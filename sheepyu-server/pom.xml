@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>sheepyu</artifactId>
+        <groupId>top.sheepyu</groupId>
+        <version>${revision}</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>sheepyu-server</artifactId>
+    <packaging>jar</packaging>
+
+    <name>${project.artifactId}</name>
+    <description>启动模块</description>
+    <url>https://github.com/ygq-future/sheepyu-vue3</url>
+
+    <dependencies>
+        <dependency>
+            <groupId>top.sheepyu</groupId>
+            <artifactId>sheepyu-module-system-biz</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- 设置构建的 jar 包名 -->
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <!-- 打包 -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.6.10</version> <!-- 如果 spring.boot.version 版本修改，则这里也要跟着修改 -->
+            </plugin>
+        </plugins>
+    </build>
+</project>

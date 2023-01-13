@@ -9,11 +9,31 @@
 
     <name>sheepyu-dependencies</name>
     <description>洋芋项目依赖管理</description>
-    <url>https://sheepyu.top</url>
+    <url>https://github.com/ygq-future/sheepyu-vue3</url>
 
     <properties>
         <revision>1.0.0-snapshot</revision>
         <spring.boot.version>2.6.10</spring.boot.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.sheepyu</groupId>
+                <artifactId>sheepyu-common</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.sheepyu</groupId>
+                <artifactId>sheepyu-module-system-biz</artifactId>
+                <version>${revision}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

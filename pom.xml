@@ -9,10 +9,14 @@
 
     <name>${project.artifactId}</name>
     <description>洋芋父项目</description>
-    <url>https://sheepyu.top</url>
+    <url>https://github.com/ygq-future/sheepyu-vue3</url>
 
     <modules>
         <module>sheepyu-dependencies</module>
+        <module>sheepyu-components</module>
+        <module>sheepyu-common</module>
+        <module>sheepyu-server</module>
+        <module>sheepyu-module-system</module>
     </modules>
 
     <properties>

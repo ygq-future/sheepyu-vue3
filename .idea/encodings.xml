@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding" native2AsciiForPropertiesFiles="true" defaultCharsetForPropertiesFiles="UTF-8">
+    <file url="file://$PROJECT_DIR$/sheepyu-common/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-common/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-components/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-components/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sheepyu-dependencies/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sheepyu-dependencies/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-module-system/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-module-system/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-server/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
     <file url="PROJECT" charset="UTF-8" />
