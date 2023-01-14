@@ -12,9 +12,16 @@
     <url>https://github.com/ygq-future/sheepyu-vue3</url>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>1.0.0-snapshot</revision>
         <spring.boot.version>2.6.10</spring.boot.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <swagger.annotations.version>1.6.8</swagger.annotations.version>
+        <jakarta.validation.version>3.0.2</jakarta.validation.version>
+        <javax.servlet.version>2.5</javax.servlet.version>
+        <hutool.version>5.8.5</hutool.version>
+        <easyexcel.verion>3.1.1</easyexcel.verion>
+        <lombok.version>1.18.20</lombok.version>
+        <mapstruct.version>1.4.1.Final</mapstruct.version>
     </properties>
 
     <dependencyManagement>
@@ -33,6 +40,47 @@
                 <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-module-system-biz</artifactId>
                 <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.verion}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger.annotations.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>jakarta.validation</groupId>
+                <artifactId>jakarta.validation-api</artifactId>
+                <version>${jakarta.validation.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.servlet</groupId>
+                <artifactId>servlet-api</artifactId>
+                <version>${javax.servlet.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
