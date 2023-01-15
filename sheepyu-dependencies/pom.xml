@@ -14,22 +14,19 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>1.0.0-snapshot</revision>
-        <spring.boot.version>2.6.10</spring.boot.version>
         <swagger.annotations.version>1.6.8</swagger.annotations.version>
-        <jakarta.validation.version>3.0.2</jakarta.validation.version>
         <javax.servlet.version>2.5</javax.servlet.version>
         <hutool.version>5.8.5</hutool.version>
         <easyexcel.verion>3.1.1</easyexcel.verion>
-        <lombok.version>1.18.20</lombok.version>
-        <mapstruct.version>1.4.1.Final</mapstruct.version>
+        <com.github.xiaoymin.version>3.0.3</com.github.xiaoymin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring.boot.version}</version>
+                <groupId>top.sheepyu</groupId>
+                <artifactId>sheepyu-spring-boot-starter-web</artifactId>
+                <version>${revision}</version>
             </dependency>
             <dependency>
                 <groupId>top.sheepyu</groupId>
@@ -40,17 +37,6 @@
                 <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-module-system-biz</artifactId>
                 <version>${revision}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.mapstruct</groupId>
-                <artifactId>mapstruct</artifactId>
-                <version>${mapstruct.version}</version>
             </dependency>
 
             <dependency>
@@ -72,15 +58,15 @@
             </dependency>
 
             <dependency>
-                <groupId>jakarta.validation</groupId>
-                <artifactId>jakarta.validation-api</artifactId>
-                <version>${jakarta.validation.version}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>servlet-api</artifactId>
                 <version>${javax.servlet.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-spring-boot-starter</artifactId>
+                <version>${com.github.xiaoymin.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

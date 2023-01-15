@@ -13,4 +13,7 @@
     <name>${project.artifactId}</name>
     <description>一些自定义的starter组件</description>
     <url>https://github.com/ygq-future/sheepyu-vue3</url>
+    <modules>
+        <module>sheepyu-spring-boot-starter-web</module>
+    </modules>
 </project>

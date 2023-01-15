@@ -1,0 +1,11 @@
+# 详情请参照SwaggerProperties
+sheepyu:
+  swagger:
+    enable: true
+    version: 1.0.0
+    base-package: top.sheepyu
+    host: https://sheepyu.top
+    contact:
+      name: sheepyu
+      url: https://sheepyu.top
+      email: 3029944576@qq.com

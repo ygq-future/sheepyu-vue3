@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+top.sheepyu.swagger.config.SwaggerAutoConfiguration,\
+top.sheepyu.web.config.WebAutoConfiguration

@@ -22,7 +22,11 @@ public class Result<T> {
         return new Result<>(200, "操作成功!", data);
     }
 
+    public static <T> Result<T> fail(int code, String message) {
+        return new Result<>(code, message, null);
+    }
+
     public static <T> Result<T> fail(ErrorCode errorCode) {
-        return new Result<>(errorCode.getCode(), errorCode.getMessage(), null);
+        return fail(errorCode.getCode(), errorCode.getMessage());
     }
 }
