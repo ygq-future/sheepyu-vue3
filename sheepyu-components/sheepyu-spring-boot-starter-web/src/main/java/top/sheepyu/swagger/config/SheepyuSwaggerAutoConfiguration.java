@@ -44,7 +44,7 @@ import java.util.List;
 @EnableConfigurationProperties({SwaggerProperties.class})
 @AllArgsConstructor
 @Slf4j
-public class SwaggerAutoConfiguration {
+public class SheepyuSwaggerAutoConfiguration {
     private SwaggerProperties swaggerProperties;
     private Environment environment;
 

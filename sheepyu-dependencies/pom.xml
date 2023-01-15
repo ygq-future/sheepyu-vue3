@@ -19,6 +19,7 @@
         <hutool.version>5.8.5</hutool.version>
         <easyexcel.verion>3.1.1</easyexcel.verion>
         <com.github.xiaoymin.version>3.0.3</com.github.xiaoymin.version>
+        <mybatisplus.version>3.5.0</mybatisplus.version>
     </properties>
 
     <dependencyManagement>
@@ -26,6 +27,11 @@
             <dependency>
                 <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-spring-boot-starter-web</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.sheepyu.mybatisplus</groupId>
+                <artifactId>sheepyu-spring-boot-starter-mybatisplus</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
@@ -67,6 +73,12 @@
                 <groupId>com.github.xiaoymin</groupId>
                 <artifactId>knife4j-spring-boot-starter</artifactId>
                 <version>${com.github.xiaoymin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatisplus.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

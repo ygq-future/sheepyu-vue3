@@ -1,4 +1,4 @@
-package top.sheepyu.util;
+package top.sheepyu.common.util;
 
 import java.io.IOException;
 import java.io.PrintWriter;

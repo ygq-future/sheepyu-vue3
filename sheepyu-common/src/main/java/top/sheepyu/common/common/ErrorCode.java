@@ -1,4 +1,4 @@
-package top.sheepyu.common;
+package top.sheepyu.common.common;
 
 import lombok.Data;
 

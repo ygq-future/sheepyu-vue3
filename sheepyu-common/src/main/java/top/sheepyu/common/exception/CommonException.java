@@ -1,7 +1,7 @@
-package top.sheepyu.exception;
+package top.sheepyu.common.exception;
 
 import lombok.Getter;
-import top.sheepyu.common.ErrorCode;
+import top.sheepyu.common.common.ErrorCode;
 
 /**
  * @author ygq

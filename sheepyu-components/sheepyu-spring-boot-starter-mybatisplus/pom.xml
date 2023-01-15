@@ -7,11 +7,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sheepyu-spring-boot-starter-web</artifactId>
+    <groupId>top.sheepyu.mybatisplus</groupId>
+    <artifactId>sheepyu-spring-boot-starter-mybatisplus</artifactId>
     <packaging>jar</packaging>
 
-    <name>${project.artifactId}</name>
-    <description>自定义spring-boot-web模块</description>
+    <name>sheepyu-spring-boot-starter-mybatisplus</name>
+    <description>自定义mybatisplus</description>
     <url>http://maven.apache.org</url>
 
     <dependencies>
@@ -19,26 +20,17 @@
             <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-common</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>top.sheepyu</groupId>
+            <artifactId>sheepyu-spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-spring-boot-starter</artifactId>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
-
         <dependency>
-            <groupId>io.swagger</groupId>
-            <artifactId>swagger-annotations</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <scope>provided</scope>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
         </dependency>
     </dependencies>
 </project>

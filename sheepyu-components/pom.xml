@@ -15,5 +15,6 @@
     <url>https://github.com/ygq-future/sheepyu-vue3</url>
     <modules>
         <module>sheepyu-spring-boot-starter-web</module>
+        <module>sheepyu-spring-boot-starter-mybatisplus</module>
     </modules>
 </project>

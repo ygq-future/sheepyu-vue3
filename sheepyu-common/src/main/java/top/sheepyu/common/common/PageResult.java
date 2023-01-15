@@ -1,4 +1,4 @@
-package top.sheepyu.common;
+package top.sheepyu.common.common;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

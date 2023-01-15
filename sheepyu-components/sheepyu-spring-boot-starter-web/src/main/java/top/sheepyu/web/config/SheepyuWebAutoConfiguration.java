@@ -15,7 +15,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import top.sheepyu.web.WebProperties;
 import top.sheepyu.web.filter.DemoFilter;
 import top.sheepyu.web.handler.GlobalExceptionHandler;
+import top.sheepyu.web.util.WebFrameworkUtil;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.Filter;
 import java.time.LocalDateTime;
@@ -27,9 +29,15 @@ import java.time.format.DateTimeFormatter;
  **/
 @Configuration
 @EnableConfigurationProperties({WebProperties.class})
-public class WebAutoConfiguration implements WebMvcConfigurer {
+public class SheepyuWebAutoConfiguration implements WebMvcConfigurer {
     @Resource
     private WebProperties webProperties;
+
+    @PostConstruct
+    public void afterProperties() {
+        //自动配置类初始化后为工具类赋值
+        WebFrameworkUtil.setProperties(webProperties);
+    }
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {

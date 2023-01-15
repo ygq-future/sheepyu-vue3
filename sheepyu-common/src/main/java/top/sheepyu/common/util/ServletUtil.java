@@ -1,8 +1,8 @@
-package top.sheepyu.util;
+package top.sheepyu.common.util;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import top.sheepyu.common.Result;
+import top.sheepyu.common.common.Result;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;

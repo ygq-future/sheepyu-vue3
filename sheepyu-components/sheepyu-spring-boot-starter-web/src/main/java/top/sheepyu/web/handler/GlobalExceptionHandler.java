@@ -8,15 +8,15 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import top.sheepyu.common.Result;
-import top.sheepyu.constants.ErrorCodeConstants;
-import top.sheepyu.exception.CommonException;
+import top.sheepyu.common.common.Result;
+import top.sheepyu.common.constants.ErrorCodeConstants;
+import top.sheepyu.common.exception.CommonException;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import static top.sheepyu.constants.ErrorCodeConstants.INVALID_PARAMS;
-import static top.sheepyu.constants.ErrorCodeConstants.UNKNOWN_ERROR;
+import static top.sheepyu.common.constants.ErrorCodeConstants.INVALID_PARAMS;
+import static top.sheepyu.common.constants.ErrorCodeConstants.UNKNOWN_ERROR;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {

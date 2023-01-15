@@ -33,6 +33,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!--这里引入spring-boot的父项目工程来管理jar, 可以省去很多我们需要自己定义版本的jar-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-parent</artifactId>
@@ -49,18 +50,22 @@
                 <scope>import</scope>
             </dependency>
 
+            <!--
+            这里引入lombok和mapstruct是因为要保证lombok插件和lombok jar包版本一致
+            因为这里改了lombok.version,那么全项目的lombok版本及插件都会跟着变,mapstruct同理
+            所以这两个jar包比较特殊,才领出来放在父工程管理下, 其他除了被springboot-parent管理的
+            jar包之外,都放在sheepyu-dependencies中
+            -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
             </dependency>
-
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-jdk8</artifactId>

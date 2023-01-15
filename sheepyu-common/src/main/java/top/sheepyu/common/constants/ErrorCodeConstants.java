@@ -1,6 +1,6 @@
-package top.sheepyu.constants;
+package top.sheepyu.common.constants;
 
-import top.sheepyu.common.ErrorCode;
+import top.sheepyu.common.common.ErrorCode;
 
 /**
  * 系统全局异常码
@@ -16,4 +16,5 @@ public interface ErrorCodeConstants {
     ErrorCode UNKNOWN_ERROR = new ErrorCode(500, "未知错误, 查看日志");
     ErrorCode USERTYPE_ERROR = new ErrorCode(501, "错误的用户类型");
     ErrorCode DEMO_DENY = new ErrorCode(502, "演示模式, 不能操作!");
+    ErrorCode EXISTS = new ErrorCode(503, "资源已存在!");
 }
