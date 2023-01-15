@@ -35,6 +35,16 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
+                <groupId>top.sheepyu.redis</groupId>
+                <artifactId>sheepyu-spring-boot-starter-redis</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.sheepyu.security</groupId>
+                <artifactId>sheepyu-spring-boot-starter-security</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
                 <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-common</artifactId>
                 <version>${revision}</version>
@@ -42,6 +52,11 @@
             <dependency>
                 <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-module-system-biz</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.sheepyu</groupId>
+                <artifactId>sheepyu-module-system-api</artifactId>
                 <version>${revision}</version>
             </dependency>
 

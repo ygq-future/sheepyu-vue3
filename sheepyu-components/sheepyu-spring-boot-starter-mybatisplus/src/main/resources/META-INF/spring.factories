@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-top.sheepyu.mybatisplus.config.SheepyuMybatisPlusAutoConfiguration
+top.sheepyu.framework.mybatisplus.config.SheepyuMybatisPlusAutoConfiguration

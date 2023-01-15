@@ -16,5 +16,7 @@
     <modules>
         <module>sheepyu-spring-boot-starter-web</module>
         <module>sheepyu-spring-boot-starter-mybatisplus</module>
+        <module>sheepyu-spring-boot-starter-security</module>
+        <module>sheepyu-spring-boot-starter-redis</module>
     </modules>
 </project>

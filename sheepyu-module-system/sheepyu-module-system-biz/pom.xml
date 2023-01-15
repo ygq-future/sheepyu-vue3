@@ -24,5 +24,13 @@
             <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-spring-boot-starter-web</artifactId>
         </dependency>
+        <dependency>
+            <groupId>top.sheepyu.security</groupId>
+            <artifactId>sheepyu-spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.sheepyu.redis</groupId>
+            <artifactId>sheepyu-spring-boot-starter-redis</artifactId>
+        </dependency>
     </dependencies>
 </project>

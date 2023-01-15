@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+top.sheepyu.framework.redis.config.SheepyuCacheAutoConfiguration,\
+top.sheepyu.framework.redis.config.SheepyuRedisAutoConfiguration
