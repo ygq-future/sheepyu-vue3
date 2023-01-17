@@ -57,6 +57,17 @@ public class SecurityFrameworkUtil {
     }
 
     /**
+     * 获得当前用户的用户名，从上下文中
+     *
+     * @return 用户名
+     */
+    @Nullable
+    public static String getLoginUserUsername() {
+        LoginUser loginUser = getLoginUser();
+        return loginUser != null ? loginUser.getUsername() : null;
+    }
+
+    /**
      * 设置当前用户
      *
      * @param loginUser 登录用户
@@ -67,8 +78,9 @@ public class SecurityFrameworkUtil {
         Authentication authentication = buildAuthentication(loginUser, request);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // 额外设置到 request 中，用于 ApiAccessLogFilter 可以获取到用户编号
+        // 额外设置到 request 中，用于一次请求全局获取
         WebFrameworkUtil.setLoginUserId(request, loginUser.getId());
+        WebFrameworkUtil.setLoginUserUsername(request, loginUser.getUsername());
         WebFrameworkUtil.setLoginUserType(request, loginUser.getUserType());
     }
 

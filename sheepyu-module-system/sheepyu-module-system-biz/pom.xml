@@ -18,7 +18,6 @@
         <dependency>
             <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-module-system-api</artifactId>
-            <version>${revision}</version>
         </dependency>
         <dependency>
             <groupId>top.sheepyu</groupId>
@@ -31,6 +30,14 @@
         <dependency>
             <groupId>top.sheepyu.redis</groupId>
             <artifactId>sheepyu-spring-boot-starter-redis</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.sheepyu.mybatisplus</groupId>
+            <artifactId>sheepyu-spring-boot-starter-mybatisplus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.sheepyu.job</groupId>
+            <artifactId>sheepyu-spring-boot-starter-job</artifactId>
         </dependency>
     </dependencies>
 </project>

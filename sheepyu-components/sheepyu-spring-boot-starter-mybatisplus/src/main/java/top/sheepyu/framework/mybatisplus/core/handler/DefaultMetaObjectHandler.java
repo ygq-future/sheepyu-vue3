@@ -1,5 +1,6 @@
 package top.sheepyu.framework.mybatisplus.core.handler;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
@@ -16,13 +17,9 @@ public class DefaultMetaObjectHandler implements MetaObjectHandler {
     public void insertFill(MetaObject metaObject) {
         BaseModel baseModel = (BaseModel) metaObject.getOriginalObject();
 
-        Long loginUserId = WebFrameworkUtil.getLoginUserId();
-        if (baseModel.getCreator() == null && loginUserId != null) {
-            baseModel.setCreator(loginUserId.toString());
-        }
-
-        if (baseModel.getUpdater() == null && loginUserId != null) {
-            baseModel.setUpdater(loginUserId.toString());
+        String username = WebFrameworkUtil.getLoginUserUsername();
+        if (baseModel.getCreator() == null && StrUtil.isNotBlank(username)) {
+            baseModel.setCreator(username);
         }
 
         if (baseModel.getCreateTime() == null) {
@@ -38,13 +35,10 @@ public class DefaultMetaObjectHandler implements MetaObjectHandler {
     public void updateFill(MetaObject metaObject) {
         BaseModel baseModel = (BaseModel) metaObject.getOriginalObject();
 
-        Long loginUserId = WebFrameworkUtil.getLoginUserId();
-        if (baseModel.getUpdater() == null && loginUserId != null) {
-            baseModel.setUpdater(loginUserId.toString());
+        String username = WebFrameworkUtil.getLoginUserUsername();
+        if (StrUtil.isNotBlank(username)) {
+            baseModel.setUpdater(username);
         }
-
-        if (baseModel.getUpdateTime() == null) {
-            baseModel.setUpdateTime(LocalDateTime.now());
-        }
+        baseModel.setUpdateTime(LocalDateTime.now());
     }
 }

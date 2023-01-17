@@ -17,4 +17,6 @@ public interface ErrorCodeConstants {
     ErrorCode USERTYPE_ERROR = new ErrorCode(501, "错误的用户类型");
     ErrorCode DEMO_DENY = new ErrorCode(502, "演示模式, 不能操作!");
     ErrorCode EXISTS = new ErrorCode(503, "资源已存在!");
+    ErrorCode OPERATION_FAILED = new ErrorCode(504, "操作失败!");
+    ErrorCode CHECK_FIELD_NOT_NULL = new ErrorCode(505, "检查的字段不能为空!");
 }

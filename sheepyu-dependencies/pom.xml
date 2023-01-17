@@ -45,6 +45,11 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
+                <groupId>top.sheepyu.job</groupId>
+                <artifactId>sheepyu-spring-boot-starter-job</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
                 <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-common</artifactId>
                 <version>${revision}</version>

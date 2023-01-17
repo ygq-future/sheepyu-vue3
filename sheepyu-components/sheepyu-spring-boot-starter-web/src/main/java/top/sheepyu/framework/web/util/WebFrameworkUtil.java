@@ -3,8 +3,8 @@ package top.sheepyu.framework.web.util;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.sheepyu.module.common.enums.UserTypeEnum;
 import top.sheepyu.framework.web.WebProperties;
+import top.sheepyu.module.common.enums.UserTypeEnum;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class WebFrameworkUtil {
     private static final String REQUEST_ATTRIBUTE_LOGIN_USER_ID = "login_user_id";
+    private static final String REQUEST_ATTRIBUTE_LOGIN_USERNAME = "login_user_name";
     private static final String REQUEST_ATTRIBUTE_LOGIN_USER_TYPE = "login_user_type";
     private static WebProperties properties;
 
@@ -27,6 +28,10 @@ public class WebFrameworkUtil {
         request.setAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_ID, userId);
     }
 
+    public static void setLoginUserUsername(ServletRequest request, String username) {
+        request.setAttribute(REQUEST_ATTRIBUTE_LOGIN_USERNAME, username);
+    }
+
     public static void setLoginUserType(ServletRequest request, Integer userType) {
         request.setAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_TYPE, userType);
     }
@@ -36,6 +41,15 @@ public class WebFrameworkUtil {
             return null;
         }
         return (Long) request.getAttribute(REQUEST_ATTRIBUTE_LOGIN_USER_ID);
+    }
+
+    public static String getLoginUserUsername(HttpServletRequest request) {
+        if (request == null) {
+            return null;
+        }
+        //使用String.valueOf防止NPE
+        Object username = request.getAttribute(REQUEST_ATTRIBUTE_LOGIN_USERNAME);
+        return username == null ? null : username.toString();
     }
 
     public static Integer getLoginUserType(HttpServletRequest request) {
@@ -57,14 +71,19 @@ public class WebFrameworkUtil {
         return null;
     }
 
-    public static Integer getLoginUserType() {
+    public static String getLoginUserUsername() {
         HttpServletRequest request = getRequest();
-        return getLoginUserType(request);
+        return getLoginUserUsername(request);
     }
 
     public static Long getLoginUserId() {
         HttpServletRequest request = getRequest();
         return getLoginUserId(request);
+    }
+
+    public static Integer getLoginUserType() {
+        HttpServletRequest request = getRequest();
+        return getLoginUserType(request);
     }
 
     public static HttpServletRequest getRequest() {

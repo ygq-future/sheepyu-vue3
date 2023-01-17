@@ -12,8 +12,27 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
-sheepyu:
-  security:
-    mock-enable: true
-    permit-urls:
-#      - /admin-api/demo
+  quartz:
+    wait-for-jobs-to-complete-on-shutdown: true
+    job-store-type: jdbc
+    jdbc:
+      # 不要在启动时初始化数据库表
+      initialize-schema: never
+    properties:
+      org:
+        quartz:
+          # JobStore持久化配置
+          jobStore:
+            class: org.springframework.scheduling.quartz.LocalDataSourceJobStore
+            isClustered: true # 开启集群模式
+            clusterCheckinInterval: 15000 #集群模式存活检查时间间隔
+            misfireThreshold: 3000  # 丢失任务,是否重试,时间阈值
+          # 线程池
+          threadPool:
+            threadCount: 25 # 线程数
+            threadPriority: 5 # 线程优先级
+            class: org.quartz.simpl.SimpleThreadPool # 实现类
+mybatis-plus:
+  global-config:
+    db-config:
+      id-type: auto

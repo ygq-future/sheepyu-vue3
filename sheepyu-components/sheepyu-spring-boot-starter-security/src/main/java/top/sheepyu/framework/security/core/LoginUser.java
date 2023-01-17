@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 public class LoginUser {
     private Long id;
+    private String username;
     private Integer userType;
     private String accessToken;
     private String refreshToken;

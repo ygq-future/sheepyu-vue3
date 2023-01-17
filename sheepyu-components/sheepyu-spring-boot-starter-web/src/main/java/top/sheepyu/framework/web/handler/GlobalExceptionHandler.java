@@ -1,5 +1,6 @@
 package top.sheepyu.framework.web.handler;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -11,6 +12,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.common.constants.ErrorCodeConstants;
 import top.sheepyu.module.common.exception.CommonException;
+import top.sheepyu.module.common.util.ExceptionUtil;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -19,6 +21,7 @@ import static top.sheepyu.module.common.constants.ErrorCodeConstants.INVALID_PAR
 import static top.sheepyu.module.common.constants.ErrorCodeConstants.UNKNOWN_ERROR;
 
 @RestControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
     /**
      * 处理 SpringMVC 请求参数缺失
@@ -94,7 +97,9 @@ public class GlobalExceptionHandler {
      * 处理系统异常，兜底处理所有的一切
      */
     @ExceptionHandler(value = Exception.class)
-    public Result<?> defaultExceptionHandler() {
+    public Result<?> defaultExceptionHandler(Exception ex) {
+        String message = ExceptionUtil.getMessage(ex);
+        log.error("\n{}", message);
         return Result.fail(UNKNOWN_ERROR);
     }
 }

@@ -48,6 +48,6 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
         if (!securityProperties.isMockEnable() || !token.startsWith(securityProperties.getMockSecret())) {
             return null;
         }
-        return new LoginUser().setId(1L).setUserType(userType);
+        return new LoginUser().setId(1L).setUserType(userType).setUsername("admin");
     }
 }

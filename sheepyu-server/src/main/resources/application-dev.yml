@@ -1,3 +1,14 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3001/sheepyu?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: 20030519
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
+    password:
 # 详情请参照SwaggerProperties
 sheepyu:
   swagger:
@@ -9,3 +20,10 @@ sheepyu:
       name: sheepyu
       url: https://sheepyu.top
       email: 3029944576@qq.com
+  security:
+    mock-enable: true
+    permit-urls:
+  #      - /admin-api/demo
+logging:
+  level:
+    top.sheepyu: debug
