@@ -5,6 +5,8 @@
     <file url="file://$PROJECT_DIR$/sheepyu-common/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-job/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-job/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-mybatisplus/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-mybatisplus/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-redis/src/main/java" charset="UTF-8" />

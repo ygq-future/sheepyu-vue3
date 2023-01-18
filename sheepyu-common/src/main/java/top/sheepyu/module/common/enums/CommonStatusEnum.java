@@ -11,14 +11,16 @@ import lombok.Getter;
 public enum CommonStatusEnum {
     //为了区分语义所以定义了多个一样code的枚举
     //也就说了这个枚举类本来就是全局系统状态, 用来管理所有状态,
-    // 所以定义0标识良好的状态,1标识不好的状态
-    OPEN(0, "开启"),
-    SUCCESS(0, "成功"),
-    SHOW(0, "显示"),
+    // 所以定义1标识良好的状态,0标识不好的状态
+    OPEN(1, "开启"),
+    SUCCESS(1, "成功"),
+    SHOW(1, "显示"),
+    TRUE(1, "正确"),
 
-    CLOSE(1, "关闭"),
-    FAILED(1, "失败"),
-    HIDE(1, "隐藏"),
+    CLOSE(0, "关闭"),
+    FAILED(0, "失败"),
+    HIDE(0, "隐藏"),
+    FALSE(0, "错误"),
     ;
 
     /**

@@ -22,7 +22,7 @@ import java.util.List;
 
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
-import static top.sheepyu.module.system.convert.job.SystemJobConvert.INSTANCE;
+import static top.sheepyu.module.system.convert.job.SystemJobConvert.CONVERT;
 import static top.sheepyu.module.system.enums.JobStatusEnum.*;
 
 /**
@@ -41,7 +41,7 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
     public void createJob(SystemJobCreateVo createVo) throws SchedulerException {
         //校验cron表达式
         validateCronExpression(createVo.getCron());
-        SystemJob job = INSTANCE.convert(createVo);
+        SystemJob job = CONVERT.convert(createVo);
         //检查处理器名字是否重复
         checkRepeatByFieldThrow(job, JOB_HANDLER_EXISTS, List.of(SystemJob::getHandlerParam));
 
@@ -66,7 +66,7 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
             throw exception(JOB_UPDATE_ONLY_NORMAL_STATUS);
         }
 
-        job = INSTANCE.convert(updateVo);
+        job = CONVERT.convert(updateVo);
         updateById(job);
 
         schedulerManager.update(handlerName, job.getHandlerParam(), job.getRetryCount(), job.getRetryInterval(), job.getCron());

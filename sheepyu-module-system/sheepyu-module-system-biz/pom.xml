@@ -24,20 +24,24 @@
             <artifactId>sheepyu-spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>top.sheepyu.security</groupId>
+            <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-spring-boot-starter-security</artifactId>
         </dependency>
         <dependency>
-            <groupId>top.sheepyu.redis</groupId>
+            <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-spring-boot-starter-redis</artifactId>
         </dependency>
         <dependency>
-            <groupId>top.sheepyu.mybatisplus</groupId>
+            <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-spring-boot-starter-mybatisplus</artifactId>
         </dependency>
         <dependency>
-            <groupId>top.sheepyu.job</groupId>
+            <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-spring-boot-starter-job</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.sheepyu</groupId>
+            <artifactId>sheepyu-spring-boot-starter-log</artifactId>
         </dependency>
     </dependencies>
 </project>

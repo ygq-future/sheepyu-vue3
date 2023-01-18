@@ -14,7 +14,7 @@ import top.sheepyu.module.system.dao.job.SystemJob;
  **/
 @Mapper
 public interface SystemJobConvert {
-    SystemJobConvert INSTANCE = Mappers.getMapper(SystemJobConvert.class);
+    SystemJobConvert CONVERT = Mappers.getMapper(SystemJobConvert.class);
 
     SystemJob convert(SystemJobCreateVo createVo);
 

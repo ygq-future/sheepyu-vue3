@@ -1,4 +1,4 @@
-package top.sheepyu.framework.security.core.annotation;
+package top.sheepyu.framework.security.core.annotations;
 
 import java.lang.annotation.*;
 

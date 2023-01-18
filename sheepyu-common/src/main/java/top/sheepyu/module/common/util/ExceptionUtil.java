@@ -5,7 +5,7 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 
 public class ExceptionUtil {
-    public static String getMessage(Exception e) {
+    public static String getMessage(Throwable e) {
         StringWriter sw = null;
         PrintWriter pw = null;
         try {
@@ -28,5 +28,9 @@ public class ExceptionUtil {
             }
         }
         return sw.toString();
+    }
+
+    public static String getRootCauseMessage(Throwable th) {
+        return cn.hutool.core.exceptions.ExceptionUtil.getRootCauseMessage(th);
     }
 }

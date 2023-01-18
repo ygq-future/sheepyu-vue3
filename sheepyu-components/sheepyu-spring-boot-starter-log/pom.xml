@@ -7,20 +7,25 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>sheepyu-spring-boot-starter-redis</artifactId>
+    <artifactId>sheepyu-spring-boot-starter-log</artifactId>
     <packaging>jar</packaging>
 
     <name>${project.artifactId}</name>
+    <description>自定义日志模块</description>
     <url>http://maven.apache.org</url>
 
     <dependencies>
         <dependency>
             <groupId>top.sheepyu</groupId>
-            <artifactId>sheepyu-common</artifactId>
+            <artifactId>sheepyu-spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>top.sheepyu</groupId>
+            <artifactId>sheepyu-module-system-api</artifactId>
         </dependency>
     </dependencies>
 </project>

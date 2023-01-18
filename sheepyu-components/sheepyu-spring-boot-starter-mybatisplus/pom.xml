@@ -7,7 +7,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>top.sheepyu.mybatisplus</groupId>
     <artifactId>sheepyu-spring-boot-starter-mybatisplus</artifactId>
     <packaging>jar</packaging>
 

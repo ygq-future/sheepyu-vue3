@@ -18,7 +18,7 @@ import top.sheepyu.module.system.service.job.SystemJobService;
 import javax.annotation.Resource;
 
 import static top.sheepyu.module.common.common.Result.success;
-import static top.sheepyu.module.system.convert.job.SystemJobConvert.INSTANCE;
+import static top.sheepyu.module.system.convert.job.SystemJobConvert.CONVERT;
 
 /**
  * @author ygq
@@ -77,7 +77,7 @@ public class SystemJobController {
     @PreAuthorize("@ss.hasPermission('system:job:query')")
     public Result<SystemJobRespVo> queryById(@PathVariable Long id) {
         SystemJob job = systemJobService.findJobById(id);
-        return success(INSTANCE.convert(job));
+        return success(CONVERT.convert(job));
     }
 
     @GetMapping("/page")
@@ -85,6 +85,6 @@ public class SystemJobController {
     @PreAuthorize("@ss.hasPermission('system:job:query')")
     public Result<PageResult<SystemJobRespVo>> queryById(SystemJobQueryVo queryVo) {
         PageResult<SystemJob> pageData = systemJobService.findJobPage(queryVo);
-        return success(INSTANCE.convertPage(pageData));
+        return success(CONVERT.convertPage(pageData));
     }
 }

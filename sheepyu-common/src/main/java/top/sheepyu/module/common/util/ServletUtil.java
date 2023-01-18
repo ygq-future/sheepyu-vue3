@@ -4,6 +4,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import top.sheepyu.module.common.common.Result;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -21,5 +22,10 @@ public class ServletUtil {
         JSONObject jsonObject = new JSONObject(JSONUtil.toJsonStr(result));
         jsonObject.set("time", format.format(time));
         res.getWriter().println(jsonObject);
+    }
+
+    public static String getClientIp(HttpServletRequest request) {
+        String clientIP = cn.hutool.extra.servlet.ServletUtil.getClientIP(request);
+        return "0:0:0:0:0:0:0:1".equals(clientIP) ? "127.0.0.1" : clientIP;
     }
 }

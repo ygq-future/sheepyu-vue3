@@ -25,10 +25,11 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import top.sheepyu.framework.security.core.SecurityProperties;
-import top.sheepyu.framework.security.core.annotation.Permit;
+import top.sheepyu.framework.security.core.annotations.Permit;
 import top.sheepyu.framework.security.core.aop.PreAuthenticatedAspect;
 import top.sheepyu.framework.security.core.filter.SecurityTokenFilter;
 import top.sheepyu.framework.security.core.service.SecurityFrameworkService;
+import top.sheepyu.framework.security.core.service.SecurityFrameworkServiceImpl;
 import top.sheepyu.framework.security.core.service.SecurityRedisService;
 import top.sheepyu.framework.web.WebProperties;
 
@@ -142,7 +143,7 @@ public class SheepyuSecurityAutoConfiguration extends WebSecurityConfigurerAdapt
 
     @Bean("ss")
     public SecurityFrameworkService securityFrameworkService() {
-        return new SecurityFrameworkService();
+        return new SecurityFrameworkServiceImpl();
     }
 
     private String buildAppApi(String url) {

@@ -2,7 +2,7 @@ package top.sheepyu.framework.security.core.aop;
 
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
-import top.sheepyu.framework.security.core.annotation.PreAuthenticated;
+import top.sheepyu.framework.security.core.annotations.PreAuthenticated;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 
 import static top.sheepyu.module.common.constants.ErrorCodeConstants.NOT_AUTHORIZE;

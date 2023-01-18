@@ -30,23 +30,28 @@
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>top.sheepyu.mybatisplus</groupId>
+                <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-spring-boot-starter-mybatisplus</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>top.sheepyu.redis</groupId>
+                <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-spring-boot-starter-redis</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>top.sheepyu.security</groupId>
+                <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-spring-boot-starter-security</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>
-                <groupId>top.sheepyu.job</groupId>
+                <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-spring-boot-starter-job</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.sheepyu</groupId>
+                <artifactId>sheepyu-spring-boot-starter-log</artifactId>
                 <version>${revision}</version>
             </dependency>
             <dependency>

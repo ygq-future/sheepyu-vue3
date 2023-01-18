@@ -7,7 +7,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>top.sheepyu.security</groupId>
     <artifactId>sheepyu-spring-boot-starter-security</artifactId>
     <packaging>jar</packaging>
 
@@ -29,7 +28,7 @@
             <artifactId>sheepyu-spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>top.sheepyu.redis</groupId>
+            <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-spring-boot-starter-redis</artifactId>
         </dependency>
         <dependency>
