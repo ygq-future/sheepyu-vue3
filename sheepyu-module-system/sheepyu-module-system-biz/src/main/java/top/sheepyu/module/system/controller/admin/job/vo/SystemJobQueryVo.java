@@ -14,6 +14,5 @@ import top.sheepyu.module.common.common.PageParam;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("系统任务分页查询vo")
 public class SystemJobQueryVo extends PageParam {
-    @ApiModelProperty("任务名称模糊查询")
-    private String name;
+
 }

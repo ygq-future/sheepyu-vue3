@@ -15,7 +15,7 @@ public class PageParam implements Serializable {
     private static final Integer CURRENT = 1;
     private static final Integer SIZE = 10;
 
-    @ApiModelProperty(value = "页码，从 1 开始", required = true,example = "1")
+    @ApiModelProperty(value = "页码，从 1 开始", required = true, example = "1")
     @NotNull(message = "页码不能为空")
     @Min(value = 1, message = "页码最小值为 1")
     private Integer current = CURRENT;
@@ -25,4 +25,7 @@ public class PageParam implements Serializable {
     @Min(value = 1, message = "每页条数最小值为 1")
     @Max(value = 100, message = "每页条数最大值为 100")
     private Integer size = SIZE;
+
+    @ApiModelProperty("模糊查询关键字")
+    private String keyword;
 }

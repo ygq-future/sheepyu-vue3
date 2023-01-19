@@ -1,5 +1,6 @@
 package top.sheepyu.framework.log.core.aop;
 
+import cn.hutool.core.text.AntPathMatcher;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.json.JSONUtil;
 import com.google.common.collect.Maps;
@@ -16,6 +17,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
+import top.sheepyu.framework.log.core.ApiLogProperties;
 import top.sheepyu.framework.log.core.annotations.RecordLog;
 import top.sheepyu.framework.log.core.enums.OperateTypeEnum;
 import top.sheepyu.framework.log.core.service.ApiLogFrameworkService;
@@ -47,6 +49,8 @@ import static top.sheepyu.framework.log.core.enums.OperateTypeEnum.*;
 public class RecordLogAspect {
     @Resource
     private ApiLogFrameworkService apiLogFrameworkService;
+    @Resource
+    private ApiLogProperties apiLogProperties;
     private static final ThreadLocal<ApiLogDto> LOG = new ThreadLocal<>();
 
     @Before("@annotation(apiOperation)")
@@ -57,9 +61,9 @@ public class RecordLogAspect {
         }
 
         ApiLogDto apiLog = new ApiLogDto().setUserId(WebFrameworkUtil.getLoginUserId()).setUserType(userType);
-        LOG.set(apiLog);
         apiLog.setName(apiOperation.value()).setStartTime(System.currentTimeMillis());
         setRequestAbout(apiLog, joinPoint);
+        LOG.set(apiLog);
     }
 
     @AfterReturning(value = "@annotation(apiOperation)", returning = "returnValue")
@@ -124,6 +128,10 @@ public class RecordLogAspect {
     }
 
     private void setRequestAbout(ApiLogDto apiLog, JoinPoint joinPoint) {
+        HttpServletRequest request = WebFrameworkUtil.getRequest();
+        String requestURI = request.getRequestURI();
+        filterExcludes(requestURI, apiLog);
+
         Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
         RequestMapping requestMapping = AnnotationUtils.getAnnotation(method, RequestMapping.class);
         RequestMethod[] methods = requestMapping == null ? new RequestMethod[1] : requestMapping.method();
@@ -148,12 +156,21 @@ public class RecordLogAspect {
                 operateType = DELETE;
         }
 
-        HttpServletRequest request = WebFrameworkUtil.getRequest();
         apiLog.setType(operateType == null ? OTHER.getDesc() : operateType.getDesc());
-        apiLog.setRequestUrl(request.getRequestURI());
+        apiLog.setRequestUrl(requestURI);
         apiLog.setRequestMethod(request.getMethod());
         apiLog.setRequestParams(obtainMethodArgs(joinPoint));
         apiLog.setUserIp(ServletUtil.getClientIp(request));
+    }
+
+    private void filterExcludes(String requestURI, ApiLogDto apiLogDto) {
+        AntPathMatcher matcher = new AntPathMatcher();
+        for (String excludeUri : apiLogProperties.getExcludes()) {
+            if (matcher.match(excludeUri, requestURI)) {
+                apiLogDto.setClose(true);
+                return;
+            }
+        }
     }
 
     private static String obtainMethodArgs(JoinPoint joinPoint) {

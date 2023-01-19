@@ -4,7 +4,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.quartz.SchedulerException;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.common.Result;
@@ -25,8 +24,7 @@ import static top.sheepyu.module.system.convert.job.SystemJobConvert.CONVERT;
  * @date 2023-01-16 18:01
  **/
 @RestController
-@RequestMapping("/job")
-@Validated
+@RequestMapping("/system/job")
 @Api(tags = "系统定时任务")
 public class SystemJobController {
     @Resource

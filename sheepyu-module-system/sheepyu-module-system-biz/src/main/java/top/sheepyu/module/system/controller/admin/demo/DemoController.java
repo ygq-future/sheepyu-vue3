@@ -13,7 +13,7 @@ import top.sheepyu.module.common.common.Result;
  * @date 2023-01-14 15:58
  **/
 @RestController
-@RequestMapping("/demo")
+@RequestMapping("/system/demo")
 @Slf4j
 @Api(tags = "测试")
 public class DemoController {

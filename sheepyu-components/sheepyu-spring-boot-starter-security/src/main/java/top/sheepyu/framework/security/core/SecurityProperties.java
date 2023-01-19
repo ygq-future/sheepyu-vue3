@@ -23,6 +23,9 @@ public class SecurityProperties {
     @NotEmpty(message = "Token Header 不能为空")
     private String tokenHeader = "Authorization";
 
+    @NotEmpty(message = "RefreshToken Header 不能为空")
+    private String refreshTokenHeader = "RefreshToken";
+
     /**
      * mock 模式的开关
      */

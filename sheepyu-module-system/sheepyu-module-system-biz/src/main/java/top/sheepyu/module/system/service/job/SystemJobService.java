@@ -1,7 +1,7 @@
 package top.sheepyu.module.system.service.job;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import org.quartz.SchedulerException;
+import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.system.controller.admin.job.vo.SystemJobCreateVo;
 import top.sheepyu.module.system.controller.admin.job.vo.SystemJobQueryVo;
@@ -14,7 +14,7 @@ import javax.validation.Valid;
  * @author ygq
  * @date 2023-01-16 17:54
  **/
-public interface SystemJobService extends IService<SystemJob> {
+public interface SystemJobService extends IServiceX<SystemJob> {
 
     void createJob(@Valid SystemJobCreateVo createVo) throws SchedulerException;
 

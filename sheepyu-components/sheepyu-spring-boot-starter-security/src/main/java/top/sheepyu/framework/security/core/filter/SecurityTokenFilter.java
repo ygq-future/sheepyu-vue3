@@ -38,6 +38,8 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
             }
 
             if (loginUser != null) {
+                String refreshToken = request.getHeader(securityProperties.getRefreshTokenHeader());
+                loginUser.setAccessToken(token).setRefreshToken(refreshToken);
                 SecurityFrameworkUtil.setLoginUser(loginUser, request);
             }
         }

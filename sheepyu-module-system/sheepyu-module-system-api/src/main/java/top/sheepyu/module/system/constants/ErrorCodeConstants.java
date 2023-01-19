@@ -23,4 +23,9 @@ public interface ErrorCodeConstants {
 
     //systemJobLog相关 100_002_001
     ErrorCode LOG_NOT_EXISTS = new ErrorCode(100_002_001, "任务日志不存在!");
+
+    //systemUser相关 100_003_001
+    ErrorCode USER_NOT_EXISTS = new ErrorCode(100_003_001, "用户不存在!");
+    ErrorCode LOGIN_FAILED = new ErrorCode(100_003_002, "登录失败, 用户名或密码错误!");
+    ErrorCode USER_EXISTS = new ErrorCode(100_003_003, "用户已存在!");
 }

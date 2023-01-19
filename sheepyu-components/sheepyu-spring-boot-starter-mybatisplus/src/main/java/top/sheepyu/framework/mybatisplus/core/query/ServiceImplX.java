@@ -1,6 +1,7 @@
 package top.sheepyu.framework.mybatisplus.core.query;
 
 import cn.hutool.core.collection.CollUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
@@ -25,13 +26,20 @@ import static top.sheepyu.module.common.exception.CommonException.exception;
  * serviceImpl的增强
  **/
 @Slf4j
-public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> {
+public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> implements IServiceX<T> {
+    @Override
     public PageResult<T> page(PageParam pageParam) {
         return page(pageParam, null);
     }
 
+    @Override
     public PageResult<T> page(PageParam pageParam, LambdaQueryWrapperX<T> wrapperX) {
-        Page<T> page = super.page(new Page<>(pageParam.getCurrent(), pageParam.getSize()), wrapperX);
+        return page(pageParam, wrapperX);
+    }
+
+    @Override
+    public PageResult<T> page(PageParam pageParam, LambdaQueryWrapper<T> wrapper) {
+        Page<T> page = super.page(new Page<>(pageParam.getCurrent(), pageParam.getSize()), wrapper);
         return new PageResult<>(page.getRecords(), page.getTotal());
     }
 
@@ -42,6 +50,7 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
      * @param fields    字段表达式
      * @param errorCode 错误码
      */
+    @Override
     public void checkRepeatByFieldThrow(T entity, ErrorCode errorCode, Collection<SFunction<T, ?>> fields) {
         boolean result = checkRepeatByField(entity, fields);
         if (result) {
@@ -56,7 +65,8 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
      * @param fields 字段表达式
      * @return result
      */
-    public final boolean checkRepeatByField(T entity, Collection<SFunction<T, ?>> fields) {
+    @Override
+    public boolean checkRepeatByField(T entity, Collection<SFunction<T, ?>> fields) {
         if (CollUtil.isEmpty(fields)) {
             throw exception(CHECK_FIELD_NOT_NULL);
         }
@@ -80,6 +90,7 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
         return hasElement;
     }
 
+    @Override
     public T findByIdValidateExists(Object id, ErrorCode errorCode) {
         T t = getById(id.toString());
         if (t == null) {
@@ -88,6 +99,7 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
         return t;
     }
 
+    @Override
     public void batchDelete(String ids, SFunction<T, ?> fieldLambda) {
         batchDelete(ids, fieldLambda, buildQuery());
     }
@@ -97,6 +109,7 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
      * @param fieldLambda 要根据哪个字段进行删除的表达式
      * @param wrapperX    删除需要什么条件, 注意这里就不要加需要删除的字段了
      */
+    @Override
     public void batchDelete(String ids, SFunction<T, ?> fieldLambda, LambdaQueryWrapperX<T> wrapperX) {
         List<String> idList = MyStrUtil.split(ids, ',');
         if (CollUtil.isEmpty(idList)) {
@@ -111,6 +124,7 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
         }
     }
 
+    @Override
     public LambdaQueryWrapperX<T> buildQuery() {
         return new LambdaQueryWrapperX<>();
     }
