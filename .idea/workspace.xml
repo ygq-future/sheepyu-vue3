@@ -5,36 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/enums/CaptchaEnum.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/util/CaptchaUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/util/ExcelUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/RedisConstants.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserExcelVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/captcha/CaptchaController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/captcha/vo/CaptchaRespVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/captcha/CaptchaService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/captcha/CaptchaServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-common/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-common/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/annotations/FlowLimit.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/annotations/Idempotent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/aop/FlowLimitAspect.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/aop/IdempotentAspect.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/enums/KeyPrefixTypeEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/resolver/DefaultProtectionKeyResolver.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/resolver/ProtectionKeyResolver.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/constants/ErrorCodeConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/constants/ErrorCodeConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java/top/sheepyu/framework/log/core/annotations/RecordLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java/top/sheepyu/framework/log/core/annotations/RecordLog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java/top/sheepyu/framework/log/core/aop/RecordLogAspect.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java/top/sheepyu/framework/log/core/aop/RecordLogAspect.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java/top/sheepyu/framework/log/core/enums/OperateTypeEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java/top/sheepyu/framework/log/core/enums/OperateTypeEnum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-security/src/main/java/top/sheepyu/framework/security/core/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-security/src/main/java/top/sheepyu/framework/security/core/LoginUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-redis/src/main/java/top/sheepyu/framework/redis/util/RedisUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-redis/src/main/java/top/sheepyu/framework/redis/util/RedisUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-security/src/main/java/top/sheepyu/framework/security/core/service/SecurityRedisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-security/src/main/java/top/sheepyu/framework/security/core/service/SecurityRedisService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-dependencies/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-dependencies/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/dto/ApiLogDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/dto/ApiLogDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/job/SystemJobController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/job/SystemJobController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/SystemUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/SystemUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserCreateVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserCreateVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserLoginVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserLoginVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/user/AppSystemUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/user/AppSystemUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/user/SystemUserConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/user/SystemUserConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/log/SystemApiLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/log/SystemApiLog.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/log/SystemApiLogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/log/SystemApiLogServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/config/SheepyuWebAutoConfiguration.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/config/SheepyuWebAutoConfiguration.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/ErrorCodeConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/ErrorCodeConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/demo/DemoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/demo/DemoController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/captcha/CaptchaService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/captcha/CaptchaService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserBiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserBiz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/java/top/sheepyu/server/SheepyuServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/java/top/sheepyu/server/SheepyuServer.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,9 +32,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="AnnotationType" />
-        <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -95,6 +82,9 @@
     "node.js.detected.package.eslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
     "settings.editor.selected.configurable": "File.Encoding",
     "spring.configuration.checksum": "598a168dea8ef8e8b554f8a402f03916",
     "vue.rearranger.settings.migration": "true"
@@ -159,8 +149,10 @@
       </method>
     </configuration>
     <configuration name="SheepyuServer" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <option name="ACTIVE_PROFILES" />
       <module name="sheepyu-server" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="top.sheepyu.server.SheepyuServer" />
+      <option name="VM_PARAMETERS" value="--illegal-access=deny --add-opens java.base/java.lang=ALL-UNNAMED" />
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="top.sheepyu.server.*" />
@@ -181,6 +173,11 @@
       <option name="showConsole" value="true" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="JUnit.SystemJobTest.test" />
+      <item itemvalue="JUnit.SystemJobTest.test01" />
+      <item itemvalue="Spring Boot.SheepyuServer" />
+    </list>
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.SheepyuServer" />
@@ -203,7 +200,7 @@
       <workItem from="1673577717822" duration="4585000" />
       <workItem from="1673601529280" duration="51267000" />
       <workItem from="1673782000703" duration="714000" />
-      <workItem from="1673853216734" duration="68171000" />
+      <workItem from="1673853216734" duration="74592000" />
     </task>
     <servers />
   </component>

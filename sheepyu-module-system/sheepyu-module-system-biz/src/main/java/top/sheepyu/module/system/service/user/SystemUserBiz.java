@@ -13,10 +13,14 @@ import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserQueryVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
+import top.sheepyu.module.system.service.captcha.CaptchaService;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
+
+import static top.sheepyu.module.common.exception.CommonException.exception;
+import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
 
 /**
  * @author ygq
@@ -29,9 +33,14 @@ public class SystemUserBiz {
     private SystemUserService systemUserService;
     @Resource
     private SecurityRedisService securityRedisService;
+    @Resource
+    private CaptchaService captchaService;
 
     public LoginUser login(SystemUserLoginVo loginVo) {
-        //TODO 校验验证码
+        //校验验证码
+        if (!captchaService.verifyCaptcha(loginVo.getKey(), loginVo.getCode())) {
+            throw exception(CODE_ERROR);
+        }
 
         //校验用户名密码
         SystemUser systemUser = systemUserService.login(loginVo);

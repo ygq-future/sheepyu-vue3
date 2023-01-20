@@ -45,5 +45,16 @@
             <artifactId>spring-security-core</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>top.sheepyu</groupId>
+            <artifactId>sheepyu-spring-boot-starter-redis</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

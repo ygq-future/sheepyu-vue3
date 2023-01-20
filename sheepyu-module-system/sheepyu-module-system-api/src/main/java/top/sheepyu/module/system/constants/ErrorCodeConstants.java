@@ -28,4 +28,5 @@ public interface ErrorCodeConstants {
     ErrorCode USER_NOT_EXISTS = new ErrorCode(100_003_001, "用户不存在!");
     ErrorCode LOGIN_FAILED = new ErrorCode(100_003_002, "登录失败, 用户名或密码错误!");
     ErrorCode USER_EXISTS = new ErrorCode(100_003_003, "用户已存在!");
+    ErrorCode CODE_ERROR = new ErrorCode(100_003_004, "验证码错误!");
 }

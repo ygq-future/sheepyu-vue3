@@ -1,5 +1,6 @@
 package top.sheepyu.framework.redis.util;
 
+import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.json.JSONUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 
@@ -22,7 +23,20 @@ public class RedisUtil {
         redisTemplate.opsForValue().set(key, value, timeout, unit);
     }
 
-    public <T> T get(String key, Class<T> clazz) {
+    public boolean setNx(String key, long timeout) {
+        return setNx(key, timeout, TimeUnit.SECONDS);
+    }
+
+    public boolean setNx(String key, long timeout, TimeUnit timeUnit) {
+        return setNx(key, "1", timeout, timeUnit);
+    }
+
+    public boolean setNx(String key, String value, long timeout, TimeUnit timeUnit) {
+        Boolean result = redisTemplate.opsForValue().setIfAbsent(key, value, timeout, timeUnit);
+        return BooleanUtil.isTrue(result);
+    }
+
+    public <T> T getJSONObj(String key, Class<T> clazz) {
         Object value = redisTemplate.opsForValue().get(key);
         if (value == null) {
             return null;
@@ -49,5 +63,9 @@ public class RedisUtil {
 
     public void del(String key) {
         redisTemplate.delete(key);
+    }
+
+    public void inr(String key) {
+        redisTemplate.opsForValue().increment(key);
     }
 }

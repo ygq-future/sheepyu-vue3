@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import top.sheepyu.framework.web.WebProperties;
+import top.sheepyu.framework.web.aop.FlowLimitAspect;
+import top.sheepyu.framework.web.aop.IdempotentAspect;
 import top.sheepyu.framework.web.filter.DemoFilter;
 import top.sheepyu.framework.web.handler.GlobalExceptionHandler;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
@@ -71,6 +73,16 @@ public class SheepyuWebAutoConfiguration implements WebMvcConfigurer {
             jacksonObjectMapperBuilder.serializerByType(LocalDateTime.class, serializer);
             jacksonObjectMapperBuilder.deserializerByType(LocalDateTime.class, deserializer);
         };
+    }
+
+    @Bean
+    public FlowLimitAspect flowLimitAspect() {
+        return new FlowLimitAspect();
+    }
+
+    @Bean
+    public IdempotentAspect idempotentAspect() {
+        return new IdempotentAspect();
     }
 
     private static <T extends Filter> FilterRegistrationBean<T> createFilterBean(T filter, Integer order) {
