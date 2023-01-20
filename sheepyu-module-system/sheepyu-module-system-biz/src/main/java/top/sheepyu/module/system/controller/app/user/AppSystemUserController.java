@@ -5,8 +5,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 import top.sheepyu.framework.security.core.LoginUser;
 import top.sheepyu.framework.security.core.annotations.Permit;
+import top.sheepyu.framework.web.annotations.FlowLimit;
 import top.sheepyu.module.common.common.Result;
-import top.sheepyu.module.common.enums.CaptchaEnum;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserRespVo;
 import top.sheepyu.module.system.convert.user.SystemUserConvert;
@@ -14,9 +14,6 @@ import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.service.user.SystemUserBiz;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 import static top.sheepyu.module.common.common.Result.success;
 
@@ -32,6 +29,7 @@ public class AppSystemUserController {
     private SystemUserBiz systemUserBiz;
 
     @Permit
+    @FlowLimit
     @PostMapping("/login")
     @ApiOperation("用户账号密码登录")
     public Result<LoginUser> create(@RequestBody SystemUserLoginVo loginVo) {
@@ -39,6 +37,7 @@ public class AppSystemUserController {
         return success(loginUser);
     }
 
+    @FlowLimit(5)
     @GetMapping("/logout")
     @ApiOperation("注销登录")
     public Result<Boolean> logout() {
@@ -51,13 +50,5 @@ public class AppSystemUserController {
     public Result<SystemUserRespVo> info() {
         SystemUser user = systemUserBiz.info();
         return success(SystemUserConvert.CONVERT.convert(user));
-    }
-
-    @GetMapping("/captcha/{type}")
-    @ApiOperation("获取验证码图片")
-    @Permit
-    public void captcha(@PathVariable Integer type, HttpServletRequest req, HttpServletResponse res) throws IOException {
-        CaptchaEnum captchaEnum = CaptchaEnum.valueOf(type);
-
     }
 }

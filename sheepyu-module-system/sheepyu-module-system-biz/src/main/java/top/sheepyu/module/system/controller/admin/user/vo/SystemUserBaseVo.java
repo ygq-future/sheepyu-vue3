@@ -16,14 +16,6 @@ import javax.validation.constraints.NotNull;
 @Data
 @ApiModel("系统用户基本vo")
 public class SystemUserBaseVo {
-    @ApiModelProperty("用户名")
-    @NotBlank(message = "用户名不能为空")
-    private String username;
-
-    @ApiModelProperty("密码")
-    @NotBlank(message = "密码不能为空")
-    private String password;
-
     @ApiModelProperty("昵称")
     private String nickname;
 

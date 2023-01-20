@@ -1,7 +1,7 @@
-package top.sheepyu.module.system.service.log;
+package top.sheepyu.module.system.service.apilog;
 
 import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
-import top.sheepyu.module.system.dao.log.SystemApiLog;
+import top.sheepyu.module.system.dao.apilog.SystemApiLog;
 import top.sheepyu.module.system.dto.ApiLogDto;
 
 import javax.validation.Valid;

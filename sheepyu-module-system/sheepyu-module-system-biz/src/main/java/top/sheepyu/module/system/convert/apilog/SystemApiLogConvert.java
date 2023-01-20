@@ -1,8 +1,8 @@
-package top.sheepyu.module.system.convert.log;
+package top.sheepyu.module.system.convert.apilog;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
-import top.sheepyu.module.system.dao.log.SystemApiLog;
+import top.sheepyu.module.system.dao.apilog.SystemApiLog;
 import top.sheepyu.module.system.dto.ApiLogDto;
 
 /**

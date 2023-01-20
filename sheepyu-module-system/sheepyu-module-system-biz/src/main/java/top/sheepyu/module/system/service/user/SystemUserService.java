@@ -32,4 +32,6 @@ public interface SystemUserService extends IServiceX<SystemUser> {
     void updateUser(@Valid SystemUserUpdateVo updateVo);
 
     void deleteUser(@NotNull(message = "用户id不能为空") Long id);
+
+    void updateLoginTime(SystemUser user);
 }

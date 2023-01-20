@@ -1,17 +1,17 @@
-package top.sheepyu.module.system.service.log;
+package top.sheepyu.module.system.service.apilog;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
-import top.sheepyu.module.system.dao.log.SystemApiLog;
-import top.sheepyu.module.system.dao.log.SystemApiLogMapper;
+import top.sheepyu.module.system.dao.apilog.SystemApiLog;
+import top.sheepyu.module.system.dao.apilog.SystemApiLogMapper;
 import top.sheepyu.module.system.dto.ApiLogDto;
 
 import static top.sheepyu.module.common.enums.CommonStatusEnum.FALSE;
 import static top.sheepyu.module.common.enums.CommonStatusEnum.TRUE;
-import static top.sheepyu.module.system.convert.log.SystemApiLogConvert.CONVERT;
+import static top.sheepyu.module.system.convert.apilog.SystemApiLogConvert.CONVERT;
 
 /**
  * @author ygq

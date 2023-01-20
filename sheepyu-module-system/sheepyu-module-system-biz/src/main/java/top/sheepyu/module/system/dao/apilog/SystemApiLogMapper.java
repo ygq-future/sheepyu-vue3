@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.dao.log;
+package top.sheepyu.module.system.dao.apilog;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 

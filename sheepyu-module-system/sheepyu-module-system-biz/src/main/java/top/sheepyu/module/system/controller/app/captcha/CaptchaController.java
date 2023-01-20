@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.sheepyu.framework.web.annotations.FlowLimit;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.system.controller.app.captcha.vo.CaptchaRespVo;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
@@ -26,6 +27,7 @@ public class CaptchaController {
     @Resource
     private CaptchaService captchaService;
 
+    @FlowLimit(20)
     @GetMapping
     @ApiOperation("获取验证码")
     public Result<CaptchaRespVo> captcha() {
