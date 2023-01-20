@@ -1,5 +1,6 @@
 package top.sheepyu.framework.log.core.aop;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.AntPathMatcher;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.json.JSONUtil;
@@ -7,10 +8,9 @@ import com.google.common.collect.Maps;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
-import org.aspectj.lang.annotation.AfterThrowing;
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.validation.BindingResult;
@@ -19,11 +19,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.log.core.ApiLogProperties;
 import top.sheepyu.framework.log.core.annotations.RecordLog;
-import top.sheepyu.framework.log.core.enums.OperateTypeEnum;
 import top.sheepyu.framework.log.core.service.ApiLogFrameworkService;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 import top.sheepyu.module.common.common.Result;
-import top.sheepyu.module.common.enums.UserTypeEnum;
 import top.sheepyu.module.common.exception.CommonException;
 import top.sheepyu.module.common.util.ExceptionUtil;
 import top.sheepyu.module.common.util.ServletUtil;
@@ -32,13 +30,14 @@ import top.sheepyu.module.system.dto.ApiLogDto;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.IntStream;
 
 import static top.sheepyu.framework.log.core.enums.OperateTypeEnum.*;
+import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 
 /**
  * @author ygq
@@ -51,126 +50,193 @@ public class RecordLogAspect {
     private ApiLogFrameworkService apiLogFrameworkService;
     @Resource
     private ApiLogProperties apiLogProperties;
-    private static final ThreadLocal<ApiLogDto> LOG = new ThreadLocal<>();
 
-    @Before("@annotation(apiOperation)")
-    public void before(JoinPoint joinPoint, ApiOperation apiOperation) {
-        Integer userType = WebFrameworkUtil.getLoginUserType();
-        if (!Objects.equals(userType, UserTypeEnum.ADMIN.getValue())) {
+    @Around("@annotation(apiOperation)")
+    public Object around(ProceedingJoinPoint pj, ApiOperation apiOperation) throws Throwable {
+        RecordLog recordLog = getMethodAnnotation(pj, RecordLog.class);
+        return processAround(pj, recordLog, apiOperation);
+    }
+
+    @Around("!@annotation(io.swagger.annotations.ApiOperation) && @annotation(recordLog)")
+    // 兼容处理，只添加 @RecordLog 注解的情况
+    public Object around(ProceedingJoinPoint joinPoint, RecordLog recordLog) throws Throwable {
+        return processAround(joinPoint, recordLog, null);
+    }
+
+    private Object processAround(ProceedingJoinPoint pj, RecordLog recordLog, ApiOperation apiOperation) throws Throwable {
+        if (!Objects.equals(WebFrameworkUtil.getLoginUserType(), ADMIN.getValue())) {
+            return pj.proceed();
+        }
+        //排除过滤的请求
+        if (isExcludes()) {
+            return pj.proceed();
+        }
+
+        Object proceed;
+        long startTime = System.currentTimeMillis();
+        try {
+            proceed = pj.proceed();
+            //正常记录
+            log(pj, recordLog, apiOperation, startTime, proceed, null);
+        } catch (Throwable e) {
+            //异常记录
+            log(pj, recordLog, apiOperation, startTime, null, e);
+            throw e;
+        }
+        return proceed;
+    }
+
+    private void log(ProceedingJoinPoint pj, RecordLog recordLog, ApiOperation apiOperation, long startTime, Object result, Throwable exception) {
+        if (!isLogEnable(pj, recordLog)) {
             return;
         }
 
-        ApiLogDto apiLog = new ApiLogDto().setUserId(WebFrameworkUtil.getLoginUserId()).setUserType(userType);
-        apiLog.setName(apiOperation.value()).setStartTime(System.currentTimeMillis());
-        setRequestAbout(apiLog, joinPoint);
-        LOG.set(apiLog);
-    }
-
-    @AfterReturning(value = "@annotation(apiOperation)", returning = "returnValue")
-    public void afterReturning(ApiOperation apiOperation, Object returnValue) {
         try {
-            ApiLogDto apiLog = LOG.get();
-            //如果是get方法且没有RecordLog注解就不记录
-            if (apiLog.isClose()) {
-                return;
-            }
+            ApiLogDto apiLog = new ApiLogDto();
+            //补充日志基本信息
+            fillBaseFields(pj, apiLog, apiOperation, recordLog);
+            // 补全请求信息
+            fillRequestFields(apiLog, pj, startTime, result);
+            // 补全异常信息
+            fillExceptionFields(apiLog, exception);
 
-            //只记录返回结果为Result的
-            if (Result.class.isAssignableFrom(returnValue.getClass())) {
-                Result<?> result = (Result<?>) returnValue;
-                apiLog.setResultCode(result.getCode()).setResultData(JSONUtil.toJsonStr(result.getData()));
-            }
-
-            setDuration(apiLog);
+            // 异步记录日志
             apiLogFrameworkService.createApiLog(apiLog);
-        } finally {
-            LOG.remove();
+        } catch (Throwable e) {
+            log.error("[log][记录操作日志时，发生异常，其中参数是 joinPoint({}) recordLog({}) apiOperation({}) result({}) exception({}) ]", pj, recordLog, apiOperation, result, exception, exception);
         }
     }
 
-    @AfterThrowing(value = "@annotation(apiOperation)", throwing = "th")
-    public void afterThrowing(ApiOperation apiOperation, Throwable th) {
-        try {
-            //如果是自定义异常也不记录
-            if (th.getClass().isAssignableFrom(CommonException.class)) {
-                return;
-            }
-
-            ApiLogDto apiLog = LOG.get();
-            apiLog.setExceptionTime(LocalDateTime.now());
-            apiLog.setExceptionName(th.getClass().getName());
-            apiLog.setExceptionRootCaseMessage(ExceptionUtil.getRootCauseMessage(th));
-            apiLog.setExceptionStackTraceFull(ExceptionUtil.getMessage(th));
-
-            List<String> crucialInfo = new ArrayList<>();
-            for (StackTraceElement traceElement : th.getStackTrace()) {
-                String className = traceElement.getClassName();
-                String fileName = traceElement.getFileName();
-                String methodName = traceElement.getMethodName();
-                int line = traceElement.getLineNumber();
-                if (className.startsWith("top.sheepyu") && !fileName.contains("generated")) {
-                    String info = String.format("class: %s, filename: %s, method: %s, line: %s", className, fileName, methodName, line);
-                    crucialInfo.add(info);
-                }
-            }
-
-            apiLog.setExceptionStackTraceCrucial(String.join("\n", crucialInfo));
-            setDuration(apiLog);
-            apiLogFrameworkService.createApiLog(apiLog);
-        } finally {
-            LOG.remove();
+    private void fillExceptionFields(ApiLogDto apiLog, Throwable th) {
+        if (th == null) {
+            return;
         }
+        //如果是自定义异常也不记录
+        if (th.getClass().isAssignableFrom(CommonException.class)) {
+            return;
+        }
+        //校验异常不记录
+        if (th.getMessage().contains("validation")) {
+            return;
+        }
+
+        apiLog.setExceptionTime(LocalDateTime.now());
+        apiLog.setExceptionName(th.getClass().getName());
+        apiLog.setExceptionRootCauseMessage(ExceptionUtil.getRootCauseMessage(th));
+        apiLog.setExceptionStackTraceFull(ExceptionUtil.getMessage(th));
+        List<String> crucialInfo = new ArrayList<>();
+        for (StackTraceElement traceElement : th.getStackTrace()) {
+            String className = traceElement.getClassName();
+            String fileName = traceElement.getFileName();
+            String methodName = traceElement.getMethodName();
+            int line = traceElement.getLineNumber();
+            if (className.startsWith("top.sheepyu") && !fileName.contains("generated")) {
+                String info = String.format("class: %s, filename: %s, method: %s, line: %s", className, fileName, methodName, line);
+                crucialInfo.add(info);
+            }
+        }
+        apiLog.setExceptionStackTraceCrucial(String.join("\n", crucialInfo));
     }
 
-    private void setDuration(ApiLogDto apiLog) {
-        long duration = System.currentTimeMillis() - apiLog.getStartTime();
-        apiLog.setDuration((int) duration);
+    private void fillBaseFields(ProceedingJoinPoint pj, ApiLogDto apiLog, ApiOperation apiOperation, RecordLog recordLog) {
+        //设置用户信息
+        apiLog.setUserId(WebFrameworkUtil.getLoginUserId());
+        apiLog.setUserType(WebFrameworkUtil.getLoginUserType());
+
+        //设置api信息
+        if (recordLog != null) {
+            apiLog.setType(recordLog.value().getDesc());
+        } else {
+            apiLog.setType(obtainOperateType(pj));
+        }
+        apiLog.setName(apiOperation == null ? apiLog.getType() : apiOperation.value());
     }
 
-    private void setRequestAbout(ApiLogDto apiLog, JoinPoint joinPoint) {
-        HttpServletRequest request = WebFrameworkUtil.getRequest();
-        String requestURI = request.getRequestURI();
-        filterExcludes(requestURI, apiLog);
+    private String obtainOperateType(ProceedingJoinPoint pj) {
+        RequestMethod requestMethod = obtainFirstLogRequestMethod(obtainRequestMethod(pj));
+        if (requestMethod == null) {
+            return null;
+        }
 
-        Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        RequestMapping requestMapping = AnnotationUtils.getAnnotation(method, RequestMapping.class);
-        RequestMethod[] methods = requestMapping == null ? new RequestMethod[1] : requestMapping.method();
-        RequestMethod requestMethod = ArrayUtil.firstNonNull(methods);
-
-        OperateTypeEnum operateType = null;
         switch (requestMethod) {
             case GET:
-                operateType = GET;
-                //如果是get方法, 且没有RecordLog注解就不记录日志
-                RecordLog recordLog = AnnotationUtils.getAnnotation(method, RecordLog.class);
-                apiLog.setClose(recordLog == null);
-                break;
+                return GET.getDesc();
             case POST:
-                operateType = CREATE;
-                break;
+                return CREATE.getDesc();
             case PUT:
             case PATCH:
-                operateType = UPDATE;
-                break;
+                return UPDATE.getDesc();
             case DELETE:
-                operateType = DELETE;
+                return DELETE.getDesc();
+            default:
+                return OTHER.getDesc();
         }
-
-        apiLog.setType(operateType == null ? OTHER.getDesc() : operateType.getDesc());
-        apiLog.setRequestUrl(requestURI);
-        apiLog.setRequestMethod(request.getMethod());
-        apiLog.setRequestParams(obtainMethodArgs(joinPoint));
-        apiLog.setUserIp(ServletUtil.getClientIp(request));
     }
 
-    private void filterExcludes(String requestURI, ApiLogDto apiLogDto) {
+    private void fillRequestFields(ApiLogDto apiLog, ProceedingJoinPoint jp, long startTime, Object result) {
+        // 获得 Request 对象
+        HttpServletRequest request = WebFrameworkUtil.getRequest();
+        if (request == null) {
+            return;
+        }
+        //不全请求信息
+        apiLog.setRequestMethod(request.getMethod());
+        apiLog.setRequestUrl(request.getRequestURI());
+        apiLog.setUserIp(ServletUtil.getClientIp(request));
+        apiLog.setRequestParams(obtainMethodArgs(jp));
+        apiLog.setDuration((int) (System.currentTimeMillis() - startTime));
+
+        //设置请求结果信息
+        if (result != null && Result.class.isAssignableFrom(result.getClass())) {
+            Result<?> r = (Result<?>) result;
+            apiLog.setResultCode(r.getCode()).setResultData(JSONUtil.toJsonStr(r.getData()));
+        }
+    }
+
+    private static boolean isLogEnable(ProceedingJoinPoint joinPoint, RecordLog recordLog) {
+        // 有 @RecordLog 注解的情况下
+        if (recordLog != null) {
+            return true;
+        }
+        // 没有 @RecordLog 注解的情况下，只记录 POST、PUT、DELETE, PATCH 的情况
+        return obtainFirstLogRequestMethod(obtainRequestMethod(joinPoint)) != null;
+    }
+
+    private static RequestMethod obtainFirstLogRequestMethod(RequestMethod[] requestMethods) {
+        if (ArrayUtil.isEmpty(requestMethods)) {
+            return null;
+        }
+        return Arrays.stream(requestMethods).filter(requestMethod -> requestMethod == RequestMethod.POST
+                        || requestMethod == RequestMethod.PUT
+                        || requestMethod == RequestMethod.DELETE
+                        || requestMethod == RequestMethod.PATCH)
+                .findFirst().orElse(null);
+    }
+
+    private static RequestMethod[] obtainRequestMethod(ProceedingJoinPoint joinPoint) {
+        RequestMapping requestMapping = AnnotationUtils.getAnnotation( // 使用 Spring 的工具类，可以处理 @RequestMapping 别名注解
+                ((MethodSignature) joinPoint.getSignature()).getMethod(), RequestMapping.class);
+        return requestMapping != null ? requestMapping.method() : new RequestMethod[]{};
+    }
+
+    private static <T extends Annotation> T getMethodAnnotation(ProceedingJoinPoint joinPoint, Class<T> annotationClass) {
+        return ((MethodSignature) joinPoint.getSignature()).getMethod().getAnnotation(annotationClass);
+    }
+
+    private boolean isExcludes() {
+        HttpServletRequest request = WebFrameworkUtil.getRequest();
+        if (request == null) {
+            return false;
+        }
+
+        String requestURI = request.getRequestURI();
         AntPathMatcher matcher = new AntPathMatcher();
         for (String excludeUri : apiLogProperties.getExcludes()) {
             if (matcher.match(excludeUri, requestURI)) {
-                apiLogDto.setClose(true);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     private static String obtainMethodArgs(JoinPoint joinPoint) {

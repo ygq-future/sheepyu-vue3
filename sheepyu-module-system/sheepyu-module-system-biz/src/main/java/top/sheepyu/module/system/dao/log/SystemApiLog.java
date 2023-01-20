@@ -30,7 +30,7 @@ public class SystemApiLog extends BaseModel {
     private Integer error;
     private LocalDateTime exceptionTime;
     private String exceptionName;
-    private String exceptionRootCaseMessage;
+    private String exceptionRootCauseMessage;
     private String exceptionStackTraceFull;
     private String exceptionStackTraceCrucial;
     private Integer processStatus;

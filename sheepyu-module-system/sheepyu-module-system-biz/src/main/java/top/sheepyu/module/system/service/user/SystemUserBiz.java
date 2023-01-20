@@ -1,6 +1,7 @@
 package top.sheepyu.module.system.service.user;
 
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.security.core.LoginUser;
@@ -15,6 +16,7 @@ import top.sheepyu.module.system.dao.user.SystemUser;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * @author ygq
@@ -54,17 +56,8 @@ public class SystemUserBiz {
     }
 
     public PageResult<SystemUser> pageUser(@Valid SystemUserQueryVo queryVo) {
-        String keyword = queryVo.getKeyword();
-        boolean keywordExists = StrUtil.isNotBlank(keyword);
         //TODO 根据postId和deptId查询用户id, 并用in查询
-        return systemUserService.page(queryVo, systemUserService.buildQuery()
-                .eqIfPresent(SystemUser::getStatus, queryVo.getStatus())
-                .betweenIfPresent(SystemUser::getLoginTime, queryVo.getLoginTimes())
-                .betweenIfPresent(SystemUser::getCreateTime, queryVo.getCreateTimes())
-                .and(keywordExists, e -> e.like(SystemUser::getUsername, keyword).or()
-                        .like(SystemUser::getNickname, keyword).or()
-                        .like(SystemUser::getMobile, keyword).or()
-                        .like(SystemUser::getEmail, keyword)));
+        return systemUserService.page(queryVo, buildQuery(queryVo));
     }
 
     public void createUser(SystemUserCreateVo createVo) {
@@ -81,5 +74,22 @@ public class SystemUserBiz {
 
     public void deleteUser(Long id) {
         systemUserService.deleteUser(id);
+    }
+
+    public List<SystemUser> listUser(@Valid SystemUserQueryVo queryVo) {
+        return systemUserService.list(buildQuery(queryVo));
+    }
+
+    private LambdaQueryWrapper<SystemUser> buildQuery(SystemUserQueryVo queryVo) {
+        String keyword = queryVo.getKeyword();
+        boolean keywordExists = StrUtil.isNotBlank(keyword);
+        return systemUserService.buildQuery()
+                .eqIfPresent(SystemUser::getStatus, queryVo.getStatus())
+                .betweenIfPresent(SystemUser::getLoginTime, queryVo.getLoginTimes())
+                .betweenIfPresent(SystemUser::getCreateTime, queryVo.getCreateTimes())
+                .and(keywordExists, e -> e.like(SystemUser::getUsername, keyword).or()
+                        .like(SystemUser::getNickname, keyword).or()
+                        .like(SystemUser::getMobile, keyword).or()
+                        .like(SystemUser::getEmail, keyword));
     }
 }

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -21,5 +21,5 @@ public class LoginUser {
     private Integer userType;
     private String accessToken;
     private String refreshToken;
-    private LocalDateTime expireTime;
+    private Date expireTime;
 }

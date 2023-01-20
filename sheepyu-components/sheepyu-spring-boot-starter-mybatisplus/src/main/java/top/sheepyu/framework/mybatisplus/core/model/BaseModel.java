@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableLogic;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -19,9 +19,9 @@ public class BaseModel implements Serializable {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updater;
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private Date createTime;
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime updateTime;
+    private Date updateTime;
     @TableLogic
     private Integer deleted;
 }

@@ -4,18 +4,21 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import top.sheepyu.framework.log.core.annotations.RecordLog;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.common.Result;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserQueryVo;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserRespVo;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
+import top.sheepyu.module.common.util.ExcelUtil;
+import top.sheepyu.module.system.controller.admin.user.vo.*;
 import top.sheepyu.module.system.convert.user.SystemUserConvert;
 import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.service.user.SystemUserBiz;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
+import static top.sheepyu.framework.log.core.enums.OperateTypeEnum.EXPORT;
 import static top.sheepyu.module.common.common.Result.success;
 
 /**
@@ -24,7 +27,7 @@ import static top.sheepyu.module.common.common.Result.success;
  **/
 @RestController
 @RequestMapping("/system/user")
-@Api(tags = "管理端-系统用户")
+@Api(tags = "管理端 - 系统用户")
 public class SystemUserController {
     @Resource
     private SystemUserBiz systemUserBiz;
@@ -67,5 +70,15 @@ public class SystemUserController {
     public Result<Boolean> delete(@PathVariable Long id) {
         systemUserBiz.deleteUser(id);
         return success(true);
+    }
+
+    @GetMapping("/export")
+    @ApiOperation("导出系统所有用户")
+    @PreAuthorize("@ss.hasPermission('system:user:export')")
+    @RecordLog(EXPORT)
+    public void export(SystemUserQueryVo queryVo, HttpServletResponse response) throws IOException {
+        List<SystemUser> list = systemUserBiz.listUser(queryVo);
+        List<SystemUserExcelVo> data = SystemUserConvert.CONVERT.convertExcel(list);
+        ExcelUtil.write(response, "系统用户", SystemUserExcelVo.class, data);
     }
 }

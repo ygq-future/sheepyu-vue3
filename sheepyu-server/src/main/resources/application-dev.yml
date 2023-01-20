@@ -22,8 +22,6 @@ sheepyu:
       email: 3029944576@qq.com
   security:
     mock-enable: true
-    permit-urls:
-  #      - /admin-api/demo
 logging:
   level:
     top.sheepyu: debug

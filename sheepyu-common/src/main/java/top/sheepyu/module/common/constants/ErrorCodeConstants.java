@@ -19,4 +19,5 @@ public interface ErrorCodeConstants {
     ErrorCode EXISTS = new ErrorCode(503, "资源已存在!");
     ErrorCode OPERATION_FAILED = new ErrorCode(504, "操作失败!");
     ErrorCode CHECK_FIELD_NOT_NULL = new ErrorCode(505, "检查的字段不能为空!");
+    ErrorCode CAPTCHA_TYPE_ERROR = new ErrorCode(506, "验证码类型错误!");
 }

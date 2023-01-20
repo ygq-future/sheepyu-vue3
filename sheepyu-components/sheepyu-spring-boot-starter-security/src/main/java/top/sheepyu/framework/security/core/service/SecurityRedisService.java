@@ -1,13 +1,16 @@
 package top.sheepyu.framework.security.core.service;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
-import top.sheepyu.framework.security.core.constants.SecurityRedisConstants;
 import top.sheepyu.framework.redis.util.RedisUtil;
 import top.sheepyu.framework.security.core.LoginUser;
+import top.sheepyu.framework.security.core.constants.SecurityRedisConstants;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
+
+import static top.sheepyu.framework.security.core.constants.SecurityRedisConstants.ACCESS_TOKEN_TTL;
 
 /**
  * @author ygq
@@ -26,9 +29,9 @@ public class SecurityRedisService {
         String refreshToken = UUID.fastUUID().toString(true);
         loginUser.setAccessToken(accessToken);
         loginUser.setRefreshToken(refreshToken);
-        loginUser.setExpireTime(LocalDateTime.now().plusMinutes(SecurityRedisConstants.ACCESS_TOKEN_TTL));
+        loginUser.setExpireTime(DateUtil.offsetMinute(new Date(), ACCESS_TOKEN_TTL.intValue()));
 
-        redisUtil.set(SecurityRedisConstants.ACCESS_TOKEN_KEY.concat(accessToken), loginUser, SecurityRedisConstants.ACCESS_TOKEN_TTL, TimeUnit.MINUTES);
+        redisUtil.set(SecurityRedisConstants.ACCESS_TOKEN_KEY.concat(accessToken), loginUser, ACCESS_TOKEN_TTL, TimeUnit.MINUTES);
         redisUtil.set(SecurityRedisConstants.REFRESH_TOKEN_KEY.concat(refreshToken), loginUser, SecurityRedisConstants.REFRESH_TOKEN_TTL, TimeUnit.MINUTES);
     }
 

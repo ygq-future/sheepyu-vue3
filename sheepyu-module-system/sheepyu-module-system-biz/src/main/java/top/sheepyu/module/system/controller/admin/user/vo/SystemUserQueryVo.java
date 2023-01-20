@@ -10,7 +10,7 @@ import top.sheepyu.module.common.enums.CommonStatusEnum;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -34,9 +34,9 @@ public class SystemUserQueryVo extends PageParam {
 
     @ApiModelProperty("最近登录时间")
     @Size(min = 2, max = 2, message = "最近登录时间参数不正确")
-    private LocalDateTime[] loginTimes;
+    private Date[] loginTimes;
 
     @ApiModelProperty("最近创建时间")
     @Size(min = 2, max = 2, message = "最近创建时间参数不正确")
-    private LocalDateTime[] createTimes;
+    private Date[] createTimes;
 }

@@ -63,6 +63,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
         }
         //根据用户名删除deleted=1的用户
         baseMapper.removeByUsernameDeleted(user.getUsername());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         save(user);
     }
 

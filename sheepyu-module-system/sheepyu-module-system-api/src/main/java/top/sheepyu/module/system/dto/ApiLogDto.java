@@ -25,7 +25,7 @@ public class ApiLogDto {
     private String resultData;
     private LocalDateTime exceptionTime;
     private String exceptionName;
-    private String exceptionRootCaseMessage;
+    private String exceptionRootCauseMessage;
     private String exceptionStackTraceFull;
     private String exceptionStackTraceCrucial;
     private Long startTime;

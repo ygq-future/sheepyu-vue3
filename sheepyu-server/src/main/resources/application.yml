@@ -39,7 +39,7 @@ mybatis-plus:
 sheepyu:
   log:
     excludes:
-#      - /admin-api/system/user/login
+  #      - /admin-api/system/user/login
   security:
     permit-urls:
-#      - /admin-api/system/user/login
+      - /app-api/captcha/**

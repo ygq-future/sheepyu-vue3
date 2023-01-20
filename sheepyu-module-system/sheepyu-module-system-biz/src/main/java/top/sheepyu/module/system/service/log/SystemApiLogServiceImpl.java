@@ -1,6 +1,7 @@
 package top.sheepyu.module.system.service.log;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
@@ -21,6 +22,7 @@ import static top.sheepyu.module.system.convert.log.SystemApiLogConvert.CONVERT;
 @Validated
 public class SystemApiLogServiceImpl extends ServiceImplX<SystemApiLogMapper, SystemApiLog> implements SystemApiLogService {
 
+    @Async
     @Override
     public void createApiLog(ApiLogDto apiLogDto) {
         SystemApiLog apiLog = CONVERT.convert(apiLogDto);

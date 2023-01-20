@@ -20,5 +20,5 @@ public class SystemUserCreateVo extends SystemUserBaseVo {
     @ApiModelProperty("用户类型")
     @NotNull(message = "用户类型不能为空")
     @InEnum(UserTypeEnum.class)
-    private String type;
+    private Integer type;
 }

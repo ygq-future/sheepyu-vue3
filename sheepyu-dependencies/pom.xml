@@ -17,9 +17,10 @@
         <swagger.annotations.version>1.6.8</swagger.annotations.version>
         <javax.servlet.version>2.5</javax.servlet.version>
         <hutool.version>5.8.5</hutool.version>
-        <easyexcel.verion>3.1.1</easyexcel.verion>
         <com.github.xiaoymin.version>3.0.3</com.github.xiaoymin.version>
         <mybatisplus.version>3.5.0</mybatisplus.version>
+        <easyexcel.version>3.2.0</easyexcel.version>
+        <easy.captcha.version>1.6.2</easy.captcha.version>
     </properties>
 
     <dependencyManagement>
@@ -77,12 +78,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>easyexcel</artifactId>
-                <version>${easyexcel.verion}</version>
-            </dependency>
-
-            <dependency>
                 <groupId>io.swagger</groupId>
                 <artifactId>swagger-annotations</artifactId>
                 <version>${swagger.annotations.version}</version>
@@ -104,6 +99,18 @@
                 <groupId>com.baomidou</groupId>
                 <artifactId>mybatis-plus-boot-starter</artifactId>
                 <version>${mybatisplus.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.github.whvcse</groupId>
+                <artifactId>easy-captcha</artifactId>
+                <version>${easy.captcha.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

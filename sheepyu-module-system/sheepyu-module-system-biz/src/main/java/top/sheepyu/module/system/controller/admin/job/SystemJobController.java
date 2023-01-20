@@ -25,7 +25,7 @@ import static top.sheepyu.module.system.convert.job.SystemJobConvert.CONVERT;
  **/
 @RestController
 @RequestMapping("/system/job")
-@Api(tags = "系统定时任务")
+@Api(tags = "管理端 - 系统定时任务")
 public class SystemJobController {
     @Resource
     private SystemJobService systemJobService;

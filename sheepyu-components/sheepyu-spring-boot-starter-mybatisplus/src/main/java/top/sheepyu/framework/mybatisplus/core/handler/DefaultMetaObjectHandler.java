@@ -6,7 +6,7 @@ import org.apache.ibatis.reflection.MetaObject;
 import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -23,11 +23,11 @@ public class DefaultMetaObjectHandler implements MetaObjectHandler {
         }
 
         if (baseModel.getCreateTime() == null) {
-            baseModel.setCreateTime(LocalDateTime.now());
+            baseModel.setCreateTime(new Date());
         }
 
         if (baseModel.getUpdateTime() == null) {
-            baseModel.setUpdateTime(LocalDateTime.now());
+            baseModel.setUpdateTime(new Date());
         }
     }
 
@@ -39,6 +39,6 @@ public class DefaultMetaObjectHandler implements MetaObjectHandler {
         if (StrUtil.isNotBlank(username)) {
             baseModel.setUpdater(username);
         }
-        baseModel.setUpdateTime(LocalDateTime.now());
+        baseModel.setUpdateTime(new Date());
     }
 }
