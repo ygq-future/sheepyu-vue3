@@ -15,6 +15,7 @@ import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.service.accesslog.SystemAccessLogService;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
+import top.sheepyu.module.system.service.config.SystemConfigService;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
 import static top.sheepyu.module.system.enums.LoginLogTypeEnum.LOGIN_USERNAME;
 import static top.sheepyu.module.system.enums.LoginResultEnum.CAPTCHA_CODE_ERROR;
+import static top.sheepyu.module.system.enums.SystemConfigKeyEnum.CAPTCHA_ENABLE;
 
 /**
  * @author ygq
@@ -40,10 +42,13 @@ public class SystemUserBiz {
     private CaptchaService captchaService;
     @Resource
     private SystemAccessLogService systemAccessLogService;
+    @Resource
+    private SystemConfigService systemConfigService;
 
-    public LoginUser login(SystemUserLoginVo loginVo) {
+    public LoginUser login(@Valid SystemUserLoginVo loginVo) {
         //校验验证码
-        if (!captchaService.verifyCaptcha(loginVo.getKey(), loginVo.getCode())) {
+        Boolean captchaEnable = systemConfigService.get(CAPTCHA_ENABLE);
+        if (captchaEnable && !captchaService.verifyCaptcha(loginVo.getKey(), loginVo.getCode())) {
             systemAccessLogService.createAccessLog(null, loginVo.getUsername(), null, LOGIN_USERNAME, CAPTCHA_CODE_ERROR);
             throw exception(CODE_ERROR);
         }

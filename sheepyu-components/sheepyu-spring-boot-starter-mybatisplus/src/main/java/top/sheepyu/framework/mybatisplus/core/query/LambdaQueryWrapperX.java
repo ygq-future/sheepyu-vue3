@@ -8,10 +8,11 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
+import java.util.function.Consumer;
 
 /**
  * 拓展 MyBatis Plus QueryWrapper 类，主要增加如下功能：
- *
+ * <p>
  * 1. 拼接条件的方法，增加 xxxIfPresent 方法，用于判断值不存在的时候，不要拼接到条件中。
  *
  * @param <T> 数据类型
@@ -98,5 +99,35 @@ public class LambdaQueryWrapperX<T> extends LambdaQueryWrapper<T> {
         Object val1 = ArrayUtils.get(values, 0);
         Object val2 = ArrayUtils.get(values, 1);
         return betweenIfPresent(column, val1, val2);
+    }
+
+    @Override
+    public LambdaQueryWrapperX<T> or(boolean condition, Consumer<LambdaQueryWrapper<T>> consumer) {
+        super.or(condition, consumer);
+        return this;
+    }
+
+    @Override
+    public LambdaQueryWrapperX<T> or(Consumer<LambdaQueryWrapper<T>> consumer) {
+        super.or(consumer);
+        return this;
+    }
+
+    @Override
+    public LambdaQueryWrapperX<T> or() {
+        super.or();
+        return this;
+    }
+
+    @Override
+    public LambdaQueryWrapperX<T> and(boolean condition, Consumer<LambdaQueryWrapper<T>> consumer) {
+        super.and(condition, consumer);
+        return this;
+    }
+
+    @Override
+    public LambdaQueryWrapperX<T> and(Consumer<LambdaQueryWrapper<T>> consumer) {
+        super.and(consumer);
+        return this;
     }
 }

@@ -14,6 +14,7 @@ import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.util.MyStrUtil;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import static top.sheepyu.module.common.constants.ErrorCodeConstants.CHECK_FIELD_NOT_NULL;
@@ -33,11 +34,6 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
     }
 
     @Override
-    public PageResult<T> page(PageParam pageParam, LambdaQueryWrapperX<T> wrapperX) {
-        return page(pageParam, wrapperX);
-    }
-
-    @Override
     public PageResult<T> page(PageParam pageParam, LambdaQueryWrapper<T> wrapper) {
         Page<T> page = super.page(new Page<>(pageParam.getCurrent(), pageParam.getSize()), wrapper);
         return new PageResult<>(page.getRecords(), page.getTotal());
@@ -51,8 +47,8 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
      * @param errorCode 错误码
      */
     @Override
-    public void checkRepeatByFieldThrow(T entity, ErrorCode errorCode, Collection<SFunction<T, ?>> fields) {
-        boolean result = checkRepeatByField(entity, fields);
+    public void checkRepeatByFieldsThrow(T entity, ErrorCode errorCode, Collection<SFunction<T, ?>> fields) {
+        boolean result = checkRepeatByFields(entity, fields);
         if (result) {
             throw exception(errorCode);
         }
@@ -66,7 +62,7 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
      * @return result
      */
     @Override
-    public boolean checkRepeatByField(T entity, Collection<SFunction<T, ?>> fields) {
+    public boolean checkRepeatByFields(T entity, Collection<SFunction<T, ?>> fields) {
         if (CollUtil.isEmpty(fields)) {
             throw exception(CHECK_FIELD_NOT_NULL);
         }
@@ -88,6 +84,16 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
             log.error("重复数据: {}", list);
         }
         return hasElement;
+    }
+
+    @Override
+    public boolean checkRepeatByField(T entity, SFunction<T, ?> field) {
+        return checkRepeatByFields(entity, Collections.singletonList(field));
+    }
+
+    @Override
+    public void checkRepeatByFieldThrow(T entity, ErrorCode errorCode, SFunction<T, ?> field) {
+        checkRepeatByFieldsThrow(entity, errorCode, Collections.singletonList(field));
     }
 
     @Override

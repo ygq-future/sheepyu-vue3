@@ -16,8 +16,6 @@ import java.util.Collection;
 public interface IServiceX<T> extends IService<T> {
     PageResult<T> page(PageParam pageParam);
 
-    PageResult<T> page(PageParam pageParam, LambdaQueryWrapperX<T> wrapperX);
-
     PageResult<T> page(PageParam pageParam, LambdaQueryWrapper<T> wrapper);
 
     /**
@@ -27,7 +25,7 @@ public interface IServiceX<T> extends IService<T> {
      * @param fields    字段表达式
      * @param errorCode 错误码
      */
-    void checkRepeatByFieldThrow(T entity, ErrorCode errorCode, Collection<SFunction<T, ?>> fields);
+    void checkRepeatByFieldsThrow(T entity, ErrorCode errorCode, Collection<SFunction<T, ?>> fields);
 
     /**
      * 检查多字段在表中是否已经存在
@@ -36,7 +34,25 @@ public interface IServiceX<T> extends IService<T> {
      * @param fields 字段表达式
      * @return result
      */
-    boolean checkRepeatByField(T entity, Collection<SFunction<T, ?>> fields);
+    boolean checkRepeatByFields(T entity, Collection<SFunction<T, ?>> fields);
+
+    /**
+     * 检查单字段在表中是否已经存在
+     *
+     * @param entity 实体类
+     * @param field  字段表达式
+     * @return result
+     */
+    boolean checkRepeatByField(T entity, SFunction<T, ?> field);
+
+    /**
+     * 检查单字段在表中是否已经存在, 但是会抛出自定义异常
+     *
+     * @param entity    实体类
+     * @param field    字段表达式
+     * @param errorCode 错误码
+     */
+    void checkRepeatByFieldThrow(T entity, ErrorCode errorCode, SFunction<T, ?> field);
 
     T findByIdValidateExists(Object id, ErrorCode errorCode);
 

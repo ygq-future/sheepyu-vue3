@@ -5,6 +5,7 @@ import cn.hutool.json.JSONUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -55,6 +56,23 @@ public class RedisUtil {
     public void sadd(String key, String value) {
         redisTemplate.opsForSet().add(key, value);
     }
+
+    public void put(String key, String hashKey, Object value) {
+        redisTemplate.opsForHash().put(key, hashKey, value);
+    }
+
+    public void putAll(String key, Map<String, Object> map) {
+        redisTemplate.opsForHash().putAll(key, map);
+    }
+
+    public Object hGet(String key, String hashKey) {
+        return redisTemplate.opsForHash().get(key, hashKey);
+    }
+
+    public void hDel(String key, String hashKey) {
+        redisTemplate.opsForHash().delete(key, hashKey);
+    }
+
 
     public long ttl(String key) {
         Long expire = redisTemplate.getExpire(key);

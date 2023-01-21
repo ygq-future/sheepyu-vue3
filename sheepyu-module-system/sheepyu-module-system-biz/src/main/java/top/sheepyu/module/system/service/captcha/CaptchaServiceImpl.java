@@ -9,6 +9,7 @@ import com.wf.captcha.SpecCaptcha;
 import com.wf.captcha.base.Captcha;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.redis.util.RedisUtil;
 import top.sheepyu.module.common.enums.CaptchaEnum;
 import top.sheepyu.module.system.controller.app.captcha.vo.CaptchaRespVo;
@@ -26,6 +27,7 @@ import static top.sheepyu.module.system.constants.RedisConstants.CAPTCHA_IMAGE_T
  **/
 @Service
 @Slf4j
+@Validated
 public class CaptchaServiceImpl implements CaptchaService {
     @Resource
     private RedisUtil redisUtil;

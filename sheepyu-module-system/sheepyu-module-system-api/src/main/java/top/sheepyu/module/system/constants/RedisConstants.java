@@ -7,4 +7,5 @@ package top.sheepyu.module.system.constants;
 public interface RedisConstants {
     String CAPTCHA_IMAGE_KEY = "captcha:image:";
     long CAPTCHA_IMAGE_TTL = 2;
+    String SYSTEM_CONFIG_KEY = "system:config";
 }

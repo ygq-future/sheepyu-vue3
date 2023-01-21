@@ -29,4 +29,9 @@ public interface ErrorCodeConstants {
     ErrorCode LOGIN_FAILED = new ErrorCode(100_003_002, "登录失败, 用户名或密码错误!");
     ErrorCode USER_EXISTS = new ErrorCode(100_003_003, "用户已存在!");
     ErrorCode CODE_ERROR = new ErrorCode(100_003_004, "验证码错误!");
+
+    //systemConfig相关 100_004_001
+    ErrorCode CONFIG_NOT_EXISTS = new ErrorCode(100_004_001, "配置不存在!");
+    ErrorCode NOT_SUPPORT_TYPE = new ErrorCode(100_004_002, "不支持的类型!");
+    ErrorCode CONFIG_KEY_EXISTS = new ErrorCode(100_004_003, "配置已存在!");
 }
