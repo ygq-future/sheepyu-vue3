@@ -23,4 +23,5 @@ public interface ErrorCodeConstants {
     ErrorCode FLOW_LIMIT_ON_METHOD = new ErrorCode(507, "限流标在错误的方法上!");
     ErrorCode ACCESS_FREQUENTLY = new ErrorCode(508, "访问过于频繁, 请稍后重试!");
     ErrorCode REPEATEDLY_REQUEST = new ErrorCode(508, "重复请求, 请稍后重试!");
+    ErrorCode SMS_SENDER_DONT_MATCH = new ErrorCode(509, "sms没有开启或者没有匹配的smsSender!");
 }

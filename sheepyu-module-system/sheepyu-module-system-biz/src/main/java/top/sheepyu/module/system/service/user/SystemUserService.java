@@ -4,9 +4,11 @@ import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
+import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -18,6 +20,10 @@ public interface SystemUserService extends IServiceX<SystemUser> {
     SystemUser login(@Valid SystemUserLoginVo loginVo);
 
     SystemUser findByUsername(@NotBlank(message = "用户名不能为空") String username);
+
+    SystemUser findByEmail(@Email String email);
+
+    SystemUser findByMobile(String mobile);
 
     /**
      * 用户脱敏信息
@@ -34,4 +40,8 @@ public interface SystemUserService extends IServiceX<SystemUser> {
     void deleteUser(@NotNull(message = "用户id不能为空") Long id);
 
     void updateLoginTime(SystemUser user);
+
+    SystemUser loginByEmail(@Valid EmailLoginVo loginVo);
+
+    void sendCode(@Email String email);
 }

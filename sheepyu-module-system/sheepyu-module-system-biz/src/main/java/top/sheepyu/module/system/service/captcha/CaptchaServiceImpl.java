@@ -11,15 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.redis.util.RedisUtil;
+import top.sheepyu.module.common.constants.ErrorCodeConstants;
 import top.sheepyu.module.common.enums.CaptchaEnum;
-import top.sheepyu.module.system.controller.app.captcha.vo.CaptchaRespVo;
+import top.sheepyu.module.system.controller.admin.captcha.vo.CaptchaRespVo;
+import top.sheepyu.module.system.service.config.SystemConfigService;
 
 import javax.annotation.Resource;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.RedisConstants.CAPTCHA_IMAGE_KEY;
 import static top.sheepyu.module.system.constants.RedisConstants.CAPTCHA_IMAGE_TTL;
+import static top.sheepyu.module.system.enums.SystemConfigKeyEnum.CAPTCHA_ENABLE;
 
 /**
  * @author ygq
@@ -31,6 +35,8 @@ import static top.sheepyu.module.system.constants.RedisConstants.CAPTCHA_IMAGE_T
 public class CaptchaServiceImpl implements CaptchaService {
     @Resource
     private RedisUtil redisUtil;
+    @Resource
+    private SystemConfigService systemConfigService;
 
     @Override
     public CaptchaRespVo generateCaptcha(CaptchaEnum type) {
@@ -58,6 +64,16 @@ public class CaptchaServiceImpl implements CaptchaService {
 
     @Override
     public boolean verifyCaptcha(String key, String code) {
+        Boolean captchaEnable = systemConfigService.get(CAPTCHA_ENABLE);
+        //如果验证码没有开启
+        if (!captchaEnable) {
+            return true;
+        }
+
+        if (StrUtil.hasBlank(key, code)) {
+            throw exception(ErrorCodeConstants.INVALID_PARAMS);
+        }
+
         key = CAPTCHA_IMAGE_KEY.concat(key);
         String value = redisUtil.get(key);
         redisUtil.del(key);

@@ -57,6 +57,11 @@
             </dependency>
             <dependency>
                 <groupId>top.sheepyu</groupId>
+                <artifactId>sheepyu-spring-boot-starter-sms</artifactId>
+                <version>${revision}</version>
+            </dependency>
+            <dependency>
+                <groupId>top.sheepyu</groupId>
                 <artifactId>sheepyu-common</artifactId>
                 <version>${revision}</version>
             </dependency>

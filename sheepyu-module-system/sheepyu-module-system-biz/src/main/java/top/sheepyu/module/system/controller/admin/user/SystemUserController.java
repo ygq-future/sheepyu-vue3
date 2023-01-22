@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import top.sheepyu.framework.log.core.annotations.RecordLog;
+import top.sheepyu.framework.security.core.LoginUser;
+import top.sheepyu.framework.security.core.annotations.Permit;
+import top.sheepyu.framework.web.annotations.FlowLimit;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.common.util.ExcelUtil;
@@ -31,6 +34,36 @@ import static top.sheepyu.module.common.common.Result.success;
 public class SystemUserController {
     @Resource
     private SystemUserBiz systemUserBiz;
+
+    /**
+     * 管理端采用用户名加密码登录
+     *
+     * @param loginVo 登录vo对象
+     * @return 返回令牌
+     */
+    @Permit
+    @FlowLimit
+    @PostMapping("/login")
+    @ApiOperation("账号密码登录")
+    public Result<LoginUser> login(@RequestBody SystemUserLoginVo loginVo) {
+        LoginUser loginUser = systemUserBiz.login(loginVo);
+        return success(loginUser);
+    }
+
+    @FlowLimit(5)
+    @GetMapping("/logout")
+    @ApiOperation("注销登录")
+    public Result<Boolean> logout() {
+        systemUserBiz.logout();
+        return success(true);
+    }
+
+    @GetMapping("/info")
+    @ApiOperation("获取用户信息")
+    public Result<SystemUserRespVo> info() {
+        SystemUser user = systemUserBiz.info();
+        return success(SystemUserConvert.CONVERT.convert(user));
+    }
 
     @GetMapping("/info/{id}")
     @ApiOperation("获取指定用户信息")

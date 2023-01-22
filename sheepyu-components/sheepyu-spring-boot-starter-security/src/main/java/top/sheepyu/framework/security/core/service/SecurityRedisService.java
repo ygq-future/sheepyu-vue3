@@ -2,6 +2,7 @@ package top.sheepyu.framework.security.core.service;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.StrUtil;
 import top.sheepyu.framework.redis.util.RedisUtil;
 import top.sheepyu.framework.security.core.LoginUser;
 import top.sheepyu.framework.security.core.constants.SecurityRedisConstants;
@@ -36,7 +37,11 @@ public class SecurityRedisService {
     }
 
     public void delLoginUser(String accessToken, String refreshToken) {
-        redisUtil.del(SecurityRedisConstants.ACCESS_TOKEN_KEY.concat(accessToken));
-        redisUtil.del(SecurityRedisConstants.REFRESH_TOKEN_KEY.concat(refreshToken));
+        if (StrUtil.isNotBlank(accessToken)) {
+            redisUtil.del(SecurityRedisConstants.ACCESS_TOKEN_KEY.concat(accessToken));
+        }
+        if (StrUtil.isNotBlank(refreshToken)) {
+            redisUtil.del(SecurityRedisConstants.REFRESH_TOKEN_KEY.concat(refreshToken));
+        }
     }
 }

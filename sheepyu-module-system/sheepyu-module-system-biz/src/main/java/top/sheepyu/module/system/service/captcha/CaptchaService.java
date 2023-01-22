@@ -1,9 +1,7 @@
 package top.sheepyu.module.system.service.captcha;
 
 import top.sheepyu.module.common.enums.CaptchaEnum;
-import top.sheepyu.module.system.controller.app.captcha.vo.CaptchaRespVo;
-
-import javax.validation.constraints.NotBlank;
+import top.sheepyu.module.system.controller.admin.captcha.vo.CaptchaRespVo;
 
 /**
  * @author ygq
@@ -19,6 +17,5 @@ public interface CaptchaService {
      * @param code code
      * @return 返回true or false
      */
-    boolean verifyCaptcha(@NotBlank(message = "验证码不能为空") String key,
-                          @NotBlank(message = "验证码不能为空") String code);
+    boolean verifyCaptcha(String key, String code);
 }

@@ -21,5 +21,6 @@
         <module>sheepyu-spring-boot-starter-redis</module>
         <module>sheepyu-spring-boot-starter-job</module>
         <module>sheepyu-spring-boot-starter-log</module>
+        <module>sheepyu-spring-boot-starter-sms</module>
     </modules>
 </project>

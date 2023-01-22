@@ -12,10 +12,10 @@ import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserQueryVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
+import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.service.accesslog.SystemAccessLogService;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
-import top.sheepyu.module.system.service.config.SystemConfigService;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -25,7 +25,6 @@ import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
 import static top.sheepyu.module.system.enums.LoginLogTypeEnum.LOGIN_USERNAME;
 import static top.sheepyu.module.system.enums.LoginResultEnum.CAPTCHA_CODE_ERROR;
-import static top.sheepyu.module.system.enums.SystemConfigKeyEnum.CAPTCHA_ENABLE;
 
 /**
  * @author ygq
@@ -42,27 +41,17 @@ public class SystemUserBiz {
     private CaptchaService captchaService;
     @Resource
     private SystemAccessLogService systemAccessLogService;
-    @Resource
-    private SystemConfigService systemConfigService;
 
-    public LoginUser login(@Valid SystemUserLoginVo loginVo) {
+    public LoginUser login(SystemUserLoginVo loginVo) {
         //校验验证码
-        Boolean captchaEnable = systemConfigService.get(CAPTCHA_ENABLE);
-        if (captchaEnable && !captchaService.verifyCaptcha(loginVo.getKey(), loginVo.getCode())) {
-            systemAccessLogService.createAccessLog(null, loginVo.getUsername(), null, LOGIN_USERNAME, CAPTCHA_CODE_ERROR);
+        if (!captchaService.verifyCaptcha(loginVo.getKey(), loginVo.getCode())) {
+            systemAccessLogService.createAccessLog(null, loginVo.getLogin(), null, LOGIN_USERNAME, CAPTCHA_CODE_ERROR);
             throw exception(CODE_ERROR);
         }
 
         //校验用户名密码
         SystemUser user = systemUserService.login(loginVo);
-        LoginUser loginUser = new LoginUser().setId(user.getId());
-        loginUser.setUsername(user.getUsername()).setUserType(user.getType());
-
-        //将用户存入redis并设置访问和刷新令牌
-        securityRedisService.setLoginUser(loginUser);
-        //更新用户登录时间
-        systemUserService.updateLoginTime(user);
-        return loginUser;
+        return loginAfterDo(user);
     }
 
     public void logout() {
@@ -100,6 +89,26 @@ public class SystemUserBiz {
 
     public List<SystemUser> listUser(@Valid SystemUserQueryVo queryVo) {
         return systemUserService.list(buildQuery(queryVo));
+    }
+
+    public LoginUser loginByEmail(@Valid EmailLoginVo loginVo) {
+        SystemUser user = systemUserService.loginByEmail(loginVo);
+        return loginAfterDo(user);
+    }
+
+    public void sendCode(String email) {
+        systemUserService.sendCode(email);
+    }
+
+    private LoginUser loginAfterDo(SystemUser user) {
+        LoginUser loginUser = new LoginUser().setId(user.getId());
+        loginUser.setUsername(user.getUsername()).setUserType(user.getType());
+
+        //将用户存入redis并设置访问和刷新令牌
+        securityRedisService.setLoginUser(loginUser);
+        //更新用户登录时间
+        systemUserService.updateLoginTime(user);
+        return loginUser;
     }
 
     private LambdaQueryWrapper<SystemUser> buildQuery(SystemUserQueryVo queryVo) {

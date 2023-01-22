@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.controller.app.captcha.vo;
+package top.sheepyu.module.system.controller.admin.captcha.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;

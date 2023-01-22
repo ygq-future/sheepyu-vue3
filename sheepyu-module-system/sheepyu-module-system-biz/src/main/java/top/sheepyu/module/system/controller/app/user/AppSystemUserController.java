@@ -9,6 +9,7 @@ import top.sheepyu.framework.web.annotations.FlowLimit;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserRespVo;
+import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.convert.user.SystemUserConvert;
 import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.service.user.SystemUserBiz;
@@ -23,7 +24,7 @@ import static top.sheepyu.module.common.common.Result.success;
  **/
 @RestController
 @RequestMapping("/system/user")
-@Api(tags = "用户端 - 用户相关")
+@Api(tags = "用户端 - 用户授权")
 public class AppSystemUserController {
     @Resource
     private SystemUserBiz systemUserBiz;
@@ -31,10 +32,28 @@ public class AppSystemUserController {
     @Permit
     @FlowLimit
     @PostMapping("/login")
-    @ApiOperation("用户账号密码登录")
-    public Result<LoginUser> create(@RequestBody SystemUserLoginVo loginVo) {
+    @ApiOperation("账号密码登录")
+    public Result<LoginUser> login(@RequestBody SystemUserLoginVo loginVo) {
         LoginUser loginUser = systemUserBiz.login(loginVo);
         return success(loginUser);
+    }
+
+    @Permit
+    @FlowLimit
+    @PostMapping("/email-login")
+    @ApiOperation("用户邮箱验证码登录")
+    public Result<LoginUser> emailLogin(@RequestBody EmailLoginVo loginVo) {
+        LoginUser loginUser = systemUserBiz.loginByEmail(loginVo);
+        return success(loginUser);
+    }
+
+    @Permit
+    @FlowLimit(5)
+    @PostMapping("/send-code")
+    @ApiOperation("发送邮箱验证码")
+    public Result<Boolean> emailLogin(@RequestParam String email) {
+        systemUserBiz.sendCode(email);
+        return success(true);
     }
 
     @FlowLimit(5)

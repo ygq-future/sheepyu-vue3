@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.controller.admin.demo;
+package top.sheepyu.module.system.controller.admin.job.demo;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

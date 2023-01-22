@@ -43,5 +43,9 @@
             <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-spring-boot-starter-log</artifactId>
         </dependency>
+        <dependency>
+            <groupId>top.sheepyu</groupId>
+            <artifactId>sheepyu-spring-boot-starter-sms</artifactId>
+        </dependency>
     </dependencies>
 </project>

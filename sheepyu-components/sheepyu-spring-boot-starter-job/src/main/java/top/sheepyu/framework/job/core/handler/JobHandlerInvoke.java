@@ -36,7 +36,6 @@ public class JobHandlerInvoke implements Job {
         int retryCount = (int) data.getOrDefault(JobDataKeyEnum.JOB_RETRY_COUNT.name(), 0);
         int retryInterval = (int) data.getOrDefault(JobDataKeyEnum.JOB_RETRY_INTERVAL.name(), 0);
         int refireCount = context.getRefireCount();
-        log.info("refireCount: {}", refireCount);
 
         Long jogLogId = null;
         LocalDateTime beginTime = LocalDateTime.now();

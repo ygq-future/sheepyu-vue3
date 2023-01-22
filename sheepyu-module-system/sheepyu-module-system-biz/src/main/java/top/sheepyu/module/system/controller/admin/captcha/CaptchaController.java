@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.controller.app.captcha;
+package top.sheepyu.module.system.controller.admin.captcha;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.sheepyu.framework.web.annotations.FlowLimit;
 import top.sheepyu.module.common.common.Result;
-import top.sheepyu.module.system.controller.app.captcha.vo.CaptchaRespVo;
+import top.sheepyu.module.system.controller.admin.captcha.vo.CaptchaRespVo;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
 
 import javax.annotation.Resource;
@@ -22,7 +22,7 @@ import static top.sheepyu.module.common.enums.CaptchaEnum.ARITHMETIC;
  **/
 @RestController
 @RequestMapping("/captcha")
-@Api(tags = "验证码")
+@Api(tags = "管理端 - 验证码")
 public class CaptchaController {
     @Resource
     private CaptchaService captchaService;
@@ -34,6 +34,7 @@ public class CaptchaController {
         return success(captchaService.generateCaptcha(ARITHMETIC));
     }
 
+    @FlowLimit(20)
     @GetMapping("/verify/{key}/{code}")
     @ApiOperation("验证")
     public Result<Boolean> verify(@PathVariable String key, @PathVariable String code) {
