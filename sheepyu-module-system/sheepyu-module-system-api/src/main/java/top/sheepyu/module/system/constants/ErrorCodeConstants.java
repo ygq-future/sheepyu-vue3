@@ -34,4 +34,9 @@ public interface ErrorCodeConstants {
     ErrorCode CONFIG_NOT_EXISTS = new ErrorCode(100_004_001, "配置不存在!");
     ErrorCode NOT_SUPPORT_TYPE = new ErrorCode(100_004_002, "不支持的类型!");
     ErrorCode CONFIG_KEY_EXISTS = new ErrorCode(100_004_003, "配置已存在!");
+
+    //systemApiLog相关 100_005_001
+    ErrorCode API_LOG_NOT_EXISTS = new ErrorCode(100_005_001, "日志不存在!");
+    ErrorCode ALREADY_HANDLE = new ErrorCode(100_005_002, "错误已处理!");
+    ErrorCode SUCCESS_API_DONT_HANDLE = new ErrorCode(100_005_003, "访问成功的api不用处理!");
 }

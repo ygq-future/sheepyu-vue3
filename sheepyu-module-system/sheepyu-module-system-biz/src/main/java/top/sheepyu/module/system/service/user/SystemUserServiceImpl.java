@@ -1,5 +1,6 @@
 package top.sheepyu.module.system.service.user;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.dao.user.SystemUserMapper;
 import top.sheepyu.module.system.enums.LoginLogTypeEnum;
 import top.sheepyu.module.system.service.accesslog.SystemAccessLogService;
+import top.sheepyu.module.system.service.config.SystemConfigService;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -30,6 +32,7 @@ import static top.sheepyu.module.system.convert.user.SystemUserConvert.CONVERT;
 import static top.sheepyu.module.system.enums.LoginLogTypeEnum.LOGIN_EMAIL;
 import static top.sheepyu.module.system.enums.LoginLogTypeEnum.LOGIN_USERNAME;
 import static top.sheepyu.module.system.enums.LoginResultEnum.*;
+import static top.sheepyu.module.system.enums.SystemConfigKeyEnum.DEFAULT_PASSWORD;
 
 /**
  * @author ygq
@@ -45,6 +48,8 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     private SystemAccessLogService systemAccessLogService;
     @Resource
     private SmsSender smsSender;
+    @Resource
+    private SystemConfigService systemConfigService;
 
     @Override
     public SystemUser login(SystemUserLoginVo loginVo) {
@@ -124,7 +129,6 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     public void updateUser(SystemUserUpdateVo updateVo) {
         findByIdValidateExists(updateVo.getId());
         SystemUser user = CONVERT.convert(updateVo);
-        user.setUsername(null);
         updateById(user);
     }
 
@@ -163,6 +167,55 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     @Override
     public void sendCode(String email) {
         smsSender.sendCode(new EmailParams(email));
+    }
+
+    @Override
+    public void resetPassword(Long id, String newPass) {
+        SystemUser user = findByIdValidateExists(id);
+        String password;
+        if (StrUtil.isNotBlank(newPass)) {
+            password = passwordEncoder.encode(newPass);
+        } else {
+            String defaultPassword = systemConfigService.get(DEFAULT_PASSWORD);
+            password = passwordEncoder.encode(defaultPassword);
+        }
+        user.setPassword(password);
+        updateById(user);
+    }
+
+    @Override
+    public void updateNickname(Long userId, String nickname) {
+        SystemUser user = findByIdValidateExists(userId);
+        user.setNickname(nickname);
+        updateById(user);
+    }
+
+    @Override
+    public void updateMobile(Long userId, String mobile) {
+        SystemUser user = findByIdValidateExists(userId);
+        user.setMobile(mobile);
+        updateById(user);
+    }
+
+    @Override
+    public void updateEmail(Long userId, String email) {
+        SystemUser user = findByIdValidateExists(userId);
+        user.setEmail(email);
+        updateById(user);
+    }
+
+    @Override
+    public void updateAvatar(Long userId, String avatar) {
+        SystemUser user = findByIdValidateExists(userId);
+        user.setAvatar(avatar);
+        updateById(user);
+    }
+
+    @Override
+    public void updatePassword(Long userId, String password) {
+        SystemUser user = findByIdValidateExists(userId);
+        user.setPassword(passwordEncoder.encode(password));
+        updateById(user);
     }
 
     private void checkStatus(SystemUser user, LoginLogTypeEnum loginType) {

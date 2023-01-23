@@ -15,7 +15,7 @@ public class ApiLogDto {
     private Long userId;
     private Integer userType;
     private String name;
-    private String type;
+    private Integer type;
     private String requestMethod;
     private String requestUrl;
     private String requestParams;

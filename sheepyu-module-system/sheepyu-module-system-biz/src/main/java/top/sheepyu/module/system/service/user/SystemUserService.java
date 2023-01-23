@@ -44,4 +44,16 @@ public interface SystemUserService extends IServiceX<SystemUser> {
     SystemUser loginByEmail(@Valid EmailLoginVo loginVo);
 
     void sendCode(@Email String email);
+
+    void resetPassword(Long id, String newPass);
+
+    void updateNickname(Long userId, @NotBlank(message = "用户名不能为空") String nickname);
+
+    void updateMobile(Long userId, @NotBlank(message = "手机号不能为空") String mobile);
+
+    void updateEmail(Long userId, @NotBlank(message = "邮箱不能为空") String email);
+
+    void updateAvatar(Long userId, @NotBlank(message = "头像不能为空") String avatar);
+
+    void updatePassword(Long userId, @NotBlank(message = "密码不能为空") String password);
 }

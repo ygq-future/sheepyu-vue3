@@ -4,6 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.log.core.annotations.RecordLog;
 import top.sheepyu.framework.security.core.LoginUser;
 import top.sheepyu.framework.security.core.annotations.Permit;
@@ -65,6 +66,41 @@ public class SystemUserController {
         return success(SystemUserConvert.CONVERT.convert(user));
     }
 
+    @PatchMapping("/nickname")
+    @ApiOperation("修改用户昵称")
+    public Result<Boolean> updateNickname(@RequestParam String nickname) {
+        systemUserBiz.updateNickname(nickname);
+        return success(true);
+    }
+
+    @PatchMapping("/mobile")
+    @ApiOperation("修改用户手机号")
+    public Result<Boolean> updateMobile(@RequestParam String mobile) {
+        systemUserBiz.updateMobile(mobile);
+        return success(true);
+    }
+
+    @PatchMapping("/email")
+    @ApiOperation("修改用户邮箱")
+    public Result<Boolean> updateEmail(@RequestParam String email) {
+        systemUserBiz.updateEmail(email);
+        return success(true);
+    }
+
+    @PatchMapping("/avatar")
+    @ApiOperation("修改用户头像")
+    public Result<Boolean> updateAvatar(@RequestParam MultipartFile file) {
+        systemUserBiz.updateAvatar(file);
+        return success(true);
+    }
+
+    @PatchMapping("/password")
+    @ApiOperation("修改用户密码")
+    public Result<Boolean> updatePassword(@RequestParam String password) {
+        systemUserBiz.updatePassword(password);
+        return success(true);
+    }
+
     @GetMapping("/info/{id}")
     @ApiOperation("获取指定用户信息")
     @PreAuthorize("@ss.hasPermission('system:user:query')")
@@ -81,7 +117,7 @@ public class SystemUserController {
         return success(SystemUserConvert.CONVERT.convertPage(result));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @ApiOperation("创建管理员")
     @PreAuthorize("@ss.hasPermission('system:user:create')")
     public Result<Boolean> create(@RequestBody SystemUserCreateVo createVo) {
@@ -89,7 +125,7 @@ public class SystemUserController {
         return success(true);
     }
 
-    @PutMapping("/update")
+    @PutMapping
     @ApiOperation("修改管理员")
     @PreAuthorize("@ss.hasPermission('system:user:update')")
     public Result<Boolean> update(@RequestBody SystemUserUpdateVo updateVo) {
@@ -97,11 +133,19 @@ public class SystemUserController {
         return success(true);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     @ApiOperation("删除管理员")
     @PreAuthorize("@ss.hasPermission('system:user:delete')")
     public Result<Boolean> delete(@PathVariable Long id) {
         systemUserBiz.deleteUser(id);
+        return success(true);
+    }
+
+    @PatchMapping("/reset-password/{id}")
+    @ApiOperation(value = "重置指定用户密码", notes = "默认重置为系统配置中的默认密码, 如果传了newPass, 就会为newPass")
+    @PreAuthorize("@ss.hasPermission('system:user:resetPassword')")
+    public Result<Boolean> resetPassword(@PathVariable Long id, @RequestParam(required = false) String newPass) {
+        systemUserBiz.resetPassword(id, newPass);
         return success(true);
     }
 

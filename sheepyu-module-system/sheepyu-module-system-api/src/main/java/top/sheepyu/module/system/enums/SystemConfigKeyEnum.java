@@ -11,6 +11,8 @@ import lombok.Getter;
 @Getter
 public enum SystemConfigKeyEnum {
     CAPTCHA_ENABLE("captcha.enable", Boolean.class),
+    //系统重置密码的默认密码
+    DEFAULT_PASSWORD("password.default", String.class),
     ;
     private final String key;
     private final Class<?> clazz;

@@ -3,13 +3,18 @@ package top.sheepyu.framework.log.core.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import top.sheepyu.framework.log.core.annotations.RecordLog;
+import top.sheepyu.module.common.common.IterableEnum;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 操作日志的操作类型
  */
 @Getter
 @AllArgsConstructor
-public enum OperateTypeEnum {
+public enum OperateTypeEnum implements IterableEnum {
     /**
      * 查询
      * <p>
@@ -29,4 +34,9 @@ public enum OperateTypeEnum {
      */
     private final int code;
     private final String desc;
+
+    @Override
+    public List<Integer> list() {
+        return Arrays.stream(values()).map(OperateTypeEnum::getCode).collect(Collectors.toList());
+    }
 }

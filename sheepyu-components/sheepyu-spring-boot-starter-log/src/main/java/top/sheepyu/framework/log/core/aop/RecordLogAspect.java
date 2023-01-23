@@ -1,6 +1,5 @@
 package top.sheepyu.framework.log.core.aop;
 
-import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.text.AntPathMatcher;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.json.JSONUtil;
@@ -145,14 +144,14 @@ public class RecordLogAspect {
 
         //设置api信息
         if (recordLog != null) {
-            apiLog.setType(recordLog.value().getDesc());
+            apiLog.setType(recordLog.value().getCode());
         } else {
             apiLog.setType(obtainOperateType(pj));
         }
-        apiLog.setName(apiOperation == null ? apiLog.getType() : apiOperation.value());
+        apiLog.setName(apiOperation.value());
     }
 
-    private String obtainOperateType(ProceedingJoinPoint pj) {
+    private Integer obtainOperateType(ProceedingJoinPoint pj) {
         RequestMethod requestMethod = obtainFirstLogRequestMethod(obtainRequestMethod(pj));
         if (requestMethod == null) {
             return null;
@@ -160,16 +159,16 @@ public class RecordLogAspect {
 
         switch (requestMethod) {
             case GET:
-                return GET.getDesc();
+                return GET.getCode();
             case POST:
-                return CREATE.getDesc();
+                return CREATE.getCode();
             case PUT:
             case PATCH:
-                return UPDATE.getDesc();
+                return UPDATE.getCode();
             case DELETE:
-                return DELETE.getDesc();
+                return DELETE.getCode();
             default:
-                return OTHER.getDesc();
+                return OTHER.getCode();
         }
     }
 

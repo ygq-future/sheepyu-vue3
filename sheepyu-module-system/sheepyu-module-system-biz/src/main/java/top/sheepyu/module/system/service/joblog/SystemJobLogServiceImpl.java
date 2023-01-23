@@ -10,6 +10,7 @@ import top.sheepyu.module.system.dao.joblog.SystemJobLog;
 import top.sheepyu.module.system.dao.joblog.SystemJobLogMapper;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static top.sheepyu.module.common.enums.CommonStatusEnum.FAILED;
 import static top.sheepyu.module.common.enums.CommonStatusEnum.SUCCESS;
@@ -42,5 +43,10 @@ public class SystemJobLogServiceImpl extends ServiceImplX<SystemJobLogMapper, Sy
 
     private SystemJobLog findByIdValidateExists(Long id) {
         return findByIdValidateExists(id, LOG_NOT_EXISTS);
+    }
+
+    @Override
+    public List<SystemJobLog> findByJobId(Long id) {
+        return lambdaQuery().eq(SystemJobLog::getJobId, id).list();
     }
 }

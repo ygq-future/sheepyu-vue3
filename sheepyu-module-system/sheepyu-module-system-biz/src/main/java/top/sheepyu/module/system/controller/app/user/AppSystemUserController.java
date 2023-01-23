@@ -3,6 +3,7 @@ package top.sheepyu.module.system.controller.app.user;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.security.core.LoginUser;
 import top.sheepyu.framework.security.core.annotations.Permit;
 import top.sheepyu.framework.web.annotations.FlowLimit;
@@ -69,5 +70,40 @@ public class AppSystemUserController {
     public Result<SystemUserRespVo> info() {
         SystemUser user = systemUserBiz.info();
         return success(SystemUserConvert.CONVERT.convert(user));
+    }
+
+    @PatchMapping("/nickname")
+    @ApiOperation("修改用户昵称")
+    public Result<Boolean> updateNickname(@RequestParam String nickname) {
+        systemUserBiz.updateNickname(nickname);
+        return success(true);
+    }
+
+    @PatchMapping("/mobile")
+    @ApiOperation("修改用户手机号")
+    public Result<Boolean> updateMobile(@RequestParam String mobile) {
+        systemUserBiz.updateMobile(mobile);
+        return success(true);
+    }
+
+    @PatchMapping("/email")
+    @ApiOperation("修改用户邮箱")
+    public Result<Boolean> updateEmail(@RequestParam String email) {
+        systemUserBiz.updateEmail(email);
+        return success(true);
+    }
+
+    @PatchMapping("/avatar")
+    @ApiOperation("修改用户头像")
+    public Result<Boolean> updateAvatar(@RequestParam MultipartFile file) {
+        systemUserBiz.updateAvatar(file);
+        return success(true);
+    }
+
+    @PatchMapping("/password")
+    @ApiOperation("修改用户密码")
+    public Result<Boolean> updatePassword(@RequestParam String password) {
+        systemUserBiz.updatePassword(password);
+        return success(true);
     }
 }

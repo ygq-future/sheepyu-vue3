@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.security.core.LoginUser;
 import top.sheepyu.framework.security.core.service.SecurityRedisService;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
@@ -122,5 +123,36 @@ public class SystemUserBiz {
                         .like(SystemUser::getNickname, keyword).or()
                         .like(SystemUser::getMobile, keyword).or()
                         .like(SystemUser::getEmail, keyword));
+    }
+
+    public void resetPassword(Long id, String newPass) {
+        systemUserService.resetPassword(id, newPass);
+    }
+
+    public void updateNickname(String nickname) {
+        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        systemUserService.updateNickname(userId, nickname);
+    }
+
+    public void updateMobile(String mobile) {
+        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        systemUserService.updateMobile(userId, mobile);
+    }
+
+    public void updateEmail(String email) {
+        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        systemUserService.updateEmail(userId, email);
+    }
+
+    public void updateAvatar(MultipartFile file) {
+        //TODO 先调用文件上传服务上传文件,然后在调用systemUserService.updateAvatar修改头像链接
+        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        String avatar = null;
+        systemUserService.updateAvatar(userId, avatar);
+    }
+
+    public void updatePassword(String password) {
+        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        systemUserService.updatePassword(userId, password);
     }
 }
