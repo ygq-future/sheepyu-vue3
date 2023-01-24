@@ -50,7 +50,7 @@ public class SheepyuWebAutoConfiguration implements WebMvcConfigurer {
     private void configurePathMatch(PathMatchConfigurer configurer, WebProperties.Api api) {
         AntPathMatcher matcher = new AntPathMatcher(".");
         configurer.addPathPrefix(api.getPrefix(), clazz -> clazz.isAnnotationPresent(RestController.class)
-                && matcher.match(api.getController(), clazz.getPackageName()));
+                && matcher.match(api.getController(), clazz.getPackage().getName()));
     }
 
     @Bean

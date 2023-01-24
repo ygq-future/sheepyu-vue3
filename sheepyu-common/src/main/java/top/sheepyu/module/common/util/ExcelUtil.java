@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -21,7 +20,7 @@ public class ExcelUtil {
         // 输出 Excel
         String datetime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
         filename += datetime.concat(".xlsx");
-        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, StandardCharsets.UTF_8));
+        response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "utf-8"));
         response.setContentType("application/vnd.ms-excel;charset=UTF-8");
         EasyExcel.write(response.getOutputStream(), head)
                 .autoCloseStream(false) // 不要自动关闭，交给 Servlet 自己处理

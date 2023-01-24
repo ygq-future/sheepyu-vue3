@@ -61,7 +61,7 @@ public class SystemDictRedisService {
     }
 
     public HashSet<SystemDictData> listByType(Long typeId) {
-        return redisUtil.getJSONObj(buildKey(typeId), new TypeReference<>() {
+        return redisUtil.getJSONObj(buildKey(typeId), new TypeReference<HashSet<SystemDictData>>() {
         });
     }
 

@@ -4,6 +4,7 @@ import top.sheepyu.framework.sms.core.sender.DefaultSmsSender;
 import top.sheepyu.framework.sms.core.sender.EmailSmsSender;
 import top.sheepyu.framework.sms.core.sender.SmsSender;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -20,7 +21,7 @@ public interface SmsSenderConstants {
     /**
      * 所有的实现类
      */
-    List<Class<? extends SmsSender>> CHILDREN = List.of(
+    List<Class<? extends SmsSender>> CHILDREN = Arrays.asList(
             DefaultSmsSender.class,
             EmailSmsSender.class
     );

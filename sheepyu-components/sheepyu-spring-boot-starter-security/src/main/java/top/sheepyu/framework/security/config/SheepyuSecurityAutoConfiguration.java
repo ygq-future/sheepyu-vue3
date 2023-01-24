@@ -88,15 +88,15 @@ public class SheepyuSecurityAutoConfiguration extends WebSecurityConfigurerAdapt
         Multimap<HttpMethod, String> permitAllUrls = this.getPermitAllUrlsFromAnnotations();
         http.authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/swagger-resources/**", "/v2/**").permitAll()
-                .antMatchers(HttpMethod.GET, permitAllUrls.get(HttpMethod.GET).toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.POST, permitAllUrls.get(HttpMethod.POST).toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.PUT, permitAllUrls.get(HttpMethod.PUT).toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.DELETE, permitAllUrls.get(HttpMethod.DELETE).toArray(String[]::new)).permitAll()
-                .antMatchers(HttpMethod.PATCH, permitAllUrls.get(HttpMethod.PATCH).toArray(String[]::new)).permitAll()
+                .antMatchers(HttpMethod.GET, permitAllUrls.get(HttpMethod.GET).toArray(new String[]{})).permitAll()
+                .antMatchers(HttpMethod.POST, permitAllUrls.get(HttpMethod.POST).toArray(new String[]{})).permitAll()
+                .antMatchers(HttpMethod.PUT, permitAllUrls.get(HttpMethod.PUT).toArray(new String[]{})).permitAll()
+                .antMatchers(HttpMethod.DELETE, permitAllUrls.get(HttpMethod.DELETE).toArray(new String[]{})).permitAll()
+                .antMatchers(HttpMethod.PATCH, permitAllUrls.get(HttpMethod.PATCH).toArray(new String[]{})).permitAll()
                 //不需要认证的请求
-                .antMatchers(securityProperties.getPermitUrls().toArray(String[]::new)).permitAll()
+                .antMatchers(securityProperties.getPermitUrls().toArray(new String[]{})).permitAll()
                 //需要认证的请求
-                .antMatchers(securityProperties.getAuthenticateUrls().toArray(String[]::new)).authenticated()
+                .antMatchers(securityProperties.getAuthenticateUrls().toArray(new String[]{})).authenticated()
                 .anyRequest().authenticated();
 
         //如果是用户中心模式

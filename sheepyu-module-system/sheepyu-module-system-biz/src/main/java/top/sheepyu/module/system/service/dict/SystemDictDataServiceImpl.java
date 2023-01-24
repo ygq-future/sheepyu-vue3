@@ -12,6 +12,7 @@ import top.sheepyu.module.system.controller.admin.dict.data.SystemDictDataUpdate
 import top.sheepyu.module.system.dao.dict.SystemDictData;
 import top.sheepyu.module.system.dao.dict.SystemDictDataMapper;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.DICT_DATA_EXISTS;
@@ -35,7 +36,7 @@ public class SystemDictDataServiceImpl extends ServiceImplX<SystemDictDataMapper
     @Override
     public SystemDictData createDictData(SystemDictDataCreateVo createVo) {
         SystemDictData dictData = CONVERT.convert(createVo);
-        checkRepeatByFieldsThrow(dictData, DICT_DATA_EXISTS, List.of(
+        checkRepeatByFieldsThrow(dictData, DICT_DATA_EXISTS, Arrays.asList(
                 SystemDictData::getDictTypeId,
                 SystemDictData::getValue
         ));

@@ -38,6 +38,7 @@ public class CaptchaController {
     @GetMapping("/verify/{key}/{code}")
     @ApiOperation("验证")
     public Result<Boolean> verify(@PathVariable String key, @PathVariable String code) {
+
         return success(captchaService.verifyCaptcha(key, code));
     }
 }
