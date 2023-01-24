@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.system.controller.admin.job.vo.*;
-import top.sheepyu.module.system.convert.joblog.SystemJobLogConvert;
+import top.sheepyu.module.system.convert.job.SystemJobLogConvert;
 import top.sheepyu.module.system.dao.job.SystemJob;
-import top.sheepyu.module.system.dao.joblog.SystemJobLog;
+import top.sheepyu.module.system.dao.job.SystemJobLog;
 import top.sheepyu.module.system.service.job.SystemJobService;
-import top.sheepyu.module.system.service.joblog.SystemJobLogService;
+import top.sheepyu.module.system.service.job.SystemJobLogService;
 
 import javax.annotation.Resource;
 import java.util.List;

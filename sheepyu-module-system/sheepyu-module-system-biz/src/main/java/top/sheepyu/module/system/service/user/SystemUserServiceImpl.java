@@ -10,6 +10,8 @@ import top.sheepyu.framework.sms.core.annotations.RequiredSms;
 import top.sheepyu.framework.sms.core.params.EmailParams;
 import top.sheepyu.framework.sms.core.sender.SmsSender;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
+import top.sheepyu.module.common.constants.ErrorCodeConstants;
+import top.sheepyu.module.common.enums.status.FunctionStatusEnum;
 import top.sheepyu.module.common.util.ServletUtil;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
@@ -18,14 +20,13 @@ import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.dao.user.SystemUserMapper;
 import top.sheepyu.module.system.enums.LoginLogTypeEnum;
-import top.sheepyu.module.system.service.accesslog.SystemAccessLogService;
 import top.sheepyu.module.system.service.config.SystemConfigService;
+import top.sheepyu.module.system.service.log.SystemAccessLogService;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static top.sheepyu.module.common.enums.CommonStatusEnum.CLOSE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.user.SystemUserConvert.CONVERT;
@@ -219,8 +220,9 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     }
 
     private void checkStatus(SystemUser user, LoginLogTypeEnum loginType) {
-        if (Objects.equals(CLOSE.getCode(), user.getStatus())) {
+        if (Objects.equals(FunctionStatusEnum.DISABLE.getCode(), user.getStatus())) {
             systemAccessLogService.createAccessLog(null, user.getUsername(), null, loginType, USER_DISABLED);
+            throw exception(ErrorCodeConstants.USER_DISABLE);
         }
     }
 

@@ -15,7 +15,7 @@ import top.sheepyu.module.system.controller.admin.user.vo.SystemUserQueryVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
-import top.sheepyu.module.system.service.accesslog.SystemAccessLogService;
+import top.sheepyu.module.system.service.log.SystemAccessLogService;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
 
 import javax.annotation.Resource;

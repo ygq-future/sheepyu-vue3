@@ -14,12 +14,6 @@ import java.time.ZoneOffset;
 @SpringBootTest(classes = SheepyuServer.class)
 public class SystemJobTest {
     @Test
-    public void test01() {
-        String[] arr = new String[]{};
-        System.out.println(arr[0]);
-    }
-
-    @Test
     public void test() {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime secondAfter = now.plusSeconds(1);

@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import top.sheepyu.module.common.annotations.InEnum;
-import top.sheepyu.module.common.enums.CommonStatusEnum;
+import top.sheepyu.module.common.enums.status.FunctionStatusEnum;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -31,7 +31,7 @@ public class SystemUserBaseVo {
 
     @ApiModelProperty("状态")
     @NotNull(message = "状态不能为空")
-    @InEnum(CommonStatusEnum.class)
+    @InEnum(FunctionStatusEnum.class)
     private Integer status;
 
     @ApiModelProperty("备注")

@@ -5,34 +5,64 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/accesslog/SystemAccessLogController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/accesslog/vo/SystemAccessLogQueryVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/accesslog/vo/SystemAccessLogRespVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/apilog/SystemApiLogController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/apilog/vo/SystemApiLogQueryVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/apilog/vo/SystemApiLogRespVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/job/vo/SystemJobLogRespVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/accesslog/SystemAccessLogConvert.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/joblog/SystemJobLogConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java/top/sheepyu/framework/log/core/enums/OperateTypeEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-log/src/main/java/top/sheepyu/framework/log/core/enums/OperateTypeEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/enums/status/ResultStatusEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/enums/status/StatusEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/enums/status/VisibleStatusEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/SystemDictController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/data/SystemDictDataBaseVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/data/SystemDictDataCreateVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/data/SystemDictDataRespVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/data/SystemDictDataUpdateVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/type/SystemDictTypeBaseVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/type/SystemDictTypeCreateVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/type/SystemDictTypeQueryVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/type/SystemDictTypeRespVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/dict/type/SystemDictTypeUpdateVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/dict/SystemDictConvert.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/dict/SystemDictData.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/dict/SystemDictDataMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/dict/SystemDictType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/dict/SystemDictTypeMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictBiz.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictDataService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictDataServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictRedisService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictTypeService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictTypeServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-server/src/test/java/system/DemoTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/constants/ErrorCodeConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/constants/ErrorCodeConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/enums/CommonStatusEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-common/src/main/java/top/sheepyu/module/common/enums/status/FunctionStatusEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-redis/src/main/java/top/sheepyu/framework/redis/util/RedisUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-redis/src/main/java/top/sheepyu/framework/redis/util/RedisUtil.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/ErrorCodeConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/ErrorCodeConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/enums/LoginLogTypeEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/enums/LoginLogTypeEnum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/enums/LoginResultEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/enums/LoginResultEnum.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/enums/SystemConfigKeyEnum.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/enums/SystemConfigKeyEnum.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/RedisConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/RedisConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/api/ApiLogApiImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/api/ApiLogApiImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/accesslog/SystemAccessLogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/log/SystemAccessLogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/accesslog/vo/SystemAccessLogQueryVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/log/access/SystemAccessLogQueryVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/accesslog/vo/SystemAccessLogRespVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/log/access/SystemAccessLogRespVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/apilog/SystemApiLogController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/log/SystemApiLogController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/apilog/vo/SystemApiLogQueryVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/log/api/SystemApiLogQueryVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/apilog/vo/SystemApiLogRespVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/log/api/SystemApiLogRespVo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/job/SystemJobController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/job/SystemJobController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/job/demo/DemoController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/demo/DemoController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/SystemUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/SystemUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/user/AppSystemUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/user/AppSystemUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/apilog/SystemApiLogConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/apilog/SystemApiLogConvert.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/accesslog/SystemAccessLogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/accesslog/SystemAccessLogService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/accesslog/SystemAccessLogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/accesslog/SystemAccessLogServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/apilog/SystemApiLogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/apilog/SystemApiLogService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/apilog/SystemApiLogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/apilog/SystemApiLogServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/joblog/SystemJobLogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/joblog/SystemJobLogService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/joblog/SystemJobLogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/joblog/SystemJobLogServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserBaseVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserBaseVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserQueryVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserQueryVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/accesslog/SystemAccessLogConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/log/SystemAccessLogConvert.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/apilog/SystemApiLogConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/log/SystemApiLogConvert.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/joblog/SystemJobLogConvert.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/job/SystemJobLogConvert.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/accesslog/SystemAccessLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/log/SystemAccessLog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/accesslog/SystemAccessLogMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/log/SystemAccessLogMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/apilog/SystemApiLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/log/SystemApiLog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/apilog/SystemApiLogMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/log/SystemApiLogMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/joblog/SystemJobLog.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/job/SystemJobLog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/joblog/SystemJobLogMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/job/SystemJobLogMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/accesslog/SystemAccessLogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/log/SystemAccessLogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/accesslog/SystemAccessLogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/log/SystemAccessLogServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/apilog/SystemApiLogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/log/SystemApiLogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/apilog/SystemApiLogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/log/SystemApiLogServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/joblog/SystemJobLogService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/job/SystemJobLogService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/joblog/SystemJobLogServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/job/SystemJobLogServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserBiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserBiz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/test/java/system/SystemJobTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/test/java/system/SystemJobTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -121,15 +151,31 @@
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\other project\sheepyu\sheepyu-server\src\main\resources" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="top.sheepyu.module.system.convert.job" />
+    </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="top.sheepyu.module.common.enums.status" />
+      <recent name="top.sheepyu.module.system.controller.admin.dict.type" />
+      <recent name="top.sheepyu.module.system.controller.admin.dict.data" />
+      <recent name="top.sheepyu.module.system.controller.admin.dict" />
       <recent name="top.sheepyu.module.system.controller.admin.apilog.vo" />
-      <recent name="top.sheepyu.module.system.controller.admin.user.vo" />
-      <recent name="top.sheepyu.module.system.dao.user" />
-      <recent name="top.sheepyu.module.system.service.log" />
-      <recent name="top.sheepyu.module.system.dao.log" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.SheepyuServer">
+    <configuration name="DemoTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="system.DemoTest" />
+      <module name="sheepyu-server" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="system.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="SystemJobTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sheepyu-server" />
       <extension name="coverage">
@@ -188,6 +234,7 @@
       <method v="2" />
     </configuration>
     <list>
+      <item itemvalue="Application.DemoTest" />
       <item itemvalue="JUnit.SystemJobTest.test" />
       <item itemvalue="JUnit.SystemJobTest.test01" />
       <item itemvalue="Spring Boot.SheepyuServer" />
@@ -195,6 +242,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.SheepyuServer" />
+        <item itemvalue="Application.DemoTest" />
         <item itemvalue="JUnit.SystemJobTest.test01" />
         <item itemvalue="JUnit.SystemJobTest.test" />
       </list>
@@ -214,7 +262,7 @@
       <workItem from="1673577717822" duration="4585000" />
       <workItem from="1673601529280" duration="51267000" />
       <workItem from="1673782000703" duration="714000" />
-      <workItem from="1673853216734" duration="112303000" />
+      <workItem from="1673853216734" duration="126374000" />
     </task>
     <servers />
   </component>

@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.sheepyu.module.common.annotations.InEnum;
 import top.sheepyu.module.common.common.PageParam;
-import top.sheepyu.module.common.enums.CommonStatusEnum;
+import top.sheepyu.module.common.enums.status.FunctionStatusEnum;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
@@ -21,7 +21,7 @@ import java.util.Date;
 @ApiModel("系统用户分页查询vo")
 public class SystemUserQueryVo extends PageParam {
     @ApiModelProperty("用户状态")
-    @InEnum(CommonStatusEnum.class)
+    @InEnum(FunctionStatusEnum.class)
     private Integer status;
 
     @ApiModelProperty("部门id")

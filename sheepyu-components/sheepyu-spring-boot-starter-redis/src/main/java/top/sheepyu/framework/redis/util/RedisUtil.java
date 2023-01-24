@@ -1,11 +1,13 @@
 package top.sheepyu.framework.redis.util;
 
+import cn.hutool.core.lang.TypeReference;
 import cn.hutool.core.util.BooleanUtil;
 import cn.hutool.json.JSONUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -15,6 +17,10 @@ import java.util.concurrent.TimeUnit;
 public class RedisUtil {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
+    public void set(String key, Object value) {
+        redisTemplate.opsForValue().set(key, value);
+    }
 
     public void set(String key, Object value, long timeout) {
         set(key, value, timeout, TimeUnit.SECONDS);
@@ -45,6 +51,22 @@ public class RedisUtil {
         return JSONUtil.toBean(value.toString(), clazz);
     }
 
+    public <T> T getJSONObj(String key, TypeReference<T> type) {
+        Object value = redisTemplate.opsForValue().get(key);
+        if (value == null) {
+            return null;
+        }
+        return JSONUtil.toBean(value.toString(), type, false);
+    }
+
+    public <T> T getObj(String key, Class<T> clazz) {
+        Object value = redisTemplate.opsForValue().get(key);
+        if (value == null) {
+            return null;
+        }
+        return clazz.cast(value);
+    }
+
     public String get(String key) {
         Object value = redisTemplate.opsForValue().get(key);
         if (value == null) {
@@ -73,7 +95,6 @@ public class RedisUtil {
         redisTemplate.opsForHash().delete(key, hashKey);
     }
 
-
     public long ttl(String key) {
         Long expire = redisTemplate.getExpire(key);
         return expire == null ? 0 : expire;
@@ -85,5 +106,10 @@ public class RedisUtil {
 
     public void inr(String key) {
         redisTemplate.opsForValue().increment(key);
+    }
+
+    public void delPrefix(String prefix) {
+        Set<String> keys = redisTemplate.keys(prefix.concat("*"));
+        redisTemplate.delete(keys);
     }
 }
