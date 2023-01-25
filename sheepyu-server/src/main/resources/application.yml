@@ -12,6 +12,10 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  servlet:
+    multipart:
+      max-file-size: 4GB
+      max-request-size: 4GB
   quartz:
     wait-for-jobs-to-complete-on-shutdown: true
     job-store-type: jdbc
@@ -48,3 +52,8 @@ sheepyu:
   security:
     permit-urls:
       - /admin-api/captcha/**
+  file:
+    config:
+      LOCAL:
+        endpoint: http://localhost:18080
+        path: F:/upload

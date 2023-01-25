@@ -47,5 +47,9 @@
             <groupId>top.sheepyu</groupId>
             <artifactId>sheepyu-spring-boot-starter-sms</artifactId>
         </dependency>
+        <dependency>
+            <groupId>top.sheepyu</groupId>
+            <artifactId>sheepyu-spring-boot-starter-file</artifactId>
+        </dependency>
     </dependencies>
 </project>

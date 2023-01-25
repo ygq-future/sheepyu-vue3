@@ -3,7 +3,7 @@ package top.sheepyu.framework.web.util;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import top.sheepyu.framework.web.WebProperties;
+import top.sheepyu.framework.web.config.WebProperties;
 import top.sheepyu.module.common.enums.UserTypeEnum;
 
 import javax.servlet.ServletRequest;
@@ -63,10 +63,10 @@ public class WebFrameworkUtil {
         }
         // 2. 其次，基于 URL 前缀的约定
         if (request.getRequestURI().startsWith(properties.getAdmin().getPrefix())) {
-            return UserTypeEnum.ADMIN.getValue();
+            return UserTypeEnum.ADMIN.getCode();
         }
         if (request.getRequestURI().startsWith(properties.getApp().getPrefix())) {
-            return UserTypeEnum.MEMBER.getValue();
+            return UserTypeEnum.MEMBER.getCode();
         }
         return null;
     }

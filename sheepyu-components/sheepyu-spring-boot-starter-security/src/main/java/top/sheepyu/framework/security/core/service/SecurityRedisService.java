@@ -4,7 +4,7 @@ import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import top.sheepyu.framework.redis.util.RedisUtil;
-import top.sheepyu.framework.security.core.LoginUser;
+import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.constants.SecurityRedisConstants;
 
 import javax.annotation.Resource;

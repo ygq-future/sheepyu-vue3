@@ -98,6 +98,10 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
 
     @Override
     public T findByIdValidateExists(Object id, ErrorCode errorCode) {
+        if (id == null) {
+            throw exception(errorCode);
+        }
+
         T t = getById(id.toString());
         if (t == null) {
             throw exception(errorCode);

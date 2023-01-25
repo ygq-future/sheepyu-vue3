@@ -24,14 +24,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import top.sheepyu.framework.security.core.SecurityProperties;
 import top.sheepyu.framework.security.core.annotations.Permit;
 import top.sheepyu.framework.security.core.aop.PreAuthenticatedAspect;
 import top.sheepyu.framework.security.core.filter.SecurityTokenFilter;
 import top.sheepyu.framework.security.core.service.SecurityFrameworkService;
 import top.sheepyu.framework.security.core.service.SecurityFrameworkServiceImpl;
 import top.sheepyu.framework.security.core.service.SecurityRedisService;
-import top.sheepyu.framework.web.WebProperties;
+import top.sheepyu.framework.web.config.WebProperties;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -87,7 +86,7 @@ public class SheepyuSecurityAutoConfiguration extends WebSecurityConfigurerAdapt
         //请求处理
         Multimap<HttpMethod, String> permitAllUrls = this.getPermitAllUrlsFromAnnotations();
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/swagger-resources/**", "/v2/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/file/**", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/swagger-resources/**", "/v2/**").permitAll()
                 .antMatchers(HttpMethod.GET, permitAllUrls.get(HttpMethod.GET).toArray(new String[]{})).permitAll()
                 .antMatchers(HttpMethod.POST, permitAllUrls.get(HttpMethod.POST).toArray(new String[]{})).permitAll()
                 .antMatchers(HttpMethod.PUT, permitAllUrls.get(HttpMethod.PUT).toArray(new String[]{})).permitAll()

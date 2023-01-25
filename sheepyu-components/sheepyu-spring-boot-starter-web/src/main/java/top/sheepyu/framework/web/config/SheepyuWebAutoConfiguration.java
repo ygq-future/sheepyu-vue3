@@ -12,11 +12,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import top.sheepyu.framework.web.WebProperties;
-import top.sheepyu.framework.web.aop.FlowLimitAspect;
-import top.sheepyu.framework.web.aop.IdempotentAspect;
-import top.sheepyu.framework.web.filter.DemoFilter;
-import top.sheepyu.framework.web.handler.GlobalExceptionHandler;
+import top.sheepyu.framework.web.core.aop.FlowLimitAspect;
+import top.sheepyu.framework.web.core.aop.IdempotentAspect;
+import top.sheepyu.framework.web.core.filter.DemoFilter;
+import top.sheepyu.framework.web.core.handler.GlobalExceptionHandler;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 
 import javax.annotation.PostConstruct;

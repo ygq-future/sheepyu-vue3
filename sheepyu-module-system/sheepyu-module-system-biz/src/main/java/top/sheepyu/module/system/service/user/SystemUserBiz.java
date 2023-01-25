@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.multipart.MultipartFile;
-import top.sheepyu.framework.security.core.LoginUser;
+import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.service.SecurityRedisService;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 import top.sheepyu.module.common.common.PageResult;

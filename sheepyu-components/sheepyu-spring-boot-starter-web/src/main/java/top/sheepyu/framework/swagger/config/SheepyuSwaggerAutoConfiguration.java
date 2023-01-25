@@ -24,8 +24,7 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-import top.sheepyu.framework.swagger.SwaggerProperties;
-import top.sheepyu.framework.swagger.SwaggerProperties.GlobalOperationParameter;
+import top.sheepyu.framework.swagger.config.SwaggerProperties.GlobalOperationParameter;
 
 import java.util.ArrayList;
 import java.util.Collections;

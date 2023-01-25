@@ -43,4 +43,7 @@ public interface ErrorCodeConstants {
     ErrorCode API_LOG_NOT_EXISTS = new ErrorCode(100_005_001, "日志不存在!");
     ErrorCode ALREADY_HANDLE = new ErrorCode(100_005_002, "错误已处理!");
     ErrorCode SUCCESS_API_DONT_HANDLE = new ErrorCode(100_005_003, "访问成功的api不用处理!");
+
+    //file相关 100_006_001
+    ErrorCode FILE_NOT_EXISTS = new ErrorCode(100_006_001, "文件不存在!");
 }

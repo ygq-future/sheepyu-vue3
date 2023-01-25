@@ -1,7 +1,5 @@
 package top.sheepyu.framework.sms.core.sender;
 
-import top.sheepyu.framework.sms.core.params.SenderParams;
-
 /**
  * 后面如果需要扩展功能, 比如说用邮件发送一个啥啥啥通知
  * 那么直接在接口新增方法比如sendInformation, 然后实现类实现即可
@@ -11,10 +9,15 @@ import top.sheepyu.framework.sms.core.params.SenderParams;
  **/
 public interface SmsSender {
     /**
+     * redis key前缀
+     */
+    String SMS_CODE_KEY = "sms:code:";
+    long SMS_CODE_TTL = 2;
+
+    /**
      * 发送验证码
      *
      * @param params 某种发送类型所需要的参数, 比如邮件发送可能要收件方等一些信息
-     * @return 返回存入redis的key
      */
     void sendCode(SenderParams params);
 

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import top.sheepyu.framework.web.annotations.FlowLimit;
+import top.sheepyu.framework.web.core.annotations.FlowLimit;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.system.controller.admin.captcha.vo.CaptchaRespVo;
 import top.sheepyu.module.system.service.captcha.CaptchaService;

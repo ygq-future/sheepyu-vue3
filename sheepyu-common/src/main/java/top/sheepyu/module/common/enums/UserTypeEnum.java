@@ -19,14 +19,13 @@ import static top.sheepyu.module.common.exception.CommonException.exception;
 @Getter
 public enum UserTypeEnum implements IterableEnum {
 
-    MEMBER(1, "会员"), // 面向 c 端，普通用户
-    ADMIN(2, "管理员"); // 面向 b 端，管理后台
+    MEMBER(1), // "普通用户" 面向 c 端，普通用户
+    ADMIN(2); // "管理员" 面向 b 端，管理后台
 
-    private final Integer value;
-    private final String name;
+    private final int code;
 
-    public static UserTypeEnum valueOf(Integer value) {
-        UserTypeEnum one = ArrayUtil.firstMatch(userType -> userType.getValue().equals(value), UserTypeEnum.values());
+    public static UserTypeEnum value(int code) {
+        UserTypeEnum one = ArrayUtil.firstMatch(userType -> userType.getCode() == code, UserTypeEnum.values());
         if (one == null) {
             throw exception(ErrorCodeConstants.USERTYPE_ERROR);
         }
@@ -35,6 +34,6 @@ public enum UserTypeEnum implements IterableEnum {
 
     @Override
     public List<Integer> list() {
-        return Arrays.stream(values()).map(UserTypeEnum::getValue).collect(Collectors.toList());
+        return Arrays.stream(values()).map(UserTypeEnum::getCode).collect(Collectors.toList());
     }
 }

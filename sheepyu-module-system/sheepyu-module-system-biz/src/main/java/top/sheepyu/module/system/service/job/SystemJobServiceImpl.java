@@ -5,7 +5,7 @@ import org.quartz.SchedulerException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import top.sheepyu.framework.job.core.SchedulerManager;
+import top.sheepyu.framework.job.config.SchedulerManager;
 import top.sheepyu.framework.job.util.CronUtils;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
 import top.sheepyu.module.common.common.PageResult;

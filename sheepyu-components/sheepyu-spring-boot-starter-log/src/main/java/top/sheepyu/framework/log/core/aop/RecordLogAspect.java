@@ -16,7 +16,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
-import top.sheepyu.framework.log.core.ApiLogProperties;
+import top.sheepyu.framework.log.config.ApiLogProperties;
 import top.sheepyu.framework.log.core.annotations.RecordLog;
 import top.sheepyu.framework.log.core.service.ApiLogFrameworkService;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
@@ -63,7 +63,7 @@ public class RecordLogAspect {
     }
 
     private Object processAround(ProceedingJoinPoint pj, RecordLog recordLog, ApiOperation apiOperation) throws Throwable {
-        if (!Objects.equals(WebFrameworkUtil.getLoginUserType(), ADMIN.getValue())) {
+        if (!Objects.equals(WebFrameworkUtil.getLoginUserType(), ADMIN.getCode())) {
             return pj.proceed();
         }
         //排除过滤的请求
@@ -248,12 +248,16 @@ public class RecordLogAspect {
             String argName = argNames[i];
             Object argValue = argValues[i];
             // 被忽略时，标记为 ignore 字符串，避免和 null 混在一起
-            args.put(argName, !isIgnoreArgs(argValue) ? argValue : "[ignore]");
+            args.put(argName, isIgnoreArgs(argValue) ? "[ignore]" : argValue);
         }
         return JSONUtil.toJsonStr(args);
     }
 
     private static boolean isIgnoreArgs(Object object) {
+        if (object == null) {
+            return false;
+        }
+
         Class<?> clazz = object.getClass();
         // 处理数组的情况
         if (clazz.isArray()) {

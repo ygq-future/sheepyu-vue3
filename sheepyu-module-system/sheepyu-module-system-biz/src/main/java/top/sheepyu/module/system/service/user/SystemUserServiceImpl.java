@@ -6,8 +6,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
-import top.sheepyu.framework.sms.core.annotations.RequiredSms;
-import top.sheepyu.framework.sms.core.params.EmailParams;
+import top.sheepyu.framework.sms.config.SmsSenderFactory;
+import top.sheepyu.framework.sms.core.sender.email.EmailParams;
 import top.sheepyu.framework.sms.core.sender.SmsSender;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 import top.sheepyu.module.common.constants.ErrorCodeConstants;
@@ -48,7 +48,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     @Resource
     private SystemAccessLogService systemAccessLogService;
     @Resource
-    private SmsSender smsSender;
+    private SmsSenderFactory smsSenderFactory;
     @Resource
     private SystemConfigService systemConfigService;
 
@@ -145,9 +145,9 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
         updateById(user);
     }
 
-    @RequiredSms
     @Override
     public SystemUser loginByEmail(EmailLoginVo loginVo) {
+        SmsSender smsSender = smsSenderFactory.get();
         SystemUser user = findByEmail(loginVo.getEmail());
         if (user == null) {
             systemAccessLogService.createAccessLog(null, loginVo.getEmail(), null, LOGIN_USERNAME, BAD_CREDENTIALS);
@@ -167,6 +167,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
     @Override
     public void sendCode(String email) {
+        SmsSender smsSender = smsSenderFactory.get();
         smsSender.sendCode(new EmailParams(email));
     }
 

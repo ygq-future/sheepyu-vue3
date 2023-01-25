@@ -3,7 +3,6 @@ package top.sheepyu.framework.job.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import top.sheepyu.framework.job.core.SchedulerManager;
 
 /**
  * @author ygq
