@@ -22,7 +22,6 @@ public class FilePartDto {
     @NotBlank(message = "md5值不能为空")
     private String md5;
 
-    @NotNull(message = "文件partTag不能为空")
     private byte[] partTag;
 
     @NotNull(message = "index不能为空")

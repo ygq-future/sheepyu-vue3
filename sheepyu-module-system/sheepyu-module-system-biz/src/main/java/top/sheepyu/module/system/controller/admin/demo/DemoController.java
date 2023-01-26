@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import top.sheepyu.framework.security.core.annotations.Permit;
 import top.sheepyu.framework.web.core.annotations.FlowLimit;
 import top.sheepyu.framework.web.core.annotations.Idempotent;
 import top.sheepyu.module.common.common.PageParam;
@@ -20,6 +21,7 @@ import top.sheepyu.module.common.common.Result;
 @Slf4j
 @Api(tags = "测试")
 public class DemoController {
+    @Permit
     @GetMapping
     @ApiOperation("测试")
     public Result<Boolean> demo() {

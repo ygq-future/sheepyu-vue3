@@ -6,6 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import top.sheepyu.framework.file.config.FileProperties.BaseConfig;
 import top.sheepyu.framework.file.core.enums.FileUploadTypeEnum;
 
 import javax.annotation.Resource;

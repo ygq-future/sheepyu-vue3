@@ -19,4 +19,6 @@ public interface FileApi {
     Long createFile(FileDto dto);
 
     void updateFile(FileDto dto);
+
+    FileDto findFile(Long fileId);
 }

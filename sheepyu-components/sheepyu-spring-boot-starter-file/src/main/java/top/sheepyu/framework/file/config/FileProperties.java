@@ -14,4 +14,13 @@ import java.util.Map;
 @Data
 public class FileProperties {
     private Map<String, BaseConfig> config = Collections.emptyMap();
+
+    @Data
+    public static class BaseConfig {
+        private String keyId;
+        private String keySecret;
+        private String endpoint;
+        private String bucket;
+        private String path;
+    }
 }

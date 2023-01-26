@@ -3,9 +3,10 @@ package top.sheepyu.module.common.util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Enumeration;
 
 /**
  * @author ygq
@@ -43,5 +44,39 @@ public class FileUtil {
             log.error("获取文件大小错误: {}", e.getMessage());
         }
         return size;
+    }
+
+    public static byte[] readAllData(InputStream is) {
+        byte[] data;
+        try (InputStream in = is) {
+            data = new byte[in.available()];
+            in.read(data);
+        } catch (IOException e) {
+            log.error("文件内容读取失败!");
+            throw new RuntimeException(e);
+        }
+        return data;
+    }
+
+    public static void merge(Enumeration<InputStream> es, String mergeFile) {
+        try (SequenceInputStream sis = new SequenceInputStream(es);
+             BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(Paths.get(mergeFile)))) {
+            byte[] bytes = new byte[1024];
+            int len;
+            while ((len = sis.read(bytes)) > 0) {
+                out.write(bytes, 0, len);
+                out.flush();
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static InputStream createIn(String path) {
+        try {
+            return Files.newInputStream(Paths.get(path));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

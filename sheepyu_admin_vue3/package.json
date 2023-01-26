@@ -1,0 +1,34 @@
+{
+  "name": "sheepyu_admin_vue3",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "vite --mode dev",
+    "build:test": "npm run build --mode test",
+    "build:prod": "npm run build --mode prod",
+    "build": "run-p type-check build-only",
+    "preview": "vite preview --mode dev",
+    "build-only": "vite build",
+    "type-check": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "axios": "^1.2.4",
+    "element-plus": "^2.2.28",
+    "pinia": "^2.0.28",
+    "vue": "^3.2.45",
+    "vue-router": "^4.1.6"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.12",
+    "@vitejs/plugin-vue": "^4.0.0",
+    "@vue/tsconfig": "^0.1.3",
+    "npm-run-all": "^4.1.5",
+    "sass": "^1.57.1",
+    "typescript": "~4.7.4",
+    "unplugin-auto-import": "^0.12.2",
+    "unplugin-vue-components": "^0.22.12",
+    "vite": "^4.0.0",
+    "vue-tsc": "^1.0.12"
+  }
+}

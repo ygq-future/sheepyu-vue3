@@ -18,4 +18,6 @@ public interface SystemFileService extends IServiceX<SystemFile> {
     void updateFile(@Valid FileDto dto);
 
     String uploadFile(MultipartFile file, String remark) throws IOException;
+
+    FileDto findFile(Long fileId);
 }

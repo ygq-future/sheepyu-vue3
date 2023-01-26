@@ -61,6 +61,11 @@ public class SystemFileServiceImpl extends ServiceImplX<SystemFileMapper, System
         return fileUpload.upload(file.getInputStream(), file.getOriginalFilename(), remark);
     }
 
+    @Override
+    public FileDto findFile(Long fileId) {
+        return CONVERT.convert(findByIdValidateExists(fileId));
+    }
+
     private SystemFile findByIdValidateExists(Long id) {
         return findByIdValidateExists(id, FILE_NOT_EXISTS);
     }

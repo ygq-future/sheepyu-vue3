@@ -46,4 +46,9 @@ public class FileApiImpl implements FileApi {
     public void updateFile(FileDto dto) {
         systemFileService.updateFile(dto);
     }
+
+    @Override
+    public FileDto findFile(Long fileId) {
+        return systemFileService.findFile(fileId);
+    }
 }

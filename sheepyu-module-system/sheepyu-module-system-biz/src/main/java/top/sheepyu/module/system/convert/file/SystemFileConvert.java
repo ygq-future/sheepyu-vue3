@@ -22,4 +22,6 @@ public interface SystemFileConvert {
     List<FilePartDto> convertList(List<SystemFilePart> list);
 
     SystemFile convert(FileDto dto);
+
+    FileDto convert(SystemFile file);
 }
