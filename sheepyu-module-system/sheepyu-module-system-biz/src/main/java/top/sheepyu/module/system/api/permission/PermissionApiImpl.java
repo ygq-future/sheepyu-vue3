@@ -1,8 +1,8 @@
-package top.sheepyu.module.system.api;
+package top.sheepyu.module.system.api.permission;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import top.sheepyu.module.system.api.PermissionApi;
+import top.sheepyu.module.system.api.permission.PermissionApi;
 
 /**
  * @author ygq

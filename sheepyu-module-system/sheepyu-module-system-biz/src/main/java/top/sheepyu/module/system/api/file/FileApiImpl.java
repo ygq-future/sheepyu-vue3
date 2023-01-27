@@ -1,9 +1,7 @@
-package top.sheepyu.module.system.api;
+package top.sheepyu.module.system.api.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import top.sheepyu.module.system.dto.FileDto;
-import top.sheepyu.module.system.dto.FilePartDto;
 import top.sheepyu.module.system.service.file.SystemFilePartService;
 import top.sheepyu.module.system.service.file.SystemFileService;
 
@@ -38,7 +36,7 @@ public class FileApiImpl implements FileApi {
     }
 
     @Override
-    public Long createFile(FileDto dto) {
+    public FileDto createFile(FileDto dto) {
         return systemFileService.createFile(dto);
     }
 

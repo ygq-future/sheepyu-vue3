@@ -8,16 +8,14 @@ import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.file.config.FileUploadFactory;
 import top.sheepyu.framework.file.core.oss.FileUpload;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
+import top.sheepyu.module.system.api.file.FileDto;
 import top.sheepyu.module.system.dao.file.SystemFile;
 import top.sheepyu.module.system.dao.file.SystemFileMapper;
-import top.sheepyu.module.system.dto.FileDto;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.Objects;
+import java.io.InputStream;
 
-import static top.sheepyu.framework.web.util.WebFrameworkUtil.getLoginUserUsername;
-import static top.sheepyu.module.common.enums.status.StatusEnum.TRUE;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.FILE_NOT_EXISTS;
 import static top.sheepyu.module.system.convert.file.SystemFileConvert.CONVERT;
 
@@ -33,19 +31,17 @@ public class SystemFileServiceImpl extends ServiceImplX<SystemFileMapper, System
     private FileUploadFactory fileUploadFactory;
 
     @Override
-    public Long createFile(FileDto dto) {
-        //根据登录用户和文件名查找上传的文件
-        SystemFile file = lambdaQuery().eq(SystemFile::getFilename, dto.getFilename())
-                .eq(SystemFile::getCreator, getLoginUserUsername()).one();
+    public FileDto createFile(FileDto dto) {
+        //根据md5查询文件是否存在
+        SystemFile file = findFileByMd5(dto.getMd5());
 
-        //如果文件为空或者已经上传过了,那么本次就算新的文件, 保存即可
-        //否则就是文件不为空且上传失败, 直接返回上一次上传失败的文件id即可
-        if (file == null || Objects.equals(file.getComplete(), TRUE.getCode())) {
+        //如果文件为空, 说明文件已经上传过了或者压根没有这个文件,那么本次就算新的文件, 保存即可
+        if (file == null) {
             file = CONVERT.convert(dto);
             save(file);
         }
 
-        return file.getId();
+        return CONVERT.convertDto(file);
     }
 
     @Override
@@ -56,14 +52,37 @@ public class SystemFileServiceImpl extends ServiceImplX<SystemFileMapper, System
     }
 
     @Override
-    public String uploadFile(MultipartFile file, String remark) throws IOException {
+    public String uploadFile(MultipartFile file, String md5, String remark) throws IOException {
         FileUpload fileUpload = fileUploadFactory.get();
-        return fileUpload.upload(file.getInputStream(), file.getOriginalFilename(), remark);
+        return fileUpload.upload(file.getInputStream(), md5, file.getOriginalFilename(), remark);
     }
 
     @Override
     public FileDto findFile(Long fileId) {
-        return CONVERT.convert(findByIdValidateExists(fileId));
+        return CONVERT.convertDto(findByIdValidateExists(fileId));
+    }
+
+    @Override
+    public Long preparePart(String md5, String filename, String remark) {
+        FileUpload fileUpload = fileUploadFactory.get();
+        return fileUpload.preparePart(md5, filename, remark);
+    }
+
+    @Override
+    public String uploadPart(Long fileId, InputStream inputStream, Integer index) {
+        FileUpload fileUpload = fileUploadFactory.get();
+        return fileUpload.uploadPart(fileId, inputStream, index);
+    }
+
+    @Override
+    public String completePart(Long fileId) {
+        FileUpload fileUpload = fileUploadFactory.get();
+        return fileUpload.completePart(fileId);
+    }
+
+    @Override
+    public SystemFile findFileByMd5(String md5) {
+        return lambdaQuery().eq(SystemFile::getMd5, md5).one();
     }
 
     private SystemFile findByIdValidateExists(Long id) {

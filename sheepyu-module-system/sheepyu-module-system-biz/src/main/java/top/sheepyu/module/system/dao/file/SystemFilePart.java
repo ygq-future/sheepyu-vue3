@@ -15,6 +15,6 @@ public class SystemFilePart {
     private String path;
     private String md5;
     private byte[] partTag;
-    private Integer index;
+    private Integer idx;
     private Integer size;
 }

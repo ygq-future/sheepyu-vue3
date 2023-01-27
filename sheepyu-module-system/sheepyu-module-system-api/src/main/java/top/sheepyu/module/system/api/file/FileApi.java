@@ -1,7 +1,4 @@
-package top.sheepyu.module.system.api;
-
-import top.sheepyu.module.system.dto.FileDto;
-import top.sheepyu.module.system.dto.FilePartDto;
+package top.sheepyu.module.system.api.file;
 
 import java.util.List;
 
@@ -16,7 +13,7 @@ public interface FileApi {
 
     List<FilePartDto> listByFileId(Long fileId);
 
-    Long createFile(FileDto dto);
+    FileDto createFile(FileDto dto);
 
     void updateFile(FileDto dto);
 

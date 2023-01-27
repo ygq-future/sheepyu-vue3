@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.dto;
+package top.sheepyu.module.system.api.file;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -25,7 +25,7 @@ public class FilePartDto {
     private byte[] partTag;
 
     @NotNull(message = "index不能为空")
-    private Integer index;
+    private Integer idx;
 
     @NotNull(message = "size不能为空")
     private Integer size;

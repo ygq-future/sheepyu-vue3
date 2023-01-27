@@ -1,7 +1,7 @@
 package top.sheepyu.framework.security.core.service;
 
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
-import top.sheepyu.module.system.api.PermissionApi;
+import top.sheepyu.module.system.api.permission.PermissionApi;
 
 import javax.annotation.Resource;
 

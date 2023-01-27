@@ -1,7 +1,7 @@
 package top.sheepyu.framework.log.core.service;
 
-import top.sheepyu.module.system.api.ApiLogApi;
-import top.sheepyu.module.system.dto.ApiLogDto;
+import top.sheepyu.module.system.api.log.ApiLogApi;
+import top.sheepyu.module.system.api.log.ApiLogDto;
 
 import javax.annotation.Resource;
 

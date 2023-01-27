@@ -1,6 +1,4 @@
-package top.sheepyu.module.system.api;
-
-import top.sheepyu.module.system.dto.ApiLogDto;
+package top.sheepyu.module.system.api.log;
 
 /**
  * @author ygq

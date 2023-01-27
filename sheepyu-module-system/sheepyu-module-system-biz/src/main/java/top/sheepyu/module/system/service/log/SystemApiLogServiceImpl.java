@@ -10,7 +10,7 @@ import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.system.controller.admin.log.api.SystemApiLogQueryVo;
 import top.sheepyu.module.system.dao.log.SystemApiLog;
 import top.sheepyu.module.system.dao.log.SystemApiLogMapper;
-import top.sheepyu.module.system.dto.ApiLogDto;
+import top.sheepyu.module.system.api.log.ApiLogDto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;

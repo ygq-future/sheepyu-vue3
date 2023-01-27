@@ -24,7 +24,7 @@ import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.common.exception.CommonException;
 import top.sheepyu.module.common.util.ExceptionUtil;
 import top.sheepyu.module.common.util.ServletUtil;
-import top.sheepyu.module.system.dto.ApiLogDto;
+import top.sheepyu.module.system.api.log.ApiLogDto;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;

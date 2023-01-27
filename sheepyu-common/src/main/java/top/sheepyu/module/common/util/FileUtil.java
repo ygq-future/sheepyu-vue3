@@ -79,4 +79,12 @@ public class FileUtil {
             throw new RuntimeException(e);
         }
     }
+
+    public static void del(File dir) {
+        try {
+            cn.hutool.core.io.FileUtil.del(dir);
+        } catch (Exception e) {
+            log.error("删除文件失败, dir: {}, msg: {}", dir, e.getMessage());
+        }
+    }
 }

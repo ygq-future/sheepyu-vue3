@@ -5,7 +5,7 @@ import org.mapstruct.factory.Mappers;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.system.controller.admin.log.api.SystemApiLogRespVo;
 import top.sheepyu.module.system.dao.log.SystemApiLog;
-import top.sheepyu.module.system.dto.ApiLogDto;
+import top.sheepyu.module.system.api.log.ApiLogDto;
 
 /**
  * @author ygq

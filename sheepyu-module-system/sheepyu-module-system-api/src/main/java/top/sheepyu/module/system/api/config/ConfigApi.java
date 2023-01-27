@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.api;
+package top.sheepyu.module.system.api.config;
 
 import top.sheepyu.module.system.enums.SystemConfigKeyEnum;
 

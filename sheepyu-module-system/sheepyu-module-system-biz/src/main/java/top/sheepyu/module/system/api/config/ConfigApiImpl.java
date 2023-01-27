@@ -1,7 +1,8 @@
-package top.sheepyu.module.system.api;
+package top.sheepyu.module.system.api.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import top.sheepyu.module.system.api.config.ConfigApi;
 import top.sheepyu.module.system.enums.SystemConfigKeyEnum;
 import top.sheepyu.module.system.service.config.SystemConfigService;
 

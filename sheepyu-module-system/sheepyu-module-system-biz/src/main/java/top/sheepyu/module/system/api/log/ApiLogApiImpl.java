@@ -1,7 +1,8 @@
-package top.sheepyu.module.system.api;
+package top.sheepyu.module.system.api.log;
 
 import org.springframework.stereotype.Service;
-import top.sheepyu.module.system.dto.ApiLogDto;
+import top.sheepyu.module.system.api.log.ApiLogApi;
+import top.sheepyu.module.system.api.log.ApiLogDto;
 import top.sheepyu.module.system.service.log.SystemApiLogService;
 
 import javax.annotation.Resource;

@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.api;
+package top.sheepyu.module.system.api.permission;
 
 /**
  * @author ygq

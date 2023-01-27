@@ -4,9 +4,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
+import top.sheepyu.module.system.api.file.FilePartDto;
 import top.sheepyu.module.system.dao.file.SystemFilePart;
 import top.sheepyu.module.system.dao.file.SystemFilePartMapper;
-import top.sheepyu.module.system.dto.FilePartDto;
 
 import java.util.List;
 import java.util.Objects;
@@ -26,7 +26,7 @@ public class SystemFilePartServiceImpl extends ServiceImplX<SystemFilePartMapper
     public void createFilePart(FilePartDto dto) {
         //根据文件和索引找文件的部分
         SystemFilePart filePart = lambdaQuery().eq(SystemFilePart::getFileId, dto.getFileId())
-                .eq(SystemFilePart::getIndex, dto.getIndex())
+                .eq(SystemFilePart::getIdx, dto.getIdx())
                 .one();
 
         //如果为空说明这一部分没有上传过, 直接保存
@@ -52,5 +52,10 @@ public class SystemFilePartServiceImpl extends ServiceImplX<SystemFilePartMapper
     @Override
     public List<FilePartDto> listByFileId(Long fileId) {
         return CONVERT.convertList(lambdaQuery().eq(SystemFilePart::getFileId, fileId).list());
+    }
+
+    @Override
+    public Integer findIndexByFileId(Long fileId) {
+        return lambdaQuery().eq(SystemFilePart::getFileId, fileId).count().intValue() - 1;
     }
 }

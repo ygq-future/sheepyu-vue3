@@ -2,10 +2,11 @@ package top.sheepyu.module.system.convert.file;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import top.sheepyu.module.system.api.file.FileDto;
+import top.sheepyu.module.system.api.file.FilePartDto;
+import top.sheepyu.module.system.controller.admin.file.vo.SystemFileRespVo;
 import top.sheepyu.module.system.dao.file.SystemFile;
 import top.sheepyu.module.system.dao.file.SystemFilePart;
-import top.sheepyu.module.system.dto.FileDto;
-import top.sheepyu.module.system.dto.FilePartDto;
 
 import java.util.List;
 
@@ -23,5 +24,7 @@ public interface SystemFileConvert {
 
     SystemFile convert(FileDto dto);
 
-    FileDto convert(SystemFile file);
+    FileDto convertDto(SystemFile file);
+
+    SystemFileRespVo convert(SystemFile file);
 }

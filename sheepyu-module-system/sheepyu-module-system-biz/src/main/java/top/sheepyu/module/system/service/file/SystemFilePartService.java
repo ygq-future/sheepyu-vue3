@@ -2,7 +2,7 @@ package top.sheepyu.module.system.service.file;
 
 import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
 import top.sheepyu.module.system.dao.file.SystemFilePart;
-import top.sheepyu.module.system.dto.FilePartDto;
+import top.sheepyu.module.system.api.file.FilePartDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
@@ -18,4 +18,6 @@ public interface SystemFilePartService extends IServiceX<SystemFilePart> {
     void deleteFilePart(@NotNull(message = "文件id不能为空") Long fileId);
 
     List<FilePartDto> listByFileId(Long fileId);
+
+    Integer findIndexByFileId(Long id);
 }

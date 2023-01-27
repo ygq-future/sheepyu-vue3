@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.dto;
+package top.sheepyu.module.system.api.file;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -17,6 +17,9 @@ public class FileDto {
 
     @NotBlank(message = "文件名不能为空")
     private String filename;
+
+    @NotBlank(message = "md5不能为空")
+    private String md5;
 
     private String url;
 

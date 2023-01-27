@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.dto;
+package top.sheepyu.module.system.api.log;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

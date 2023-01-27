@@ -15,6 +15,7 @@ import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 public class SystemFile extends BaseModel {
     private Long id;
     private String filename;
+    private String md5;
     private String url;
     private String mimeType;
     private Integer size;

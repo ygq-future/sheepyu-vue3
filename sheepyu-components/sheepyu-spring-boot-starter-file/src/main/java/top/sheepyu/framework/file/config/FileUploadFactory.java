@@ -7,7 +7,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import top.sheepyu.framework.file.core.enums.FileUploadTypeEnum;
 import top.sheepyu.framework.file.core.oss.FileUpload;
-import top.sheepyu.module.system.api.ConfigApi;
+import top.sheepyu.module.system.api.config.ConfigApi;
 import top.sheepyu.module.system.enums.SystemConfigKeyEnum;
 
 import javax.annotation.Resource;
