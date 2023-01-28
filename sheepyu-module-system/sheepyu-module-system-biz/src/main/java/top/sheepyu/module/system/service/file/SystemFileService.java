@@ -1,13 +1,10 @@
 package top.sheepyu.module.system.service.file;
 
-import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
-import top.sheepyu.module.system.dao.file.SystemFile;
 import top.sheepyu.module.system.api.file.FileDto;
+import top.sheepyu.module.system.dao.file.SystemFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author ygq
@@ -16,17 +13,13 @@ import java.io.InputStream;
 public interface SystemFileService extends IServiceX<SystemFile> {
     FileDto createFile(@Valid FileDto dto);
 
-    void updateFile(@Valid FileDto dto);
+    void updateFileByUploadId(@Valid FileDto dto);
 
-    String uploadFile(MultipartFile file, String md5, String remark) throws IOException;
+    SystemFile findFileByUploadId(String uploadId);
 
-    FileDto findFile(Long fileId);
-
-    Long preparePart(String md5, String filename, String remark);
-
-    String uploadPart(Long fileId, InputStream inputStream, Integer index);
-
-    String completePart(Long fileId);
+    void updatePartIndex(String uploadId, Integer partIndex);
 
     SystemFile findFileByMd5(String md5);
+
+    boolean deleteFileByUploadId(String uploadId);
 }

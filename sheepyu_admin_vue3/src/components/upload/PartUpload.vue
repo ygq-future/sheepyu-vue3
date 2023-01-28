@@ -7,7 +7,7 @@
     <el-button type='primary'>点击上传</el-button>
     <template #tip>
       <div class='el-upload__tip'>
-        <el-progress :percentage='percentage' />
+        <el-progress :percentage='pageData.percentage' />
         请上传类型为
         <span style='color: #ff4d4d'>{{ fileTypes.join('/') }}</span>
         且大小不超过
@@ -15,7 +15,7 @@
         的文件
       </div>
       <div class='operate'>
-        <el-input class='remark' placeholder='文件备注' v-model='remark' />
+        <el-input class='remark' placeholder='文件备注' v-model='pageData.remark' />
         <el-button type='danger' @click='cancelUpload'>取消上传</el-button>
       </div>
     </template>
@@ -41,9 +41,15 @@ const props = withDefaults(defineProps<{
   modelValue: ''
 })
 
-let fileId: number = 0
-const remark = ref<string>('')
-const percentage = ref<number>(0)
+const pageData = reactive<{
+  uploadId: string
+  remark: string
+  percentage: number
+}>({
+  uploadId: '',
+  remark: '',
+  percentage: 0
+})
 //将props.size转为字节单位, 作为每一份part的大小
 const partSize = props.size * 1024 * 1024
 //文件类型
@@ -65,21 +71,25 @@ const beforeUpload: UploadProps['beforeUpload'] = (file) => {
 }
 
 function cancelUpload() {
-  if (!fileId) {
+  if (!pageData.uploadId) {
     return ElNotification.warning('没有正在上传的文件')
   }
   abortPart()
 }
 
-function createPartFile(file: File): FormData[] {
+/**
+ * 切割完成的文件为分片数据
+ * @param file 文件
+ * @param index 从哪个分片开始切割
+ */
+function createPartFile(file: File, index: number = 0): FormData[] {
   const partList: FormData[] = []
-  let index = 0
-  let cur = 0
+  let cur = index * partSize
   while (cur < file.size) {
     const blob = file.slice(cur, cur = cur + partSize)
     const part = new FormData()
     part.append('file', blob)
-    part.append('index', `${index++}`)
+    part.append('index', `${++index}`)
     partList.push(part)
   }
   if (index > props.chunkNum) {
@@ -108,40 +118,41 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     const md5 = await computeMd5(file)
     //查看是否有这个文件
     const { data } = await checkMd5(md5)
-    if (data && data.complete) {
-      //如果文件存在会返回url, 直接回调更新值
-      emit('update:modelValue', data.url)
-      percentage.value = 100
-      return resolve(true)
+    //如果没有这个文件
+    if (!data) {
+      //调用分片准备接口, 创建全局唯一id
+      const prepareData = new FormData()
+      prepareData.append('md5', md5)
+      prepareData.append('filename', file.name)
+      prepareData.append('remark', pageData.remark)
+      pageData.uploadId = <string>(await preparePart(prepareData)).data
+    } else {
+      //如果已经有此md5的文件, 直接取uploadId
+      pageData.uploadId = data.uploadId
+      //如果完成了, 直接返回
+      if (data.complete) {
+        //如果文件存在会返回url, 直接回调更新值
+        emit('update:modelValue', data.url)
+        pageData.percentage = 100
+        return resolve(true)
+      }
     }
 
-    //调用分片准备接口, 创建全局唯一id
-    const prepareData = new FormData()
-    prepareData.append('md5', md5)
-    prepareData.append('filename', file.name)
-    prepareData.append('remark', remark.value)
-    const res = await preparePart(prepareData)
-    fileId = <number>res.data
-
-    //逐个上传分片
-    const partList = createPartFile(file)
-    let i = 0
     //从上次分片的后一个开始
-    if (data) {
-      i = data.index + 1
-    }
-    for (; i < partList.length; i++) {
-      const data = partList[i]
-      await uploadPart(data, fileId)
-      percentage.value = Math.ceil(((i + 1) / partList.length) * 100) - 1
+    let i = data ? data.partIndex : 0
+    const partList = createPartFile(file, i)
+    //逐个上传分片
+    const total = i + partList.length
+    for (const part of partList) {
+      pageData.percentage = Math.ceil((++i / total) * 100) - 1
+      await uploadPart(part, pageData.uploadId)
     }
 
     //合并分片
-    const result = await completePart(fileId)
-    percentage.value = 100
+    emit('update:modelValue', (await completePart(pageData.uploadId)).data)
+    pageData.percentage = 100
+    pageData.uploadId = ''
     ElNotification.success('上传成功')
-    emit('update:modelValue', result.data)
-    fileId = 0
     resolve(true)
   })
 }

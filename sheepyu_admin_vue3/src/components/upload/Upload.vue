@@ -71,11 +71,12 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     const file = options.file
     //计算md5
     const md5 = await computeMd5(file)
+    console.log(md5)
     //查看是否有这个文件
-    const result = await checkMd5(md5)
-    if (result.data && result.data.complete) {
+    const res = await checkMd5(md5)
+    if (res.data && res.data.complete) {
       //如果文件存在会返回url, 直接回调更新值
-      emit('update:modelValue', result.data.url)
+      emit('update:modelValue', res.data.url)
       return resolve(true)
     }
 
@@ -84,8 +85,7 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     data.append('file', file)
     data.append('md5', md5)
     data.append('remark', remark.value)
-    const res = await upload(data)
-    emit('update:modelValue', res.data)
+    emit('update:modelValue', (await upload(data)).data)
     instance.close()
     return resolve(true)
   })

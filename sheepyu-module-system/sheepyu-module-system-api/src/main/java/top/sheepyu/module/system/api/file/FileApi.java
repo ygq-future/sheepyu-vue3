@@ -7,15 +7,19 @@ import java.util.List;
  * @date 2023-01-25 16:09
  **/
 public interface FileApi {
-    void createFilePart(FilePartDto dto);
+    boolean createFilePart(FilePartDto dto);
 
-    void deleteFilePart(Long fileId);
+    void deletePartByUploadId(String uploadId);
 
-    List<FilePartDto> listByFileId(Long fileId);
+    List<FilePartDto> listByUploadId(String uploadId);
 
     FileDto createFile(FileDto dto);
 
-    void updateFile(FileDto dto);
+    void updateFileByUploadId(FileDto dto);
 
-    FileDto findFile(Long fileId);
+    FileDto findFileByUploadId(String uploadId);
+
+    boolean deleteFileByUploadId(String uploadId);
+
+    void updatePartIndex(String uploadId, int partIndex);
 }

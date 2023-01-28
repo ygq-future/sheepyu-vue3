@@ -24,12 +24,12 @@ export function upload(data: FormData) {
 
 export function preparePart(data: FormData) {
   checkCancel()
-  return request.post<number>('/system/file/preparePart', data, { cancelToken: source.token })
+  return request.post<string>('/system/file/preparePart', data, { cancelToken: source.token })
 }
 
-export function uploadPart(data: FormData, fileId: number) {
+export function uploadPart(data: FormData, uploadId: string) {
   checkCancel()
-  return request.post<string>(`/system/file/uploadPart/${fileId}`, data, { cancelToken: source.token })
+  return request.post<string>(`/system/file/uploadPart/${uploadId}`, data, { cancelToken: source.token })
 }
 
 export function abortPart() {
@@ -40,7 +40,7 @@ export function abortPart() {
   isCancel = true
 }
 
-export function completePart(fileId: number) {
+export function completePart(uploadId: string) {
   checkCancel()
-  return request.post<string>(`/system/file/completePart/${fileId}`, { cancelToken: source.token })
+  return request.post<string>(`/system/file/completePart/${uploadId}`, { cancelToken: source.token })
 }

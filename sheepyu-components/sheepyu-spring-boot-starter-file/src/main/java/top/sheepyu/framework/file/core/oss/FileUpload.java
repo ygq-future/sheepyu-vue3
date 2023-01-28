@@ -1,5 +1,6 @@
 package top.sheepyu.framework.file.core.oss;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.InputStream;
@@ -44,30 +45,34 @@ public interface FileUpload {
      * @param md5      整个文件的md5
      * @param filename 文件名称
      * @param remark   备注
-     * @return 返回文件id
+     * @return 返回uploadId
      */
-    Long preparePart(@NotBlank(message = "md5不能为空") String md5,
-                     @NotBlank(message = "文件名不能为空") String filename,
-                     String remark);
+    String preparePart(@NotBlank(message = "md5不能为空") String md5,
+                       @NotBlank(message = "文件名不能为空") String filename,
+                       String remark);
 
     /**
      * 分片上传
      *
-     * @param fileId 文件id
-     * @param in     文件流
-     * @param index  第几个part, 从0开始
+     * @param uploadId  文件id
+     * @param in        文件流
+     * @param partIndex 第几个part, 从1开始
      * @return 返回md5值
      */
-    String uploadPart(@NotNull(message = "文件id不能为空") Long fileId,
-                      @NotNull(message = "文件流不能为空") InputStream in, int index);
+    String uploadPart(@NotNull(message = "文件id不能为空") String uploadId,
+                      @NotNull(message = "文件流不能为空") InputStream in,
+                      @NotNull(message = "partIndex不能为空")
+                      @Min(value = 1, message = "partIndex最小值为1") int partIndex);
 
     /**
      * 完成分片上传
      *
-     * @param fileId 文件id
+     * @param uploadId uploadId
      * @return 返回访问url
      */
-    String completePart(@NotNull(message = "文件id不能为空") Long fileId);
+    String completePart(@NotNull(message = "文件id不能为空") String uploadId);
+
+    boolean deleteFile(String uploadId);
 
     String getType();
 }

@@ -14,6 +14,12 @@ public class SystemFileRespVo {
     @ApiModelProperty("id")
     private Long id;
 
+    @ApiModelProperty("uploadId")
+    private String uploadId;
+
+    @ApiModelProperty("partIndex")
+    private Integer partIndex;
+
     @ApiModelProperty("文件名")
     private String filename;
 
@@ -27,7 +33,7 @@ public class SystemFileRespVo {
     private String mimeType;
 
     @ApiModelProperty("size")
-    private Integer size;
+    private Long size;
 
     @ApiModelProperty("地域")
     private String domain;
@@ -41,6 +47,9 @@ public class SystemFileRespVo {
     @ApiModelProperty("备注")
     private String remark;
 
-    @ApiModelProperty("如果没有完成, 最后一块分片的坐标")
-    private Integer index;
+    @ApiModelProperty("创建人")
+    private String creator;
+
+    @ApiModelProperty("创建时间")
+    private String createTime;
 }

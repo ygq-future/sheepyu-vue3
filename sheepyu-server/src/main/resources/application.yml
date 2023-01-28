@@ -57,3 +57,13 @@ sheepyu:
       LOCAL:
         endpoint: http://localhost:18080
         path: F:/upload
+      ALIYUN:
+        key: LTAI5tLLMcvdpWXsnU4pYK7e
+        secret: aUbXJb7DbwoKxXV4ImJCtbJNOYniGi
+        endpoint: oss-cn-hangzhou.aliyuncs.com
+        bucket: sheepyu
+      QCLOUD:
+        key: AKIDQn0ueMI9xdBlKrNtMoIqJqaOEzY3OXZS
+        secret: tb7RdFgxCLYgs48SWN5cx791hCYxtpme
+        endpoint: cos.ap-chengdu
+        bucket: sheepyu-1309810208

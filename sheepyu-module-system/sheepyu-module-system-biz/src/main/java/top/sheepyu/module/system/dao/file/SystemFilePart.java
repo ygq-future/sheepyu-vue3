@@ -11,10 +11,9 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class SystemFilePart {
     private Long id;
-    private Long fileId;
+    private String uploadId;
     private String path;
     private String md5;
-    private byte[] partTag;
-    private Integer idx;
+    private Integer partIndex;
     private Integer size;
 }

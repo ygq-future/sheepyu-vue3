@@ -23,16 +23,16 @@ import static top.sheepyu.module.system.convert.file.SystemFileConvert.CONVERT;
 public class SystemFilePartServiceImpl extends ServiceImplX<SystemFilePartMapper, SystemFilePart> implements SystemFilePartService {
 
     @Override
-    public void createFilePart(FilePartDto dto) {
-        //根据文件和索引找文件的部分
-        SystemFilePart filePart = lambdaQuery().eq(SystemFilePart::getFileId, dto.getFileId())
-                .eq(SystemFilePart::getIdx, dto.getIdx())
+    public boolean createFilePart(FilePartDto dto) {
+        //根据上传id和索引找文件的部分
+        SystemFilePart filePart = lambdaQuery().eq(SystemFilePart::getUploadId, dto.getUploadId())
+                .eq(SystemFilePart::getPartIndex, dto.getPartIndex())
                 .one();
 
         //如果为空说明这一部分没有上传过, 直接保存
         if (filePart == null) {
             save(CONVERT.convert(dto));
-            return;
+            return true;
         }
 
         //如果不为空,而且md5值还不相同,说明之前上传过这一个文件,但是失败了
@@ -41,21 +41,19 @@ public class SystemFilePartServiceImpl extends ServiceImplX<SystemFilePartMapper
         if (!Objects.equals(dto.getMd5(), filePart.getMd5())) {
             filePart.setMd5(dto.getMd5());
             updateById(filePart);
+            return true;
         }
+        return false;
     }
 
     @Override
-    public void deleteFilePart(Long fileId) {
-        lambdaUpdate().eq(SystemFilePart::getFileId, fileId).remove();
+    public void deletePartByUploadId(String uploadId) {
+        lambdaUpdate().eq(SystemFilePart::getUploadId, uploadId).remove();
     }
 
     @Override
-    public List<FilePartDto> listByFileId(Long fileId) {
-        return CONVERT.convertList(lambdaQuery().eq(SystemFilePart::getFileId, fileId).list());
-    }
-
-    @Override
-    public Integer findIndexByFileId(Long fileId) {
-        return lambdaQuery().eq(SystemFilePart::getFileId, fileId).count().intValue() - 1;
+    public List<SystemFilePart> listByUploadId(String uploadId) {
+        return lambdaQuery().eq(SystemFilePart::getUploadId, uploadId)
+                .orderByAsc(SystemFilePart::getPartIndex).list();
     }
 }

@@ -17,8 +17,8 @@ public class FileProperties {
 
     @Data
     public static class BaseConfig {
-        private String keyId;
-        private String keySecret;
+        private String key;
+        private String secret;
         private String endpoint;
         private String bucket;
         private String path;

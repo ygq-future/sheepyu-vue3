@@ -1,6 +1,8 @@
 export interface SystemFileRespVo {
   id: number;
 
+  uploadId: string
+
   //("文件名")
   filename: string;
 
@@ -28,6 +30,6 @@ export interface SystemFileRespVo {
   //("备注")
   remark: string;
 
-  //("如果没有完成, 最后一块分片的坐标")
-  index: number;
+  //("如果没有完成, 已完成的最后一块分片的坐标")
+  partIndex: number;
 }

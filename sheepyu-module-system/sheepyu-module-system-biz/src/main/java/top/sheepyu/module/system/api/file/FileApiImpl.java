@@ -2,11 +2,15 @@ package top.sheepyu.module.system.api.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import top.sheepyu.module.system.dao.file.SystemFile;
+import top.sheepyu.module.system.dao.file.SystemFilePart;
 import top.sheepyu.module.system.service.file.SystemFilePartService;
 import top.sheepyu.module.system.service.file.SystemFileService;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static top.sheepyu.module.system.convert.file.SystemFileConvert.CONVERT;
 
 /**
  * @author ygq
@@ -21,18 +25,19 @@ public class FileApiImpl implements FileApi {
     private SystemFileService systemFileService;
 
     @Override
-    public void createFilePart(FilePartDto dto) {
-        systemFilePartService.createFilePart(dto);
+    public boolean createFilePart(FilePartDto dto) {
+        return systemFilePartService.createFilePart(dto);
     }
 
     @Override
-    public void deleteFilePart(Long fileId) {
-        systemFilePartService.deleteFilePart(fileId);
+    public void deletePartByUploadId(String uploadId) {
+        systemFilePartService.deletePartByUploadId(uploadId);
     }
 
     @Override
-    public List<FilePartDto> listByFileId(Long fileId) {
-        return systemFilePartService.listByFileId(fileId);
+    public List<FilePartDto> listByUploadId(String uploadId) {
+        List<SystemFilePart> parts = systemFilePartService.listByUploadId(uploadId);
+        return CONVERT.convertDtoList(parts);
     }
 
     @Override
@@ -41,12 +46,23 @@ public class FileApiImpl implements FileApi {
     }
 
     @Override
-    public void updateFile(FileDto dto) {
-        systemFileService.updateFile(dto);
+    public void updateFileByUploadId(FileDto dto) {
+        systemFileService.updateFileByUploadId(dto);
     }
 
     @Override
-    public FileDto findFile(Long fileId) {
-        return systemFileService.findFile(fileId);
+    public FileDto findFileByUploadId(String uploadId) {
+        SystemFile file = systemFileService.findFileByUploadId(uploadId);
+        return CONVERT.convertDto(file);
+    }
+
+    @Override
+    public boolean deleteFileByUploadId(String uploadId) {
+        return systemFileService.deleteFileByUploadId(uploadId);
+    }
+
+    @Override
+    public void updatePartIndex(String uploadId, int partIndex) {
+        systemFileService.updatePartIndex(uploadId, partIndex);
     }
 }

@@ -9,7 +9,7 @@ export interface Result<T = any> {
 }
 
 export enum RequestEnums {
-  TIMEOUT = 60000,
+  TIMEOUT = 300000,
   NOT_AUTHORIZE = 401, // 登录失效
   SUCCESS = 200, // 请求成功
 }

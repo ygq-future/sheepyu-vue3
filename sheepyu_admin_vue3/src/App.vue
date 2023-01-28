@@ -1,7 +1,7 @@
 <template>
   <el-config-provider size='small'>
     <div class='box'>
-      <PartUpload v-model='url'></PartUpload>
+      <PartUpload v-model='url' :size='10'></PartUpload>
       <Upload v-model='url1'></Upload>
     </div>
   </el-config-provider>

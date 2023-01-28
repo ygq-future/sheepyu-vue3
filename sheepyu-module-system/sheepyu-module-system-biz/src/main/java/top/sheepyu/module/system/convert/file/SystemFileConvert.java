@@ -20,7 +20,7 @@ public interface SystemFileConvert {
 
     SystemFilePart convert(FilePartDto dto);
 
-    List<FilePartDto> convertList(List<SystemFilePart> list);
+    List<FilePartDto> convertDtoList(List<SystemFilePart> list);
 
     SystemFile convert(FileDto dto);
 

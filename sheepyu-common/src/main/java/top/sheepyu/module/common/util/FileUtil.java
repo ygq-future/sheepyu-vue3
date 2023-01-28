@@ -36,7 +36,7 @@ public class FileUtil {
         return "." + cn.hutool.core.io.FileUtil.getSuffix(filename);
     }
 
-    public static int getSize(InputStream in) {
+    public static long getSize(InputStream in) {
         int size = 0;
         try {
             size = in.available();
@@ -58,7 +58,7 @@ public class FileUtil {
         return data;
     }
 
-    public static void merge(Enumeration<InputStream> es, String mergeFile) {
+    public static boolean merge(Enumeration<InputStream> es, String mergeFile) {
         try (SequenceInputStream sis = new SequenceInputStream(es);
              BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(Paths.get(mergeFile)))) {
             byte[] bytes = new byte[1024];
@@ -68,8 +68,10 @@ public class FileUtil {
                 out.flush();
             }
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("合并流失败: {}", e.getMessage());
+            return false;
         }
+        return true;
     }
 
     public static InputStream createIn(String path) {
@@ -85,6 +87,29 @@ public class FileUtil {
             cn.hutool.core.io.FileUtil.del(dir);
         } catch (Exception e) {
             log.error("删除文件失败, dir: {}, msg: {}", dir, e.getMessage());
+        }
+    }
+
+    public static byte[] objectToByte(Object obj) {
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(bos);
+            oos.writeObject(obj);
+            oos.flush();
+            return bos.toByteArray();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static <T> T byteToObject(byte[] data, Class<T> clazz) {
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(data);
+            ObjectInputStream oos = new ObjectInputStream(bis);
+            Object obj = oos.readObject();
+            return clazz.cast(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

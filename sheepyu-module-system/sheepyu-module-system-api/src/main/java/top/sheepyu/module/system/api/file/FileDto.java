@@ -15,6 +15,14 @@ import javax.validation.constraints.NotNull;
 public class FileDto {
     private Long id;
 
+    /**
+     * 不管什么上传, 都已uploadId作为唯一标识, 推荐使用uuid
+     */
+    @NotBlank(message = "uploadId不能为空")
+    private String uploadId;
+
+    private Integer partIndex;
+
     @NotBlank(message = "文件名不能为空")
     private String filename;
 
@@ -25,7 +33,7 @@ public class FileDto {
 
     private String mimeType;
 
-    private Integer size;
+    private Long size;
 
     private String domain;
 

@@ -13,8 +13,10 @@ import javax.validation.constraints.NotNull;
 @Data
 @Accessors(chain = true)
 public class FilePartDto {
-    @NotNull(message = "文件id不能为空")
-    private Long fileId;
+    private Long id;
+
+    @NotNull(message = "uploadId不能为空")
+    private String uploadId;
 
     @NotBlank(message = "path不能为空")
     private String path;
@@ -22,10 +24,8 @@ public class FilePartDto {
     @NotBlank(message = "md5值不能为空")
     private String md5;
 
-    private byte[] partTag;
-
     @NotNull(message = "index不能为空")
-    private Integer idx;
+    private Integer partIndex;
 
     @NotNull(message = "size不能为空")
     private Integer size;
