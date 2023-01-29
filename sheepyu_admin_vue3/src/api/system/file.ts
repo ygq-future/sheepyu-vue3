@@ -1,6 +1,5 @@
 import { request } from '@/util/request'
 import type { CancelTokenSource } from 'axios'
-import type { SystemFileRespVo } from '@/api/file/pojo'
 
 let source: CancelTokenSource = request.getSource()
 let isCancel: boolean = false
@@ -43,4 +42,29 @@ export function abortPart() {
 export function completePart(uploadId: string) {
   checkCancel()
   return request.post<string>(`/system/file/completePart/${uploadId}`, { cancelToken: source.token })
+}
+
+interface SystemFileRespVo {
+  id: number;
+  uploadId: string
+  //("文件名")
+  filename: string;
+  //("md5")
+  md5: string;
+  //("url")
+  url: string;
+  //("mimeType")
+  mimeType: string;
+  //("size")
+  size: number;
+  //("地域")
+  domain: string;
+  //("相对路径")
+  path: string;
+  //("是否完成")
+  complete: boolean;
+  //("备注")
+  remark: string;
+  //("如果没有完成, 已完成的最后一块分片的坐标")
+  partIndex: number;
 }

@@ -23,8 +23,10 @@
 import type { UploadProps } from 'element-plus'
 import { ElLoading, ElNotification } from 'element-plus'
 import Md5Worker from '@/util/worker/md5Worker.ts?worker'
-import { checkMd5, upload } from '@/api/file'
+import { useMd5Store } from '@/stores/worker/md5Store'
+import { checkMd5, upload } from '@/api/system/file'
 
+const md5Store = useMd5Store()
 const emit = defineEmits(['update:modelValue'])
 const props = withDefaults(defineProps<{
   extendTypes?: string[]
@@ -55,13 +57,18 @@ const beforeUpload: UploadProps['beforeUpload'] = (file) => {
 
 function computeMd5(file: File): Promise<string> {
   return new Promise(resolve => {
+    let md5 = md5Store.findCache(file.name, file.lastModified)
+    if (md5) {
+      return resolve(md5)
+    }
     //使用worker线程计算md5值
     const worker = new Md5Worker()
     const instance = ElLoading.service({ text: '正在计算文件...', fullscreen: true })
     worker.postMessage(file)
     worker.onmessage = (e) => {
       instance.close()
-      resolve(e.data)
+      md5Store.addCache(file.name, file.lastModified, md5 = e.data)
+      resolve(md5)
     }
   })
 }
@@ -71,7 +78,6 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     const file = options.file
     //计算md5
     const md5 = await computeMd5(file)
-    console.log(md5)
     //查看是否有这个文件
     const res = await checkMd5(md5)
     if (res.data && res.data.complete) {
