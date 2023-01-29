@@ -14,10 +14,10 @@ public class SystemDictDataRespVo {
     @ApiModelProperty("字典id")
     private Long id;
 
-    @ApiModelProperty("字典标签")
-    private Long dictTypeId;
+    @ApiModelProperty("字典类型")
+    private String dictType;
 
-    @ApiModelProperty("字典标签名称")
+    @ApiModelProperty("字典类型名称")
     private String dictTypeName;
 
     @ApiModelProperty("字典排序")
@@ -30,7 +30,7 @@ public class SystemDictDataRespVo {
     private String value;
 
     @ApiModelProperty("字典状态")
-    private Integer visible;
+    private Integer status;
 
     @ApiModelProperty("字典显示的组件")
     private String component;

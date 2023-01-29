@@ -15,7 +15,7 @@ import top.sheepyu.module.system.controller.admin.job.vo.SystemJobQueryVo;
 import top.sheepyu.module.system.controller.admin.job.vo.SystemJobUpdateVo;
 import top.sheepyu.module.system.dao.job.SystemJob;
 import top.sheepyu.module.system.dao.job.SystemJobMapper;
-import top.sheepyu.module.system.enums.JobStatusEnum;
+import top.sheepyu.module.system.enums.job.JobStatusEnum;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.job.SystemJobConvert.CONVERT;
-import static top.sheepyu.module.system.enums.JobStatusEnum.*;
+import static top.sheepyu.module.system.enums.job.JobStatusEnum.*;
 
 /**
  * @author ygq

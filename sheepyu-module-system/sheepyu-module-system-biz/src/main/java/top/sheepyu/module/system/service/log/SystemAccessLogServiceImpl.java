@@ -11,8 +11,8 @@ import top.sheepyu.module.common.util.ServletUtil;
 import top.sheepyu.module.system.controller.admin.log.access.SystemAccessLogQueryVo;
 import top.sheepyu.module.system.dao.log.SystemAccessLog;
 import top.sheepyu.module.system.dao.log.SystemAccessLogMapper;
-import top.sheepyu.module.system.enums.LoginLogTypeEnum;
-import top.sheepyu.module.system.enums.LoginResultEnum;
+import top.sheepyu.module.system.enums.log.LoginTypeEnum;
+import top.sheepyu.module.system.enums.log.LoginResultEnum;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @Validated
 public class SystemAccessLogServiceImpl extends ServiceImplX<SystemAccessLogMapper, SystemAccessLog> implements SystemAccessLogService {
     @Override
-    public void createAccessLog(Long userId, String username, String nickname, LoginLogTypeEnum logType, LoginResultEnum result) {
+    public void createAccessLog(Long userId, String username, String nickname, LoginTypeEnum logType, LoginResultEnum result) {
         SystemAccessLog accessLog = new SystemAccessLog();
         accessLog.setUserId(userId).setUsername(username).setNickname(nickname).setLoginResult(result.getCode());
         accessLog.setUserType(WebFrameworkUtil.getLoginUserType()).setLoginType(logType.getCode());

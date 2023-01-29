@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import top.sheepyu.module.common.annotations.InEnum;
-import top.sheepyu.module.common.enums.status.VisibleStatusEnum;
+import top.sheepyu.module.common.enums.CommonStatusEnum;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -22,8 +22,8 @@ public class SystemDictTypeBaseVo {
 
     @ApiModelProperty("字典类型状态")
     @NotNull(message = "字典类型状态不能为空")
-    @InEnum(VisibleStatusEnum.class)
-    private Integer visible;
+    @InEnum(CommonStatusEnum.class)
+    private Integer status;
 
     @ApiModelProperty("字典备注")
     private String remark;

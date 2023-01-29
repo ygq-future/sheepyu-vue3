@@ -27,8 +27,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 
-import static top.sheepyu.module.common.enums.status.StatusEnum.FALSE;
-import static top.sheepyu.module.common.enums.status.StatusEnum.TRUE;
+import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.COMPLETE;
+import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.INCOMPLETE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.common.util.FileUtil.*;
 import static top.sheepyu.module.common.util.MyStrUtil.getDatePath;
@@ -66,7 +66,7 @@ public class LocalFileUpload implements FileUpload {
 
         //创建文件
         FileDto file = new FileDto()
-                .setComplete(TRUE.getCode())
+                .setComplete(COMPLETE.getCode())
                 .setUploadId(getUUID())
                 .setMd5(md5)
                 .setFilename(filename)
@@ -97,7 +97,7 @@ public class LocalFileUpload implements FileUpload {
         String url = domain + "/file" + path;
 
         FileDto file = new FileDto()
-                .setComplete(FALSE.getCode())
+                .setComplete(INCOMPLETE.getCode())
                 .setMd5(md5)
                 .setFilename(filename)
                 .setMimeType(mimeType)
@@ -107,7 +107,7 @@ public class LocalFileUpload implements FileUpload {
                 .setUploadId(MyStrUtil.getUUID())
                 .setRemark(remark);
         file = fileApi.createFile(file);
-        if (Objects.equals(file.getComplete(), TRUE.getCode())) {
+        if (Objects.equals(file.getComplete(), COMPLETE.getCode())) {
             throw exception(ErrorCodeConstants.EXISTS);
         }
         return file.getUploadId();
@@ -160,7 +160,7 @@ public class LocalFileUpload implements FileUpload {
         mergeAsync(uploadId, vector.elements(), buildLocalPathStr(file.getPath()));
 
         //设置参数, 更新文件信息
-        fileApi.updateFileByUploadId(file.setComplete(TRUE.getCode()).setSize(size));
+        fileApi.updateFileByUploadId(file.setComplete(COMPLETE.getCode()).setSize(size));
 
         //清理文件分片信息
         del(new File(buildLocalPathStr(partList.get(0).getPath())).getParentFile());
@@ -192,7 +192,7 @@ public class LocalFileUpload implements FileUpload {
         boolean result = merge(es, mergeFile);
         if (!result) {
             log.error("uploadId[{}], 合并流失败! 回调修改文件状态!", uploadId);
-            fileApi.updateFileByUploadId(new FileDto().setUploadId(uploadId).setComplete(FALSE.getCode()));
+            fileApi.updateFileByUploadId(new FileDto().setUploadId(uploadId).setComplete(INCOMPLETE.getCode()));
         }
     }
 

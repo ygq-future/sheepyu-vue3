@@ -7,7 +7,8 @@ import lombok.EqualsAndHashCode;
 import top.sheepyu.framework.log.core.enums.OperateTypeEnum;
 import top.sheepyu.module.common.annotations.InEnum;
 import top.sheepyu.module.common.common.PageParam;
-import top.sheepyu.module.common.enums.status.StatusEnum;
+import top.sheepyu.module.system.enums.log.ApiLogProcessEnum;
+import top.sheepyu.module.system.enums.log.ApiLogStatusEnum;
 
 import javax.validation.constraints.Size;
 
@@ -28,10 +29,10 @@ public class SystemApiLogQueryVo extends PageParam {
     private Integer[] durations;
 
     @ApiModelProperty("是否有异常")
-    @InEnum(StatusEnum.class)
-    private Integer error;
+    @InEnum(ApiLogStatusEnum.class)
+    private Integer status;
 
     @ApiModelProperty("处理状态")
-    @InEnum(StatusEnum.class)
+    @InEnum(ApiLogProcessEnum.class)
     private Integer processStatus;
 }

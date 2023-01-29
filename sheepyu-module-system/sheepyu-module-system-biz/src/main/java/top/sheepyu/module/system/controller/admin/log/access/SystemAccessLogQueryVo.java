@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 import top.sheepyu.module.common.annotations.InEnum;
 import top.sheepyu.module.common.common.PageParam;
 import top.sheepyu.module.common.enums.UserTypeEnum;
-import top.sheepyu.module.system.enums.LoginLogTypeEnum;
-import top.sheepyu.module.system.enums.LoginResultEnum;
+import top.sheepyu.module.system.enums.log.LoginTypeEnum;
+import top.sheepyu.module.system.enums.log.LoginResultEnum;
 
 /**
  * @author ygq
@@ -23,7 +23,7 @@ public class SystemAccessLogQueryVo extends PageParam {
     private Integer userType;
 
     @ApiModelProperty("登录类型")
-    @InEnum(LoginLogTypeEnum.class)
+    @InEnum(LoginTypeEnum.class)
     private Integer loginType;
 
     @ApiModelProperty("登录结果")

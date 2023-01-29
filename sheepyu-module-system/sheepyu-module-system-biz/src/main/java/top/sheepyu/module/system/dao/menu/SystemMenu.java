@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.dao.dict;
+package top.sheepyu.module.system.dao.menu;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,15 +7,10 @@ import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 
 /**
  * @author ygq
- * @date 2023-01-24 13:46
+ * @date 2023-01-29 16:13
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class SystemDictType extends BaseModel {
-    private Long id;
-    private String type;
-    private String name;
-    private Integer status;
-    private String remark;
+public class SystemMenu extends BaseModel {
 }

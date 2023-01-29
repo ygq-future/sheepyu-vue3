@@ -13,22 +13,22 @@ import java.util.List;
  * @date 2023-01-24 13:48
  **/
 public interface SystemDictDataService extends IServiceX<SystemDictData> {
-    boolean existsByTypeId(Long id);
+    boolean existsByType(String type);
 
     SystemDictData createDictData(SystemDictDataCreateVo createVo);
 
     SystemDictData updateDictData(@Valid SystemDictDataUpdateVo updateVo);
 
-    Long batchDeleteDictData(String ids);
+    String batchDeleteDictData(String ids);
 
     /**
      * 查询字典列表数据
      *
-     * @param typeId 类型id
-     * @param open   是否查询状态为开启的字典数据
+     * @param type 类型id
+     * @param enable 是否查询状态为开启的字典数据
      * @return 返回字典集合数据
      */
-    List<SystemDictData> listDictData(Long typeId, boolean open);
+    List<SystemDictData> listDictData(String type, boolean enable);
 
     SystemDictData findDictData(Long id);
 }

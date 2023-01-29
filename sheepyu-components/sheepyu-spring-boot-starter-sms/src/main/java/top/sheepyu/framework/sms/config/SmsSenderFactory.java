@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContextAware;
 import top.sheepyu.framework.sms.core.enums.SmsSenderTypeEnum;
 import top.sheepyu.framework.sms.core.sender.SmsSender;
 import top.sheepyu.module.system.api.config.ConfigApi;
-import top.sheepyu.module.system.enums.SystemConfigKeyEnum;
+import top.sheepyu.module.system.enums.config.SystemConfigKeyEnum;
 
 import javax.annotation.Resource;
 import java.util.Map;

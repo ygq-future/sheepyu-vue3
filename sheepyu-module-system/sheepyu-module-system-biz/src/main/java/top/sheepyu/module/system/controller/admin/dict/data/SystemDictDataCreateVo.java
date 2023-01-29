@@ -17,9 +17,9 @@ import javax.validation.constraints.NotNull;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel("字典数据创建vo")
 public class SystemDictDataCreateVo extends SystemDictDataBaseVo {
-    @ApiModelProperty("字典标签")
+    @ApiModelProperty("字典类型")
     @NotNull(message = "字典类型不能为空")
-    private Long dictTypeId;
+    private String dictType;
 
     @ApiModelProperty("字典值")
     @NotBlank(message = "字典值不能为空")

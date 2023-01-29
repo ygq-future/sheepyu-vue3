@@ -25,8 +25,8 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
-import static top.sheepyu.module.common.enums.status.StatusEnum.FALSE;
-import static top.sheepyu.module.common.enums.status.StatusEnum.TRUE;
+import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.COMPLETE;
+import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.INCOMPLETE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.common.util.FileUtil.*;
 import static top.sheepyu.module.common.util.MyStrUtil.getDatePath;
@@ -56,7 +56,7 @@ public class AliyunFileUpload implements FileUpload {
 
         //创建文件
         FileDto file = new FileDto()
-                .setComplete(TRUE.getCode())
+                .setComplete(COMPLETE.getCode())
                 .setUploadId(getUUID())
                 .setFilename(filename)
                 .setSize(size)
@@ -92,7 +92,7 @@ public class AliyunFileUpload implements FileUpload {
         String url = domain + path;
 
         FileDto file = new FileDto()
-                .setComplete(FALSE.getCode())
+                .setComplete(INCOMPLETE.getCode())
                 .setMd5(md5)
                 .setFilename(filename)
                 .setMimeType(mimeType)
@@ -102,7 +102,7 @@ public class AliyunFileUpload implements FileUpload {
                 .setUploadId(buildUploadId(path.substring(1)))
                 .setRemark(remark);
         file = fileApi.createFile(file);
-        if (Objects.equals(file.getComplete(), TRUE.getCode())) {
+        if (Objects.equals(file.getComplete(), COMPLETE.getCode())) {
             throw exception(ErrorCodeConstants.EXISTS);
         }
         return file.getUploadId();
@@ -162,7 +162,7 @@ public class AliyunFileUpload implements FileUpload {
             CompleteMultipartUploadRequest complete = new CompleteMultipartUploadRequest(config.getBucket(), path, uploadId, partETags);
             oss.completeMultipartUpload(complete);
             //设置参数, 更新文件信息
-            fileApi.updateFileByUploadId(file.setComplete(TRUE.getCode()).setSize(size.get()));
+            fileApi.updateFileByUploadId(file.setComplete(COMPLETE.getCode()).setSize(size.get()));
         });
         return file.getUrl();
     }

@@ -10,7 +10,7 @@ import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigCreateVo
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigUpdateVo;
 import top.sheepyu.module.system.dao.config.SystemConfig;
 import top.sheepyu.module.system.dao.config.SystemConfigMapper;
-import top.sheepyu.module.system.enums.SystemConfigKeyEnum;
+import top.sheepyu.module.system.enums.config.SystemConfigKeyEnum;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;

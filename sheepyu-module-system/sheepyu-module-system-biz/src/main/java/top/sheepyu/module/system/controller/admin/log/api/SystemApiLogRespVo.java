@@ -49,8 +49,8 @@ public class SystemApiLogRespVo {
     @ApiModelProperty("返回数据")
     private String resultData;
 
-    @ApiModelProperty("是否有异常")
-    private Integer error;
+    @ApiModelProperty("日志状态 normal or exception")
+    private Integer status;
 
     @ApiModelProperty("发生异常的时间")
     private LocalDateTime exceptionTime;

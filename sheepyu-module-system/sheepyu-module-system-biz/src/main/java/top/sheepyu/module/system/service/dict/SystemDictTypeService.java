@@ -17,15 +17,13 @@ import java.util.List;
 public interface SystemDictTypeService extends IServiceX<SystemDictType> {
     void createDictType(@Valid SystemDictTypeCreateVo createVo);
 
-    void updateDictType(@Valid SystemDictTypeUpdateVo updateVo);
-
-    boolean deleteDictType(Long id);
+    String updateDictType(@Valid SystemDictTypeUpdateVo updateVo);
 
     PageResult<SystemDictType> pageDictType(@Valid SystemDictTypeQueryVo queryVo);
 
     SystemDictType findDictType(Long id);
 
-    boolean existsById(Long typeId);
+    boolean existsByType(String type);
 
-    List<Long> idList();
+    List<String> typeList();
 }

@@ -20,7 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 
-import static top.sheepyu.module.common.enums.status.VisibleStatusEnum.VISIBLE;
+import static top.sheepyu.module.common.enums.CommonStatusEnum.ENABLE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.DICT_TYPE_HAS_DATA;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.DICT_TYPE_NOT_EXISTS;
@@ -45,21 +45,23 @@ public class SystemDictBiz {
     }
 
     public void updateDictType(SystemDictTypeUpdateVo updateVo) {
-        systemDictTypeService.updateDictType(updateVo);
+        String type = systemDictTypeService.updateDictType(updateVo);
         //修改之后重新加载字典数据, 因为可能修改了状态
-        loadDictType(updateVo.getId());
+        loadDictType(type);
     }
 
-    public void deleteDictType(Long id) {
+    public void deleteDictType(Long typeId) {
+        //查询类型
+        SystemDictType dictType = systemDictTypeService.findDictType(typeId);
         //检查类型下是否还有字典数据
-        boolean result = systemDictDataService.existsByTypeId(id);
+        boolean result = systemDictDataService.existsByType(dictType.getType());
         if (result) {
             throw exception(DICT_TYPE_HAS_DATA);
         }
 
         //同时删除redis中的数据
-        if (systemDictTypeService.deleteDictType(id)) {
-            systemDictRedisService.deleteDictType(id);
+        if (systemDictTypeService.removeById(dictType)) {
+            systemDictRedisService.deleteDictType(dictType.getType());
         }
     }
 
@@ -73,38 +75,38 @@ public class SystemDictBiz {
 
     public void createDictData(@Valid SystemDictDataCreateVo createVo) {
         //检查dictType是否存在
-        if (!systemDictTypeService.existsById(createVo.getDictTypeId())) {
+        if (!systemDictTypeService.existsByType(createVo.getDictType())) {
             throw exception(DICT_TYPE_NOT_EXISTS);
         }
         SystemDictData dictData = systemDictDataService.createDictData(createVo);
 
         //将数据添加到redis
-        if (Objects.equals(dictData.getVisible(), VISIBLE.getCode())) {
-            systemDictRedisService.addDictData(dictData.getDictTypeId(), dictData);
+        if (Objects.equals(dictData.getStatus(), ENABLE.getCode())) {
+            systemDictRedisService.addDictData(dictData.getDictType(), dictData);
         }
     }
 
     public void updateDictData(SystemDictDataUpdateVo updateVo) {
         SystemDictData dictData = systemDictDataService.updateDictData(updateVo);
         //将数据添加到redis
-        if (Objects.equals(dictData.getVisible(), VISIBLE.getCode())) {
-            systemDictRedisService.addDictData(dictData.getDictTypeId(), dictData);
+        if (Objects.equals(dictData.getStatus(), ENABLE.getCode())) {
+            systemDictRedisService.addDictData(dictData.getDictType(), dictData);
         } else {
-            systemDictRedisService.delDictData(dictData.getDictTypeId(), dictData);
+            systemDictRedisService.delDictData(dictData.getDictType(), dictData);
         }
     }
 
     public void batchDeleteDictData(String ids) {
-        Long typeId = systemDictDataService.batchDeleteDictData(ids);
-        loadDictType(typeId);
+        String type = systemDictDataService.batchDeleteDictData(ids);
+        loadDictType(type);
     }
 
-    public List<SystemDictData> listDictData(Long typeId) {
-        return systemDictDataService.listDictData(typeId, false);
+    public List<SystemDictData> listDictData(String type) {
+        return systemDictDataService.listDictData(type, false);
     }
 
-    public SystemDictData findDictData(Long typeId, String value) {
-        HashSet<SystemDictData> set = systemDictRedisService.listByType(typeId);
+    public SystemDictData findDictData(String type, String value) {
+        HashSet<SystemDictData> set = systemDictRedisService.listByType(type);
         if (CollUtil.isNotEmpty(set)) {
             for (SystemDictData dictData : set) {
                 if (Objects.equals(value, dictData.getValue())) {
@@ -127,15 +129,15 @@ public class SystemDictBiz {
         log.info("初始化加载字典数据...");
         //清空旧数据
         systemDictRedisService.clear();
-        List<Long> idList = systemDictTypeService.idList();
-        for (Long typeId : idList) {
-            loadDictType(typeId);
+        List<String> typeList = systemDictTypeService.typeList();
+        for (String type : typeList) {
+            loadDictType(type);
         }
         log.info("加载字典数据完成");
     }
 
-    private void loadDictType(Long typeId) {
-        List<SystemDictData> list = systemDictDataService.listDictData(typeId, true);
-        systemDictRedisService.loadDictType(typeId, new HashSet<>(list));
+    private void loadDictType(String type) {
+        List<SystemDictData> list = systemDictDataService.listDictData(type, true);
+        systemDictRedisService.loadDictType(type, new HashSet<>(list));
     }
 }

@@ -7,19 +7,21 @@ import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 import top.sheepyu.module.common.common.PageResult;
+import top.sheepyu.module.system.api.log.ApiLogDto;
 import top.sheepyu.module.system.controller.admin.log.api.SystemApiLogQueryVo;
 import top.sheepyu.module.system.dao.log.SystemApiLog;
 import top.sheepyu.module.system.dao.log.SystemApiLogMapper;
-import top.sheepyu.module.system.api.log.ApiLogDto;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import static top.sheepyu.module.common.enums.status.StatusEnum.FALSE;
-import static top.sheepyu.module.common.enums.status.StatusEnum.TRUE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.log.SystemApiLogConvert.CONVERT;
+import static top.sheepyu.module.system.enums.log.ApiLogProcessEnum.PROCESSED;
+import static top.sheepyu.module.system.enums.log.ApiLogProcessEnum.UNPROCESSED;
+import static top.sheepyu.module.system.enums.log.ApiLogStatusEnum.EXCEPTION;
+import static top.sheepyu.module.system.enums.log.ApiLogStatusEnum.NORMAL;
 
 /**
  * @author ygq
@@ -35,9 +37,9 @@ public class SystemApiLogServiceImpl extends ServiceImplX<SystemApiLogMapper, Sy
     public void createApiLog(ApiLogDto apiLogDto) {
         SystemApiLog apiLog = CONVERT.convert(apiLogDto);
         //异常时间不等于空说明发生了异常
-        apiLog.setError(apiLog.getExceptionTime() != null ? TRUE.getCode() : FALSE.getCode());
+        apiLog.setStatus(apiLog.getExceptionTime() != null ? EXCEPTION.getCode() : NORMAL.getCode());
         //默认处理都是未处理的状态
-        apiLog.setProcessStatus(FALSE.getCode());
+        apiLog.setProcessStatus(UNPROCESSED.getCode());
         save(apiLog);
     }
 
@@ -46,7 +48,7 @@ public class SystemApiLogServiceImpl extends ServiceImplX<SystemApiLogMapper, Sy
         return page(queryVo, buildQuery()
                 .eqIfPresent(SystemApiLog::getType, queryVo.getType())
                 .betweenIfPresent(SystemApiLog::getDuration, queryVo.getDurations())
-                .eqIfPresent(SystemApiLog::getError, queryVo.getError())
+                .eqIfPresent(SystemApiLog::getStatus, queryVo.getStatus())
                 .eqIfPresent(SystemApiLog::getProcessStatus, queryVo.getProcessStatus())
                 .likeIfPresent(SystemApiLog::getName, queryVo.getKeyword()));
     }
@@ -55,17 +57,16 @@ public class SystemApiLogServiceImpl extends ServiceImplX<SystemApiLogMapper, Sy
     public void process(Long id) {
         SystemApiLog apiLog = findByIdValidateExists(id);
         //已经处理过的不用处理
-        if (Objects.equals(apiLog.getProcessStatus(), TRUE.getCode())) {
+        if (Objects.equals(apiLog.getProcessStatus(), PROCESSED.getCode())) {
             throw exception(ALREADY_HANDLE);
         }
 
         //成功的api不需要处理
-        if (Objects.equals(apiLog.getError(), FALSE.getCode())) {
+        if (Objects.equals(apiLog.getStatus(), NORMAL.getCode())) {
             throw exception(SUCCESS_API_DONT_HANDLE);
         }
 
-        apiLog.setProcessStatus(TRUE.getCode()).setProcessTime(LocalDateTime.now());
-        ;
+        apiLog.setProcessStatus(PROCESSED.getCode()).setProcessTime(LocalDateTime.now());
         apiLog.setProcessUserId(SecurityFrameworkUtil.getLoginUserId());
         updateById(apiLog);
     }

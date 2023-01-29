@@ -27,7 +27,7 @@ public class SystemApiLog extends BaseModel {
     private Integer duration;
     private Integer resultCode;
     private String resultData;
-    private Integer error;
+    private Integer status;
     private LocalDateTime exceptionTime;
     private String exceptionName;
     private String exceptionRootCauseMessage;

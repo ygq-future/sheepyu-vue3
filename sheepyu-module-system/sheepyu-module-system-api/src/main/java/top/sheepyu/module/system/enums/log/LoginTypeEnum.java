@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.enums;
+package top.sheepyu.module.system.enums.log;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
  */
 @Getter
 @AllArgsConstructor
-public enum LoginLogTypeEnum implements IterableEnum {
+public enum LoginTypeEnum implements IterableEnum {
     LOGIN_USERNAME(100), // 使用账号登录
     LOGIN_SOCIAL(101), // 使用社交登录
     LOGIN_MOBILE(103), // 使用手机登陆
@@ -27,6 +27,6 @@ public enum LoginLogTypeEnum implements IterableEnum {
 
     @Override
     public List<Integer> list() {
-        return Arrays.stream(values()).map(LoginLogTypeEnum::getCode).collect(Collectors.toList());
+        return Arrays.stream(values()).map(LoginTypeEnum::getCode).collect(Collectors.toList());
     }
 }

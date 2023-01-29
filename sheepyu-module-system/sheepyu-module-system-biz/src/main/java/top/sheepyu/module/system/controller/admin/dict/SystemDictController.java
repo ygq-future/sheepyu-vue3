@@ -97,19 +97,19 @@ public class SystemDictController {
         return Result.success(true);
     }
 
-    @GetMapping("/data/{typeId}")
+    @GetMapping("/data/{type}")
     @ApiOperation("字典数据列表")
     @PreAuthorize("@ss.hasPermission('system:dict:query')")
-    public Result<List<SystemDictDataRespVo>> listDictData(@PathVariable Long typeId) {
-        List<SystemDictData> list = systemDictBiz.listDictData(typeId);
+    public Result<List<SystemDictDataRespVo>> listDictData(@PathVariable String type) {
+        List<SystemDictData> list = systemDictBiz.listDictData(type);
         return Result.success(CONVERT.convertList(list));
     }
 
-    @GetMapping("/data/{typeId}/{value}")
+    @GetMapping("/data/{type}/{value}")
     @ApiOperation("根据类型和value获取字典数据")
     @PreAuthorize("@ss.hasPermission('system:dict:query')")
-    public Result<SystemDictDataRespVo> findDictData(@PathVariable Long typeId, @PathVariable String value) {
-        SystemDictData dictData = systemDictBiz.findDictData(typeId, value);
+    public Result<SystemDictDataRespVo> findDictData(@PathVariable String type, @PathVariable String value) {
+        SystemDictData dictData = systemDictBiz.findDictData(type, value);
         return Result.success(CONVERT.convert(dictData));
     }
 

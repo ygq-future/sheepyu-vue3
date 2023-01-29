@@ -24,8 +24,8 @@ import java.util.List;
 
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
-import static top.sheepyu.module.system.enums.LoginLogTypeEnum.LOGIN_USERNAME;
-import static top.sheepyu.module.system.enums.LoginResultEnum.CAPTCHA_CODE_ERROR;
+import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_USERNAME;
+import static top.sheepyu.module.system.enums.log.LoginResultEnum.CAPTCHA_CODE_ERROR;
 
 /**
  * @author ygq

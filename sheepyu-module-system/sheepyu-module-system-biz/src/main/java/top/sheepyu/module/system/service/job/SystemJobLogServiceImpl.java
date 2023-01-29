@@ -12,9 +12,9 @@ import top.sheepyu.module.system.dao.job.SystemJobLogMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static top.sheepyu.module.common.enums.status.ResultStatusEnum.FAILED;
-import static top.sheepyu.module.common.enums.status.ResultStatusEnum.SUCCESS;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.LOG_NOT_EXISTS;
+import static top.sheepyu.module.system.enums.job.JobLogStatusEnum.FAILED;
+import static top.sheepyu.module.system.enums.job.JobLogStatusEnum.SUCCESS;
 
 /**
  * @author ygq

@@ -11,7 +11,7 @@ import top.sheepyu.framework.sms.core.sender.email.EmailParams;
 import top.sheepyu.framework.sms.core.sender.SmsSender;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 import top.sheepyu.module.common.constants.ErrorCodeConstants;
-import top.sheepyu.module.common.enums.status.FunctionStatusEnum;
+import top.sheepyu.module.common.enums.CommonStatusEnum;
 import top.sheepyu.module.common.util.ServletUtil;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
@@ -19,7 +19,7 @@ import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.dao.user.SystemUserMapper;
-import top.sheepyu.module.system.enums.LoginLogTypeEnum;
+import top.sheepyu.module.system.enums.log.LoginTypeEnum;
 import top.sheepyu.module.system.service.config.SystemConfigService;
 import top.sheepyu.module.system.service.log.SystemAccessLogService;
 
@@ -30,10 +30,10 @@ import java.util.Objects;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.user.SystemUserConvert.CONVERT;
-import static top.sheepyu.module.system.enums.LoginLogTypeEnum.LOGIN_EMAIL;
-import static top.sheepyu.module.system.enums.LoginLogTypeEnum.LOGIN_USERNAME;
-import static top.sheepyu.module.system.enums.LoginResultEnum.*;
-import static top.sheepyu.module.system.enums.SystemConfigKeyEnum.DEFAULT_PASSWORD;
+import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_EMAIL;
+import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_USERNAME;
+import static top.sheepyu.module.system.enums.log.LoginResultEnum.*;
+import static top.sheepyu.module.system.enums.config.SystemConfigKeyEnum.DEFAULT_PASSWORD;
 
 /**
  * @author ygq
@@ -220,8 +220,8 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
         updateById(user);
     }
 
-    private void checkStatus(SystemUser user, LoginLogTypeEnum loginType) {
-        if (Objects.equals(FunctionStatusEnum.DISABLE.getCode(), user.getStatus())) {
+    private void checkStatus(SystemUser user, LoginTypeEnum loginType) {
+        if (Objects.equals(CommonStatusEnum.DISABLE.getCode(), user.getStatus())) {
             systemAccessLogService.createAccessLog(null, user.getUsername(), null, loginType, USER_DISABLED);
             throw exception(ErrorCodeConstants.USER_DISABLE);
         }

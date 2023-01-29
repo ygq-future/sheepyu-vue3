@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.enums;
+package top.sheepyu.module.system.enums.job;
 
 import cn.hutool.core.util.ArrayUtil;
 import lombok.AllArgsConstructor;
@@ -13,12 +13,12 @@ import static top.sheepyu.module.system.constants.ErrorCodeConstants.STATUS_ERRO
 @Getter
 @AllArgsConstructor
 public enum JobStatusEnum {
-    INIT(0, "初始化"),
-    NORMAL(1, "已开启"),
-    STOP(2, "已暂停");
+    INIT(0), //初始化
+    NORMAL(1), //已开启
+    STOP(2), //已暂停
+    ;
 
     private final int code;
-    private final String desc;
 
     public static JobStatusEnum valueOf(int code) {
         JobStatusEnum status = ArrayUtil.firstMatch(e -> e.getCode() == code, values());

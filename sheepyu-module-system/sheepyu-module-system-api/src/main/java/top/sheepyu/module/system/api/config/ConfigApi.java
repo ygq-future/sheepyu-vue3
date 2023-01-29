@@ -1,6 +1,6 @@
 package top.sheepyu.module.system.api.config;
 
-import top.sheepyu.module.system.enums.SystemConfigKeyEnum;
+import top.sheepyu.module.system.enums.config.SystemConfigKeyEnum;
 
 /**
  * @author ygq

@@ -1,4 +1,4 @@
-package top.sheepyu.module.common.enums.status;
+package top.sheepyu.module.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,13 +9,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * 显示状态枚举
+ * 功能状态枚举
  */
 @Getter
 @AllArgsConstructor
-public enum VisibleStatusEnum implements IterableEnum {
-    VISIBLE(1, "显示"),
-    INVISIBLE(0, "隐藏"),
+public enum CommonStatusEnum implements IterableEnum {
+    ENABLE(1, "启用"),
+    DISABLE(0, "禁用"),
     ;
 
     /**
@@ -29,6 +29,6 @@ public enum VisibleStatusEnum implements IterableEnum {
 
     @Override
     public List<Integer> list() {
-        return Arrays.stream(values()).map(VisibleStatusEnum::getCode).collect(Collectors.toList());
+        return Arrays.stream(values()).map(CommonStatusEnum::getCode).collect(Collectors.toList());
     }
 }

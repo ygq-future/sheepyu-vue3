@@ -4,7 +4,7 @@ import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigCreateVo;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigUpdateVo;
 import top.sheepyu.module.system.dao.config.SystemConfig;
-import top.sheepyu.module.system.enums.SystemConfigKeyEnum;
+import top.sheepyu.module.system.enums.config.SystemConfigKeyEnum;
 
 import javax.validation.Valid;
 import java.util.List;

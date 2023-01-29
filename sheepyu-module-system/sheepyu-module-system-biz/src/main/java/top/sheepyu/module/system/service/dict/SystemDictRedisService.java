@@ -2,6 +2,7 @@ package top.sheepyu.module.system.service.dict;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.TypeReference;
+import cn.hutool.json.JSONConfig;
 import cn.hutool.json.JSONUtil;
 import org.springframework.stereotype.Service;
 import top.sheepyu.framework.redis.util.RedisUtil;
@@ -21,51 +22,60 @@ public class SystemDictRedisService {
     @Resource
     private RedisUtil redisUtil;
 
-    public void loadDictType(Long typeId, HashSet<SystemDictData> set) {
+    public void loadDictType(String type, HashSet<SystemDictData> set) {
         if (CollUtil.isEmpty(set)) {
-            deleteDictType(typeId);
+            deleteDictType(type);
             return;
         }
-        redisUtil.set(buildKey(typeId), JSONUtil.toJsonStr(set));
+        //删除无关信息
+        set.forEach(item -> {
+            item.setCreator(null);
+            item.setUpdater(null);
+            item.setCreateTime(null);
+            item.setUpdateTime(null);
+            item.setDeleted(null);
+            item.setRemark(null);
+        });
+        redisUtil.set(buildKey(type), JSONUtil.toJsonStr(set, new JSONConfig()));
     }
 
-    public void deleteDictType(Long id) {
-        redisUtil.del(buildKey(id));
+    public void deleteDictType(String type) {
+        redisUtil.del(buildKey(type));
     }
 
-    public void addDictData(Long typeId, SystemDictData dictData) {
-        HashSet<SystemDictData> set = listByType(typeId);
+    public void addDictData(String type, SystemDictData dictData) {
+        HashSet<SystemDictData> set = listByType(type);
         if (CollUtil.isEmpty(set)) {
             HashSet<SystemDictData> hashSet = new HashSet<>();
             hashSet.add(dictData);
-            loadDictType(typeId, hashSet);
+            loadDictType(type, hashSet);
             return;
         }
 
         set.add(dictData);
-        loadDictType(typeId, set);
+        loadDictType(type, set);
     }
 
-    public void delDictData(Long typeId, SystemDictData dictData) {
-        HashSet<SystemDictData> set = listByType(typeId);
+    public void delDictData(String type, SystemDictData dictData) {
+        HashSet<SystemDictData> set = listByType(type);
         if (CollUtil.isEmpty(set)) {
             return;
         }
 
         set.remove(dictData);
-        loadDictType(typeId, set);
+        loadDictType(type, set);
     }
 
     public void clear() {
         redisUtil.delPrefix(SYSTEM_DICT_KEY);
     }
 
-    public HashSet<SystemDictData> listByType(Long typeId) {
-        return redisUtil.getJSONObj(buildKey(typeId), new TypeReference<HashSet<SystemDictData>>() {
+    public HashSet<SystemDictData> listByType(String type) {
+        return redisUtil.getJSONObj(buildKey(type), new TypeReference<HashSet<SystemDictData>>() {
         });
     }
 
-    private String buildKey(Long id) {
-        return SYSTEM_DICT_KEY.concat(id.toString());
+    private String buildKey(String type) {
+        return SYSTEM_DICT_KEY.concat(type);
     }
 }

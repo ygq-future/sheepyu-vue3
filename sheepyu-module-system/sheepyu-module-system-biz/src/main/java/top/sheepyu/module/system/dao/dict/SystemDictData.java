@@ -14,11 +14,11 @@ import java.util.Objects;
 @Accessors(chain = true)
 public class SystemDictData extends BaseModel {
     private Long id;
-    private Long dictTypeId;
+    private String dictType;
     private Integer sort;
     private String label;
     private String value;
-    private Integer visible;
+    private Integer status;
     private String component;
     private String remark;
 
@@ -27,11 +27,11 @@ public class SystemDictData extends BaseModel {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SystemDictData dictData = (SystemDictData) o;
-        return dictTypeId.equals(dictData.dictTypeId) && label.equals(dictData.label) && value.equals(dictData.value);
+        return dictType.equals(dictData.dictType) && value.equals(dictData.value);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), dictTypeId, label, value);
+        return Objects.hash(super.hashCode(), dictType, value);
     }
 }

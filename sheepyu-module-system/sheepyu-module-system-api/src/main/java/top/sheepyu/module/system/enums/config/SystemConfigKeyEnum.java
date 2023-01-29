@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.enums;
+package top.sheepyu.module.system.enums.config;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

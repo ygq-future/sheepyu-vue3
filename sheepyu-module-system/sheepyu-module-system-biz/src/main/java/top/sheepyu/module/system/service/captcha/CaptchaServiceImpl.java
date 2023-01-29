@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.RedisConstants.CAPTCHA_IMAGE_KEY;
 import static top.sheepyu.module.system.constants.RedisConstants.CAPTCHA_IMAGE_TTL;
-import static top.sheepyu.module.system.enums.SystemConfigKeyEnum.CAPTCHA_ENABLE;
+import static top.sheepyu.module.system.enums.config.SystemConfigKeyEnum.CAPTCHA_ENABLE;
 
 /**
  * @author ygq
