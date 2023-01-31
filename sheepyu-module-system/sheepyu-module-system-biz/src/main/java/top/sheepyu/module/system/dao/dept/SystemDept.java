@@ -1,9 +1,12 @@
 package top.sheepyu.module.system.dao.dept;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
+
+import java.util.List;
 
 /**
  * @author ygq
@@ -20,4 +23,7 @@ public class SystemDept extends BaseModel {
     private Long leaderUserId;
     private String phone;
     private String email;
+
+    @TableField(exist = false)
+    private List<SystemDept> children;
 }

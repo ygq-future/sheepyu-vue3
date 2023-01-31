@@ -9,7 +9,7 @@ import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
 import top.sheepyu.module.system.dao.job.SystemJobLog;
 import top.sheepyu.module.system.dao.job.SystemJobLogMapper;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.LOG_NOT_EXISTS;
@@ -25,7 +25,7 @@ import static top.sheepyu.module.system.enums.job.JobLogStatusEnum.SUCCESS;
 @Validated
 public class SystemJobLogServiceImpl extends ServiceImplX<SystemJobLogMapper, SystemJobLog> implements SystemJobLogService, JobLogFrameworkService {
     @Override
-    public Long createJobLog(Long jobId, LocalDateTime beginTime, String jobHandlerName, String jobHandlerParam, Integer executeIndex) {
+    public Long createJobLog(Long jobId, Date beginTime, String jobHandlerName, String jobHandlerParam, Integer executeIndex) {
         SystemJobLog jobLog = new SystemJobLog();
         jobLog.setJobId(jobId).setBeginTime(beginTime).setHandlerName(jobHandlerName).setHandlerParam(jobHandlerParam).setRetryCount(executeIndex);
         save(jobLog);
@@ -34,7 +34,7 @@ public class SystemJobLogServiceImpl extends ServiceImplX<SystemJobLogMapper, Sy
 
     @Async
     @Override
-    public void updateJobLogResultAsync(Long logId, LocalDateTime endTime, Integer duration, boolean success, String result) {
+    public void updateJobLogResultAsync(Long logId, Date endTime, Integer duration, boolean success, String result) {
         SystemJobLog jobLog = this.findByIdValidateExists(logId);
         jobLog.setEndTime(endTime).setDuration(duration).setResult(result);
         jobLog.setStatus(success ? SUCCESS.getCode() : FAILED.getCode());

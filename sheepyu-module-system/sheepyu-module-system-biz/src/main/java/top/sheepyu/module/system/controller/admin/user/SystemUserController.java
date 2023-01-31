@@ -4,7 +4,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.log.core.annotations.RecordLog;
 import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.annotations.Permit;
@@ -89,8 +88,8 @@ public class SystemUserController {
 
     @PatchMapping("/avatar")
     @ApiOperation("修改用户头像")
-    public Result<Boolean> updateAvatar(@RequestParam MultipartFile file) {
-        systemUserBiz.updateAvatar(file);
+    public Result<Boolean> updateAvatar(@RequestParam String avatar) {
+        systemUserBiz.updateAvatar(avatar);
         return success(true);
     }
 

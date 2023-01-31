@@ -7,14 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
 import top.sheepyu.framework.sms.config.SmsSenderFactory;
-import top.sheepyu.framework.sms.core.sender.email.EmailParams;
 import top.sheepyu.framework.sms.core.sender.SmsSender;
+import top.sheepyu.framework.sms.core.sender.email.EmailParams;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 import top.sheepyu.module.common.constants.ErrorCodeConstants;
 import top.sheepyu.module.common.enums.CommonStatusEnum;
 import top.sheepyu.module.common.util.ServletUtil;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
@@ -24,16 +23,17 @@ import top.sheepyu.module.system.service.config.SystemConfigService;
 import top.sheepyu.module.system.service.log.SystemAccessLogService;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
+import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.user.SystemUserConvert.CONVERT;
+import static top.sheepyu.module.system.enums.config.SystemConfigKeyEnum.DEFAULT_PASSWORD;
+import static top.sheepyu.module.system.enums.log.LoginResultEnum.*;
 import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_EMAIL;
 import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_USERNAME;
-import static top.sheepyu.module.system.enums.log.LoginResultEnum.*;
-import static top.sheepyu.module.system.enums.config.SystemConfigKeyEnum.DEFAULT_PASSWORD;
 
 /**
  * @author ygq
@@ -53,32 +53,32 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     private SystemConfigService systemConfigService;
 
     @Override
-    public SystemUser login(SystemUserLoginVo loginVo) {
+    public SystemUser login(String login, String password) {
         //这里为什么不用or查询, 因为根据username or email or mobile这几个查询
         //是很常用的, 所以这几个字段都有索引, 如果使用or查询, 就会全表扫描了
-        SystemUser user = findByUsername(loginVo.getLogin());
+        SystemUser user = findByUsername(login);
 
         //如果为空再根据邮箱查询
         if (user == null) {
-            user = findByEmail(loginVo.getLogin());
+            user = findByEmail(login);
         }
         //如果还为空, 然后根据手机号查询
         if (user == null) {
-            user = findByMobile(loginVo.getLogin());
+            user = findByMobile(login);
         }
         if (user == null) {
-            systemAccessLogService.createAccessLog(null, loginVo.getLogin(), null, LOGIN_USERNAME, BAD_CREDENTIALS);
+            systemAccessLogService.createAccessLog(null, login, null, LOGIN_USERNAME, BAD_CREDENTIALS);
             throw exception(LOGIN_FAILED);
         }
         checkStatus(user, LOGIN_USERNAME);
 
         //密码不匹配
-        if (!passwordEncoder.matches(loginVo.getPassword(), user.getPassword())) {
-            systemAccessLogService.createAccessLog(null, loginVo.getLogin(), null, LOGIN_USERNAME, BAD_CREDENTIALS);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            systemAccessLogService.createAccessLog(null, login, null, LOGIN_USERNAME, BAD_CREDENTIALS);
             throw exception(LOGIN_FAILED);
         }
 
-        systemAccessLogService.createAccessLog(user.getId(), loginVo.getLogin(), user.getNickname(), LOGIN_USERNAME, SUCCESS);
+        systemAccessLogService.createAccessLog(user.getId(), login, user.getNickname(), LOGIN_USERNAME, SUCCESS);
         return user;
     }
 
@@ -115,7 +115,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
     @Override
     public void create(SystemUserCreateVo createVo) {
-        SystemUser user = CONVERT.convert(createVo);
+        SystemUser user = CONVERT.convert(createVo).setType(ADMIN.getCode());
         SystemUser byUsername = findByUsername(user.getUsername());
         if (byUsername != null) {
             throw exception(USER_EXISTS);
@@ -141,7 +141,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     @Override
     public void updateLoginTime(SystemUser user) {
         String loginIp = ServletUtil.getClientIp(WebFrameworkUtil.getRequest());
-        user.setLoginTime(LocalDateTime.now()).setLoginIp(loginIp);
+        user.setLoginTime(new Date()).setLoginIp(loginIp);
         updateById(user);
     }
 
@@ -167,8 +167,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
     @Override
     public void sendCode(String email) {
-        SmsSender smsSender = smsSenderFactory.get();
-        smsSender.sendCode(new EmailParams(email));
+        smsSenderFactory.get().sendCode(new EmailParams(email));
     }
 
     @Override

@@ -17,9 +17,6 @@ public class SystemDictDataRespVo {
     @ApiModelProperty("字典类型")
     private String dictType;
 
-    @ApiModelProperty("字典类型名称")
-    private String dictTypeName;
-
     @ApiModelProperty("字典排序")
     private Integer sort;
 

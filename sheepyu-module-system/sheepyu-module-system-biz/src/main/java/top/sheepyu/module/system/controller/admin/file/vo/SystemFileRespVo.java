@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author ygq
  * @date 2023-01-27 11:35
@@ -51,5 +53,5 @@ public class SystemFileRespVo {
     private String creator;
 
     @ApiModelProperty("创建时间")
-    private String createTime;
+    private Date createTime;
 }

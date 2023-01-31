@@ -5,7 +5,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -18,6 +17,5 @@ import javax.validation.constraints.NotNull;
 public class SystemUserUpdateVo extends SystemUserBaseVo {
     @ApiModelProperty("用户id")
     @NotNull(message = "用户id不能为空")
-    @Min(1)
     private Long id;
 }

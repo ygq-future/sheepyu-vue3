@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -29,10 +29,10 @@ public class SystemJobLogRespVo {
     private Integer retryCount;
 
     @ApiModelProperty("执行开始时间")
-    private LocalDateTime beginTime;
+    private Date beginTime;
 
     @ApiModelProperty("执行结束时间")
-    private LocalDateTime endTime;
+    private Date endTime;
 
     @ApiModelProperty("执行持续时间")
     private Integer duration;

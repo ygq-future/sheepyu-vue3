@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -53,7 +53,7 @@ public class SystemApiLogRespVo {
     private Integer status;
 
     @ApiModelProperty("发生异常的时间")
-    private LocalDateTime exceptionTime;
+    private Date exceptionTime;
 
     @ApiModelProperty("异常的名称")
     private String exceptionName;
@@ -71,7 +71,7 @@ public class SystemApiLogRespVo {
     private Integer processStatus;
 
     @ApiModelProperty("处理时间")
-    private LocalDateTime processTime;
+    private Date processTime;
 
     @ApiModelProperty("处理人id")
     private Long processUserId;

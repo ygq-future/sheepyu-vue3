@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -28,12 +28,12 @@ public class SystemApiLog extends BaseModel {
     private Integer resultCode;
     private String resultData;
     private Integer status;
-    private LocalDateTime exceptionTime;
+    private Date exceptionTime;
     private String exceptionName;
     private String exceptionRootCauseMessage;
     private String exceptionStackTraceFull;
     private String exceptionStackTraceCrucial;
     private Integer processStatus;
-    private LocalDateTime processTime;
+    private Date processTime;
     private Long processUserId;
 }

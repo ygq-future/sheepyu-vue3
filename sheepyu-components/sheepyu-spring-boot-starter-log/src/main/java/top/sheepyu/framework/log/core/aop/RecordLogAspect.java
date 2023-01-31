@@ -31,7 +31,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Array;
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -119,7 +118,7 @@ public class RecordLogAspect {
             return;
         }
 
-        apiLog.setExceptionTime(LocalDateTime.now());
+        apiLog.setExceptionTime(new Date());
         apiLog.setExceptionName(th.getClass().getName());
         apiLog.setExceptionRootCauseMessage(ExceptionUtil.getRootCauseMessage(th));
         apiLog.setExceptionStackTraceFull(ExceptionUtil.getMessage(th));

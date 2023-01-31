@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
  * @date 2023-01-22 11:33
  **/
 @Data
-@ApiModel("邮箱登录vo")
+@ApiModel("app用户邮箱登录vo")
 public class EmailLoginVo {
     @Email(message = "邮箱格式错误")
     @NotBlank(message = "邮箱不能为空")

@@ -46,4 +46,19 @@ public interface ErrorCodeConstants {
 
     //file相关 100_006_001
     ErrorCode FILE_NOT_EXISTS = new ErrorCode(100_006_001, "文件不存在!");
+
+    //dept相关 100_007_001
+    ErrorCode DEPT_NOT_EXISTS = new ErrorCode(100_007_001, "部门不存在!");
+    ErrorCode DEPT_HAS_CHILDREN = new ErrorCode(100_007_002, "部门还有子部门!");
+
+    //post相关 100_008_001
+    ErrorCode POST_NOT_EXISTS = new ErrorCode(100_008_001, "职位不存在!");
+    ErrorCode POST_EXISTS = new ErrorCode(100_008_001, "职位已存在!");
+
+    //menu相关 100_009_001
+    ErrorCode MENU_NOT_EXISTS = new ErrorCode(100_009_001, "菜单不存在!");
+    ErrorCode MENU_HAS_CHILDREN = new ErrorCode(100_009_002, "菜单还有子菜单!");
+
+    //role相关 100_010_001
+    ErrorCode ROLE_NOT_EXISTS = new ErrorCode(100_010_001, "角色不存在!");
 }

@@ -32,17 +32,17 @@ public class SystemUserExcelVo {
     @ExcelProperty("电话号码")
     private String mobile;
 
-    @ApiModelProperty("头像url")
-    @ExcelProperty("头像")
-    private String avatar;
+    @ApiModelProperty("部门")
+    @ExcelProperty("部门")
+    private String deptName;
+
+    @ApiModelProperty("职位")
+    @ExcelProperty("职位")
+    private String postNames;
 
     @ApiModelProperty("状态")
     @ExcelProperty("状态")
     private Integer status;
-
-    @ApiModelProperty("类型")
-    @ExcelProperty("类型")
-    private Integer type;
 
     @ApiModelProperty("备注")
     @ExcelProperty("备注")

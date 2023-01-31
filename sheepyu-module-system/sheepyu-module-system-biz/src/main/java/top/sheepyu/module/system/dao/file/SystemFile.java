@@ -3,7 +3,7 @@ package top.sheepyu.module.system.dao.file;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * 系统文件不使用逻辑删除, 因为没有软用
@@ -27,5 +27,5 @@ public class SystemFile {
     private Integer complete;
     private String remark;
     private String creator;
-    private LocalDateTime createTime;
+    private Date createTime;
 }

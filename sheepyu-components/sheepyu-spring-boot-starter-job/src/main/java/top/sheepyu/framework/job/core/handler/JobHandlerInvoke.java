@@ -9,8 +9,7 @@ import top.sheepyu.framework.job.core.enums.JobDataKeyEnum;
 import top.sheepyu.framework.job.service.JobLogFrameworkService;
 
 import javax.annotation.Resource;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.util.Date;
 
 import static cn.hutool.core.exceptions.ExceptionUtil.getRootCauseMessage;
 
@@ -38,7 +37,7 @@ public class JobHandlerInvoke implements Job {
         int refireCount = context.getRefireCount();
 
         Long jogLogId = null;
-        LocalDateTime beginTime = LocalDateTime.now();
+        Date beginTime = new Date();
         String result = null;
         Throwable ex = null;
         try {
@@ -60,8 +59,8 @@ public class JobHandlerInvoke implements Job {
         return jobHandler.execute(jobHandlerParam);
     }
 
-    private void updateJobLogResultAsync(Long jobLogId, String jobName, LocalDateTime beginTime, String result, Throwable exception) {
-        LocalDateTime endTime = LocalDateTime.now();
+    private void updateJobLogResultAsync(Long jobLogId, String jobName, Date beginTime, String result, Throwable exception) {
+        Date endTime = new Date();
         // 处理是否成功
         boolean success = exception == null;
         if (!success) {
@@ -69,8 +68,8 @@ public class JobHandlerInvoke implements Job {
         }
         // 更新日志
         try {
-            long start = beginTime.toInstant(ZoneOffset.of("+8")).toEpochMilli();
-            long end = endTime.toInstant(ZoneOffset.of("+8")).toEpochMilli();
+            long start = beginTime.getTime();
+            long end = endTime.getTime();
             jobLogFrameworkService.updateJobLogResultAsync(jobLogId, endTime, (int) (end - start), success, result);
         } catch (Exception ex) {
             log.error("[executeInternal][Job({}) logId({}) 记录执行日志失败({}/{})]", jobName, jobLogId, success, result);

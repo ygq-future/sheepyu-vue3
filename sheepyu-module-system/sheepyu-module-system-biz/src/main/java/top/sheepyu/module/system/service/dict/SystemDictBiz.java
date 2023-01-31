@@ -1,6 +1,7 @@
 package top.sheepyu.module.system.service.dict;
 
 import cn.hutool.core.collection.CollUtil;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -32,12 +33,10 @@ import static top.sheepyu.module.system.constants.ErrorCodeConstants.DICT_TYPE_N
 @Service
 @Slf4j
 @Validated
+@AllArgsConstructor
 public class SystemDictBiz {
-    @Resource
     private SystemDictDataService systemDictDataService;
-    @Resource
     private SystemDictTypeService systemDictTypeService;
-    @Resource
     private SystemDictRedisService systemDictRedisService;
 
     public void createDictType(SystemDictTypeCreateVo createVo) {

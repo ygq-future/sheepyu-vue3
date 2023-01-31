@@ -12,7 +12,7 @@ import top.sheepyu.module.system.controller.admin.log.api.SystemApiLogQueryVo;
 import top.sheepyu.module.system.dao.log.SystemApiLog;
 import top.sheepyu.module.system.dao.log.SystemApiLogMapper;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 import static top.sheepyu.module.common.exception.CommonException.exception;
@@ -66,7 +66,7 @@ public class SystemApiLogServiceImpl extends ServiceImplX<SystemApiLogMapper, Sy
             throw exception(SUCCESS_API_DONT_HANDLE);
         }
 
-        apiLog.setProcessStatus(PROCESSED.getCode()).setProcessTime(LocalDateTime.now());
+        apiLog.setProcessStatus(PROCESSED.getCode()).setProcessTime(new Date());
         apiLog.setProcessUserId(SecurityFrameworkUtil.getLoginUserId());
         updateById(apiLog);
     }

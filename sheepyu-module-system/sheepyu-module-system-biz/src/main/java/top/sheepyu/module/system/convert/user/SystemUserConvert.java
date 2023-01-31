@@ -7,6 +7,7 @@ import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserExcelVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserRespVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
+import top.sheepyu.module.system.controller.app.user.vo.AppUserRespVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
 
 import java.util.List;
@@ -24,6 +25,8 @@ public interface SystemUserConvert {
     SystemUser convert(SystemUserUpdateVo updateVo);
 
     SystemUserRespVo convert(SystemUser systemUser);
+
+    AppUserRespVo convertApp(SystemUser systemUser);
 
     List<SystemUserExcelVo> convertExcel(List<SystemUser> list);
 

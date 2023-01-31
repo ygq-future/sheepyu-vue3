@@ -1,4 +1,4 @@
-package top.sheepyu.module.system.dao.dept;
+package top.sheepyu.module.system.dao.menu;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -7,13 +7,13 @@ import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 
 /**
  * @author ygq
- * @date 2023-01-29 16:12
+ * @date 2023-01-29 16:13
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-public class SystemUserDept extends BaseModel {
+public class SystemRoleMenu extends BaseModel {
     private Long id;
-    private Long userId;
-    private Long deptId;
+    private Long roleId;
+    private Long menuId;
 }

@@ -1,10 +1,11 @@
 package top.sheepyu.module.system.service.user;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.service.SecurityRedisService;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
@@ -13,19 +14,23 @@ import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserQueryVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
+import top.sheepyu.module.system.controller.app.user.vo.AppUserLoginVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
-import top.sheepyu.module.system.service.log.SystemAccessLogService;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
+import top.sheepyu.module.system.service.dept.SystemDeptService;
+import top.sheepyu.module.system.service.log.SystemAccessLogService;
+import top.sheepyu.module.system.service.post.SystemPostService;
 
-import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 
+import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
-import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_USERNAME;
 import static top.sheepyu.module.system.enums.log.LoginResultEnum.CAPTCHA_CODE_ERROR;
+import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_USERNAME;
 
 /**
  * @author ygq
@@ -33,17 +38,16 @@ import static top.sheepyu.module.system.enums.log.LoginResultEnum.CAPTCHA_CODE_E
  **/
 @Service
 @Validated
+@AllArgsConstructor
 public class SystemUserBiz {
-    @Resource
-    private SystemUserService systemUserService;
-    @Resource
-    private SecurityRedisService securityRedisService;
-    @Resource
-    private CaptchaService captchaService;
-    @Resource
-    private SystemAccessLogService systemAccessLogService;
+    private final SystemUserService systemUserService;
+    private final SecurityRedisService securityRedisService;
+    private final CaptchaService captchaService;
+    private final SystemAccessLogService systemAccessLogService;
+    private final SystemDeptService systemDeptService;
+    private final SystemPostService systemPostService;
 
-    public LoginUser login(SystemUserLoginVo loginVo) {
+    public LoginUser login(@Valid SystemUserLoginVo loginVo) {
         //校验验证码
         if (!captchaService.verifyCaptcha(loginVo.getKey(), loginVo.getCode())) {
             systemAccessLogService.createAccessLog(null, loginVo.getLogin(), null, LOGIN_USERNAME, CAPTCHA_CODE_ERROR);
@@ -51,7 +55,13 @@ public class SystemUserBiz {
         }
 
         //校验用户名密码
-        SystemUser user = systemUserService.login(loginVo);
+        SystemUser user = systemUserService.login(loginVo.getLogin(), loginVo.getPassword());
+        return loginAfterDo(user);
+    }
+
+    public LoginUser loginOfApp(@Valid AppUserLoginVo loginVo) {
+        //校验用户名密码
+        SystemUser user = systemUserService.login(loginVo.getLogin(), loginVo.getPassword());
         return loginAfterDo(user);
     }
 
@@ -64,12 +74,19 @@ public class SystemUserBiz {
 
     public SystemUser info() {
         Long userId = SecurityFrameworkUtil.getLoginUserId();
-        return systemUserService.insensitiveInfo(userId);
+        SystemUser user = systemUserService.insensitiveInfo(userId);
+        if (Objects.equals(user.getType(), ADMIN.getCode())) {
+            fillDeptInfo(user);
+        }
+        return user;
     }
 
     public PageResult<SystemUser> pageUser(@Valid SystemUserQueryVo queryVo) {
-        //TODO 根据postId和deptId查询用户id, 并用in查询
-        return systemUserService.page(queryVo, buildQuery(queryVo));
+        PageResult<SystemUser> page = systemUserService.page(queryVo, buildQuery(queryVo));
+        for (SystemUser user : page.getList()) {
+            fillDeptInfo(user);
+        }
+        return page;
     }
 
     public void createUser(SystemUserCreateVo createVo) {
@@ -89,7 +106,11 @@ public class SystemUserBiz {
     }
 
     public List<SystemUser> listUser(@Valid SystemUserQueryVo queryVo) {
-        return systemUserService.list(buildQuery(queryVo));
+        List<SystemUser> list = systemUserService.list(buildQuery(queryVo));
+        for (SystemUser user : list) {
+            fillDeptInfo(user);
+        }
+        return list;
     }
 
     public LoginUser loginByEmail(@Valid EmailLoginVo loginVo) {
@@ -115,10 +136,12 @@ public class SystemUserBiz {
     private LambdaQueryWrapper<SystemUser> buildQuery(SystemUserQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
         boolean keywordExists = StrUtil.isNotBlank(keyword);
+
         return systemUserService.buildQuery()
                 .eqIfPresent(SystemUser::getStatus, queryVo.getStatus())
-                .betweenIfPresent(SystemUser::getLoginTime, queryVo.getLoginTimes())
+                .eqIfPresent(SystemUser::getDeptId, queryVo.getDeptId())
                 .betweenIfPresent(SystemUser::getCreateTime, queryVo.getCreateTimes())
+                .eq(SystemUser::getType, ADMIN.getCode())
                 .and(keywordExists, e -> e.like(SystemUser::getUsername, keyword).or()
                         .like(SystemUser::getNickname, keyword).or()
                         .like(SystemUser::getMobile, keyword).or()
@@ -144,15 +167,25 @@ public class SystemUserBiz {
         systemUserService.updateEmail(userId, email);
     }
 
-    public void updateAvatar(MultipartFile file) {
-        //TODO 先调用文件上传服务上传文件,然后在调用systemUserService.updateAvatar修改头像链接
+    public void updateAvatar(String avatar) {
         Long userId = SecurityFrameworkUtil.getLoginUserId();
-        String avatar = null;
         systemUserService.updateAvatar(userId, avatar);
     }
 
     public void updatePassword(String password) {
         Long userId = SecurityFrameworkUtil.getLoginUserId();
         systemUserService.updatePassword(userId, password);
+    }
+
+    private void fillDeptInfo(SystemUser user) {
+        if (user.getDeptId() != null) {
+            String deptName = systemDeptService.findNameById(user.getDeptId());
+            user.setDeptName(deptName);
+        }
+
+        if (CollUtil.isNotEmpty(user.getPostIds())) {
+            List<String> postNames = systemPostService.findNamesByIds(user.getPostIds());
+            user.setPostNames(String.join(",", postNames));
+        }
     }
 }

@@ -13,9 +13,8 @@ import javax.validation.constraints.NotBlank;
 @Data
 @ApiModel("系统用户登录vo")
 public class SystemUserLoginVo {
-    @ApiModelProperty("账号")
+    @ApiModelProperty("账号,可以是username, mobile 或者 email")
     @NotBlank(message = "账号不能为空")
-    //可以是username, mobile 或者 email
     private String login;
 
     @ApiModelProperty("密码")

@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -20,8 +20,8 @@ public class SystemJobLog extends BaseModel {
     private String handlerName;
     private String handlerParam;
     private Integer retryCount;
-    private LocalDateTime beginTime;
-    private LocalDateTime endTime;
+    private Date beginTime;
+    private Date endTime;
     private Integer duration;
     private Integer status;
     private String result;

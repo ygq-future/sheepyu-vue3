@@ -3,7 +3,7 @@ package top.sheepyu.module.system.api.log;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -23,11 +23,9 @@ public class ApiLogDto {
     private Integer duration;
     private Integer resultCode;
     private String resultData;
-    private LocalDateTime exceptionTime;
+    private Date exceptionTime;
     private String exceptionName;
     private String exceptionRootCauseMessage;
     private String exceptionStackTraceFull;
     private String exceptionStackTraceCrucial;
-    private Long startTime;
-    private boolean close;
 }

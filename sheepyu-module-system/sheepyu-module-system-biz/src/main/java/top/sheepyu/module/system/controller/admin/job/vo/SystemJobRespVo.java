@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
  * @author ygq
@@ -22,5 +22,5 @@ public class SystemJobRespVo extends SystemJobBaseVo {
     @ApiModelProperty("创建者")
     private String creator;
     @ApiModelProperty("创建时间")
-    private LocalDateTime createTime;
+    private Date createTime;
 }

@@ -3,13 +3,12 @@ package top.sheepyu.module.system.controller.app.user;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.annotations.Permit;
 import top.sheepyu.framework.web.core.annotations.FlowLimit;
 import top.sheepyu.module.common.common.Result;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserRespVo;
+import top.sheepyu.module.system.controller.app.user.vo.AppUserLoginVo;
+import top.sheepyu.module.system.controller.app.user.vo.AppUserRespVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.convert.user.SystemUserConvert;
 import top.sheepyu.module.system.dao.user.SystemUser;
@@ -26,7 +25,7 @@ import static top.sheepyu.module.common.common.Result.success;
 @RestController
 @RequestMapping("/system/user")
 @Api(tags = "用户端 - 用户授权")
-public class AppSystemUserController {
+public class AppUserController {
     @Resource
     private SystemUserBiz systemUserBiz;
 
@@ -34,8 +33,8 @@ public class AppSystemUserController {
     @FlowLimit
     @PostMapping("/login")
     @ApiOperation("账号密码登录")
-    public Result<LoginUser> login(@RequestBody SystemUserLoginVo loginVo) {
-        LoginUser loginUser = systemUserBiz.login(loginVo);
+    public Result<LoginUser> login(@RequestBody AppUserLoginVo loginVo) {
+        LoginUser loginUser = systemUserBiz.loginOfApp(loginVo);
         return success(loginUser);
     }
 
@@ -67,9 +66,9 @@ public class AppSystemUserController {
 
     @GetMapping("/info")
     @ApiOperation("获取用户信息")
-    public Result<SystemUserRespVo> info() {
+    public Result<AppUserRespVo> info() {
         SystemUser user = systemUserBiz.info();
-        return success(SystemUserConvert.CONVERT.convert(user));
+        return success(SystemUserConvert.CONVERT.convertApp(user));
     }
 
     @PatchMapping("/nickname")
@@ -95,8 +94,8 @@ public class AppSystemUserController {
 
     @PatchMapping("/avatar")
     @ApiOperation("修改用户头像")
-    public Result<Boolean> updateAvatar(@RequestParam MultipartFile file) {
-        systemUserBiz.updateAvatar(file);
+    public Result<Boolean> updateAvatar(@RequestParam String avatar) {
+        systemUserBiz.updateAvatar(avatar);
         return success(true);
     }
 

@@ -13,4 +13,10 @@ import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 public class SystemRole extends BaseModel {
+    private Long id;
+    private String name;
+    private String code;
+    private Integer sort;
+    private Integer status;
+    private String remark;
 }

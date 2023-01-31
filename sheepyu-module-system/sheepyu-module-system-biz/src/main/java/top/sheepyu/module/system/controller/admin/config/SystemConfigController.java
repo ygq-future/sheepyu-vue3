@@ -47,7 +47,7 @@ public class SystemConfigController {
     @DeleteMapping("/{id}")
     @ApiOperation("删除系统配置")
     @PreAuthorize("@ss.hasPermission('system:config:delete')")
-    public Result<Boolean> update(@PathVariable Long id) {
+    public Result<Boolean> delete(@PathVariable Long id) {
         systemConfigService.deleteConfig(id);
         return success(true);
     }
@@ -55,7 +55,7 @@ public class SystemConfigController {
     @GetMapping
     @ApiOperation("获取系统配置列表")
     @PreAuthorize("@ss.hasPermission('system:config:query')")
-    public Result<List<SystemConfigRespVo>> update(@RequestParam(required = false) String keyword) {
+    public Result<List<SystemConfigRespVo>> list(@RequestParam(required = false) String keyword) {
         List<SystemConfig> result = systemConfigService.listConfig(keyword);
         return success(CONVERT.convertList(result));
     }
