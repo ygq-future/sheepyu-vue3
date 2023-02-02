@@ -1,21 +1,23 @@
 <template>
   <el-config-provider size='small'>
     <div class='box'>
-      <PartUpload v-model='url' :size='10'></PartUpload>
-      <Upload v-model='url1'></Upload>
+      <IconSelector v-model='icon'></IconSelector>
     </div>
   </el-config-provider>
 </template>
 
 <script setup lang='ts'>
-import PartUpload from '@/components/upload/PartUpload.vue'
-import Upload from '@/components/upload/Upload.vue'
+import IconSelector from '@/components/icon/IconSelector.vue'
+import iconFontInit from '@/util/iconfont'
 
-const url = ref('')
-const url1 = ref('')
-watch([url, url1], (val) => {
-  console.log(val)
+const icon = ref('iconfont icon-kehuquanyi')
+watch(icon, (value) => {
+  console.log(value)
+}, {
+  immediate: true
 })
+
+iconFontInit()
 </script>
 
 <style lang='scss'>

@@ -2,7 +2,9 @@ package top.sheepyu.module.system.api.permission;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import top.sheepyu.module.system.api.permission.PermissionApi;
+import top.sheepyu.module.system.service.permission.PermissionBiz;
+
+import javax.annotation.Resource;
 
 /**
  * @author ygq
@@ -11,13 +13,16 @@ import top.sheepyu.module.system.api.permission.PermissionApi;
 @Service
 @Slf4j
 public class PermissionApiImpl implements PermissionApi {
+    @Resource
+    private PermissionBiz permissionBiz;
+
     @Override
     public boolean hasAnyPermissions(Long userId, String... permissions) {
-        return true;
+        return permissionBiz.hasAnyPermissions(userId, permissions);
     }
 
     @Override
     public boolean hasAnyRoles(Long userId, String... roles) {
-        return true;
+        return permissionBiz.hasAnyRoles(userId, roles);
     }
 }

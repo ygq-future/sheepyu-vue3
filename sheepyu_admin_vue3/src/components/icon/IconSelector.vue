@@ -1,0 +1,215 @@
+<template>
+  <el-popover
+    placement='bottom'
+    :width='state.inputWidth'
+    trigger='focus'
+    :visible='state.popoverVisible'
+  >
+    <div class='popover-content'
+         @mouseover.stop='state.iconSelectorMouseover = true'
+         @mouseout.stop='state.iconSelectorMouseover = false'>
+      <div class='content-header'>
+        <span>请选择图标</span>
+        <div class='types'>
+          <span @click='changeType(item)' v-for='item in state.types'
+                :class="state.type === item ? 'active' : ''">{{ item }}</span>
+        </div>
+      </div>
+
+      <div class='content-body'>
+        <el-scrollbar height='180'>
+          <div v-if='renderIconNames.length > 0'>
+            <div class='icon-item' @click='onIcon(item)' :key='key' v-for='(item, key) in renderIconNames'>
+              <Icon :name='item' />
+            </div>
+          </div>
+        </el-scrollbar>
+      </div>
+    </div>
+
+    <template #reference>
+      <el-input v-model='state.inputValue'
+                @focus='onFocus'
+                @blur='onBlur'
+                class='select-input'
+                :size='size'
+                placeholder='搜索图标'
+                ref='selectorInput'>
+        <template #prepend>
+          <Icon :key='`icon-${state.prependIcon}`' :name='state.prependIcon'></Icon>
+          <span style='font-size: 12px;margin-left: 5px'>{{ state.prependIcon }}</span>
+        </template>
+        <template #append>
+          <Icon style='cursor: pointer' :size='22' name='el-icon-RefreshRight' @click='resetIcon' />
+        </template>
+      </el-input>
+    </template>
+  </el-popover>
+</template>
+
+<script setup lang='ts'>
+import { getElementPlusIconfontNames, getIconfontNames } from '@/util/iconfont'
+import { useEventListener } from '@vueuse/core'
+
+const props = withDefaults(defineProps<{
+  modelValue: string
+  size?: 'large' | 'default' | 'small'
+  width?: string
+}>(), {
+  modelValue: '',
+  size: 'default',
+  width: '400px'
+})
+
+const emits = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+
+type IconType = 'ele' | 'ali'
+const selectorInput = ref()
+const state = reactive<{
+  type: IconType,
+  types: IconType[],
+  iconNames: string[],
+  inputValue: string,
+  prependIcon: string,
+  inputWidth: number,
+  inputFocus: boolean,
+  iconSelectorMouseover: boolean,
+  popoverVisible: boolean
+}>({
+  type: 'ele',
+  types: ['ele', 'ali'],
+  iconNames: [],
+  inputValue: '',
+  prependIcon: props.modelValue || 'el-icon-Plus',
+  inputWidth: 0,
+  inputFocus: false,
+  iconSelectorMouseover: false,
+  popoverVisible: false
+})
+
+function getIconNames() {
+  state.iconNames = []
+  if (state.type == 'ele') {
+    getElementPlusIconfontNames().then(res => {
+      state.iconNames = res
+    })
+  } else if (state.type == 'ali') {
+    getIconfontNames().then(res => {
+      state.iconNames = res.map(name => `iconfont ${name}`)
+    })
+  }
+}
+
+function changeType(type: IconType) {
+  if (state.type == type) return
+  state.type = type
+  getIconNames()
+}
+
+function getInputWidth() {
+  state.inputWidth = selectorInput.value.$el.offsetWidth
+}
+
+function onIcon(item: string) {
+  state.prependIcon = item
+  emits('update:modelValue', item)
+  state.popoverVisible = state.iconSelectorMouseover = false
+  nextTick(() => {
+    selectorInput.value.blur()
+  })
+}
+
+function resetIcon() {
+}
+
+function onFocus() {
+  state.inputFocus = state.popoverVisible = true
+}
+
+function onBlur() {
+  state.inputFocus = false
+  state.popoverVisible = state.iconSelectorMouseover
+}
+
+const renderIconNames = computed(() => {
+  if (!state.inputValue) return state.iconNames
+
+  let inputValue = state.inputValue.trim().toLowerCase()
+  return state.iconNames.filter((icon: string) => {
+    if (icon.toLowerCase().indexOf(inputValue) > 0) {
+      return icon
+    }
+  })
+})
+
+onMounted(() => {
+  getIconNames()
+  getInputWidth()
+  useEventListener(document, 'click', () => {
+    state.popoverVisible = state.inputFocus || state.iconSelectorMouseover
+  })
+})
+</script>
+
+<style scoped lang='scss'>
+.popover-content {
+  display: flex;
+  flex-direction: column;
+
+  .content-body {
+    padding-top: 10px;
+
+    .icon-item {
+      display: inline-block;
+      padding: 10px 10px 6px 10px;
+      margin: 3px;
+      border: 0.5px solid #ececec;
+      border-radius: 10px;
+      cursor: pointer;
+
+      &:hover {
+        border-color: #61afff;
+      }
+    }
+  }
+
+  .content-header {
+    display: flex;
+    justify-content: space-between;
+
+    .types {
+      flex: 1;
+      display: flex;
+      justify-content: flex-end;
+
+      span {
+        margin-right: 10px;
+        cursor: pointer;
+      }
+
+      span:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+}
+
+.active {
+  color: #61afff;
+  text-decoration: underline;
+}
+
+.select-input {
+  width: v-bind(width) !important;
+}
+
+:deep(.el-input-group__prepend) {
+  padding: 0 10px;
+}
+
+:deep(.el-input-group__append) {
+  padding: 0 10px;
+}
+</style>
