@@ -26,10 +26,10 @@
 import type { UploadProps } from 'element-plus'
 import { ElLoading, ElNotification } from 'element-plus'
 import Md5Worker from '@/util/worker/md5Worker.ts?worker'
-import { useMd5Store } from '@/stores/worker/md5Store'
+import { useMd5Worker } from '@/stores/worker/md5Worker'
 import { abortPart, checkMd5, completePart, preparePart, uploadPart } from '@/api/system/file'
 
-const md5Store = useMd5Store()
+const md5Store = useMd5Worker()
 const emit = defineEmits(['update:modelValue'])
 const props = withDefaults(defineProps<{
   extendTypes?: string[]

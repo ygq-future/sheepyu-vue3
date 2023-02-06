@@ -1,50 +1,52 @@
 <template>
-  <el-popover
-    placement='bottom'
-    :width='state.inputWidth'
-    trigger='focus'
-    :visible='state.popoverVisible'
-  >
-    <div class='popover-content'
-         @mouseover.stop='state.iconSelectorMouseover = true'
-         @mouseout.stop='state.iconSelectorMouseover = false'>
-      <div class='content-header'>
-        <span>请选择图标</span>
-        <div class='types'>
+  <div class='selector'>
+    <el-popover
+      placement='bottom'
+      :width='state.popoverWidth'
+      trigger='focus'
+      :visible='state.popoverVisible'
+    >
+      <div class='popover-content'
+           @mouseover.stop='state.iconSelectorMouseover = true'
+           @mouseout.stop='state.iconSelectorMouseover = false'>
+        <div class='content-header'>
+          <span>请选择图标</span>
+          <div class='types'>
           <span @click='changeType(item)' v-for='item in state.types'
                 :class="state.type === item ? 'active' : ''">{{ item }}</span>
+          </div>
+        </div>
+
+        <div class='content-body'>
+          <el-scrollbar height='180'>
+            <div v-if='renderIconNames.length > 0'>
+              <div class='icon-item' @click='onIcon(item)' :key='key' v-for='(item, key) in renderIconNames'>
+                <Icon :name='item' />
+              </div>
+            </div>
+          </el-scrollbar>
         </div>
       </div>
 
-      <div class='content-body'>
-        <el-scrollbar height='180'>
-          <div v-if='renderIconNames.length > 0'>
-            <div class='icon-item' @click='onIcon(item)' :key='key' v-for='(item, key) in renderIconNames'>
-              <Icon :name='item' />
-            </div>
-          </div>
-        </el-scrollbar>
-      </div>
-    </div>
-
-    <template #reference>
-      <el-input v-model='state.inputValue'
-                @focus='onFocus'
-                @blur='onBlur'
-                class='select-input'
-                :size='size'
-                placeholder='搜索图标'
-                ref='selectorInput'>
-        <template #prepend>
-          <Icon :key='`icon-${state.prependIcon}`' :name='state.prependIcon'></Icon>
-          <span style='font-size: 12px;margin-left: 5px'>{{ state.prependIcon }}</span>
-        </template>
-        <template #append>
-          <Icon style='cursor: pointer' :size='22' name='el-icon-RefreshRight' @click='resetIcon' />
-        </template>
-      </el-input>
-    </template>
-  </el-popover>
+      <template #reference>
+        <el-input v-model='state.inputValue'
+                  @focus='onFocus'
+                  @blur='onBlur'
+                  class='select-input'
+                  :size='size'
+                  placeholder='搜索图标'
+                  ref='selectorInput'>
+          <template #prepend>
+            <Icon :key='`icon-${state.prependIcon}`' :name='state.prependIcon'></Icon>
+            <span v-show='showIconText' style='font-size: 12px;margin-left: 5px'>{{ state.prependIcon }}</span>
+          </template>
+          <template #append>
+            <Icon style='cursor: pointer' :size='22' name='el-icon-RefreshRight' @click='resetIcon' />
+          </template>
+        </el-input>
+      </template>
+    </el-popover>
+  </div>
 </template>
 
 <script setup lang='ts'>
@@ -54,10 +56,12 @@ import { useEventListener } from '@vueuse/core'
 const props = withDefaults(defineProps<{
   modelValue: string
   size?: 'large' | 'default' | 'small'
+  showIconText?: boolean
   width?: string
 }>(), {
   modelValue: '',
   size: 'default',
+  showIconText: true,
   width: '400px'
 })
 
@@ -73,20 +77,22 @@ const state = reactive<{
   iconNames: string[],
   inputValue: string,
   prependIcon: string,
-  inputWidth: number,
+  popoverWidth: number,
   inputFocus: boolean,
   iconSelectorMouseover: boolean,
   popoverVisible: boolean
+  firstValue: string
 }>({
   type: 'ele',
   types: ['ele', 'ali'],
   iconNames: [],
   inputValue: '',
   prependIcon: props.modelValue || 'el-icon-Plus',
-  inputWidth: 0,
+  popoverWidth: 0,
   inputFocus: false,
   iconSelectorMouseover: false,
-  popoverVisible: false
+  popoverVisible: false,
+  firstValue: props.modelValue || 'el-icon-Plus'
 })
 
 function getIconNames() {
@@ -109,11 +115,12 @@ function changeType(type: IconType) {
 }
 
 function getInputWidth() {
-  state.inputWidth = selectorInput.value.$el.offsetWidth
+  state.popoverWidth = selectorInput.value.$el.offsetWidth < 260 ? 260 : selectorInput.value.$el.offsetWidth
 }
 
 function onIcon(item: string) {
   state.prependIcon = item
+  state.inputValue = ''
   emits('update:modelValue', item)
   state.popoverVisible = state.iconSelectorMouseover = false
   nextTick(() => {
@@ -122,6 +129,7 @@ function onIcon(item: string) {
 }
 
 function resetIcon() {
+  onIcon(state.firstValue)
 }
 
 function onFocus() {
@@ -154,6 +162,10 @@ onMounted(() => {
 </script>
 
 <style scoped lang='scss'>
+.selector {
+  width: v-bind(width);
+}
+
 .popover-content {
   display: flex;
   flex-direction: column;
@@ -165,7 +177,7 @@ onMounted(() => {
       display: inline-block;
       padding: 10px 10px 6px 10px;
       margin: 3px;
-      border: 0.5px solid #ececec;
+      border: 1px solid #ececec;
       border-radius: 10px;
       cursor: pointer;
 
@@ -199,10 +211,6 @@ onMounted(() => {
 .active {
   color: #61afff;
   text-decoration: underline;
-}
-
-.select-input {
-  width: v-bind(width) !important;
 }
 
 :deep(.el-input-group__prepend) {

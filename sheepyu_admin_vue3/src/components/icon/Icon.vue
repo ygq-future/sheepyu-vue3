@@ -15,15 +15,14 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: '#000000'
+      required: false
     }
   },
   setup(props) {
     const iconStyle = computed((): CSSProperties => {
-      const { size, color } = props
       return {
-        fontSize: `${size}px`,
-        color
+        color: props.color,
+        fontSize: `${props.size}px`
       }
     })
 

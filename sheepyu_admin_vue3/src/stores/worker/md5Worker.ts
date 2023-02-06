@@ -8,7 +8,7 @@ interface FileCache {
   md5: string
 }
 
-export const useMd5Store = defineStore(IdEnum.MD5_WORKER, () => {
+export const useMd5Worker = defineStore(IdEnum.MD5_WORKER, () => {
   const md5Caches = reactive(new Array<FileCache>())
 
   function addCache(name: string, lastModified: number, md5: string) {
@@ -33,6 +33,6 @@ export const useMd5Store = defineStore(IdEnum.MD5_WORKER, () => {
   return { md5Caches, addCache, findCache }
 }, {
   persist: {
-    key: StorePersistKey.MD5_STORE_KEY
+    key: StorePersistKey.MD5_WORKER_STORE_KEY
   }
 })

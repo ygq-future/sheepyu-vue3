@@ -1,23 +1,14 @@
 <template>
-  <el-config-provider size='small'>
-    <div class='box'>
-      <IconSelector v-model='icon'></IconSelector>
-    </div>
+  <el-config-provider :size='config.layout.size' :locale='zhCn'>
+    <router-view></router-view>
   </el-config-provider>
 </template>
 
 <script setup lang='ts'>
-import IconSelector from '@/components/icon/IconSelector.vue'
-import iconFontInit from '@/util/iconfont'
+import { useConfig } from '@/stores/config/config'
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 
-const icon = ref('iconfont icon-kehuquanyi')
-watch(icon, (value) => {
-  console.log(value)
-}, {
-  immediate: true
-})
-
-iconFontInit()
+const config = useConfig()
 </script>
 
 <style lang='scss'>
@@ -28,11 +19,28 @@ html, body, #app {
   padding: 0;
 }
 
-.box {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+html.light {
+  background-color: #f5f5f5;
+}
+
+.default-main {
+  margin: 16px;
+  box-sizing: border-box;
+}
+
+.layout-shade {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background-color: transparent;
+  z-index: 9999;
+}
+
+@media screen and (max-width: 768px) {
+  .xs-hide {
+    display: none;
+  }
 }
 </style>

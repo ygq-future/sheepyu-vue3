@@ -15,8 +15,10 @@
   "dependencies": {
     "axios": "^1.2.4",
     "element-plus": "^2.2.28",
+    "mitt": "^3.0.0",
     "pinia": "^2.0.28",
     "pinia-plugin-persistedstate": "^3.0.2",
+    "screenfull": "^6.0.2",
     "spark-md5": "^3.0.2",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6"
