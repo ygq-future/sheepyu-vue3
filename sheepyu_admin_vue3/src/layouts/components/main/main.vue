@@ -4,7 +4,7 @@
       <router-view v-slot='{Component}'>
         <transition :name='config.layout.pageAnimation' mode='out-in'>
           <keep-alive :include='state.keepAliveList'>
-            <component :is='Component' />
+            <component :is='Component' :key='state.componentKey' />
           </keep-alive>
         </transition>
       </router-view>
@@ -25,33 +25,38 @@ const config = useConfig()
 const tabs = useTabs()
 const state = reactive<{
   keepAliveList: string[]
+  componentKey: string
 }>({
-  keepAliveList: []
+  keepAliveList: [],
+  componentKey: route.path
 })
 
-function addKeepAlive(route: RouteLocationNormalized) {
-  if (!route) return
-  if (!route.meta.keepalive) return
-  const name: string | undefined = route.name?.toString()
+function addKeepAlive(menu: RouteLocationNormalized) {
+  if (!menu) return
+  if (!menu.meta.keepalive) return
+  const name: string | undefined = menu.name?.toString()
   if (!name || state.keepAliveList.includes(name)) return
   state.keepAliveList.push(name)
 }
 
-function removeKeepAlive(route: RouteLocationNormalized) {
-  if (!route.meta.keepalive) return
-  const name: string | undefined = route.name?.toString()
+function removeKeepAlive(menu: RouteLocationNormalized) {
+  if (!menu.meta.keepalive) return
+  const name: string | undefined = menu.name?.toString()
   state.keepAliveList = state.keepAliveList.filter(item => item != name)
 }
 
-watch(() => route.path, () => {
+watch(() => route.path, (path) => {
+  state.componentKey = path
   addKeepAlive(tabs.state.activeRoute as RouteLocationNormalized)
 })
 
 onBeforeMount(() => {
-  instance?.proxy?.$bus.on('onTabRefresh', (route: RouteLocationNormalized) => {
-    removeKeepAlive(route)
+  instance?.proxy?.$bus.on('onTabRefresh', (menu: RouteLocationNormalized) => {
+    removeKeepAlive(menu)
+    state.componentKey = ''
     nextTick(() => {
-      addKeepAlive(route)
+      state.componentKey = menu.path
+      addKeepAlive(menu)
     })
   })
 

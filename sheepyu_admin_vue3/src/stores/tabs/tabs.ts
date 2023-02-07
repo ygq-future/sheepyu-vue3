@@ -30,6 +30,14 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
     }
   }
 
+  function closeTabs(route: RouteLocationNormalized | undefined = undefined) {
+    if (route) {
+      state.tabsView = [route]
+    } else {
+      state.tabsView = []
+    }
+  }
+
   function addTab(route: RouteLocationNormalized) {
     const index = findTab(route)
     if (index >= 0) {
@@ -60,10 +68,10 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
     return -1
   }
 
-  return { state, addTab, closeTab, setActiveTab }
+  return { state, addTab, closeTab, setActiveTab, closeTabs }
 }, {
   persist: {
     key: StorePersistKey.TABS_STORE_KEY,
-    paths: ['tabFullScreen']
+    paths: ['state.tabFullScreen']
   }
 })

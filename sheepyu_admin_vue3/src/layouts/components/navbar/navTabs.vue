@@ -6,6 +6,7 @@
           :class="['tab', index === tabs.state.activeIndex ? 'active' : '']"
           v-for='(item, index) in tabs.state.tabsView'
           @click='onChange(item)'
+          @contextmenu.prevent='onContextmenu(item, $event)'
           :key='item.path'
         >
           <span>{{ item.meta.title }}</span>
@@ -15,6 +16,8 @@
         <div :style='navTabBackStyle' class='nav-tab-back'></div>
       </div>
     </el-scrollbar>
+
+    <ContextMenu ref='contextMenuRef' :items='contextMenuItems' @itemClick='onItemClick' />
   </div>
 </template>
 
@@ -22,13 +25,17 @@
 import { useConfig } from '@/stores/config/config'
 import { useTabs } from '@/stores/tabs/tabs'
 import type { RouteLocationNormalized } from 'vue-router'
-import { onBeforeRouteUpdate, useRouter } from 'vue-router'
+import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
+import type { ContextMenuItem, ContextmenuItemClickEmitArg } from '@/layouts/components/navbar/interface'
+import ContextMenu from '@/layouts/components/navbar/contextMenu.vue'
 
 const instance = getCurrentInstance()
 const router = useRouter()
+const route = useRoute()
 const config = useConfig()
 const tabs = useTabs()
 const tabsRef = ref<HTMLDivElement>()
+const contextMenuRef = ref()
 const topMenuActiveBackColor = computed(() => config.getColor('topMenuActiveBackColor'))
 const closeHoverBackColor = computed(() => {
   return config.layout.isDark ? '#2e366e' : '#c8f2fc'
@@ -40,6 +47,13 @@ const navTabBackStyle = reactive<{
   width: '0px',
   transform: 'translateX(0px)'
 })
+const contextMenuItems = reactive<ContextMenuItem[]>([
+  { name: 'refresh', label: '重新加载', icon: 'el-icon-Refresh' },
+  { name: 'close', label: '关闭标签', icon: 'el-icon-Refresh' },
+  { name: 'fullScreen', label: '当前标签全屏', icon: 'el-icon-FullScreen' },
+  { name: 'closeOther', label: '关闭其他标签', icon: 'el-icon-FolderRemove' },
+  { name: 'closeAll', label: '关闭全部标签', icon: 'el-icon-FolderDelete' }
+])
 
 function changeNavTab() {
   const div = findDiv(tabs.state.activeIndex)
@@ -51,8 +65,61 @@ function changeNavTab() {
   navTabBackStyle.transform = `translateX(${div.offsetLeft}px)`
 }
 
-function onChange(route: RouteLocationNormalized) {
-  router.push(route)
+function onChange(menu: RouteLocationNormalized) {
+  router.push(menu)
+}
+
+function onContextmenu(menu: RouteLocationNormalized, e: MouseEvent) {
+  //如果当前不是激活的标签, 禁用刷新
+  contextMenuItems[0].disabled = menu.path !== tabs.state.activeRoute?.path
+  //如果只剩下一个标签, 则不能关闭
+  contextMenuItems[1].disabled = contextMenuItems[3].disabled = tabs.state.tabsView.length === 1
+
+  const { clientX, clientY } = e
+  contextMenuRef.value.onShow(menu, {
+    x: clientX,
+    y: clientY
+  })
+}
+
+function onItemClick(item: ContextmenuItemClickEmitArg) {
+  switch (item.name) {
+    case 'refresh':
+      instance?.proxy?.$bus.emit('onTabRefresh', item.menu)
+      break
+    case 'close':
+      onClose(item.menu as RouteLocationNormalized)
+      instance?.proxy?.$bus.emit('onTabClose', item.menu)
+      break
+    case 'fullScreen':
+      tabs.state.tabFullScreen = true
+      break
+    case 'closeOther':
+      closeOther(item.menu as RouteLocationNormalized)
+      break
+    case 'closeAll':
+      closeAll()
+  }
+}
+
+function closeAll() {
+  //默认打开的页面
+  const homePath = '/dashboard'
+  if (tabs.state.activeRoute!.path == homePath) {
+    tabs.closeTabs(tabs.state.activeRoute!)
+  } else {
+    tabs.closeTabs()
+    router.push(homePath)
+  }
+}
+
+function closeOther(menu: RouteLocationNormalized) {
+  tabs.closeTabs(menu)
+  tabs.setActiveTab(menu)
+
+  if (route.path !== menu.path) {
+    router.push(menu)
+  }
 }
 
 function onClose(item: RouteLocationNormalized) {
@@ -69,9 +136,11 @@ function onClose(item: RouteLocationNormalized) {
   }
 }
 
-function updateTab(route: RouteLocationNormalized) {
-  tabs.addTab(route)
-  tabs.setActiveTab(route)
+function updateTab(menu: RouteLocationNormalized) {
+  if (!menu.meta.keepalive) return
+
+  tabs.addTab(menu)
+  tabs.setActiveTab(menu)
 
   nextTick(() => {
     changeNavTab()
