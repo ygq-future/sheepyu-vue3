@@ -4,6 +4,7 @@ export const staticRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'layout',
+    redirect: '/dashboard',
     component: () => import('@/layouts/layout.vue'),
     children: [{
       path: 'dashboard',
@@ -30,6 +31,11 @@ export const staticRoutes: Array<RouteRecordRaw> = [
       }
     }]
   }, {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/system/login.vue')
+  }
+  , {
     path: '/:path(.*)*',
     redirect: '/404'
   }, {

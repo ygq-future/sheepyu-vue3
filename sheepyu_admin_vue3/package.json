@@ -5,8 +5,8 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "vite --mode dev",
-    "build:test": "npm run build --mode test",
-    "build:prod": "npm run build --mode prod",
+    "build:test": "run-p type-check & vite build --mode test",
+    "build:prod": "run-p type-check & vite build --mode prod",
     "build": "run-p type-check build-only",
     "preview": "vite preview --mode dev",
     "build-only": "vite build",

@@ -2,7 +2,7 @@
   <el-container class='layout-container'>
     <Aside v-show='!tabs.state.tabFullScreen' />
     <el-container class='content-wrapper'>
-      <NavBar v-show='!tabs.state.tabFullScreen' />
+      <NavBar v-if='!tabs.state.tabFullScreen' />
       <Main />
     </el-container>
     <CloseFullScreen v-if='tabs.state.tabFullScreen' />

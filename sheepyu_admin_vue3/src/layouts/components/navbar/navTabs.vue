@@ -83,19 +83,25 @@ function onContextmenu(menu: RouteLocationNormalized, e: MouseEvent) {
 }
 
 function onItemClick(item: ContextmenuItemClickEmitArg) {
+  let menu
+  if (!(menu = item.menu)) return
+
   switch (item.name) {
     case 'refresh':
-      instance?.proxy?.$bus.emit('onTabRefresh', item.menu)
+      instance?.proxy?.$bus.emit('onTabRefresh', menu)
       break
     case 'close':
-      onClose(item.menu as RouteLocationNormalized)
-      instance?.proxy?.$bus.emit('onTabClose', item.menu)
+      onClose(menu)
+      instance?.proxy?.$bus.emit('onTabClose', menu)
       break
     case 'fullScreen':
+      if (route.path !== menu.path) {
+        router.push(menu)
+      }
       tabs.state.tabFullScreen = true
       break
     case 'closeOther':
-      closeOther(item.menu as RouteLocationNormalized)
+      closeOther(menu)
       break
     case 'closeAll':
       closeAll()
@@ -183,6 +189,7 @@ onMounted(() => {
     padding: 0 20px;
     cursor: pointer;
     transition: 0.2s ease-in;
+    margin-right: 1px;
     z-index: 999;
 
     span {

@@ -1,11 +1,15 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios'
 import axios, { AxiosError } from 'axios'
 import { ElNotification } from 'element-plus'
+import { pinia } from '@/stores/pinia'
+import { useAdmin } from '@/stores/user/user'
+
+const admin = useAdmin(pinia)
 
 export interface Result<T = any> {
   code: number
   msg: string
-  data?: T
+  data: T
 }
 
 export enum RequestEnums {
@@ -37,11 +41,11 @@ export class Request {
      * token校验(JWT) : 接受服务器返回的token,存储到vuex/pinia/本地储存当中
      */
     this.service.interceptors.request.use((config: any) => {
-        const token = localStorage.getItem('Authorization') || ''
+        const token = admin.state.accessToken
         return {
           ...config,
           headers: {
-            'Authorization': 'test01'
+            'Authorization': token
           }
         }
       }

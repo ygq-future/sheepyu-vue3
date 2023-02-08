@@ -1,6 +1,4 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
-import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import App from './App.vue'
 import router from './router'
 import { registerIcons } from '@/util/common'
@@ -8,6 +6,7 @@ import { registerDirectives } from '@/util/directives'
 import iconFontInit from '@/util/iconfont'
 import type { Emitter } from 'mitt'
 import mitt from 'mitt'
+import { pinia } from '@/stores/pinia'
 
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
@@ -29,4 +28,4 @@ registerIcons(app)
 registerDirectives(app)
 //初始化自定义图标
 iconFontInit()
-app.use(createPinia().use(piniaPluginPersistedstate)).use(router).mount('#app')
+app.use(pinia).use(router).mount('#app')

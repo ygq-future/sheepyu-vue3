@@ -22,7 +22,7 @@ public class SecurityRedisService {
     private RedisUtil redisUtil;
 
     public LoginUser getLoginUser(String prefix, String token) {
-        return redisUtil.getJSONObj(prefix.concat(token), LoginUser.class);
+        return redisUtil.getObj(prefix.concat(token), LoginUser.class);
     }
 
     public void setLoginUser(LoginUser loginUser) {

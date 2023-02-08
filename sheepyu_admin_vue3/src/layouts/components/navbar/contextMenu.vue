@@ -12,7 +12,7 @@
         <template v-for='(item, idx) in props.items' :key='idx'>
           <li class='el-dropdown-menu__item' :class="item.disabled ? 'is-disabled' : ''" tabindex='-1'
               @click='onItemClick(item)'>
-            <Icon :size='14' :name='item.icon' />
+            <Icon :size='14' :name="item.icon ? item.icon : 'el-icon-Plus'" />
             <span>{{ item.label }}</span>
           </li>
         </template>

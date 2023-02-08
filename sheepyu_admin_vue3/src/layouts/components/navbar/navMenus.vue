@@ -28,27 +28,27 @@
 
     <div class='menu-item'>
       <el-popover
-        :offset='20'
+        :offset='10'
         placement='bottom-start'
         :width='240'
         trigger='click'
       >
         <template #reference>
           <div class='user-icon'>
-            <el-avatar :size='25' :src='avatar' />
-            <span class='user-name'>User</span>
+            <el-avatar :size='25' :src='admin.state.avatar' />
+            <span class='user-name'>{{ admin.state.nickname }}</span>
           </div>
         </template>
 
         <div class='user-info'>
-          <el-avatar :size='60' :src='avatar' />
+          <el-avatar :size='60' :src='admin.state.avatar' />
           <div class='user-other'>
-            <span>User</span>
-            <span>2023-02-04 15:06:02</span>
+            <span>{{ admin.state.nickname }}</span>
+            <span>{{ admin.state.loginTime }}</span>
           </div>
           <div class='user-footer'>
             <el-button type='primary' plain v-blur>个人资料</el-button>
-            <el-button type='danger' plain v-blur>注销</el-button>
+            <el-button type='danger' plain v-blur @click='logout'>注销</el-button>
           </div>
         </div>
       </el-popover>
@@ -67,9 +67,12 @@ import { useConfig } from '@/stores/config/config'
 import screenfull from 'screenfull'
 import { ElMessage } from 'element-plus'
 import Config from '@/layouts/components/navbar/config.vue'
+import { useRouter } from 'vue-router'
+import { useAdmin } from '@/stores/user/user'
 
+const router = useRouter()
 const config = useConfig()
-const avatar = 'https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqoNRrWuicJyqXmgzZPyNajldiaLplJRjh9Iy4763GibK1ibXtTc970D2bDXcBbmV6RMFfdM9Gxadsd6A/132'
+const admin = useAdmin()
 const state = reactive<{
   screenFull: boolean
 }>({
@@ -77,6 +80,11 @@ const state = reactive<{
 })
 
 const topTextColor = computed(() => config.getColor('topTextColor'))
+
+function logout() {
+  admin.clear()
+  router.push('/login')
+}
 
 function onShowConfig() {
   config.layout.showConfig = true
@@ -146,6 +154,8 @@ screenfull.onchange(() => {
     max-width: 50px;
     margin-left: 5px;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 }
 
