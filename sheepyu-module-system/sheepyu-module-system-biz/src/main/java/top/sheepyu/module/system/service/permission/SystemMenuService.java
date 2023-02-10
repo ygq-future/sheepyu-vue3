@@ -23,9 +23,13 @@ public interface SystemMenuService extends IServiceX<SystemMenu> {
 
     List<SystemMenu> listMenu(SystemMenuQueryVo queryVo);
 
+    List<SystemMenu> convertToTree(List<SystemMenu> list);
+
     SystemMenu findById(Long id);
 
     Set<Long> listMenuIdFromCache();
 
-    List<SystemMenu> findMenuByIdsFromCache(Set<Long> menuIds);
+    Set<String> findPermissionByMenuIdsFromCache(Set<Long> menuIds, boolean enable);
+
+    List<SystemMenu> findMenuByIdsFromCache(Set<Long> menuIds, boolean enable);
 }

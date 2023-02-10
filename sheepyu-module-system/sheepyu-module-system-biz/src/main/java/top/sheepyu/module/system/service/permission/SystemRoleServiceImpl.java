@@ -91,7 +91,7 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
     }
 
     @Override
-    public boolean isAnySuperAdmin(Set<Long> roleIds) {
+    public boolean hasAnySuperAdmin(Set<Long> roleIds) {
         if (CollUtil.isEmpty(roleIds)) {
             return false;
         }

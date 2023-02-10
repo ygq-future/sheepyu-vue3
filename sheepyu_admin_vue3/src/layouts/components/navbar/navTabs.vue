@@ -56,13 +56,15 @@ const contextMenuItems = reactive<ContextMenuItem[]>([
 ])
 
 function changeNavTab() {
-  const div = findDiv(tabs.state.activeIndex)
-  if (!div) {
-    return false
-  }
+  nextTick(() => {
+    const div = findDiv(tabs.state.activeIndex)
+    if (!div) {
+      return false
+    }
 
-  navTabBackStyle.width = `${div.clientWidth}px`
-  navTabBackStyle.transform = `translateX(${div.offsetLeft}px)`
+    navTabBackStyle.width = `${div.clientWidth}px`
+    navTabBackStyle.transform = `translateX(${div.offsetLeft}px)`
+  })
 }
 
 function onChange(menu: RouteLocationNormalized) {
@@ -113,6 +115,7 @@ function closeAll() {
   const homePath = '/dashboard'
   if (tabs.state.activeRoute!.path == homePath) {
     tabs.closeTabs(tabs.state.activeRoute!)
+    changeNavTab()
   } else {
     tabs.closeTabs()
     router.push(homePath)
@@ -121,10 +124,11 @@ function closeAll() {
 
 function closeOther(menu: RouteLocationNormalized) {
   tabs.closeTabs(menu)
-  tabs.setActiveTab(menu)
 
   if (route.path !== menu.path) {
     router.push(menu)
+  } else {
+    changeNavTab()
   }
 }
 
@@ -136,9 +140,7 @@ function onClose(item: RouteLocationNormalized) {
   if (isActive) {
     router.push(tabs.state.activeRoute as RouteLocationNormalized)
   } else {
-    nextTick(() => {
-      changeNavTab()
-    })
+    changeNavTab()
   }
 }
 
@@ -148,9 +150,7 @@ function updateTab(menu: RouteLocationNormalized) {
   tabs.addTab(menu)
   tabs.setActiveTab(menu)
 
-  nextTick(() => {
-    changeNavTab()
-  })
+  changeNavTab()
 }
 
 function findDiv(index: number): HTMLDivElement {

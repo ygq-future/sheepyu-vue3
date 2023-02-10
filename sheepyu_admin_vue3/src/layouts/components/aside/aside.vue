@@ -7,21 +7,14 @@
                :unique-opened='config.layout.asideAccordion'
                :collapse='config.layout.asideCollapse'
                :default-active='route.path'
+               :default-openeds='[route.path]'
       >
         <el-menu-item @click='collapseMenu' index='/dashboard'>
-          <Icon name='el-icon-ChatLineRound'></Icon>
+          <Icon name='el-icon-HomeFilled'></Icon>
           <span>控制台</span>
         </el-menu-item>
 
-        <el-menu-item @click='collapseMenu' index='/home'>
-          <Icon name='el-icon-Discount'></Icon>
-          <span>主页</span>
-        </el-menu-item>
-
-        <el-menu-item @click='collapseMenu' index='/about'>
-          <Icon name='el-icon-UserFilled'></Icon>
-          <span>关于</span>
-        </el-menu-item>
+        <MenuTree :menus='tabs.state.tabsViewRoutes' />
       </el-menu>
     </el-scrollbar>
   </el-aside>
@@ -29,12 +22,16 @@
 
 <script setup lang='ts'>
 import Logo from '@/layouts/components/aside/logo.vue'
+import MenuTree from '@/layouts/components/aside/menuTree.vue'
+
 import { useConfig } from '@/stores/config/config'
 import { useRoute } from 'vue-router'
 import { closeShade } from '@/util/pageShade'
+import { useTabs } from '@/stores/tabs/tabs'
 
 const route = useRoute()
 const config = useConfig()
+const tabs = useTabs()
 const menuWidth = computed(() => config.menuWidth())
 const asideBackColor = computed(() => config.getColor('asideBackColor'))
 const asideTextColor = computed(() => config.getColor('asideTextColor'))

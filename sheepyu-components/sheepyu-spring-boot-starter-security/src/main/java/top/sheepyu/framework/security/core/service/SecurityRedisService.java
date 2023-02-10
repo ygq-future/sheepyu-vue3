@@ -21,6 +21,12 @@ public class SecurityRedisService {
     @Resource
     private RedisUtil redisUtil;
 
+    /**
+     * 根据refreshToken或者accessToken获取当前登录用户
+     * @param prefix SecurityRedisConstants
+     * @param token token
+     * @return LoginUser
+     */
     public LoginUser getLoginUser(String prefix, String token) {
         return redisUtil.getObj(prefix.concat(token), LoginUser.class);
     }

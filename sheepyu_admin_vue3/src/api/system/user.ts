@@ -4,6 +4,10 @@ export function login(data: SystemUserLoginVo) {
   return request.post<LoginUser>('/system/user/login', data)
 }
 
+export function refreshToken(refreshToken: string) {
+  return request.post<LoginUser>(`/system/user/refreshToken/${refreshToken}`)
+}
+
 export function info() {
   return request.get<SystemUserRespVo>('/system/user/info')
 }

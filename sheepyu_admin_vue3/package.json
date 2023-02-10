@@ -7,8 +7,8 @@
     "dev": "vite --mode dev",
     "build:test": "run-p type-check & vite build --mode test",
     "build:prod": "run-p type-check & vite build --mode prod",
-    "build": "run-p type-check build-only",
-    "preview": "vite preview --mode dev",
+    "build": "run-p type-check & vite build",
+    "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit"
   },

@@ -1,8 +1,8 @@
 <template>
   <el-upload
     :show-file-list='false'
-    :http-request='(options) => httpRequest(options)'
-    :before-upload='(file) => beforeUpload(file)'
+    :http-request='(options: UploadRequestOptions) => httpRequest(options)'
+    :before-upload='(file: UploadRawFile) => beforeUpload(file)'
   >
     <el-button type='primary'>点击上传</el-button>
     <template #tip>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang='ts'>
-import type { UploadProps } from 'element-plus'
+import type { UploadProps, UploadRequestOptions, UploadRawFile } from 'element-plus'
 import { ElLoading, ElNotification } from 'element-plus'
 import Md5Worker from '@/util/worker/md5Worker.ts?worker'
 import { useMd5Worker } from '@/stores/worker/md5Worker'

@@ -83,6 +83,19 @@ public class SystemMenuController {
         return success(list);
     }
 
+    @GetMapping("/user-permission")
+    @ApiOperation("获取当前登录用户的权限列表")
+    public Result<Set<String>> listPermissionByUser() {
+        Set<String> list = permissionBiz.listPermissionByUser();
+        return success(list);
+    }
+
+    @GetMapping("/user-menu")
+    @ApiOperation("获取当前登录用户的菜单列表")
+    public Result<List<SystemMenuRespVo>> listMenuByUser() {
+        return success(CONVERT.convertList(permissionBiz.listMenuByUser()));
+    }
+
     @GetMapping("/{id}")
     @ApiOperation("获取指定系统菜单")
     @PreAuthorize("@ss.hasPermission('system:menu:query')")

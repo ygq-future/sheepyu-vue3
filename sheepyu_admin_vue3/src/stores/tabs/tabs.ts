@@ -2,14 +2,15 @@ import { defineStore } from 'pinia'
 import { IdEnum } from '@/stores/storeId'
 import { StorePersistKey } from '@/stores/storePersistKey'
 import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
+import type { SystemMenuRespVo } from '@/api/system/menu'
 
 interface NavTabs {
   activeIndex: number
   activeRoute: RouteLocationNormalized | null
   tabsView: RouteLocationNormalized[]
   tabFullScreen: boolean
-  tabsViewRoutes: RouteRecordRaw[]
-  authNode: Map<string, string[]>
+  tabsViewRoutes: RouteRecordRaw[],
+  menuTree: SystemMenuRespVo[]
 }
 
 export const useTabs = defineStore(IdEnum.TABS, () => {
@@ -19,8 +20,20 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
     tabsView: [],
     tabFullScreen: false,
     tabsViewRoutes: [],
-    authNode: new Map()
+    menuTree: []
   })
+
+  function hasRoute() {
+    return state.tabsViewRoutes.length > 0
+  }
+
+  function setRoutes(routes: RouteRecordRaw[]) {
+    state.tabsViewRoutes = routes
+  }
+
+  function clearRoute() {
+    state.tabsViewRoutes = []
+  }
 
   function closeTab(route: RouteLocationNormalized) {
     const index = findTab(route)
@@ -33,6 +46,7 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
   function closeTabs(route: RouteLocationNormalized | undefined = undefined) {
     if (route) {
       state.tabsView = [route]
+      setActiveTab(route)
     } else {
       state.tabsView = []
     }
@@ -68,7 +82,7 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
     return -1
   }
 
-  return { state, addTab, closeTab, setActiveTab, closeTabs }
+  return { state, addTab, closeTab, setActiveTab, closeTabs, hasRoute, setRoutes, clearRoute }
 }, {
   persist: {
     key: StorePersistKey.TABS_STORE_KEY,

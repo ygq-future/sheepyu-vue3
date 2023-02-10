@@ -1,5 +1,6 @@
 package top.sheepyu.module.system.service.permission;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,9 @@ import javax.annotation.Resource;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static top.sheepyu.module.common.enums.CommonStatusEnum.ENABLE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
+import static top.sheepyu.module.common.util.CollectionUtil.convertSetFilter;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.MENU_HAS_CHILDREN;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.MENU_NOT_EXISTS;
 import static top.sheepyu.module.system.convert.permission.SystemMenuConvert.CONVERT;
@@ -33,14 +36,14 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
     @Resource
     private SystemRoleMenuMapper systemRoleMenuMapper;
     private static final Map<Long, SystemMenu> MENUS = new HashMap<>();
-    private static final Map<String, SystemMenu> PERMISSIONS = new HashMap<>();
+//    private static final Map<String, SystemMenu> PERMISSIONS = new HashMap<>();
 
     @Override
     public void createMenu(SystemMenuCreateVo createVo) {
         SystemMenu menu = CONVERT.convert(createVo);
         save(menu);
         MENUS.put(menu.getId(), menu);
-        PERMISSIONS.put(menu.getPermission(), menu);
+//        PERMISSIONS.put(menu.getPermission(), menu);
     }
 
     @Override
@@ -50,7 +53,7 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
         if (result) {
             menu = findByIdValidateExists(menu.getId());
             MENUS.put(menu.getId(), menu);
-            PERMISSIONS.put(menu.getPermission(), menu);
+//            PERMISSIONS.put(menu.getPermission(), menu);
         }
     }
 
@@ -69,7 +72,7 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
         //同时删除关联数据
         systemRoleMenuMapper.deleteByMenuId(id);
         MENUS.remove(menu.getId());
-        PERMISSIONS.remove(menu.getPermission());
+//        PERMISSIONS.remove(menu.getPermission());
     }
 
     @Override
@@ -78,7 +81,10 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
                 .likeIfPresent(SystemMenu::getName, queryVo.getKeyword())
                 .eqIfPresent(SystemMenu::getStatus, queryVo.getStatus())
                 .orderByAsc(SystemMenu::getSort));
+        return convertToTree(list);
+    }
 
+    public List<SystemMenu> convertToTree(List<SystemMenu> list) {
         //筛选出一级目录
         List<SystemMenu> result = new ArrayList<>();
         for (SystemMenu menu : list) {
@@ -91,8 +97,7 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
         for (SystemMenu menu : result) {
             menu.setChildren(fillTreeData(list, menu.getId()));
         }
-
-        return result.isEmpty() ? null : result;
+        return result;
     }
 
     @Override
@@ -106,8 +111,19 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
     }
 
     @Override
-    public List<SystemMenu> findMenuByIdsFromCache(Set<Long> menuIds) {
-        return menuIds.stream().map(MENUS::get).collect(Collectors.toList());
+    public Set<String> findPermissionByMenuIdsFromCache(Set<Long> menuIds, boolean enable) {
+        return convertSetFilter(
+                findMenuByIdsFromCache(menuIds, enable),
+                SystemMenu::getPermission,
+                e -> StrUtil.isNotBlank(e.getPermission())
+        );
+    }
+
+    @Override
+    public List<SystemMenu> findMenuByIdsFromCache(Set<Long> menuIds, boolean enable) {
+        return menuIds.stream().map(MENUS::get)
+                .filter(e -> !enable || Objects.equals(e.getStatus(), ENABLE.getCode()))
+                .collect(Collectors.toList());
     }
 
     private List<SystemMenu> fillTreeData(List<SystemMenu> list, Long id) {
@@ -123,7 +139,7 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
             menu.setChildren(fillTreeData(list, menu.getId()));
         }
 
-        return result;
+        return result.isEmpty() ? null : result;
     }
 
     private boolean existsChildren(Long id) {
@@ -140,7 +156,7 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
         List<SystemMenu> list = list();
         for (SystemMenu menu : list) {
             MENUS.put(menu.getId(), menu);
-            PERMISSIONS.put(menu.getPermission(), menu);
+//            PERMISSIONS.put(menu.getPermission(), menu);
         }
     }
 }

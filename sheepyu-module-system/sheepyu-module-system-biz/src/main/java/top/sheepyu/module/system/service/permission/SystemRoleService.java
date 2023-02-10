@@ -30,7 +30,7 @@ public interface SystemRoleService extends IServiceX<SystemRole> {
 
     boolean isSuperAdmin(Long roleId);
 
-    boolean isAnySuperAdmin(Set<Long> roleIds);
+    boolean hasAnySuperAdmin(Set<Long> roleIds);
 
     List<SystemRole> findRoleByIdsFromCache(Set<Long> roleIds);
 }

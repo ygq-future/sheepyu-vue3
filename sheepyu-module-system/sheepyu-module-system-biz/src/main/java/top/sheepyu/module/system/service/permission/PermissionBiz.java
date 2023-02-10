@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
+import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 import top.sheepyu.module.system.dao.permission.menu.SystemMenu;
 import top.sheepyu.module.system.dao.permission.menu.SystemRoleMenu;
 import top.sheepyu.module.system.dao.permission.menu.SystemRoleMenuMapper;
@@ -44,7 +45,52 @@ public class PermissionBiz {
     private SystemUserService systemUserService;
     private static final Map<Long, Set<Long>> userRolesCache = new HashMap<>();
     private static final Map<Long, Set<Long>> roleMenusCache = new HashMap<>();
-    private static final Map<Long, Set<Long>> menuRolesCache = new HashMap<>();
+//    private static final Map<Long, Set<Long>> menuRolesCache = new HashMap<>();
+
+    /**
+     * 获取用户的菜单
+     *
+     * @return 菜单列表
+     */
+    public List<SystemMenu> listMenuByUser() {
+        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        Set<Long> roleIds = userRolesCache.get(userId);
+        if (CollUtil.isEmpty(roleIds)) {
+            return Collections.emptyList();
+        }
+
+        if (systemRoleService.hasAnySuperAdmin(roleIds)) {
+            Set<Long> menuIds = systemMenuService.listMenuIdFromCache();
+            List<SystemMenu> list = systemMenuService.findMenuByIdsFromCache(menuIds, true);
+            return systemMenuService.convertToTree(list);
+        }
+
+        //获取角色对应的菜单
+        Set<Long> menuIds = getMenuIdsByRoleIds(roleIds);
+        List<SystemMenu> list = systemMenuService.findMenuByIdsFromCache(menuIds, true);
+        return systemMenuService.convertToTree(list);
+    }
+
+    /**
+     * 获取用户拥有的权限
+     *
+     * @return 权限列表
+     */
+    public Set<String> listPermissionByUser() {
+        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        Set<Long> roleIds = userRolesCache.get(userId);
+        if (CollUtil.isEmpty(roleIds)) {
+            return Collections.emptySet();
+        }
+
+        if (systemRoleService.hasAnySuperAdmin(roleIds)) {
+            return systemMenuService.findPermissionByMenuIdsFromCache(systemMenuService.listMenuIdFromCache(), true);
+        }
+
+        //获取角色对应的菜单
+        Set<Long> menuIds = getMenuIdsByRoleIds(roleIds);
+        return systemMenuService.findPermissionByMenuIdsFromCache(menuIds, true);
+    }
 
     public Set<Long> listMenuIdByRoleId(Long roleId) {
         Set<Long> menuIds;
@@ -109,14 +155,12 @@ public class PermissionBiz {
 
     public boolean hasPermission(Long userId, String permission) {
         Set<Long> roleIds = userRolesCache.get(userId);
-        if (systemRoleService.isAnySuperAdmin(roleIds)) {
+        if (systemRoleService.hasAnySuperAdmin(roleIds)) {
             return true;
         }
         Set<Long> menuIds = getMenuIdsByRoleIds(roleIds);
-        List<SystemMenu> menus = systemMenuService.findMenuByIdsFromCache(menuIds);
-        return convertSetFilter(menus, SystemMenu::getPermission,
-                e -> Objects.equals(e.getStatus(), ENABLE.getCode()))
-                .contains(permission);
+        List<SystemMenu> menus = systemMenuService.findMenuByIdsFromCache(menuIds, true);
+        return convertSet(menus, SystemMenu::getPermission).contains(permission);
     }
 
     private Set<Long> getMenuIdsByRoleIds(Set<Long> roleIds) {

@@ -58,6 +58,15 @@ public class SystemUserController {
         return success(true);
     }
 
+    @Permit
+    @FlowLimit(5)
+    @PostMapping("/refreshToken/{refreshToken}")
+    @ApiOperation("刷新令牌")
+    public Result<LoginUser> refreshToken(@PathVariable String refreshToken) {
+        LoginUser loginUser = systemUserBiz.refreshToken(refreshToken);
+        return success(loginUser);
+    }
+
     @GetMapping("/info")
     @ApiOperation("获取用户信息")
     public Result<SystemUserRespVo> info() {

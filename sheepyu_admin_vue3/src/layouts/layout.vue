@@ -17,6 +17,14 @@ import CloseFullScreen from '@/layouts/components/main/closeFullScreen.vue'
 import { useTabs } from '@/stores/tabs/tabs'
 
 const tabs = useTabs()
+
+onMounted(() => {
+  console.log('mounted')
+})
+
+onUnmounted(() => {
+  console.log('unmounted')
+})
 </script>
 
 <style scoped lang='scss'>

@@ -26,6 +26,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Objects;
 
+import static top.sheepyu.framework.security.core.constants.SecurityRedisConstants.REFRESH_TOKEN_KEY;
+import static top.sheepyu.module.common.constants.ErrorCodeConstants.OPERATION_FAILED;
 import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
@@ -70,6 +72,16 @@ public class SystemUserBiz {
         if (loginUser != null) {
             securityRedisService.delLoginUser(loginUser.getAccessToken(), loginUser.getRefreshToken());
         }
+    }
+
+    public LoginUser refreshToken(String refreshToken) {
+        LoginUser loginUser = securityRedisService.getLoginUser(REFRESH_TOKEN_KEY, refreshToken);
+        if (loginUser == null) {
+            throw exception(OPERATION_FAILED);
+        }
+        //刷新accessToken和refreshToken
+        securityRedisService.setLoginUser(loginUser);
+        return loginUser;
     }
 
     public SystemUser info() {

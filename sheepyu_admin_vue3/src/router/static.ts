@@ -9,35 +9,17 @@ export const staticRoutes: Array<RouteRecordRaw> = [
     children: [{
       path: 'dashboard',
       name: 'dashboard',
-      component: () => import('@/views/dashboard/dashboard.vue'),
+      component: () => import('@/views/system/dashboard.vue'),
       meta: {
         title: '控制台',
-        keepalive: true
-      }
-    }, {
-      path: 'home',
-      name: 'home',
-      component: () => import('@/views/dashboard/home.vue'),
-      meta: {
-        title: '主页'
-      }
-    }, {
-      path: 'about',
-      name: 'about',
-      component: () => import('@/views/dashboard/about.vue'),
-      meta: {
-        title: '关于',
-        keepalive: true
+        keepalive: true,
+        fullpath: '/dashboard'
       }
     }]
   }, {
     path: '/login',
     name: 'login',
     component: () => import('@/views/system/login.vue')
-  }
-  , {
-    path: '/:path(.*)*',
-    redirect: '/404'
   }, {
     path: '/404',
     name: '404',
