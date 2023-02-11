@@ -50,7 +50,7 @@
 </template>
 
 <script setup lang='ts'>
-import { getElementPlusIconfontNames, getIconfontNames } from '@/util/iconfont'
+import { getAwesomeIconfontNames, getElementPlusIconfontNames, getIconfontNames } from '@/util/iconfont'
 import { useEventListener } from '@vueuse/core'
 
 const props = withDefaults(defineProps<{
@@ -69,7 +69,7 @@ const emits = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
 
-type IconType = 'ele' | 'ali'
+type IconType = 'ele' | 'ali' | 'awe'
 const selectorInput = ref()
 const state = reactive<{
   type: IconType,
@@ -84,7 +84,7 @@ const state = reactive<{
   firstValue: string
 }>({
   type: 'ele',
-  types: ['ele', 'ali'],
+  types: ['ele', 'awe', 'ali'],
   iconNames: [],
   inputValue: '',
   prependIcon: props.modelValue || 'el-icon-Plus',
@@ -100,6 +100,10 @@ function getIconNames() {
   if (state.type == 'ele') {
     getElementPlusIconfontNames().then(res => {
       state.iconNames = res
+    })
+  } else if (state.type == 'awe') {
+    getAwesomeIconfontNames().then(res => {
+      state.iconNames = res.map(name => `fa ${name}`)
     })
   } else if (state.type == 'ali') {
     getIconfontNames().then(res => {
@@ -175,7 +179,9 @@ onMounted(() => {
 
     .icon-item {
       display: inline-block;
-      padding: 10px 10px 6px 10px;
+      padding: 10px;
+      width: 18px;
+      height: 18px;
       margin: 3px;
       border: 1px solid #ececec;
       border-radius: 10px;

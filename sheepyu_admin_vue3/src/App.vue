@@ -1,14 +1,11 @@
 <template>
-  <el-config-provider :size='config.layout.size' :locale='zhCn'>
+  <el-config-provider :locale='zhCn'>
     <router-view></router-view>
   </el-config-provider>
 </template>
 
 <script setup lang='ts'>
-import { useConfig } from '@/stores/config/config'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-
-const config = useConfig()
 </script>
 
 <style lang='scss'>

@@ -10,8 +10,6 @@ interface Layout {
   layoutMode: 'default' | 'classic'
   //是否为紧凑模式, 当屏幕尺寸小于1000时
   shrink: boolean
-  //element组件全局大小
-  size: 'small' | 'default' | 'large'
   //是否显示设置面板
   showConfig: boolean
 
@@ -94,7 +92,6 @@ export const useConfig = defineStore(IdEnum.CONFIG, () => {
   const layout = reactive<Layout>({
     layoutMode: 'default',
     shrink: false,
-    size: 'default',
     showConfig: false,
     colorMode: ['light', 'dark', 'auto'],
     colorModeIndex: 2,
@@ -142,7 +139,7 @@ export const useConfig = defineStore(IdEnum.CONFIG, () => {
   const colorMode = useColorMode()
 
   function changeColorMode(colorModeIndex: number) {
-    colorMode.value = layout.colorMode[colorModeIndex]
+    colorMode.value = layout.colorMode[layout.colorModeIndex = colorModeIndex]
   }
 
   function menuWidth() {

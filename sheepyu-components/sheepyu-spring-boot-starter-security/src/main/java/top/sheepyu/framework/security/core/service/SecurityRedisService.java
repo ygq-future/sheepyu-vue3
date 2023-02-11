@@ -23,8 +23,9 @@ public class SecurityRedisService {
 
     /**
      * 根据refreshToken或者accessToken获取当前登录用户
+     *
      * @param prefix SecurityRedisConstants
-     * @param token token
+     * @param token  token
      * @return LoginUser
      */
     public LoginUser getLoginUser(String prefix, String token) {
@@ -43,11 +44,21 @@ public class SecurityRedisService {
     }
 
     public void delLoginUser(String accessToken, String refreshToken) {
+        delAccessToken(accessToken);
+        delRefreshToken(refreshToken);
+    }
+
+    public void delAccessToken(String accessToken) {
         if (StrUtil.isNotBlank(accessToken)) {
             redisUtil.del(SecurityRedisConstants.ACCESS_TOKEN_KEY.concat(accessToken));
         }
+    }
+
+    public void delRefreshToken(String refreshToken) {
         if (StrUtil.isNotBlank(refreshToken)) {
             redisUtil.del(SecurityRedisConstants.REFRESH_TOKEN_KEY.concat(refreshToken));
         }
     }
+
+
 }

@@ -81,6 +81,8 @@ public class SystemUserBiz {
         }
         //刷新accessToken和refreshToken
         securityRedisService.setLoginUser(loginUser);
+        //删除旧的refreshToken
+        securityRedisService.delRefreshToken(refreshToken);
         return loginUser;
     }
 

@@ -10,21 +10,14 @@
       <Icon name='el-icon-FullScreen' :color='topTextColor'></Icon>
     </div>
 
-    <el-dropdown trigger='click' style='height: 100%'>
-      <div class='menu-item'>
-        <Icon name='el-icon-Operation' :color='topTextColor'></Icon>
-      </div>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item :disabled="config.layout.size === 'small'" @click="changeLayoutSize('small')">small
-          </el-dropdown-item>
-          <el-dropdown-item :disabled="config.layout.size === 'default'" @click="changeLayoutSize('default')">default
-          </el-dropdown-item>
-          <el-dropdown-item :disabled="config.layout.size === 'large'" @click="changeLayoutSize('large')">large
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+    <div class='menu-item'>
+      <Icon v-if='config.layout.colorModeIndex === 0'
+            name='fa fa-moon-o'
+            title='暗黑模式'
+            @click='changeColorMode(1)'
+      />
+      <Icon v-else name='fa fa-sun-o' title='明亮模式' @click='changeColorMode(0)' />
+    </div>
 
     <div class='menu-item'>
       <el-popover
@@ -86,12 +79,12 @@ function logout() {
   router.push('/login')
 }
 
-function onShowConfig() {
-  config.layout.showConfig = true
+function changeColorMode(colorModeIndex: number) {
+  config.changeColorMode(colorModeIndex)
 }
 
-function changeLayoutSize(size: 'small' | 'default' | 'large') {
-  config.layout.size = size
+function onShowConfig() {
+  config.layout.showConfig = true
 }
 
 function toHome() {

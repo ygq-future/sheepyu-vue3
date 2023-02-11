@@ -1,21 +1,24 @@
 import type { RouteRecordRaw } from 'vue-router'
 
+export const homeRoute: RouteRecordRaw = {
+  path: 'dashboard',
+  name: 'dashboard',
+  component: () => import('@/views/system/dashboard.vue'),
+  meta: {
+    title: '控制台',
+    icon: 'el-icon-HomeFilled',
+    keepalive: true,
+    fullpath: '/dashboard'
+  }
+}
+
 export const staticRoutes: Array<RouteRecordRaw> = [
   {
     path: '/',
     name: 'layout',
     redirect: '/dashboard',
     component: () => import('@/layouts/layout.vue'),
-    children: [{
-      path: 'dashboard',
-      name: 'dashboard',
-      component: () => import('@/views/system/dashboard.vue'),
-      meta: {
-        title: '控制台',
-        keepalive: true,
-        fullpath: '/dashboard'
-      }
-    }]
+    children: [homeRoute]
   }, {
     path: '/login',
     name: 'login',

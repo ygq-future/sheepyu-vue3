@@ -9,9 +9,9 @@
                :default-active='route.path'
                :default-openeds='[route.path]'
       >
-        <el-menu-item @click='collapseMenu' index='/dashboard'>
-          <Icon name='el-icon-HomeFilled'></Icon>
-          <span>控制台</span>
+        <el-menu-item @click='collapseMenu' :index='homeRoute.meta.fullpath'>
+          <Icon :name='homeRoute.meta.icon ? homeRoute.meta.icon : config.layout.asideDefaultIcon'></Icon>
+          <span>{{ homeRoute.meta.title }}</span>
         </el-menu-item>
 
         <MenuTree :menus='tabs.state.tabsViewRoutes' />
@@ -23,6 +23,7 @@
 <script setup lang='ts'>
 import Logo from '@/layouts/components/aside/logo.vue'
 import MenuTree from '@/layouts/components/aside/menuTree.vue'
+import { homeRoute } from '@/router/static'
 
 import { useConfig } from '@/stores/config/config'
 import { useRoute } from 'vue-router'

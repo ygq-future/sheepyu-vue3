@@ -2,7 +2,8 @@ import { loadCss } from '@/util/common'
 import * as elIcons from '@element-plus/icons-vue'
 
 const cssUrls = [
-  '//at.alicdn.com/t/c/font_3876395_n8wkznhweqo.css'
+  '//at.alicdn.com/t/c/font_3876395_n8wkznhweqo.css',
+  '//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
 ]
 
 export default function init() {
@@ -22,6 +23,30 @@ function getStylesFromDomain(domain: string) {
   }
 
   return sheets
+}
+
+export function getAwesomeIconfontNames() {
+  return new Promise<string[]>((resolve, reject) => {
+    const iconNames = []
+    const sheets = getStylesFromDomain('cdn.bootcdn.net/ajax/libs/font-awesome/')
+    for (const sheet of sheets) {
+      for (const rule of sheet.cssRules) {
+        if (rule instanceof CSSStyleRule && /^\.fa-(.*)::before$/.test(rule.selectorText)) {
+          if (rule.selectorText.indexOf(', ') > -1) {
+            const iconArr = rule.selectorText.split(', ')
+            iconNames.push(`${iconArr[0].substring(1, iconArr[0].length).replace(/::before/gi, '')}`)
+          } else {
+            iconNames.push(`${rule.selectorText.substring(1, rule.selectorText.length).replace(/::before/gi, '')}`)
+          }
+        }
+      }
+    }
+
+    if (iconNames.length > 0) {
+      return resolve(iconNames)
+    }
+    reject('No Iconfont style sheet')
+  })
 }
 
 export function getIconfontNames() {
