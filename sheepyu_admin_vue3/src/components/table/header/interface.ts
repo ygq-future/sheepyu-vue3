@@ -1,3 +1,5 @@
+import type { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
+
 export type ComSearchConfig = Array<ComSearchConfigItem>
 
 export interface ComSearchConfigItem {
@@ -8,8 +10,10 @@ export interface ComSearchConfigItem {
   placeholder?: string
   //render为select时必传, 否则组件不会显示
   selectOptions?: Array<any>
-  selectIdKey?: string,
+  selectIdKey?: string
   selectLabelKey?: string
+  //如果render为dict, 那么字典类型必传
+  dictType?: DictTypeEnum
 }
 
 export interface SelectOptionItem {

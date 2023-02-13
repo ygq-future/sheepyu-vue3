@@ -6,6 +6,20 @@
 
 <script setup lang='ts'>
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import { useDict } from '@/stores/dict/dict'
+import { dictTypeList } from '@/api/system/dict'
+
+const dict = useDict()
+
+//初始化加载系统字典数据
+async function findDictTypeList() {
+  const { data } = await dictTypeList()
+  dict.setDictMap(data)
+}
+
+onMounted(() => {
+  findDictTypeList()
+})
 </script>
 
 <style lang='scss'>

@@ -5,23 +5,23 @@ export function dictTypeList() {
 }
 
 export interface SystemDictTypeRespVo {
-  id: number;
-  type: string;
-  name: string;
-  status: number;
-  remark?: string;
-  createTime: string;
-  creator?: string;
-  dictDataList: SystemDictDataRespVo[];
+  id: number
+  type: string
+  name: string
+  status: number
+  remark?: string
+  createTime: string
+  creator?: string
+  dictDataList: SystemDictDataRespVo[]
 }
 
 export interface SystemDictDataRespVo {
-  id: number;
-  dictType: string;
-  sort: number;
-  label: string;
-  value: number;
-  status: number;
-  colorType?: string;
-  remark?: string;
+  id: number
+  dictType: string
+  sort: number
+  label: string
+  value: string
+  status: number
+  colorType?: string
+  remark?: string
 }

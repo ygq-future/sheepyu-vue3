@@ -17,9 +17,21 @@
       <el-table-column prop='name' label='名称' align='center' />
       <el-table-column prop='icon' label='图标' align='center' />
       <el-table-column prop='sort' label='排序' align='center' />
-      <el-table-column prop='type' label='类型' align='center' />
-      <el-table-column prop='keepAlive' label='是否缓存' align='center' />
-      <el-table-column prop='status' label='状态' align='center' />
+      <el-table-column prop='type' label='类型' align='center'>
+        <template #default='scope'>
+          <Dict :value='scope.row.type' :type='DictTypeEnum.SYSTEM_MENU_TYPE' />
+        </template>
+      </el-table-column>
+      <el-table-column prop='keepAlive' label='是否缓存' align='center'>
+        <template #default='scope'>
+          <Dict v-model='scope.row.status' :type='DictTypeEnum.COMMON_STATUS' render='switch' @change='onChange' />
+        </template>
+      </el-table-column>
+      <el-table-column prop='status' label='状态' align='center'>
+        <template #default='scope'>
+          <Dict v-model='scope.row.status' :type='DictTypeEnum.COMMON_STATUS' render='switch' @change='onChange' />
+        </template>
+      </el-table-column>
       <el-table-column label='操作' align='center' width='250' fixed='right'>
         <template #default='scope'>
           <el-button type='primary'>
@@ -35,17 +47,10 @@
 
 <script setup lang='ts'>
 import TableHeader from '@/components/table/header/TableHeader.vue'
-import type { ComSearchConfig, SelectOptionItem } from '@/components/table/header/interface'
+import type { ComSearchConfig } from '@/components/table/header/interface'
 import type { SystemMenuQueryVo, SystemMenuRespVo } from '@/api/system/menu'
 import { menuList } from '@/api/system/menu'
-
-const selectOptions: SelectOptionItem[] = [{
-  id: 0,
-  label: '开启'
-}, {
-  id: 1,
-  label: '关闭'
-}]
+import { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
 
 const state = reactive<{
   query: SystemMenuQueryVo
@@ -55,14 +60,21 @@ const state = reactive<{
   query: {},
   tableData: [],
   comSearchConfig: [
-    { label: '状态', prop: 'status', placeholder: '菜单状态', render: 'select', selectOptions }
+    { label: '状态', prop: 'status', placeholder: '菜单状态', render: 'dict', dictType: DictTypeEnum.COMMON_STATUS }
   ]
 })
+
+watch(state.query, value => {
+  console.log(value)
+})
+
+function onChange(value: number) {
+  console.log(value)
+}
 
 async function findMenuList() {
   const { data } = await menuList(toRaw(state.query))
   state.tableData = data
-  console.log(data)
 }
 
 onMounted(() => {

@@ -35,6 +35,12 @@
             </el-form-item>
           </el-col>
 
+          <el-col class='p-15' :sm='6' :xs='24' v-if='item.render === "dict" && item.dictType'>
+            <el-form-item :label='item.label' :prop='item.prop'>
+              <Dict render='select' v-model='formData[item.prop]' :type='item.dictType' />
+            </el-form-item>
+          </el-col>
+
           <el-col class='p-15' :sm='12' :xs='24' v-if='item.render === "datetime"'>
             <el-form-item :label='item.label' :prop='item.prop'>
               <el-date-picker

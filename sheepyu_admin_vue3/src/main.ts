@@ -8,6 +8,7 @@ import iconFontInit from '@/util/iconfont'
 import type { Emitter } from 'mitt'
 import mitt from 'mitt'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+import Dict from '@/components/dict/Dict.vue'
 
 import 'element-plus/theme-chalk/dark/css-vars.css'
 
@@ -29,4 +30,6 @@ registerIcons(app)
 registerDirectives(app)
 //初始化自定义图标
 iconFontInit()
+//注册字典组件
+app.component('Dict', Dict)
 app.use(createPinia().use(piniaPluginPersistedstate)).use(router).mount('#app')
