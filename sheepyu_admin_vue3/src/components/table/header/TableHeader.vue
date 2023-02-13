@@ -95,8 +95,6 @@ const props = withDefaults(defineProps<{
   search?: boolean
   //默认显示的按钮
   buttons?: string[]
-  //是否显示快捷模糊搜索栏
-  like?: boolean
   //是否开启紧凑模式, 开启之后不会显示按钮的文字, 只会显示icon并带有title提示
   shrink?: boolean
   rows?: object[],
@@ -106,7 +104,6 @@ const props = withDefaults(defineProps<{
   comSearch: true,
   search: true,
   buttons: () => [],
-  like: true,
   shrink: false,
   rows: () => []
 })
@@ -126,7 +123,7 @@ const emits = defineEmits<{
 const state = reactive({
   searchValue: '',
   unfold: true,
-  comSearch: true
+  comSearch: false
 })
 
 function onUnfold() {

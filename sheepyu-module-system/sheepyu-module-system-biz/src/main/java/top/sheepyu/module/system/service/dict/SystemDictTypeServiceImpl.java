@@ -68,6 +68,11 @@ public class SystemDictTypeServiceImpl extends ServiceImplX<SystemDictTypeMapper
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<SystemDictType> listDictType() {
+        return lambdaQuery().eq(SystemDictType::getStatus, ENABLE.getCode()).list();
+    }
+
     private SystemDictType findByIdValidateExists(Long id) {
         return findByIdValidateExists(id, DICT_TYPE_NOT_EXISTS);
     }

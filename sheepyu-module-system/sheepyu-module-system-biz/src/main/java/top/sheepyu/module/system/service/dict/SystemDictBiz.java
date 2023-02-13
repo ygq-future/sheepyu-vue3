@@ -15,8 +15,8 @@ import top.sheepyu.module.system.dao.dict.SystemDictData;
 import top.sheepyu.module.system.dao.dict.SystemDictType;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
@@ -118,6 +118,15 @@ public class SystemDictBiz {
 
     public SystemDictData findDictData(Long id) {
         return systemDictDataService.findDictData(id);
+    }
+
+    public List<SystemDictType> listDictType() {
+        List<SystemDictType> dictTypeList = systemDictTypeService.listDictType();
+        dictTypeList.forEach(type -> {
+            HashSet<SystemDictData> dictDataSet = systemDictRedisService.listByType(type.getType());
+            type.setDictDataList(new ArrayList<>(dictDataSet));
+        });
+        return dictTypeList;
     }
 
     /**

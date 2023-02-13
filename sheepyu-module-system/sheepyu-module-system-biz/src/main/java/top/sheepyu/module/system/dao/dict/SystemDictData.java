@@ -19,7 +19,7 @@ public class SystemDictData extends BaseModel {
     private String label;
     private String value;
     private Integer status;
-    private String component;
+    private String colorType;
     private String remark;
 
     @Override

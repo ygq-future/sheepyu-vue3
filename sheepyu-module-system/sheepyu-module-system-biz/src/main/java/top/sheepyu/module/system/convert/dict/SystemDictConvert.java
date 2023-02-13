@@ -36,5 +36,7 @@ public interface SystemDictConvert {
 
     SystemDictTypeRespVo convert(SystemDictType dictType);
 
+    List<SystemDictTypeRespVo> convertTypeList(List<SystemDictType> dictTypeList);
+
     PageResult<SystemDictTypeRespVo> convertPage(PageResult<SystemDictType> pageResult);
 }

@@ -1,9 +1,12 @@
 package top.sheepyu.module.system.dao.dict;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
+
+import java.util.List;
 
 /**
  * @author ygq
@@ -18,4 +21,7 @@ public class SystemDictType extends BaseModel {
     private String name;
     private Integer status;
     private String remark;
+
+    @TableField(exist = false)
+    private List<SystemDictData> dictDataList;
 }

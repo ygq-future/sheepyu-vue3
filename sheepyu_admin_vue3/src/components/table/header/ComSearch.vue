@@ -93,7 +93,7 @@ function checkSelectOptions(configItem: ComSearchConfigItem): boolean {
   for (let option of selectOptions) {
     let id: string | number | undefined = configItem.selectIdKey ? option[configItem.selectIdKey] : option.id
     let label: string | number | undefined = configItem.selectLabelKey ? option[configItem.selectLabelKey] : option.label
-    if (!id || !label) return false
+    if (id === undefined || label === undefined) return false
   }
 
   return true

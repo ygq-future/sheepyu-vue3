@@ -1,93 +1,73 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      :buttons="['add', 'edit', 'delete']"
-      @input='onInput'
-      @inputEnter='onInputEnter'
-      @inputClear='onInputClear'
-      v-model='state.form.keyword'
+      :buttons="['add', 'delete']"
+      v-model='state.query.keyword'
     >
-
-      <template #btn>
-        <el-tooltip content='新增' placement='top'>
-          <el-button class='button-item' v-blur type='primary'>
-            <Icon name='fa fa-plus' />
-            <span class='button-text'>新增</span>
-          </el-button>
-        </el-tooltip>
-
-        <el-tooltip content='编辑' placement='top'>
-          <el-button v-blur type='primary'>
-            <Icon name='fa fa-pencil' />
-            <span class='button-text'>编辑</span>
-          </el-button>
-        </el-tooltip>
-      </template>
-
       <template #comSearch>
         <ComSearch
-          :com-search-config='comSearchConfig'
-          v-model='state.form'
-          @search='onSearch'
-          @reset='onReset'
+          :com-search-config='state.comSearchConfig'
+          v-model='state.query'
         />
       </template>
     </TableHeader>
+
+    <el-table :data='state.tableData' row-key='id' border stripe>
+      <el-table-column prop='id' label='id' align='center' />
+      <el-table-column prop='name' label='名称' align='center' />
+      <el-table-column prop='icon' label='图标' align='center' />
+      <el-table-column prop='sort' label='排序' align='center' />
+      <el-table-column prop='type' label='类型' align='center' />
+      <el-table-column prop='keepAlive' label='是否缓存' align='center' />
+      <el-table-column prop='status' label='状态' align='center' />
+      <el-table-column label='操作' align='center' width='250' fixed='right'>
+        <template #default='scope'>
+          <el-button type='primary'>
+            <template #icon>
+              <Icon name='fa fa-pencil' />
+            </template>
+          </el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
 </template>
 
 <script setup lang='ts'>
 import TableHeader from '@/components/table/header/TableHeader.vue'
-import type { ComSearchConfig } from '@/components/table/header/interface'
+import type { ComSearchConfig, SelectOptionItem } from '@/components/table/header/interface'
+import type { SystemMenuQueryVo, SystemMenuRespVo } from '@/api/system/menu'
+import { menuList } from '@/api/system/menu'
 
-const state = reactive({
-  form: {}
-})
-
-watch(state.form, value => {
-  console.log(value)
-})
-
-const categories = [{
+const selectOptions: SelectOptionItem[] = [{
+  id: 0,
+  label: '开启'
+}, {
   id: 1,
-  name: '手机'
-}, {
-  id: 2,
-  name: '内衣'
-}, {
-  id: 3,
-  name: '休闲'
+  label: '关闭'
 }]
 
-const comSearchConfig = reactive<ComSearchConfig>([
-  { label: '名称', prop: 'name', placeholder: '名称模糊匹配' },
-  { label: '年龄', prop: 'age', render: 'number', placeholder: '输入年龄' },
-  { label: '职位', prop: 'position' },
-  { label: '部门', prop: 'dept' },
-  { label: '创建日期', prop: 'createDate', render: 'datetime' },
-  { label: '创建精确时间', prop: 'createDateTime', render: 'datetime' },
-  { label: '分类', prop: 'categoryId', render: 'select', selectOptions: categories, selectLabelKey: 'name' }
-])
+const state = reactive<{
+  query: SystemMenuQueryVo
+  tableData: SystemMenuRespVo[]
+  comSearchConfig: ComSearchConfig
+}>({
+  query: {},
+  tableData: [],
+  comSearchConfig: [
+    { label: '状态', prop: 'status', placeholder: '菜单状态', render: 'select', selectOptions }
+  ]
+})
 
-function onSearch(value: object) {
-  console.log('search', value)
+async function findMenuList() {
+  const { data } = await menuList(toRaw(state.query))
+  state.tableData = data
+  console.log(data)
 }
 
-function onReset() {
-  console.log('reset')
-}
-
-function onInput(value: string) {
-  console.log(value)
-}
-
-function onInputEnter(value: string) {
-  console.log(value)
-}
-
-function onInputClear() {
-  console.log('clear')
-}
+onMounted(() => {
+  findMenuList()
+})
 </script>
 
 

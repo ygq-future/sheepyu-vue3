@@ -26,4 +26,6 @@ public interface SystemDictTypeService extends IServiceX<SystemDictType> {
     boolean existsByType(String type);
 
     List<String> typeList();
+
+    List<SystemDictType> listDictType();
 }

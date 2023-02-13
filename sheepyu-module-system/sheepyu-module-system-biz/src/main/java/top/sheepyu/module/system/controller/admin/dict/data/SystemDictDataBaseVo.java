@@ -28,8 +28,8 @@ public class SystemDictDataBaseVo {
     @InEnum(CommonStatusEnum.class)
     private Integer status;
 
-    @ApiModelProperty("字典显示的组件")
-    private String component;
+    @ApiModelProperty("颜色类型")
+    private String colorType;
 
     @ApiModelProperty("字典备注")
     private String remark;

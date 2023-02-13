@@ -3,8 +3,10 @@ package top.sheepyu.module.system.controller.admin.dict.type;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import top.sheepyu.module.system.controller.admin.dict.data.SystemDictDataRespVo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author ygq
@@ -33,4 +35,7 @@ public class SystemDictTypeRespVo {
 
     @ApiModelProperty("创建人")
     private String creator;
+
+    @ApiModelProperty("字典数据")
+    private List<SystemDictDataRespVo> dictDataList;
 }
