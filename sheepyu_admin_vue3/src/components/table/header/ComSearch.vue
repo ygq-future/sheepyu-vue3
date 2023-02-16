@@ -68,7 +68,7 @@
 </template>
 
 <script setup lang='ts'>
-import type { ComSearchConfig, ComSearchConfigItem, SelectOptionItem } from '@/components/table/header/interface'
+import type { ComSearchConfig, ComSearchConfigItem, SelectOptionItem } from '@/components/table/interface'
 import { ElForm } from 'element-plus'
 
 const props = defineProps<{

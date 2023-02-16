@@ -2,6 +2,25 @@ import type { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
 
 export type ComSearchConfig = Array<ComSearchConfigItem>
 
+export interface TableConfig {
+  border?: boolean
+  stripe?: boolean
+  selection?: boolean
+  rows?: any[]
+  index?: boolean
+  columns: ColumnConfig[]
+}
+
+export interface ColumnConfig {
+  render?: 'text' | 'icon' | 'img'
+  label: string
+  prop: string
+  align?: string
+  sortable?: boolean
+  dictRender?: string
+  dictType?: DictTypeEnum
+}
+
 export interface ComSearchConfigItem {
   label: string
   prop: string

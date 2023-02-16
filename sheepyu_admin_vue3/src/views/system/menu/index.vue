@@ -24,7 +24,7 @@
       </el-table-column>
       <el-table-column prop='keepAlive' label='是否缓存' align='center'>
         <template #default='scope'>
-          <Dict v-model='scope.row.status' :type='DictTypeEnum.COMMON_STATUS' render='switch' @change='onChange' />
+          <Dict v-model='scope.row.keepAlive' :type='DictTypeEnum.COMMON_STATUS' render='switch' @change='onChange' />
         </template>
       </el-table-column>
       <el-table-column prop='status' label='状态' align='center'>
@@ -47,7 +47,7 @@
 
 <script setup lang='ts'>
 import TableHeader from '@/components/table/header/TableHeader.vue'
-import type { ComSearchConfig } from '@/components/table/header/interface'
+import type { ComSearchConfig } from '@/components/table/interface'
 import type { SystemMenuQueryVo, SystemMenuRespVo } from '@/api/system/menu'
 import { menuList } from '@/api/system/menu'
 import { DictTypeEnum } from '@/stores/dict/dictTypeEnum'

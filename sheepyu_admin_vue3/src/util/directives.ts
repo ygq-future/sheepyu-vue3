@@ -2,7 +2,6 @@ import type { App } from 'vue'
 import { useEventListener } from '@vueuse/core'
 import { useAdmin } from '@/stores/user/user'
 
-
 export function registerDirectives(app: App) {
   blurDirective(app)
 
