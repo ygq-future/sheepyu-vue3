@@ -116,6 +116,7 @@ export const useConfig = defineStore(IdEnum.CONFIG, () => {
     classicTopMenuActiveBackColor: [...classicTopMenuActiveBackColor]
   })
 
+  //暂时没用, 登录页实时获取验证码开启状态
   const system = reactive<SystemConfig>({
     enableCaptcha: import.meta.env.VITE_APP_ENABLE_CAPTCHA
   })

@@ -110,6 +110,24 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
     }
 
     @Override
+    public T findByFieldValidateExists(SFunction<T, ?> field, Object fieldVal, ErrorCode errorCode) {
+        if (fieldVal == null) {
+            throw exception(errorCode);
+        }
+
+        T one = findByField(field, fieldVal);
+        if (one == null) {
+            throw exception(errorCode);
+        }
+        return one;
+    }
+
+    @Override
+    public T findByField(SFunction<T, ?> field, Object fieldVal) {
+        return lambdaQuery().eq(field, fieldVal).one();
+    }
+
+    @Override
     public void batchDelete(String ids, SFunction<T, ?> fieldLambda) {
         batchDelete(ids, fieldLambda, buildQuery());
     }

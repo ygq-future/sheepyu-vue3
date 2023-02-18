@@ -49,12 +49,16 @@ public interface IServiceX<T> extends IService<T> {
      * 检查单字段在表中是否已经存在, 但是会抛出自定义异常
      *
      * @param entity    实体类
-     * @param field    字段表达式
+     * @param field     字段表达式
      * @param errorCode 错误码
      */
     void checkRepeatByFieldThrow(T entity, ErrorCode errorCode, SFunction<T, ?> field);
 
     T findByIdValidateExists(Object id, ErrorCode errorCode);
+
+    T findByFieldValidateExists(SFunction<T, ?> field, Object fieldVal, ErrorCode errorCode);
+
+    T findByField(SFunction<T, ?> field, Object fieldVal);
 
     void batchDelete(String ids, SFunction<T, ?> fieldLambda);
 

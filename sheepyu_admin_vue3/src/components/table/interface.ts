@@ -1,6 +1,15 @@
 import type { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
+import type { ElTable } from 'element-plus'
 
 export type ComSearchConfig = Array<ComSearchConfigItem>
+
+export class SyTable {
+  table: TableConfig
+
+  constructor(table: TableConfig) {
+    this.table = table
+  }
+}
 
 export interface TableConfig {
   border?: boolean
@@ -8,6 +17,7 @@ export interface TableConfig {
   selection?: boolean
   rows?: any[]
   index?: boolean
+  ref?: InstanceType<typeof ElTable>
   columns: ColumnConfig[]
 }
 
@@ -17,7 +27,7 @@ export interface ColumnConfig {
   prop: string
   align?: string
   sortable?: boolean
-  dictRender?: string
+  dictRender?: 'tag' | 'switch' | 'select'
   dictType?: DictTypeEnum
 }
 

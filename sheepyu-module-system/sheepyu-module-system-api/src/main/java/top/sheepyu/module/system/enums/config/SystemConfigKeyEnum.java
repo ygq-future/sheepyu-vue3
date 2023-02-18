@@ -1,7 +1,13 @@
 package top.sheepyu.module.system.enums.config;
 
+import cn.hutool.core.util.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import top.sheepyu.module.system.constants.ErrorCodeConstants;
+
+import java.util.Objects;
+
+import static top.sheepyu.module.common.exception.CommonException.exception;
 
 /**
  * @author ygq
@@ -22,4 +28,12 @@ public enum SystemConfigKeyEnum {
     ;
     private final String key;
     private final Class<?> clazz;
+
+    public static SystemConfigKeyEnum value(String key) {
+        SystemConfigKeyEnum configKeyEnum = ArrayUtil.firstMatch(config -> Objects.equals(config.getKey(), key), values());
+        if (configKeyEnum == null) {
+            throw exception(ErrorCodeConstants.CONFIG_NOT_EXISTS);
+        }
+        return configKeyEnum;
+    }
 }

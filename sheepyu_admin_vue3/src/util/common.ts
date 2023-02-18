@@ -1,6 +1,8 @@
 import type { App } from 'vue'
 import Icon from '@/components/icon/Icon.vue'
 import * as elIcons from '@element-plus/icons-vue'
+import { useDict } from '@/stores/dict/dict'
+import { dictTypeList } from '@/api/system/dict'
 
 export function registerIcons(app: App) {
   /*
@@ -18,6 +20,13 @@ export function registerIcons(app: App) {
     const name = `el-icon-${icons[key].name}`
     app.component(name, icons[key])
   }
+}
+
+export function loadDict() {
+  const dict = useDict()
+  dictTypeList().then(res => {
+    dict.setDictMap(res.data)
+  })
 }
 
 /**

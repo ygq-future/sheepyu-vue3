@@ -4,11 +4,14 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import top.sheepyu.framework.security.core.annotations.Permit;
+import top.sheepyu.framework.web.core.annotations.FlowLimit;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigCreateVo;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigRespVo;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigUpdateVo;
 import top.sheepyu.module.system.dao.config.SystemConfig;
+import top.sheepyu.module.system.enums.config.SystemConfigKeyEnum;
 import top.sheepyu.module.system.service.config.SystemConfigService;
 
 import javax.annotation.Resource;
@@ -66,5 +69,14 @@ public class SystemConfigController {
     public Result<SystemConfigRespVo> findById(@PathVariable Long id) {
         SystemConfig config = systemConfigService.findById(id);
         return success(CONVERT.convert(config));
+    }
+
+    @FlowLimit
+    @Permit
+    @GetMapping("/by-key/{key}")
+    @ApiOperation("根据指定key获取系统配置")
+    public Result<Object> findByKey(@PathVariable String key) {
+        Object obj = systemConfigService.get(SystemConfigKeyEnum.value(key));
+        return success(obj);
     }
 }

@@ -36,13 +36,13 @@
       </el-form-item>
       <el-form-item class='code' prop='code'>
         <el-input
-          :disabled='!config.system.enableCaptcha'
+          :disabled='!captchaEnable'
           prefix-icon='el-icon-More'
           v-model='form.code'
           placeholder='验证码'
           @keydown.enter='submit(formRef)'
         />
-        <img v-if='config.system.enableCaptcha'
+        <img v-if='captchaEnable'
              :src='captchaInfo.base64'
              alt='验证码'
              @click='getCaptcha'
@@ -63,12 +63,15 @@ import type { CaptchaRespVo, SystemUserLoginVo } from '@/api/system/user'
 import { captcha, info, login } from '@/api/system/user'
 import { ParticleLine } from '@/util/particleLine'
 import type { ElForm, FormRules } from 'element-plus'
+import { loadDict } from '@/util/common'
+import { ConfigKeyEnum, getConfig } from '@/api/system/config'
 
 let particleLine: ParticleLine
 const config = useConfig()
 const admin = useAdmin()
 const router = useRouter()
 const formRef = ref<InstanceType<typeof ElForm>>()
+const captchaEnable = ref<boolean>(true)
 const form = reactive<SystemUserLoginVo>({
   login: '',
   password: ''
@@ -97,6 +100,7 @@ function submit(formRef: InstanceType<typeof ElForm>) {
       admin.setAuthInfo(res.data)
       info().then(res => {
         admin.setAdminInfo(res.data)
+        loadDict()
         router.push('/')
       })
     }).catch(() => {
@@ -106,7 +110,7 @@ function submit(formRef: InstanceType<typeof ElForm>) {
 }
 
 async function getCaptcha() {
-  if (!config.system.enableCaptcha) {
+  if (!captchaEnable.value) {
     return
   }
 
@@ -124,10 +128,12 @@ function onColorModeChange(colorModeIndex: number) {
   })
 }
 
-onMounted(() => {
-  getCaptcha()
+onMounted(async () => {
   particleLine = new ParticleLine(config.layout.isDark)
   particleLine.init()
+  const { data } = await getConfig(ConfigKeyEnum.CAPTCHA_ENABLE)
+  captchaEnable.value = data
+  await getCaptcha()
 })
 </script>
 

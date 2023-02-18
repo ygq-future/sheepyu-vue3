@@ -67,7 +67,6 @@ public class SystemDictController {
 
     @GetMapping("/type")
     @ApiOperation("字典类型列表, 包含字典数据")
-    @PreAuthorize("@ss.hasPermission('system:dict:query')")
     public Result<List<SystemDictTypeRespVo>> listDictType() {
         List<SystemDictType> dictTypeList = systemDictBiz.listDictType();
         return Result.success(CONVERT.convertTypeList(dictTypeList));
