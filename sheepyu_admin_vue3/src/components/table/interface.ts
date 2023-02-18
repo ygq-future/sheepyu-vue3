@@ -7,18 +7,18 @@ export class SyTable {
   table: TableConfig
 
   constructor(table: TableConfig) {
-    this.table = table
+    this.table = reactive<TableConfig>(table)
   }
 }
 
 export interface TableConfig {
-  border?: boolean
   stripe?: boolean
-  selection?: boolean
-  rows?: any[]
   index?: boolean
+  selection?: boolean
   ref?: InstanceType<typeof ElTable>
+  rows?: any[]
   columns: ColumnConfig[]
+  buttons: string[]
 }
 
 export interface ColumnConfig {
@@ -26,6 +26,7 @@ export interface ColumnConfig {
   label: string
   prop: string
   align?: string
+  width?: number | string
   sortable?: boolean
   dictRender?: 'tag' | 'switch' | 'select'
   dictType?: DictTypeEnum

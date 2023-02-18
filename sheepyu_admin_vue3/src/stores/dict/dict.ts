@@ -37,10 +37,16 @@ export const useDict = defineStore(IdEnum.DICT, () => {
     key: StorePersistKey.DICT_STORE_KEY,
     serializer: {
       deserialize: (value) => {
-        return JSON.parse(value) || []
+        //因为存储的时候把map变成数组了, 这里要转回来
+        const dictArr = JSON.parse(value) || []
+        const dictMap = new Map<string, SystemDictDataRespVo>()
+        dictArr.forEach((item: any) => {
+          dictMap.set(item[0], item[1])
+        })
+        return { state: { dictMap } }
       },
       serialize: (stateTree) => {
-        const dictMap = stateTree.state.dictMap
+        const dictMap = toRaw(stateTree.state.dictMap)
         return JSON.stringify([...dictMap])
       }
     }
