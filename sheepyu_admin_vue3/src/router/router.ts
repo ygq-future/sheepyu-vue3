@@ -6,7 +6,6 @@ import 'nprogress/nprogress.css'
 import type { SystemMenuRespVo } from '@/api/system/menu'
 import { userMenu } from '@/api/system/menu'
 import { useAdmin } from '@/stores/user/user'
-import ParentView from '@/layouts/components/main/parentView.vue'
 import { useTabs } from '@/stores/tabs/tabs'
 
 const componentViews = import.meta.glob('@/views/**/*.vue')
@@ -61,7 +60,7 @@ function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], 
     //不是目录也不是菜单
     if (menu.type !== 1 && menu.type !== 2) continue
 
-    let component = ParentView
+    let component
     let path = menu.path
     let fullpath = menu.parentId === 0 ? `/${path}` : path
     let name = path
@@ -78,6 +77,7 @@ function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], 
       name,
       path,
       component,
+      children: [],
       meta: {
         title: menu.name,
         icon: menu.icon,

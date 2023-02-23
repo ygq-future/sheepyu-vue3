@@ -49,6 +49,7 @@ sheepyu:
   log:
     excludes:
       - /admin-api/system/user/login
+      - /admin-api/system/user/refreshToken/*
   security:
     permit-urls:
       - /admin-api/captcha/**

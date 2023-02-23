@@ -23,6 +23,9 @@ html.light {
 .default-main {
   margin: 16px;
   box-sizing: border-box;
+  box-shadow: var(--el-box-shadow-light);
+  border-radius: var(--el-border-radius-base);
+  overflow: hidden;
 }
 
 .layout-shade {

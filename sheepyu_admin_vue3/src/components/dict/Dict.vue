@@ -10,7 +10,7 @@
   />
 
   <el-select v-if="render === 'select'" v-model='state.value' clearable filterable @change='onValueChange'>
-    <el-option v-for='item in dictList' :key='item.id' :value='item.value' :label='item.label' />
+    <el-option v-for='item in state.dictList' :key='item.id' :value='item.value' :label='item.label' />
   </el-select>
 </template>
 
@@ -39,11 +39,12 @@ const emits = defineEmits<{
 
 const state = reactive<{
   value: string | number | undefined
+  dictList: SystemDictDataRespVo[]
 }>({
-  value: props.modelValue
+  value: props.modelValue,
+  dictList: dict.findDictDataByType(props.type)
 })
 
-const dictList = computed<SystemDictDataRespVo[]>(() => dict.findDictDataByType(props.type))
 const tagItem = computed<SystemDictDataRespVo>(() => {
   const dictData = dict.findDictData(props.type, props.value?.toString() || '')
   if (!dictData) {
@@ -57,6 +58,11 @@ function onValueChange(value: number) {
   emits('update:modelValue', value)
   emits('change', value)
 }
+
+watch(() => props.modelValue, value => {
+  //需要改变组件内的值
+  state.value = value
+})
 </script>
 
 <style scoped lang='scss'>

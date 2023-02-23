@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run dev",
-    "dev": "vite --mode dev",
+    "dev": "vite --mode dev --host 0.0.0.0",
     "build:test": "run-p type-check & vite build --mode test",
     "build:prod": "run-p type-check & vite build --mode prod",
     "build": "run-p type-check & vite build",

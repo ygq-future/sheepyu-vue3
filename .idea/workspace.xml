@@ -5,9 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/Table.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/render/FieldRender.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/App.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/dict/Dict.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/dict/Dict.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/header/ComSearch.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/header/ComSearch.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/header/TableHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/header/TableHeader.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/dict/dict.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/dict/dict.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/dashboard.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/main/parentView.vue" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/config.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/config.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/router.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/common.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/common.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/menu/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/menu/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,30 +68,30 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "E:/other project/sheepyu/sheepyu_admin_vue3/src/api/system",
-    "node.js.detected.package.eslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.26237053",
-    "settings.editor.selected.configurable": "reference.projectsettings.compiler.javacompiler",
-    "spring.configuration.checksum": "b304ccba8dfff90570df49785ace90de",
-    "ts.external.directory.path": "E:\\other project\\sheepyu\\sheepyu_admin_vue3\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/other project/sheepyu/sheepyu_admin_vue3/src/api/system&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.26237053&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;leetcode.id&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;b304ccba8dfff90570df49785ace90de&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;E:\\other project\\sheepyu\\sheepyu_admin_vue3\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -218,7 +230,10 @@
       <workItem from="1676514213241" duration="1154000" />
       <workItem from="1676534881605" duration="395000" />
       <workItem from="1676537616510" duration="1125000" />
-      <workItem from="1676684394481" duration="15349000" />
+      <workItem from="1676684394481" duration="21497000" />
+      <workItem from="1676962241540" duration="906000" />
+      <workItem from="1676979543410" duration="31000" />
+      <workItem from="1677070673253" duration="22727000" />
     </task>
     <servers />
   </component>

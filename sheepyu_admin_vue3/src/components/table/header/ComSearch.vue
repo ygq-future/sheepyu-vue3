@@ -176,7 +176,7 @@ const shortcuts = [
 
 .search-box {
   background-color: var(--el-bg-color);
-  border: 0.5px solid var(--el-border-color);
+  border: 1px solid var(--el-border-color);
   border-bottom: none;
   padding: 13px 15px;
   box-sizing: border-box;

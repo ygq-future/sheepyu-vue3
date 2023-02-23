@@ -40,13 +40,3 @@ export function loadCss(url: string): void {
   link.crossOrigin = 'anonymous'
   document.getElementsByTagName('head')[0].appendChild(link)
 }
-
-/**
- * 加载网络js文件
- * @param url js资源url
- */
-export function loadJs(url: string): void {
-  const link = document.createElement('script')
-  link.src = url
-  document.body.appendChild(link)
-}

@@ -173,6 +173,7 @@ function resetConfig(type: 'current' | 'all') {
 }
 
 onBeforeMount(() => {
+  window.dispatchEvent(new Event('resize'))
   useEventListener(window, 'resize', () => {
     let defaultBeforeResizeLayout = {
       layoutMode: config.layout.layoutMode,

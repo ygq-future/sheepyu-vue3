@@ -1,24 +1,27 @@
 import type { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
-import type { ElTable } from 'element-plus'
 
 export type ComSearchConfig = Array<ComSearchConfigItem>
 
-export class SyTable {
-  table: TableConfig
-
-  constructor(table: TableConfig) {
-    this.table = reactive<TableConfig>(table)
-  }
-}
-
 export interface TableConfig {
+  //是否斑马风格
   stripe?: boolean
-  index?: boolean
+  //是否需要多选功能
   selection?: boolean
-  ref?: InstanceType<typeof ElTable>
-  rows?: any[]
+  //是否需要分页
+  pagination?: boolean
+  //数据为树形数据时必须
+  rowKey?: string
+  //数据列配置
   columns: ColumnConfig[]
-  buttons: string[]
+  // 树形数据配置项, 例如: { hasChildren: 'hasChildren', children: 'children' }
+  treeProps?: object
+  //如果没有, 那么操作列不会在展示
+  operate?: {
+    width?: string | number
+    fixed?: 'right' | 'left'
+    align?: string
+    buttons: string[]
+  }
 }
 
 export interface ColumnConfig {
