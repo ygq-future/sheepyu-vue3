@@ -1,23 +1,21 @@
 <template>
   <transition name='el-zoom-in-center'>
     <div
-      class='el-popper is-pure is-light el-dropdown__popper ba-contextmenu'
+      class='menu'
       :style='`top: ${state.axis.y + 5}px;left: ${state.axis.x - 14}px;width:${props.width}px`'
       :key='Math.random()'
       v-show='state.show'
-      aria-hidden='false'
-      data-popper-placement='bottom'
     >
-      <ul class='el-dropdown-menu'>
-        <template v-for='(item, idx) in props.items' :key='idx'>
-          <li class='el-dropdown-menu__item' :class="item.disabled ? 'is-disabled' : ''" tabindex='-1'
-              @click='onItemClick(item)'>
-            <Icon :size='14' :name="item.icon ? item.icon : 'el-icon-Plus'" />
-            <span>{{ item.label }}</span>
-          </li>
-        </template>
-      </ul>
-      <span class='el-popper__arrow' :style='{ left: `${state.arrowAxis}px` }'></span>
+      <div
+        v-for='(item, idx) in props.items'
+        class='menu-item'
+        :key='idx'
+        :class='item.disabled ? "disabled" : ""'
+        @click='onItemClick(item)'
+      >
+        <Icon :size='14' :name="item.icon ? item.icon : 'el-icon-Plus'" />
+        <span>{{ item.label }}</span>
+      </div>
     </div>
   </transition>
 </template>
@@ -25,7 +23,7 @@
 <script setup lang='ts'>
 import type { RouteLocationNormalized } from 'vue-router'
 import type { Axis, ContextMenuItem, ContextmenuItemClickEmitArg } from '@/layouts/components/navbar/interface'
-import { onMounted, reactive, toRaw } from 'vue'
+import { onMounted, reactive } from 'vue'
 import { useEventListener } from '@vueuse/core'
 
 const props = withDefaults(defineProps<{
@@ -82,29 +80,52 @@ onMounted(() => {
 </script>
 
 <style scoped lang='scss'>
-.ba-contextmenu {
+.menu {
   z-index: 9999;
+  position: absolute;
+  background-color: var(--el-bg-color);
+  border-radius: var(--el-border-radius-base);
+  box-shadow: var(--el-box-shadow-light);
+  font-size: 13px;
+  padding: 8px 0;
+
+  &::before {
+    position: absolute;
+    top: -5px;
+    left: 12px;
+    content: "";
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    transform: rotate(45deg);
+    background-color: var(--el-bg-color);
+    border-radius: 2px;
+  }
 }
 
-.el-popper,
-.el-popper.is-light .el-popper__arrow::before {
-  box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-  border: none;
-}
-
-.el-dropdown-menu__item {
+.menu-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 38px;
   padding: 8px 20px;
   user-select: none;
-}
+  cursor: pointer;
+  box-sizing: border-box;
 
-.el-dropdown-menu__item .icon {
-  margin-right: 5px;
-}
-
-.el-dropdown-menu__item:not(.is-disabled) {
-  &:hover {
-    background-color: var(--el-dropdown-menuItem-hover-fill);
-    color: var(--el-dropdown-menuItem-hover-color);
+  .icon {
+    margin-right: 5px;
   }
+
+  &:not(.disabled):hover {
+    background-color: var(--el-color-primary-light-9);
+    color: var(--el-color-primary);
+  }
+}
+
+.disabled {
+  cursor: not-allowed;
+  color: gray;
 }
 </style>

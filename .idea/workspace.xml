@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="" />
+    <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/contextMenu.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/contextMenu.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/navTabs.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/navTabs.vue" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -217,7 +220,7 @@
       <workItem from="1676684394481" duration="21497000" />
       <workItem from="1676962241540" duration="906000" />
       <workItem from="1676979543410" duration="31000" />
-      <workItem from="1677070673253" duration="23075000" />
+      <workItem from="1677070673253" duration="27000000" />
     </task>
     <servers />
   </component>

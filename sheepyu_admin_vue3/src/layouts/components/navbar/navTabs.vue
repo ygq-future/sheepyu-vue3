@@ -49,7 +49,7 @@ const navTabBackStyle = reactive<{
 })
 const contextMenuItems = reactive<ContextMenuItem[]>([
   { name: 'refresh', label: '重新加载', icon: 'el-icon-Refresh' },
-  { name: 'close', label: '关闭标签', icon: 'el-icon-Refresh' },
+  { name: 'close', label: '关闭标签', icon: 'el-icon-Close' },
   { name: 'fullScreen', label: '当前标签全屏', icon: 'el-icon-FullScreen' },
   { name: 'closeOther', label: '关闭其他标签', icon: 'el-icon-FolderRemove' },
   { name: 'closeAll', label: '关闭全部标签', icon: 'el-icon-FolderDelete' }
