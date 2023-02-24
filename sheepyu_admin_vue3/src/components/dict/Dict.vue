@@ -6,6 +6,7 @@
     v-if="render === 'switch'"
     :active-value='1'
     :inactive-value='0'
+    :loading='state.switchLoading'
     @change='onValueChange'
   />
 
@@ -40,9 +41,11 @@ const emits = defineEmits<{
 const state = reactive<{
   value: string | number | undefined
   dictList: SystemDictDataRespVo[]
+  switchLoading: boolean
 }>({
   value: props.modelValue,
-  dictList: dict.findDictDataByType(props.type)
+  dictList: dict.findDictDataByType(props.type),
+  switchLoading: false
 })
 
 const tagItem = computed<SystemDictDataRespVo>(() => {
@@ -57,6 +60,10 @@ const tagItem = computed<SystemDictDataRespVo>(() => {
 function onValueChange(value: number) {
   emits('update:modelValue', value)
   emits('change', value)
+  state.switchLoading = true
+  setTimeout(() => {
+    state.switchLoading = false
+  }, 1000)
 }
 
 watch(() => props.modelValue, value => {

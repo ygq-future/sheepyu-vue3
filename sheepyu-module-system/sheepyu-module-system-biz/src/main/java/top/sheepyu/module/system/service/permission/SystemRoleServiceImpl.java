@@ -2,12 +2,12 @@ package top.sheepyu.module.system.service.permission;
 
 import cn.hutool.core.collection.CollUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
 import top.sheepyu.module.common.common.PageResult;
+import top.sheepyu.module.common.util.MyStrUtil;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleCreateVo;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleQueryVo;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleUpdateVo;
@@ -21,6 +21,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.ROLE_NOT_EXISTS;
@@ -38,7 +39,7 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
     private SystemUserRoleMapper systemUserRoleMapper;
     @Resource
     private SystemRoleMenuMapper systemRoleMenuMapper;
-    private static final Map<Long, SystemRole> ROLES = new HashedMap<>();
+    private static final Map<Long, SystemRole> ROLES = new ConcurrentHashMap<>();
 
     @Override
     public void createRole(SystemRoleCreateVo createVo) {
@@ -59,12 +60,14 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
 
     @Transactional
     @Override
-    public void deleteRole(Long id) {
-        removeById(id);
+    public void deleteRole(String ids) {
+        List<Long> idList = MyStrUtil.splitToLong(ids, ',');
+        batchDelete(ids, SystemRole::getId);
+
         //同步删除用户角色数据和角色菜单数据
-        systemUserRoleMapper.deleteByRoleId(id);
-        systemRoleMenuMapper.deleteByRoleId(id);
-        ROLES.remove(id);
+        systemUserRoleMapper.deleteByRoleIds(idList);
+        systemRoleMenuMapper.deleteByRoleIds(idList);
+        idList.forEach(ROLES::remove);
     }
 
     @Override

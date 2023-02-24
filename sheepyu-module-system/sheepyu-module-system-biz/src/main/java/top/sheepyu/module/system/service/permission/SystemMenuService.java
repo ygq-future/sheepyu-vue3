@@ -19,7 +19,7 @@ public interface SystemMenuService extends IServiceX<SystemMenu> {
 
     void updateMenu(@Valid SystemMenuUpdateVo updateVo);
 
-    void deleteMenu(Long id);
+    void deleteMenu(String ids);
 
     List<SystemMenu> listMenu(SystemMenuQueryVo queryVo);
 

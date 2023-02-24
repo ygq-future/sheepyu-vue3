@@ -59,11 +59,11 @@ public class SystemPermissionController {
         return success(true);
     }
 
-    @DeleteMapping("/menu/{id}")
+    @DeleteMapping("/menu/{ids}")
     @ApiOperation("删除系统菜单")
     @PreAuthorize("@ss.hasPermission('system:menu:delete')")
-    public Result<Boolean> deleteMenu(@PathVariable Long id) {
-        systemMenuService.deleteMenu(id);
+    public Result<Boolean> deleteMenu(@PathVariable String ids) {
+        systemMenuService.deleteMenu(ids);
         return success(true);
     }
 
@@ -99,11 +99,11 @@ public class SystemPermissionController {
         return success(true);
     }
 
-    @DeleteMapping("/role/{id}")
+    @DeleteMapping("/role/{ids}")
     @ApiOperation("删除系统角色")
     @PreAuthorize("@ss.hasPermission('system:role:delete')")
-    public Result<Boolean> deleteRole(@PathVariable Long id) {
-        systemRoleService.deleteRole(id);
+    public Result<Boolean> deleteRole(@PathVariable String ids) {
+        systemRoleService.deleteRole(ids);
         return success(true);
     }
 

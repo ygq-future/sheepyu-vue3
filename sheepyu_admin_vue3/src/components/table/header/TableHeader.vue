@@ -154,6 +154,10 @@ function onBatchDelete() {
   emits('batch-delete', props.rows.map(item => item[props.rowKey]))
 }
 
+defineExpose({
+  getUnfold: () => state.unfold
+})
+
 </script>
 
 <style scoped lang='scss'>

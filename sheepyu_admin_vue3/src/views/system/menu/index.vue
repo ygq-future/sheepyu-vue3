@@ -1,17 +1,22 @@
 <template>
   <div class='default-main'>
     <TableHeader
+      ref='tableHeaderRef'
       v-model='state.query.keyword'
       :buttons="['add', 'delete', 'edit', 'unfold']"
       :rows='state.selection'
       @unfold='onUnfold'
       @batch-delete='onBatchDelete'
       @batch-edit='onBatchEdit'
+      @input-enter='findMenuList'
+      @input-clear='$nextTick(() => findMenuList())'
     >
       <template #comSearch>
         <ComSearch
           :com-search-config='state.comSearchConfig'
           v-model='state.query'
+          @search='findMenuList'
+          @reset='findMenuList'
         />
       </template>
     </TableHeader>
@@ -22,6 +27,7 @@
       :data='state.tableData'
       :table-config='state.tableConfig'
       @fieldChange='onFieldChange'
+      @delete='(row) => onBatchDelete([row.id])'
     >
     </Table>
   </div>
@@ -30,8 +36,8 @@
 <script setup lang='ts'>
 import TableHeader from '@/components/table/header/TableHeader.vue'
 import type { ComSearchConfig, TableConfig } from '@/components/table/interface'
-import type { SystemMenuQueryVo, SystemMenuRespVo } from '@/api/system/menu'
-import { menuList } from '@/api/system/menu'
+import type { SystemMenuQueryVo, SystemMenuRespVo, SystemMenuUpdateVo } from '@/api/system/menu'
+import { menuList, updateMenu } from '@/api/system/menu'
 import { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
 import Table from '@/components/table/Table.vue'
 
@@ -68,13 +74,10 @@ const state = reactive<{
 })
 
 const tableRef = ref()
+const tableHeaderRef = ref()
 
-watch(state.query, value => {
-  console.log(value)
-})
-
-function onFieldChange(row: any, val: any) {
-  console.log(row, val)
+async function onFieldChange(row: SystemMenuUpdateVo) {
+  await updateMenu(toRaw(row))
 }
 
 function onUnfold(value: boolean) {
@@ -92,6 +95,9 @@ function onBatchEdit(ids: number[]) {
 async function findMenuList() {
   const { data } = await menuList(toRaw(state.query))
   state.tableData = data
+  await nextTick(() => {
+    tableRef.value.expandAll(!tableHeaderRef.value.getUnfold())
+  })
 }
 
 onMounted(() => {

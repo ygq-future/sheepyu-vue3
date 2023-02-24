@@ -23,4 +23,12 @@ public class CollectionUtil {
     public static <T, U> List<U> convertList(Collection<T> collection, Function<T, U> fun) {
         return collection.stream().map(fun).collect(Collectors.toList());
     }
+
+    public static <T> List<T> convertListFilter(Collection<T> collection, Predicate<T> predicate) {
+        return collection.stream().filter(predicate).collect(Collectors.toList());
+    }
+
+    public static <T, U> List<U> convertListFilter(Collection<T> collection, Function<T, U> fun, Predicate<T> predicate) {
+        return collection.stream().filter(predicate).map(fun).collect(Collectors.toList());
+    }
 }

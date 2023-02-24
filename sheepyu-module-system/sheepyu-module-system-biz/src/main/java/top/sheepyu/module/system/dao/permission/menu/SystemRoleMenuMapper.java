@@ -12,13 +12,12 @@ import java.util.stream.Collectors;
  * @date 2023-01-29 17:53
  **/
 public interface SystemRoleMenuMapper extends BaseMapper<SystemRoleMenu> {
-    default void deleteByMenuId(Long id) {
-        delete(new LambdaQueryWrapper<SystemRoleMenu>().eq(SystemRoleMenu::getMenuId, id));
+    default void deleteByMenuIds(Collection<Long> ids) {
+        delete(new LambdaQueryWrapper<SystemRoleMenu>().in(SystemRoleMenu::getMenuId, ids));
     }
 
-    default void deleteByRoleId(Long id) {
-        delete(new LambdaQueryWrapper<SystemRoleMenu>().eq(SystemRoleMenu::getRoleId, id));
-
+    default void deleteByRoleIds(Collection<Long> ids) {
+        delete(new LambdaQueryWrapper<SystemRoleMenu>().in(SystemRoleMenu::getRoleId, ids));
     }
 
     default Set<Long> findMenuIdByRoleId(Long roleId) {

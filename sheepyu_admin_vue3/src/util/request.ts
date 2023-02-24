@@ -97,6 +97,12 @@ export class Request {
           return Promise.reject(data)
         }
 
+        if (res.config.method !== 'get') {
+          ElNotification.success({
+            message: '操作成功',
+            duration: 2000
+          })
+        }
         return data
       }, (error: AxiosError) => {
         ElNotification.error(error.message)

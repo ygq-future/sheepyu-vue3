@@ -130,12 +130,10 @@ function onRowDblClick(row: any) {
 }
 
 function onEdit(row: any) {
-  console.log(row)
   emits('edit', row)
 }
 
 function onDelete(row: any) {
-  console.log(row)
   emits('delete', row)
 }
 

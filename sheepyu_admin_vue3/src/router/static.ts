@@ -6,7 +6,7 @@ export const homeRoute: RouteRecordRaw = {
   component: () => import('@/views/system/dashboard.vue'),
   meta: {
     title: '控制台',
-    icon: 'el-icon-HomeFilled',
+    icon: 'fa fa-dashboard',
     keepalive: true,
     fullpath: '/dashboard'
   }

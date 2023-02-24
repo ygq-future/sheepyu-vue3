@@ -20,7 +20,7 @@ public interface SystemRoleService extends IServiceX<SystemRole> {
 
     void updateRole(@Valid SystemRoleUpdateVo updateVo);
 
-    void deleteRole(Long id);
+    void deleteRole(String ids);
 
     PageResult<SystemRole> pageRole(@Valid SystemRoleQueryVo queryVo);
 

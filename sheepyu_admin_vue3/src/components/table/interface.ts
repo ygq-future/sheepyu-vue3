@@ -9,6 +9,7 @@ export interface TableConfig {
   selection?: boolean
   //是否需要分页
   pagination?: boolean
+  expandAll?: boolean
   //数据为树形数据时必须
   rowKey?: string
   //数据列配置

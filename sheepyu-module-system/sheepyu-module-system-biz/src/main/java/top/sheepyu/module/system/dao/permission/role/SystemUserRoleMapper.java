@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
  * @date 2023-01-29 17:54
  **/
 public interface SystemUserRoleMapper extends BaseMapper<SystemUserRole> {
-    default void deleteByRoleId(Long id) {
-        delete(new LambdaQueryWrapper<SystemUserRole>().eq(SystemUserRole::getRoleId, id));
+    default void deleteByRoleIds(Collection<Long> ids) {
+        delete(new LambdaQueryWrapper<SystemUserRole>().in(SystemUserRole::getRoleId, ids));
     }
 
     default Set<Long> findRoleIdByUserId(Long userId) {
