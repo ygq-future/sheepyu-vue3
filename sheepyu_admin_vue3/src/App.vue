@@ -5,8 +5,7 @@
 </template>
 
 <script setup lang='ts'>
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
-</script>
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'</script>
 
 <style lang='scss'>
 html, body, #app {
@@ -36,6 +35,22 @@ html.light {
   width: 100vw;
   background-color: transparent;
   z-index: 9999;
+}
+
+.el-dialog__body {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+}
+
+.el-dialog__footer {
+  box-shadow: var(--el-box-shadow-light);
+  padding-bottom: 15px !important;
+  padding-top: 15px !important;
+}
+
+.el-dialog__header {
+  padding-bottom: 15px !important;
+  padding-top: 15px !important;
 }
 
 @media screen and (max-width: 768px) {

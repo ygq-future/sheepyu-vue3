@@ -23,7 +23,7 @@
           <el-tooltip :show-after='500' v-if="props.buttons.includes('edit')" content='编辑' placement='top'>
             <el-button v-blur type='primary' :disabled='rows.length === 0' @click='onBatchEdit'>
               <Icon name='fa fa-pencil' />
-              <span class='button-text'>编辑</span>
+              <span class='button-text'>批量编辑</span>
             </el-button>
           </el-tooltip>
 
@@ -39,7 +39,7 @@
                 <el-tooltip :show-after='500' content='删除' placement='top'>
                   <el-button v-blur type='danger' :disabled='rows.length === 0'>
                     <Icon name='fa fa-trash' />
-                    <span class='button-text'>删除</span>
+                    <span class='button-text'>批量删除</span>
                   </el-button>
                 </el-tooltip>
               </div>

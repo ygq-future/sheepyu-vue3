@@ -1,4 +1,5 @@
 import type { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
+import type { DictRender } from '@/components/dict/interface'
 
 export type ComSearchConfig = Array<ComSearchConfigItem>
 
@@ -10,6 +11,7 @@ export interface TableConfig {
   //是否需要分页
   pagination?: boolean
   expandAll?: boolean
+  loading?: boolean
   //数据为树形数据时必须
   rowKey?: string
   //数据列配置
@@ -32,7 +34,7 @@ export interface ColumnConfig {
   align?: string
   width?: number | string
   sortable?: boolean
-  dictRender?: 'tag' | 'switch' | 'select'
+  dictRender?: DictRender
   dictType?: DictTypeEnum
 }
 

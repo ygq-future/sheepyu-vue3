@@ -24,8 +24,8 @@ export function updateMenu(data: SystemMenuUpdateVo) {
   return request.put<boolean>('/system/permission/menu', data)
 }
 
-export function deleteMenu(id: number) {
-  return request.delete<boolean>(`/system/permission/menu/${id}`)
+export function deleteMenu(ids: string) {
+  return request.delete<boolean>(`/system/permission/menu/${ids}`)
 }
 
 export interface SystemMenuQueryVo {
@@ -45,7 +45,7 @@ export interface SystemMenuRespVo {
   component?: string
   status: number
   keepAlive: number
-  children: SystemMenuRespVo[]
+  children?: SystemMenuRespVo[]
 }
 
 export interface SystemMenuCreateVo extends SystemMenuBaseVo {

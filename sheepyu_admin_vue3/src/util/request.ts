@@ -97,9 +97,9 @@ export class Request {
           return Promise.reject(data)
         }
 
-        if (res.config.method !== 'get') {
+        if (res.config.method !== 'get' && !this.isRefreshing) {
           ElNotification.success({
-            message: '操作成功',
+            message: res.config.url === '/system/user/login' ? '登录成功' : '操作成功',
             duration: 2000
           })
         }

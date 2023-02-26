@@ -168,6 +168,7 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
     public List<SystemMenu> findMenuByIdsFromCache(Set<Long> menuIds, boolean enable) {
         return menuIds.stream().map(MENUS::get)
                 .filter(e -> !enable || Objects.equals(e.getStatus(), ENABLE.getCode()))
+                .sorted(Comparator.comparingInt(SystemMenu::getSort))
                 .collect(Collectors.toList());
     }
 

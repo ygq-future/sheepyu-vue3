@@ -2,13 +2,15 @@
   <div class='selector'>
     <el-popover
       placement='bottom'
-      :width='state.popoverWidth'
       trigger='focus'
+      :width='state.popoverWidth'
       :visible='state.popoverVisible'
     >
-      <div class='popover-content'
-           @mouseover.stop='state.iconSelectorMouseover = true'
-           @mouseout.stop='state.iconSelectorMouseover = false'>
+      <div
+        class='popover-content'
+        @mouseover.stop='state.iconSelectorMouseover = true'
+        @mouseout.stop='state.iconSelectorMouseover = false'
+      >
         <div class='content-header'>
           <span>请选择图标</span>
           <div class='types'>
@@ -30,10 +32,10 @@
 
       <template #reference>
         <el-input v-model='state.inputValue'
+                  :disabled='disabled'
                   @focus='onFocus'
                   @blur='onBlur'
                   class='select-input'
-                  :size='size'
                   placeholder='搜索图标'
                   ref='selectorInput'>
           <template #prepend>
@@ -53,16 +55,20 @@
 import { getAwesomeIconfontNames, getElementPlusIconfontNames, getIconfontNames } from '@/util/iconfont'
 import { useEventListener } from '@vueuse/core'
 
+import { useConfig } from '@/stores/config/config'
+
+const config = useConfig()
+
 const props = withDefaults(defineProps<{
   modelValue: string
-  size?: 'large' | 'default' | 'small'
   showIconText?: boolean
   width?: string
+  disabled?: boolean
 }>(), {
   modelValue: '',
-  size: 'default',
   showIconText: true,
-  width: '400px'
+  width: '400px',
+  disabled: false
 })
 
 const emits = defineEmits<{
@@ -72,14 +78,14 @@ const emits = defineEmits<{
 type IconType = 'ele' | 'ali' | 'awe'
 const selectorInput = ref()
 const state = reactive<{
-  type: IconType,
-  types: IconType[],
-  iconNames: string[],
-  inputValue: string,
-  prependIcon: string,
-  popoverWidth: number,
-  inputFocus: boolean,
-  iconSelectorMouseover: boolean,
+  type: IconType
+  types: IconType[]
+  iconNames: string[]
+  inputValue: string
+  prependIcon: string
+  popoverWidth: number
+  inputFocus: boolean
+  iconSelectorMouseover: boolean
   popoverVisible: boolean
   firstValue: string
 }>({
@@ -87,12 +93,12 @@ const state = reactive<{
   types: ['ele', 'awe', 'ali'],
   iconNames: [],
   inputValue: '',
-  prependIcon: props.modelValue || 'el-icon-Plus',
+  prependIcon: props.modelValue || config.layout.asideDefaultIcon,
   popoverWidth: 0,
   inputFocus: false,
   iconSelectorMouseover: false,
   popoverVisible: false,
-  firstValue: props.modelValue || 'el-icon-Plus'
+  firstValue: props.modelValue || config.layout.asideDefaultIcon
 })
 
 function getIconNames() {
@@ -158,9 +164,11 @@ const renderIconNames = computed(() => {
 
 onMounted(() => {
   getIconNames()
-  getInputWidth()
   useEventListener(document, 'click', () => {
     state.popoverVisible = state.inputFocus || state.iconSelectorMouseover
+  })
+  nextTick(() => {
+    getInputWidth()
   })
 })
 </script>

@@ -9,8 +9,9 @@ interface NavTabs {
   activeRoute: RouteLocationNormalized | null
   tabsView: RouteLocationNormalized[]
   tabFullScreen: boolean
-  tabsViewRoutes: RouteRecordRaw[],
-  menuTree: SystemMenuRespVo[]
+  tabsViewRoutes: RouteRecordRaw[]
+  //是否有路由更新, 关联菜单操作
+  isRouteUpdated: boolean
 }
 
 export const useTabs = defineStore(IdEnum.TABS, () => {
@@ -20,19 +21,20 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
     tabsView: [],
     tabFullScreen: false,
     tabsViewRoutes: [],
-    menuTree: []
+    isRouteUpdated: true
   })
 
   function hasRoute() {
-    return state.tabsViewRoutes.length > 0
+    return !state.isRouteUpdated
   }
 
   function setRoutes(routes: RouteRecordRaw[]) {
+    state.isRouteUpdated = false
     state.tabsViewRoutes = routes
   }
 
   function clearRoute() {
-    state.tabsViewRoutes = []
+    state.isRouteUpdated = true
   }
 
   function closeTab(route: RouteLocationNormalized) {

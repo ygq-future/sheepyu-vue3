@@ -6,6 +6,7 @@
     :row-key='tableConfig.rowKey'
     :stripe='tableConfig.stripe === undefined || tableConfig.stripe'
     :tree-props='tableConfig.treeProps'
+    v-loading='tableConfig.loading'
     @select='onSelect'
     @select-all='onSelectAll'
     @selection-change='onSelectionChange'
@@ -14,7 +15,7 @@
     <el-table-column v-if='tableConfig.selection' type='selection' align='center' />
 
     <template v-for='item in tableConfig.columns'>
-      <FieldRender :column='item' @field-change='onFieldChange' />
+      <ColumnRender :column='item' @field-change='onFieldChange' />
     </template>
 
     <el-table-column
@@ -58,11 +59,12 @@
             </template>
           </el-popconfirm>
 
-          <slot name='buttons'></slot>
+          <slot name='buttons' :data='scope.row'></slot>
         </div>
       </template>
     </el-table-column>
   </el-table>
+
   <div class='pagination' v-if='tableConfig.pagination'>
     <el-pagination
       background
@@ -78,7 +80,7 @@
 </template>
 
 <script setup lang='ts'>
-import FieldRender from './render/FieldRender.vue'
+import ColumnRender from './render/ColumnRender.vue'
 import type { TableConfig } from '@/components/table/interface'
 import { ElTable } from 'element-plus'
 

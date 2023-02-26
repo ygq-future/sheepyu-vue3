@@ -88,7 +88,7 @@ function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], 
 
     if (!parentRoute) {
       routes.push(route)
-      generateRoutes(routes, menu.children, menu, route)
+      generateRoutes(routes, menu.children || [], menu, route)
       continue
     }
 
@@ -97,7 +97,7 @@ function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], 
     } else {
       parentRoute.children = [route]
     }
-    generateRoutes(routes, menu.children, menu, route)
+    generateRoutes(routes, menu.children || [], menu, route)
   }
 }
 
