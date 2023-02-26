@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { IdEnum } from '@/stores/storeId'
 import { StorePersistKey } from '@/stores/storePersistKey'
 import { useColorMode, useDark } from '@vueuse/core'
+import { Local } from '@/util/storage'
 
 interface Layout {
   /*
@@ -153,6 +154,21 @@ export const useConfig = defineStore(IdEnum.CONFIG, () => {
 
   function collapseMenu() {
     layout.asideCollapse = !layout.asideCollapse
+    setDefaultBeforeResizeLayout()
+  }
+
+  function changeLayoutMode() {
+    Local.set(StorePersistKey.RESIZE_BEFORE_KEY, {
+      layoutMode: layout.layoutMode,
+      asideCollapse: layout.asideCollapse
+    })
+  }
+
+  function setDefaultBeforeResizeLayout() {
+    Local.set(StorePersistKey.RESIZE_BEFORE_KEY, {
+      layoutMode: layout.layoutMode,
+      asideCollapse: layout.asideCollapse
+    })
   }
 
   function getColor(key: keyof Layout) {
@@ -203,7 +219,17 @@ export const useConfig = defineStore(IdEnum.CONFIG, () => {
     layout.topMenuActiveTextColor[target] = originActiveTextColor
   }
 
-  return { layout, system, menuWidth, getColor, resetCurrentTheme, resetConfig, changeColorMode, collapseMenu }
+  return {
+    layout,
+    system,
+    menuWidth,
+    getColor,
+    resetCurrentTheme,
+    resetConfig,
+    changeColorMode,
+    collapseMenu,
+    changeLayoutMode
+  }
 }, {
   persist: {
     key: StorePersistKey.CONFIG_STORE_KEY

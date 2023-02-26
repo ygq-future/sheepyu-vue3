@@ -11,7 +11,7 @@
         <div class='config-list'>
           <div class='config-item'>
             <span>布局方式</span>
-            <el-radio-group v-model='config.layout.layoutMode'>
+            <el-radio-group v-model='config.layout.layoutMode' @change='onLayoutModeChange'>
               <el-radio-button label='default'>默认</el-radio-button>
               <el-radio-button label='classic'>经典</el-radio-button>
             </el-radio-group>
@@ -162,6 +162,10 @@ const router = useRouter()
 
 function onColorModeChange(colorModeIndex: number) {
   config.changeColorMode(colorModeIndex)
+}
+
+function onLayoutModeChange() {
+  config.changeLayoutMode()
 }
 
 function resetConfig(type: 'current' | 'all') {
