@@ -5,14 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/enums/MenuTypeEnum.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/dict/Dict.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/dict/Dict.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/router.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/dict/dict.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/dict/dict.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/dict/dictTypeEnum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/enums/DictTypeEnum.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/PopupForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/PopupForm.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/menu/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/menu/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -232,7 +225,7 @@
       <workItem from="1676979543410" duration="31000" />
       <workItem from="1677070673253" duration="45453000" />
       <workItem from="1677287647198" duration="29429000" />
-      <workItem from="1677392346651" duration="14714000" />
+      <workItem from="1677392346651" duration="15776000" />
     </task>
     <servers />
   </component>

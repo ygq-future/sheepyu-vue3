@@ -72,6 +72,7 @@ import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { useTabs } from '@/stores/tabs/tabs'
 import { MenuTypeEnum } from '@/enums/MenuTypeEnum'
+import { ElNotification } from 'element-plus'
 
 const tabs = useTabs()
 const tableRef = ref()
@@ -141,8 +142,15 @@ const state = reactive<{
   }
 })
 
+const forbidList: number[] = [1, 2, 12]
+
 async function onFieldChange(row: SystemMenuUpdateVo) {
-  await updateMenu(toRaw(row))
+  const data = toRaw(row)
+  if (forbidList.includes(data.id)) {
+    await findMenuList()
+    return ElNotification.warning('不能操作重要数据')
+  }
+  await updateMenu(data)
   tabs.clearRoute()
 }
 

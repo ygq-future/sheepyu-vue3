@@ -88,9 +88,9 @@ async function onSubmitAndNext() {
   emits('submit', () => {
     clearTimeout(timer)
     if (props.popupFormConfig.isEdit && !state.isLastEdit) {
+      state.formLoading = false
       return onNext()
     }
-    state.formLoading = false
     hide()
   })
 }
