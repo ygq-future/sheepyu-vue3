@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { IdEnum } from '@/stores/storeId'
 import type { SystemDictDataRespVo, SystemDictTypeRespVo } from '@/api/system/dict'
-import type { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
+import type { DictTypeEnum } from '@/enums/DictTypeEnum'
 import { StorePersistKey } from '@/stores/storePersistKey'
 
 export const useDict = defineStore(IdEnum.DICT, () => {

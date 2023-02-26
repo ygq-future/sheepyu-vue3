@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang='ts'>
-import { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
+import type { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { SystemDictDataRespVo } from '@/api/system/dict'
 import { useDict } from '@/stores/dict/dict'
 import type { DictRender } from '@/components/dict/interface'

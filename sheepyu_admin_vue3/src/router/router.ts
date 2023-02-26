@@ -7,6 +7,7 @@ import type { SystemMenuRespVo } from '@/api/system/menu'
 import { userMenu } from '@/api/system/menu'
 import { useAdmin } from '@/stores/user/user'
 import { useTabs } from '@/stores/tabs/tabs'
+import { MenuTypeEnum } from '@/enums/MenuTypeEnum'
 
 const componentViews = import.meta.glob('@/views/**/*.vue')
 const router = createRouter({
@@ -58,7 +59,7 @@ function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], 
 
   for (let menu of menuTree) {
     //不是目录也不是菜单
-    if (menu.type !== 1 && menu.type !== 2) continue
+    if (menu.type === MenuTypeEnum.BUTTON) continue
 
     let component
     let path = menu.path
@@ -68,7 +69,7 @@ function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], 
       fullpath = `${parentRoute.meta?.fullpath}/${fullpath}`
       name = `${parentRoute.name?.toString()}-${name}`
     }
-    if (menu.type === 2) {
+    if (menu.type === MenuTypeEnum.MENU) {
       component = componentViews[`/src/views/${menu.component}.vue`]
     }
     if (!path) continue

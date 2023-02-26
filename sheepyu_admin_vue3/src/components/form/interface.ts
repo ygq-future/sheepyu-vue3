@@ -1,5 +1,5 @@
 import type { FormRules } from 'element-plus'
-import type { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
+import type { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { DictRender } from '@/components/dict/interface'
 
 export interface PopupFormConfig {

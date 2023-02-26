@@ -1,4 +1,4 @@
-import type { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
+import type { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { DictRender } from '@/components/dict/interface'
 
 export type ComSearchConfig = Array<ComSearchConfigItem>

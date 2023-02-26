@@ -35,7 +35,7 @@
 
       <template #buttons='{data}'>
         <el-tooltip
-          v-if='data.type !== 3'
+          v-if='data.type !== MenuTypeEnum.BUTTON'
           content='新增'
           placement='top'
           :show-after='500'
@@ -68,9 +68,10 @@ import PopupForm from '@/components/form/PopupForm.vue'
 import type { ComSearchConfig, TableConfig } from '@/components/table/interface'
 import type { SystemMenuCreateVo, SystemMenuQueryVo, SystemMenuRespVo, SystemMenuUpdateVo } from '@/api/system/menu'
 import { createMenu, deleteMenu, findMenu, menuList, updateMenu } from '@/api/system/menu'
-import { DictTypeEnum } from '@/stores/dict/dictTypeEnum'
+import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { useTabs } from '@/stores/tabs/tabs'
+import { MenuTypeEnum } from '@/enums/MenuTypeEnum'
 
 const tabs = useTabs()
 const tableRef = ref()
@@ -228,7 +229,7 @@ function setFormItemData(data: SystemMenuRespVo[]) {
 
 function removeLastChildren(data: SystemMenuRespVo[]) {
   for (let item of data) {
-    if (item.type === 3) {
+    if (item.type === MenuTypeEnum.BUTTON) {
       return true
     }
     const result = removeLastChildren(item.children || [])
