@@ -27,6 +27,7 @@ import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.common.util.CollectionUtil.*;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.permission.SystemMenuConvert.CONVERT;
+import static top.sheepyu.module.system.enums.menu.MenuTypeEnum.*;
 
 /**
  * @author ygq
@@ -39,10 +40,24 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
     @Resource
     private SystemRoleMenuMapper systemRoleMenuMapper;
     private static final Map<Long, SystemMenu> MENUS = new ConcurrentHashMap<>();
+    private static final List<Long> forbidIdList = Arrays.asList(1L, 2L, 12L);
 
     @Override
     public void createMenu(SystemMenuCreateVo createVo) {
         SystemMenu menu = CONVERT.convert(createVo);
+        SystemMenu parentMenu = findByIdValidateExists(menu.getParentId());
+
+        //如果是目录或者菜单, 那么只能在目录下
+        Integer type = menu.getType();
+        if ((Objects.equals(type, CATALOG.getCode()) || Objects.equals(type, MENU.getCode())) &&
+                !Objects.equals(parentMenu.getType(), CATALOG.getCode())) {
+            throw exception(LEVEL_RELATION_ERROR);
+        }
+        //如果是按钮, 那么只能在菜单下
+        if (Objects.equals(type, BUTTON.getCode()) && !Objects.equals(parentMenu.getType(), MENU.getCode())) {
+            throw exception(LEVEL_RELATION_ERROR);
+        }
+
         save(menu);
         MENUS.put(menu.getId(), menu);
     }
@@ -68,7 +83,7 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
             return;
         }
         //不能删除系统重要的菜单
-        if (idList.contains(1L) || idList.contains(2L)) {
+        if (CollUtil.intersection(idList, forbidIdList).size() > 0) {
             throw exception(FORBID_REMOVE);
         }
         //要删除的数据
@@ -78,7 +93,7 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
         }
         //删除的数据中, 类型为目录的数据
         Set<Long> removeCatalogIds = convertSetFilter(removeMenus, SystemMenu::getId,
-                e -> Objects.equals(e.getType(), MenuTypeEnum.CATALOG.getCode()));
+                e -> Objects.equals(e.getType(), CATALOG.getCode()));
 
         //所有最终能删除的id
         Set<Long> removeIds = new HashSet<>();

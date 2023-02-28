@@ -23,7 +23,7 @@ export class ParticleLine {
     }
     this.ctx = ctx
     this.isDark = isDark
-    this.radius = this.lineWidth = 1
+    this.radius = this.lineWidth = 0.5
     this.fillStyle = this.getColor(this.isDark, .3)
   }
 

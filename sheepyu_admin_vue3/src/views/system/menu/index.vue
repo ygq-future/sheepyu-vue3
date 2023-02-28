@@ -206,6 +206,9 @@ function onClose() {
 
 async function findMenuById(id: number) {
   const { data } = await findMenu(id)
+  if (forbidList.includes(data.id)) {
+    state.popupFormConfig.disabledProps = ['keepAlive', 'status', 'type']
+  }
   state.form = data
 }
 

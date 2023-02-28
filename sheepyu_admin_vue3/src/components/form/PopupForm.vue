@@ -30,8 +30,8 @@
 
     <template #footer>
       <span class='dialog-footer'>
-        <el-button @click='hide'>取消</el-button>
-        <el-button type='primary' @click='onSubmitAndNext'>
+        <el-button :disabled='state.formLoading' @click='hide'>取消</el-button>
+        <el-button :disabled='state.formLoading' type='primary' @click='onSubmitAndNext'>
             {{ !popupFormConfig.isEdit || state.isLastEdit ? '确定' : '保存并编辑下一个' }}
         </el-button>
       </span>

@@ -59,6 +59,7 @@ public interface ErrorCodeConstants {
     ErrorCode MENU_NOT_EXISTS = new ErrorCode(100_009_001, "菜单不存在!");
     ErrorCode MENU_HAS_CHILDREN = new ErrorCode(100_009_002, "菜单还有子菜单!");
     ErrorCode FORBID_REMOVE = new ErrorCode(100_009_002, "系统菜单禁止删除!");
+    ErrorCode LEVEL_RELATION_ERROR = new ErrorCode(100_009_002, "错误的层次关系!");
 
     //role相关 100_010_001
     ErrorCode ROLE_NOT_EXISTS = new ErrorCode(100_010_001, "角色不存在!");
