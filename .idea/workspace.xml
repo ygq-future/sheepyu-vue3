@@ -4,12 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/ErrorCodeConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/ErrorCodeConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/permission/SystemMenuServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/permission/SystemMenuServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/PopupForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/PopupForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/particleLine.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/particleLine.ts" afterDir="false" />
-    </list>
+    <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -69,15 +64,15 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/other project/sheepyu/sheepyu_admin_vue3/src/api/system&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/other project/sheepyu&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.26237053&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;leetcode.id&quot;,
-    &quot;spring.configuration.checksum&quot;: &quot;b304ccba8dfff90570df49785ace90de&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;0b4a500f76e3bfe2152d19d9ce4bde8c&quot;,
     &quot;ts.external.directory.path&quot;: &quot;E:\\other project\\sheepyu\\sheepyu_admin_vue3\\node_modules\\typescript\\lib&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -231,6 +226,9 @@
       <workItem from="1677395290081" duration="17000" />
       <workItem from="1677543747360" duration="38000" />
       <workItem from="1677574400676" duration="3119000" />
+      <workItem from="1677631653498" duration="60000" />
+      <workItem from="1677656085868" duration="292000" />
+      <workItem from="1677656583926" duration="101000" />
     </task>
     <servers />
   </component>
@@ -247,5 +245,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>
