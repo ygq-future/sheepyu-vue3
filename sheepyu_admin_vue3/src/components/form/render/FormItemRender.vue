@@ -6,10 +6,9 @@
       v-model='form[config.prop]'
     />
 
-    <el-input
+    <el-input-number
       v-if='config.render === "number"'
-      type='number'
-      v-model.number='form[config.prop]'
+      v-model='form[config.prop]'
       :disabled='disabled'
     />
 

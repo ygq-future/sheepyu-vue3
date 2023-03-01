@@ -96,7 +96,10 @@ const state = reactive<{
     type: 1,
     sort: 0,
     status: 1,
-    keepAlive: 1
+    keepAlive: 1,
+    icon: '',
+    permission: '',
+    path: ''
   },
   tableData: [],
   comSearchConfig: [
@@ -200,7 +203,10 @@ function onClose() {
     type: 1,
     sort: 0,
     status: 1,
-    keepAlive: 1
+    keepAlive: 1,
+    icon: '',
+    permission: '',
+    path: ''
   }
 }
 
@@ -225,17 +231,17 @@ async function findMenuList() {
 
 function setFormItemData(data: SystemMenuRespVo[]) {
   const temp: SystemMenuRespVo[] = JSON.parse(JSON.stringify(data))
-  temp.unshift({
+  removeLastChildren(temp)
+  state.popupFormConfig.formItemConfigs[0].data = [{
     id: 0,
     name: '顶级目录',
     type: 1,
     sort: 0,
     parentId: 0,
     status: 1,
-    keepAlive: 1
-  })
-  removeLastChildren(temp)
-  state.popupFormConfig.formItemConfigs[0].data = temp
+    keepAlive: 1,
+    children: temp
+  }]
 }
 
 function removeLastChildren(data: SystemMenuRespVo[]) {

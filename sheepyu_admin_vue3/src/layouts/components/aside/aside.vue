@@ -79,6 +79,10 @@ const collapseMenu = () => {
   margin-right: 5px;
 }
 
+:deep(.el-sub-menu__title .icon) {
+  margin-right: 5px;
+}
+
 :deep(.el-menu) {
   border-right: none;
   --el-menu-bg-color: v-bind(asideBackColor);

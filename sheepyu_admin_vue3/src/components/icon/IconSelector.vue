@@ -93,12 +93,12 @@ const state = reactive<{
   types: ['ele', 'awe', 'ali'],
   iconNames: [],
   inputValue: '',
-  prependIcon: props.modelValue || config.layout.asideDefaultIcon,
+  prependIcon: '',
   popoverWidth: 0,
   inputFocus: false,
   iconSelectorMouseover: false,
   popoverVisible: false,
-  firstValue: props.modelValue || config.layout.asideDefaultIcon
+  firstValue: ''
 })
 
 function getIconNames() {
@@ -170,6 +170,10 @@ onMounted(() => {
   nextTick(() => {
     getInputWidth()
   })
+})
+
+onUpdated(() => {
+  state.prependIcon = state.firstValue = props.modelValue || config.layout.asideDefaultIcon
 })
 </script>
 

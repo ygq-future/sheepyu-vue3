@@ -46,7 +46,7 @@ import type { FormInstance, FormRules } from 'element-plus'
 import { ElNotification } from 'element-plus'
 
 const props = defineProps<{
-  form: object
+  form: any
   popupFormConfig: PopupFormConfig
 }>()
 
