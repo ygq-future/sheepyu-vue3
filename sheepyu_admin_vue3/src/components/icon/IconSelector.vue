@@ -39,8 +39,8 @@
                   placeholder='搜索图标'
                   ref='selectorInput'>
           <template #prepend>
-            <Icon :key='`icon-${state.prependIcon}`' :name='state.prependIcon'></Icon>
-            <span v-show='showIconText' style='font-size: 12px;margin-left: 5px'>{{ state.prependIcon }}</span>
+            <Icon :key='`icon-${iconValue}`' :name='iconValue'></Icon>
+            <span v-show='showIconText' style='font-size: 12px;margin-left: 5px'>{{ iconValue }}</span>
           </template>
           <template #append>
             <Icon style='cursor: pointer' :size='22' name='el-icon-RefreshRight' @click='resetIcon' />
@@ -56,6 +56,7 @@ import { getAwesomeIconfontNames, getElementPlusIconfontNames, getIconfontNames 
 import { useEventListener } from '@vueuse/core'
 
 import { useConfig } from '@/stores/config/config'
+import type { WritableComputedRef } from '@vue/reactivity'
 
 const config = useConfig()
 
@@ -64,6 +65,8 @@ const props = withDefaults(defineProps<{
   showIconText?: boolean
   width?: string
   disabled?: boolean
+  //是否需要默认值
+  default?: boolean
 }>(), {
   modelValue: '',
   showIconText: true,
@@ -82,7 +85,6 @@ const state = reactive<{
   types: IconType[]
   iconNames: string[]
   inputValue: string
-  prependIcon: string
   popoverWidth: number
   inputFocus: boolean
   iconSelectorMouseover: boolean
@@ -93,7 +95,6 @@ const state = reactive<{
   types: ['ele', 'awe', 'ali'],
   iconNames: [],
   inputValue: '',
-  prependIcon: '',
   popoverWidth: 0,
   inputFocus: false,
   iconSelectorMouseover: false,
@@ -129,9 +130,8 @@ function getInputWidth() {
 }
 
 function onIcon(item: string) {
-  state.prependIcon = item
   state.inputValue = ''
-  emits('update:modelValue', item)
+  iconValue.value = item
   state.popoverVisible = state.iconSelectorMouseover = false
   nextTick(() => {
     selectorInput.value.blur()
@@ -162,18 +162,40 @@ const renderIconNames = computed(() => {
   })
 })
 
+const iconValue: WritableComputedRef<string> = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    if (!state.firstValue) {
+      state.firstValue = value
+    }
+    emits('update:modelValue', value)
+  }
+})
+
+//解决表单双向绑定时重置操作问题
+const cancel = watchEffect(() => {
+  if (props.modelValue) {
+    state.firstValue = props.modelValue
+    cancel()
+  }
+})
+
 onMounted(() => {
+  if (props.default) {
+    iconValue.value = config.layout.asideDefaultIcon
+    cancel()
+  }
+
   getIconNames()
   useEventListener(document, 'click', () => {
     state.popoverVisible = state.inputFocus || state.iconSelectorMouseover
   })
   nextTick(() => {
     getInputWidth()
+    console.log(props.modelValue)
   })
-})
-
-onUpdated(() => {
-  state.prependIcon = state.firstValue = props.modelValue || config.layout.asideDefaultIcon
 })
 </script>
 

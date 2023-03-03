@@ -2,7 +2,7 @@
   <div class='default-main'>
     <el-card>
       DashBoard
-      <icon-selector v-model='icon' />
+      <icon-selector v-model='icon' default />
     </el-card>
   </div>
 </template>
