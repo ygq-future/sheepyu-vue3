@@ -23,5 +23,4 @@ public class SystemCodegenTable extends BaseModel {
     private String className;
     private String classComment;
     private String author;
-
 }

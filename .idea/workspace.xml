@@ -5,13 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/SystemCodegenController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/vo/TableInfoRespVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/codegen/SystemCodegenBiz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-dependencies/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-dependencies/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/icon/IconSelector.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/icon/IconSelector.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/dashboard.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/dashboard.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/enums/codegen/CodegenSceneEnum.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/vo/SystemCodegenRespVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/vo/SystemCodegenUpdateVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/convert/codegen/SystemCodegenConvert.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/SystemCodegenController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/SystemCodegenController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/codegen/SystemCodegenColumn.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/codegen/SystemCodegenColumn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/codegen/SystemCodegenTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/codegen/SystemCodegenTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/codegen/SystemCodegenBiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/codegen/SystemCodegenBiz.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/codegen/SystemCodegenColumnService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/codegen/SystemCodegenColumnService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/codegen/SystemCodegenColumnServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/codegen/SystemCodegenColumnServiceImpl.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -114,11 +117,11 @@
       <recent name="top.sheepyu.module.system.convert.job" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="top.sheepyu.module.system.controller.admin.codegen.vo" />
       <recent name="top.sheepyu.module.system.service.codegen" />
       <recent name="top.sheepyu.module.system.dao.codegen" />
       <recent name="top.sheepyu.module.system.controller.admin.role.vo" />
       <recent name="top.sheepyu.module.system.controller.admin.post.vo" />
-      <recent name="top.sheepyu.module.system.controller.admin.menu.vo" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.SheepyuServer">
@@ -246,7 +249,7 @@
       <workItem from="1677656696305" duration="600000" />
       <workItem from="1677662130867" duration="890000" />
       <workItem from="1677673797477" duration="9172000" />
-      <workItem from="1677841570234" duration="8657000" />
+      <workItem from="1677841570234" duration="21264000" />
     </task>
     <servers />
   </component>

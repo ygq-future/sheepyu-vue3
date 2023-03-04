@@ -14,22 +14,23 @@ import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 @Accessors(chain = true)
 public class SystemCodegenColumn extends BaseModel {
     private Long id;
+    private Long tableId;
     private String name;
     private String type;
     private String comment;
-    private Integer nullable;
-    private Integer primaryKey;
-    private Integer autoIncrement;
+    private Boolean nullable;
+    private Boolean primaryKey;
+    private Boolean autoIncrement;
     private String javaType;
     private String javaField;
     private String dictType;
     private String example;
-    private Integer createOperation;
-    private Integer updateOperation;
-    private Integer queryOperation;
+    private Boolean createOperation;
+    private Boolean updateOperation;
+    private Boolean queryOperation;
     private String queryCondition;
-    private Integer listOperationResult;
-    private String showType;
-    private Integer quickSearch;
+    private Boolean listOperationResult;
+    private String formShowType;
+    private Boolean quickSearch;
     private String sort;
 }
