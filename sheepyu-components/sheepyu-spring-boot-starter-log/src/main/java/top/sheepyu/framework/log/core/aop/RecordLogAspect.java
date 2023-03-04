@@ -85,7 +85,7 @@ public class RecordLogAspect {
     }
 
     private void log(ProceedingJoinPoint pj, RecordLog recordLog, ApiOperation apiOperation, long startTime, Object result, Throwable exception) {
-        if (!isLogEnable(pj, recordLog)) {
+        if (!isLogEnable(pj, recordLog, exception)) {
             return;
         }
 
@@ -102,6 +102,7 @@ public class RecordLogAspect {
             apiLogFrameworkService.createApiLog(apiLog);
         } catch (Throwable e) {
             log.error("[log][记录操作日志时，发生异常，其中参数是 joinPoint({}) recordLog({}) apiOperation({}) result({}) exception({}) ]", pj, recordLog, apiOperation, result, exception, exception);
+            throw e;
         }
     }
 
@@ -114,7 +115,7 @@ public class RecordLogAspect {
             return;
         }
         //校验异常不记录
-        if (th.getMessage().contains("validation")) {
+        if (th.toString().contains("validation")) {
             return;
         }
 
@@ -191,7 +192,11 @@ public class RecordLogAspect {
         }
     }
 
-    private static boolean isLogEnable(ProceedingJoinPoint joinPoint, RecordLog recordLog) {
+    private static boolean isLogEnable(ProceedingJoinPoint joinPoint, RecordLog recordLog, Throwable ex) {
+        //如果发生了异常
+        if(ex != null) {
+            return true;
+        }
         // 有 @RecordLog 注解的情况下
         if (recordLog != null) {
             return true;
@@ -204,7 +209,8 @@ public class RecordLogAspect {
         if (ArrayUtil.isEmpty(requestMethods)) {
             return null;
         }
-        return Arrays.stream(requestMethods).filter(requestMethod -> requestMethod == RequestMethod.POST
+        return Arrays.stream(requestMethods).filter(requestMethod -> requestMethod == RequestMethod.GET
+                        || requestMethod == RequestMethod.POST
                         || requestMethod == RequestMethod.PUT
                         || requestMethod == RequestMethod.DELETE
                         || requestMethod == RequestMethod.PATCH)
