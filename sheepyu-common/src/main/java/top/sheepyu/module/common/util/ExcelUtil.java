@@ -16,20 +16,30 @@ import java.util.List;
  * @date 2023-01-19 14:24
  **/
 public class ExcelUtil {
-    public static <T> void write(HttpServletResponse response, String filename, Class<T> head, List<T> data) throws IOException {
-        // 输出 Excel
-        String datetime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy_MM_dd_HH_mm_ss"));
+    /**
+     * 导出excel文件, 文件名
+     *
+     * @param filename 不用带后缀
+     */
+    public static <T> void write(HttpServletResponse response, String filename, Class<T> excelDataType, List<T> data) throws IOException {
+        String datetime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("_yyyy年MM月dd日HH时mm分ss秒"));
         filename += datetime.concat(".xlsx");
         response.setHeader("Content-Disposition", "attachment;filename=" + URLEncoder.encode(filename, "utf-8"));
         response.setContentType("application/vnd.ms-excel;charset=UTF-8");
-        EasyExcel.write(response.getOutputStream(), head)
+        EasyExcel.write(response.getOutputStream(), excelDataType)
                 .autoCloseStream(false) // 不要自动关闭，交给 Servlet 自己处理
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy()) // 基于 column 长度，自动适配。最大 255 宽度
-                .sheet("xxx").doWrite(data);
+                .sheet().doWrite(data);
     }
 
-    public static <T> List<T> read(MultipartFile file, Class<T> head) throws IOException {
-        return EasyExcel.read(file.getInputStream(), head, null)
+    /**
+     * 导入excel
+     * @param file 文件
+     * @param excelDataType 接受数据的ExcelVo
+     * @return 返回数据列表
+     */
+    public static <T> List<T> read(MultipartFile file, Class<T> excelDataType) throws IOException {
+        return EasyExcel.read(file.getInputStream(), excelDataType, null)
                 .autoCloseStream(false)  // 不要自动关闭，交给 Servlet 自己处理
                 .doReadAllSync();
     }

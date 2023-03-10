@@ -12,7 +12,7 @@
     @selection-change='onSelectionChange'
     @row-dblclick='onRowDblClick'
   >
-    <el-table-column v-if='tableConfig.selection' type='selection' align='center' />
+    <el-table-column v-if='tableConfig.selection' type='selection' align='center' fixed='left' />
 
     <template v-for='item in tableConfig.columns'>
       <ColumnRender :column='item' @field-change='onFieldChange' />
@@ -33,7 +33,7 @@
             placement='top'
             :show-after='500'
           >
-            <el-button v-blur type='primary' @click='onEdit(scope.row)'>
+            <el-button v-auth='`${props.auth}:update`' v-blur type='primary' @click='onEdit(scope.row)'>
               <template #icon>
                 <Icon name='el-icon-Edit' />
               </template>
@@ -49,7 +49,7 @@
             <template #reference>
               <div>
                 <el-tooltip :show-after='500' content='删除' placement='top'>
-                  <el-button v-blur type='danger'>
+                  <el-button v-auth='`${props.auth}:delete`' v-blur type='danger'>
                     <template #icon>
                       <Icon name='el-icon-Delete' />
                     </template>
@@ -66,16 +66,18 @@
   </el-table>
 
   <div class='pagination' v-if='tableConfig.pagination'>
-    <el-pagination
-      background
-      layout='sizes, total, prev, pager, next, jumper'
-      v-model:current-page='paginationObj.current'
-      v-model:page-size='paginationObj.size'
-      :page-sizes='[10, 20, 30, 50, 100]'
-      :total='paginationObj.total'
-      @size-change='onSizeChange'
-      @current-change='onCurrentChange'
-    />
+    <el-scrollbar>
+      <el-pagination
+        background
+        :layout="config.layout.shrink ? 'prev, pager, next' : 'sizes, total, prev, pager, next, jumper'"
+        v-model:current-page='paginationObj.current'
+        v-model:page-size='paginationObj.size'
+        :page-sizes='[10, 20, 30, 50, 100]'
+        :total='paginationObj.total'
+        @size-change='onSizeChange'
+        @current-change='onCurrentChange'
+      />
+    </el-scrollbar>
   </div>
 </template>
 
@@ -83,14 +85,20 @@
 import ColumnRender from './render/ColumnRender.vue'
 import type { TableConfig } from '@/components/table/interface'
 import { ElTable } from 'element-plus'
+import { useConfig } from '@/stores/config/config'
 
-const props = defineProps<{
+const config = useConfig()
+
+const props = withDefaults(defineProps<{
   data: any
   tableConfig: TableConfig
   //如果开启了selection, 也可以使用双向绑定, 更加方便
   selection?: any[]
   pagination?: object
-}>()
+  auth?: string
+}>(), {
+  auth: 'none'
+})
 
 const emits = defineEmits<{
   (e: 'field-change', row: any, val: number): void

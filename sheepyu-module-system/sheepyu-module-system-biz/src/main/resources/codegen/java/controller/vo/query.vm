@@ -1,0 +1,38 @@
+package top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo;
+
+import io.swagger.annotations.*;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+#if($table.requirePage)import top.sheepyu.module.common.common.PageParam;
+#end
+#parse('codegen/java/common/_import.vm')
+import javax.validation.constraints.*;
+import java.util.*;
+
+import static top.sheepyu.module.common.constants.CommonConstants.DATE_TIME_FORMAT;
+
+/**
+* @author ygq
+* @date 2023-01-17 10:37
+**/
+@Data
+#if($table.requirePage)@EqualsAndHashCode(callSuper = true)
+#end
+@ApiModel("${table.classComment}分页查询vo")
+public class ${fullClassName}QueryVo#if($table.requirePage) extends PageParam #end {
+#if(!$table.requirePage && $hasQuickSearch)
+    @ApiModelProperty("模糊查询关键字")
+    private String keyword;
+#end
+#foreach($column in $columns)
+    #if($column.queryOperation && !$column.quickSearch)
+    #parse('codegen/java/common/_type.vm')
+
+    @ApiModelProperty(#if($!column.comment != "")"${column.comment}"#end)
+    #if($javaType == 'Date')
+    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
+    #end
+    private ${javaType}#if($column.queryCondition == 'between')[]#end ${column.javaField}#if($column.queryCondition == 'between')s#end;
+    #end
+#end
+}

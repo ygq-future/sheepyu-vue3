@@ -13,7 +13,7 @@ export class ParticleLine {
   fillStyle: string
   connection: number = 120
   animationFrame: number = 0
-  dotsNum: number = 80
+  dotsNum: number = 100
 
   constructor(isDark: boolean = false) {
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement

@@ -1,0 +1,46 @@
+package top.sheepyu.module.${table.moduleName}.convert.${table.businessName};
+
+#if ($table.requirePage)import top.sheepyu.module.common.common.PageResult;
+#end
+import org.mapstruct.Mapper;
+import org.mapstruct.factory.Mappers;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}CreateVo;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}RespVo;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}UpdateVo;
+#if($table.requireImport || $table.requireExport)import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}ExcelVo;
+#end
+import top.sheepyu.module.${table.moduleName}.dao.${table.businessName}.${fullClassName};
+
+#if ($table.requireList || $table.requireExport || $table.requireImport)import java.util.List;
+#end
+
+/**
+* @author ${table.author}
+* @date ${date}
+**/
+@Mapper
+public interface ${fullClassName}Convert {
+    ${fullClassName}Convert CONVERT = Mappers.getMapper(${fullClassName}Convert.class);
+
+    ${fullClassName} convert(${fullClassName}CreateVo createVo);
+
+    ${fullClassName} convert(${fullClassName}UpdateVo updateVo);
+
+    ${fullClassName}RespVo convert(${fullClassName} ${classVarName});
+    #if($table.requireList)
+
+    List<${fullClassName}RespVo> convertList(List<${fullClassName}> list);
+    #end
+    #if($table.requirePage)
+
+    PageResult<${fullClassName}RespVo> convertPage(PageResult<${fullClassName}> pageResult);
+    #end
+    #if($table.requireExport)
+
+    List<${fullClassName}ExcelVo> convert2Excel(List<${fullClassName}> list);
+    #end
+    #if($table.requireImport)
+
+    List<${fullClassName}> convertExcel2(List<${fullClassName}ExcelVo> list);
+    #end
+}

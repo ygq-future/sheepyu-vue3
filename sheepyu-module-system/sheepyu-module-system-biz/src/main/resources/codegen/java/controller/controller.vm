@@ -1,0 +1,131 @@
+package top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName};
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+#if ($table.scene == 1)import org.springframework.security.access.prepost.PreAuthorize;
+#end
+import org.springframework.web.bind.annotation.*;
+import top.sheepyu.framework.security.core.annotations.Permit;
+import top.sheepyu.framework.web.core.annotations.FlowLimit;
+#if($table.requireImport)
+import org.springframework.web.multipart.MultipartFile;
+import javax.servlet.http.HttpServletResponse;
+#end
+import top.sheepyu.module.common.common.Result;
+#if($table.requireImport || $table.requireExport)
+import java.io.IOException;
+import top.sheepyu.framework.log.core.annotations.RecordLog;
+import top.sheepyu.module.common.util.ExcelUtil;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}ExcelVo;
+#end
+#if ($table.requirePage)import top.sheepyu.module.common.common.PageResult;
+#end
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}CreateVo;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}RespVo;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}UpdateVo;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}QueryVo;
+import top.sheepyu.module.${table.moduleName}.dao.${table.businessName}.${fullClassName};
+import top.sheepyu.module.${table.moduleName}.service.${table.businessName}.${fullClassName}Service;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+import static top.sheepyu.module.common.common.Result.success;
+import static top.sheepyu.module.${table.moduleName}.convert.${table.businessName}.${fullClassName}Convert.CONVERT;
+#if($table.requireExport)import static top.sheepyu.framework.log.core.enums.OperateTypeEnum.EXPORT;
+#end
+#if($table.requireImport)import static top.sheepyu.framework.log.core.enums.OperateTypeEnum.IMPORT;
+#end
+
+/**
+ * @author ${table.author}
+ * @date ${date}
+ **/
+@RestController
+@RequestMapping("/${table.moduleName}/${table.businessName}")
+@Api(tags = "#if($table.scene == 1)管理端#else 用户端#end - ${table.classComment}")
+public class ${fullClassName}Controller {
+    @Resource
+    private ${fullClassName}Service ${classVarName}Service;
+
+    @PostMapping
+    @ApiOperation("创建${table.classComment}")
+#if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:create')")
+#end
+    public Result<Boolean> create(@RequestBody ${fullClassName}CreateVo createVo) {
+        ${classVarName}Service.create(createVo);
+        return success(true);
+    }
+
+    @PutMapping
+    @ApiOperation("修改${table.classComment}")
+#if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:update')")
+#end
+    public Result<Boolean> update(@RequestBody ${fullClassName}UpdateVo updateVo) {
+        ${classVarName}Service.update(updateVo);
+        return success(true);
+    }
+
+    @DeleteMapping("/{ids}")
+    @ApiOperation("删除${table.classComment}")
+#if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:delete')")
+#end
+    public Result<Boolean> delete(@PathVariable String ids) {
+        ${classVarName}Service.delete(ids);
+        return success(true);
+    }
+
+#if ($table.requireList)
+    @GetMapping
+    @ApiOperation("${table.classComment}列表")
+#if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:query')")
+#end
+    public Result<List<${fullClassName}RespVo>> list(${fullClassName}QueryVo queryVo) {
+        return success(CONVERT.convertList(${classVarName}Service.list(queryVo)));
+    }
+#end
+
+#if ($table.requirePage)
+    @GetMapping("/page")
+    @ApiOperation("获取${table.classComment}分页")
+#if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:query')")
+#end
+    public Result<PageResult<${fullClassName}RespVo>> page(${fullClassName}QueryVo queryVo) {
+        return success(CONVERT.convertPage(${classVarName}Service.page(queryVo)));
+    }
+#end
+
+    @GetMapping("/{id}")
+    @ApiOperation("获取指定${table.classComment}")
+#if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:query')")
+#end
+    public Result<${fullClassName}RespVo> findById(@PathVariable Long id) {
+        return success(CONVERT.convert(${classVarName}Service.findById(id)));
+    }
+
+#if ($table.requireExport)
+    @GetMapping("/export")
+    @ApiOperation("导出所有${table.classComment}")
+#if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:export')")
+#end
+    @RecordLog(EXPORT)
+    public void export(${fullClassName}QueryVo queryVo, HttpServletResponse response) throws IOException {
+        List<${fullClassName}> list = ${classVarName}Service.list(queryVo);
+        List<${fullClassName}ExcelVo> data = CONVERT.convert2Excel(list);
+        ExcelUtil.write(response, "${table.classComment}", ${fullClassName}ExcelVo.class, data);
+    }
+#end
+
+#if ($table.requireImport)
+    @PostMapping("/batchImport")
+    @ApiOperation("批量导入${table.classComment}")
+#if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:import')")
+#end
+    @RecordLog(IMPORT)
+    public Result<Boolean> batchImport(MultipartFile file) throws IOException {
+        List<${fullClassName}ExcelVo> result = ExcelUtil.read(file, ${fullClassName}ExcelVo.class);
+        ${classVarName}Service.batchImport(result);
+        return success(true);
+    }
+#end
+}

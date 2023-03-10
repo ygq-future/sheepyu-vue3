@@ -19,7 +19,7 @@
     :disabled='disabled'
     @change='onValueChange'
   >
-    <el-option v-for='item in state.dictList' :key='item.id' :value='item.value' :label='item.label' />
+    <el-option v-for='item in state.dictList' :key='item.id' :value='valueOf(item.value)' :label='item.label' />
   </el-select>
 
   <el-radio-group
@@ -57,9 +57,9 @@ const props = withDefaults(defineProps<{
   render?: DictRender
   type: DictTypeEnum
   //用于表单组件的双向绑定
-  modelValue?: string | number
+  modelValue?: string | number | boolean
   //用于tag组件的显示
-  value?: string | number
+  value?: string | number | boolean
   disabled?: boolean
 }>(), {
   render: 'tag',
@@ -72,10 +72,10 @@ const emits = defineEmits<{
 }>()
 
 const state = reactive<{
-  value: string | number | undefined
+  value: string | number | boolean | undefined
   dictList: SystemDictDataRespVo[]
   switchLoading: boolean
-  valueType: 'number' | 'string'
+  valueType: 'number' | 'string' | 'boolean'
 }>({
   value: props.modelValue,
   dictList: dict.findDictDataByType(props.type),
@@ -92,8 +92,15 @@ const tagItem = computed<SystemDictDataRespVo>(() => {
   return dictData
 })
 
-function valueOf(value: string): number | string {
-  return state.valueType === 'string' ? value : parseInt(value)
+function valueOf(value: string): number | string | boolean {
+  switch (state.valueType) {
+    case 'string':
+      return value
+    case 'number':
+      return parseInt(value)
+    case 'boolean':
+      return value === 'true'
+  }
 }
 
 function onValueChange(value: number) {
@@ -113,6 +120,8 @@ watch(() => props.modelValue, value => {
 onBeforeMount(() => {
   if (typeof props.modelValue === 'number') {
     state.valueType = 'number'
+  } else if (typeof props.modelValue === 'boolean') {
+    state.valueType = 'boolean'
   }
 })
 </script>

@@ -1,0 +1,4 @@
+#set($javaType = $column.javaType)
+#if($column.javaType == 'Boolean' && "$!column.dictType" != "")
+    #set($javaType = 'Integer')
+#end

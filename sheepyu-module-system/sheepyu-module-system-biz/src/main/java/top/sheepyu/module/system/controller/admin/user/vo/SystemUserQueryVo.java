@@ -4,12 +4,15 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.springframework.format.annotation.DateTimeFormat;
 import top.sheepyu.module.common.annotations.InEnum;
 import top.sheepyu.module.common.common.PageParam;
 import top.sheepyu.module.common.enums.CommonStatusEnum;
 
 import javax.validation.constraints.Size;
 import java.util.Date;
+
+import static top.sheepyu.module.common.constants.CommonConstants.DATE_TIME_FORMAT;
 
 /**
  * @author ygq
@@ -28,5 +31,6 @@ public class SystemUserQueryVo extends PageParam {
 
     @ApiModelProperty("最近创建时间")
     @Size(min = 2, max = 2, message = "最近创建时间参数不正确")
+    @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private Date[] createTimes;
 }

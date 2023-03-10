@@ -22,9 +22,4 @@ public class SystemCodegenColumnServiceImpl extends ServiceImplX<SystemCodegenCo
     public List<SystemCodegenColumn> listByTableId(Long id) {
         return lambdaQuery().eq(SystemCodegenColumn::getTableId, id).list();
     }
-
-    @Override
-    public void removeByTableId(Long id) {
-        lambdaUpdate().eq(SystemCodegenColumn::getTableId, id).remove();
-    }
 }

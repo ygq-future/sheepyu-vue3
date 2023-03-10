@@ -1,0 +1,99 @@
+import { request } from '@/util/request'
+#if($table.requirePage)import type { PageResult } from '@/util/request'
+#end
+
+##前端页面一般都会存在多个不同业务的api调用, 所以为了避免 import {} 名字冲突, 所有api方法名称都是 操作+业务名, 例如createDemo
+export function create${table.className}Api(data: ${fullClassName}CreateVo) {
+  return request.post<boolean>('/${table.moduleName}/${table.businessName}', data)
+}
+
+export function update${table.className}Api(data: ${fullClassName}UpdateVo) {
+  return request.put<boolean>('/${table.moduleName}/${table.businessName}', data)
+}
+
+export function delete${table.className}Api(ids: string) {
+  return request.delete<boolean>('/${table.moduleName}/${table.businessName}/' + ids)
+}
+#if($table.requireList)
+
+export function list${table.className}Api(params: ${fullClassName}QueryVo) {
+  return request.get<Array<${fullClassName}RespVo>>('/${table.moduleName}/${table.businessName}', { params })
+}
+#end
+#if($table.requirePage)
+
+export function page${table.className}Api(params: ${fullClassName}QueryVo) {
+  return request.get<PageResult<${fullClassName}RespVo>>('/${table.moduleName}/${table.businessName}/page', { params })
+}
+#end
+#if($table.requireExport)
+
+export function find${table.className}Api(id: number) {
+  return request.get<${fullClassName}RespVo>('/${table.moduleName}/${table.businessName}/' + id)
+}
+
+export function export${table.className}Api(params: ${fullClassName}QueryVo) {
+  return request.download('/${table.moduleName}/${table.businessName}/export', '${table.classComment}导出数据.xlsx', { params })
+}
+#end
+#if($table.requireImport)
+
+export function import${table.className}Api(file: File) {
+  const formData = new FormData()
+  formData.append("file", file)
+  return request.post<boolean>('/${table.moduleName}/${table.businessName}/batchImport', formData)
+}
+#end
+
+export interface ${fullClassName}BaseVo {
+#foreach($column in $columns)
+  #if($column.createOperation && $column.updateOperation && $column.listOperationResult)
+    #parse('codegen/vue3/common/_column.vm')
+  #end
+#end
+}
+
+export interface ${fullClassName}CreateVo extends ${fullClassName}BaseVo {
+#foreach($column in $columns)
+  #if($column.createOperation && (!$column.updateOperation || !$column.listOperationResult))
+    #parse('codegen/vue3/common/_column.vm')
+  #end
+#end
+}
+
+export interface ${fullClassName}UpdateVo extends ${fullClassName}BaseVo {
+#foreach($column in $columns)
+  #if($column.updateOperation && (!$column.createOperation || !$column.listOperationResult))
+    #parse('codegen/vue3/common/_column.vm')
+  #end
+#end
+}
+
+export interface ${fullClassName}RespVo extends ${fullClassName}BaseVo {
+#foreach($column in $columns)
+  #if($column.listOperationResult && (!$column.updateOperation || !$column.createOperation))
+    #parse('codegen/vue3/common/_column.vm')
+  #end
+#end
+}
+
+export interface ${fullClassName}QueryVo {
+#if($table.requirePage)
+  //当前页
+  current?: number
+  //页大小
+  size?: number
+  //总记录数
+  total?: number
+#end
+#if($hasQuickSearch)
+  //快速搜索关键字
+  keyword?: string
+#end
+#foreach($column in $columns)
+  #if($column.queryOperation && !$column.quickSearch)
+    #set($isQuery = true)
+    #parse('codegen/vue3/common/_column.vm')
+  #end
+#end
+}

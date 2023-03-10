@@ -4,12 +4,14 @@
       v-if='(!config.render && !config.dictType && !config.dictRender)
       || config.render === "text"'
       v-model='form[config.prop]'
+      :placeholder='config.placeholder'
     />
 
     <el-input-number
       v-if='config.render === "number"'
       v-model='form[config.prop]'
       :disabled='disabled'
+      :placeholder='config.placeholder'
     />
 
     <Dict
@@ -36,6 +38,16 @@
       :render-after-expand='false'
       :props='config.props'
       :disabled='disabled'
+    />
+
+    <DateTime v-if='config.render === "datetime"' v-model='form[config.prop]' />
+
+    <el-input
+      v-if='config.render === "textarea"'
+      v-model='form[config.prop]'
+      type='textarea'
+      :rows='4'
+      :placeholder='config.placeholder'
     />
 
     <span class='tip' v-if='config.tip'>{{ config.tip }}</span>

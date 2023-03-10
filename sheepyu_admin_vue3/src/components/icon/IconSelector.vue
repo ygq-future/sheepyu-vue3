@@ -176,9 +176,8 @@ const iconValue: WritableComputedRef<string> = computed({
 
 //解决表单双向绑定时重置操作问题
 const cancel = watchEffect(() => {
-  if (props.modelValue) {
+  if (props.modelValue && !state.firstValue) {
     state.firstValue = props.modelValue
-    cancel()
   }
 })
 
@@ -194,7 +193,6 @@ onMounted(() => {
   })
   nextTick(() => {
     getInputWidth()
-    console.log(props.modelValue)
   })
 })
 </script>

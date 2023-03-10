@@ -1,0 +1,285 @@
+#set($methodName = "list${table.className}")
+#if(($table.requireList && $table.requirePage) || $table.requirePage)
+  #set($methodName = "page${table.className}")
+#end
+<template>
+  <div class='default-main'>
+    <TableHeader
+      ref='tableHeaderRef'
+      v-model='state.query.keyword'
+      auth='${table.moduleName}:${table.businessName}'
+      :buttons="['add', 'delete', 'edit'#if($table.requireImport), 'import'#end#if($table.requireExport), 'export'#end]"
+      :rows='state.selection'
+      @refresh='${methodName}'
+      @add='onAdd'
+      @batch-delete='onBatchDelete'
+      @batch-edit='onBatchEdit'
+      @input-enter='${methodName}'
+      @input-clear='$nextTick(() => ${methodName}())'
+      #if($table.requireExport)
+      @export='export${table.className}'
+      #end
+      #if($table.requireImport)
+      @batch-import='batchImport'
+      @download='downloadTemplate'
+      #end
+    >
+      <template #comSearch>
+        <ComSearch
+          :com-search-config='state.comSearchConfig'
+          :form='state.query'
+          @search='${methodName}'
+          @reset='${methodName}'
+        />
+      </template>
+    </TableHeader>
+
+    <Table
+      ref='tableRef'
+      v-model:selection='state.selection'
+      auth='${table.moduleName}:${table.businessName}'
+      :data='state.tableData'
+      :table-config='state.tableConfig'
+      #if($table.requirePage)
+      :pagination='state.query'
+      #end
+      @fieldChange='onFieldChange'
+      @edit='(row) => onBatchEdit([row.id])'
+      @delete='(row) => onBatchDelete([row.id])'
+      #if($table.requirePage)
+      @current-change='${methodName}'
+      @size-change='${methodName}'
+      #end
+    >
+    </Table>
+
+    <PopupForm
+      ref='popupFormRef'
+      :form='state.form'
+      :popup-form-config='state.popupFormConfig'
+      @close='onClose'
+      @next='find${table.className}'
+      @submit='onSubmit'
+    />
+  </div>
+</template>
+#macro(convertValue $javaType)
+  #set($value = 'null')
+  #if($javaType == 'String' || $javaType == 'Date')
+    #set($value = "''")
+  #elseif($javaType == 'Integer' || $javaType == 'Long' || $javaType == 'BigDecimal' || $javaType == 'Double' || $javaType == 'Float' || ($javaType == 'Boolean' && "$!column.dictType" != ""))
+    #set($value = "0")
+  #elseif($javaType == 'Boolean')
+    #set($value = "false")
+  #end
+#end
+#macro(initForm)
+  #foreach($column in $columns)
+    #if(!$column.nullable && $column.javaField != 'id' && !$baseModelFields.contains($column.javaField))
+    #convertValue($column.javaType)
+    ${column.javaField}: ${value},
+    #end
+  #end
+#end
+#macro(comSearchRender $column)
+  #set($render = 'text')
+  #if("$!column.dictType" != "")
+    #set($render = 'dict')
+  #elseif($column.javaType == 'Integer' || $javaType == 'Long' || $javaType == 'BigDecimal' || $javaType == 'Double' || $javaType == 'Float')
+    #set($render = 'number')
+  #elseif($column.javaType == 'Date')
+    #set($render = 'datetime')
+  #end
+#end
+<script setup lang='ts'>
+import TableHeader from '@/components/table/header/TableHeader.vue'
+import Table from '@/components/table/Table.vue'
+import PopupForm from '@/components/form/PopupForm.vue'
+import type { ComSearchConfig, TableConfig } from '@/components/table/interface'
+import type { ${fullClassName}CreateVo, ${fullClassName}QueryVo, ${fullClassName}RespVo, ${fullClassName}UpdateVo } from '@/api/${table.moduleName}/${table.businessName}'
+import {
+  create${table.className}Api,
+  delete${table.className}Api,
+  find${table.className}Api,
+  #if($table.requireList)
+  list${table.className}Api,
+  #end
+  #if($table.requirePage)
+  page${table.className}Api,
+  #end
+  update${table.className}Api,
+  #if($table.requireExport)
+  export${table.className}Api,
+  #end
+  #if($table.requireImport)
+  import${table.className}Api,
+  #end
+} from '@/api/${table.moduleName}/${table.businessName}'
+import { DictTypeEnum } from '@/enums/DictTypeEnum'
+import type { PopupFormConfig } from '@/components/form/interface'
+#if($table.requireImport || $table.requireExport)
+import { ElLoading } from 'element-plus'
+#end
+
+const tableRef = ref()
+const tableHeaderRef = ref()
+const popupFormRef = ref()
+
+const state = reactive<{
+  selection: any[]
+  query: ${fullClassName}QueryVo
+  form: ${fullClassName}CreateVo | ${fullClassName}UpdateVo
+  tableData: ${fullClassName}RespVo[]
+  comSearchConfig: ComSearchConfig
+  tableConfig: TableConfig
+  popupFormConfig: PopupFormConfig
+}>({
+  selection: [],
+  query: {
+    #if($table.requirePage)
+    current: 1,
+    size: 10,
+    total: 0
+    #end
+  },
+  form: {
+    #initForm()
+  },
+  tableData: [],
+  comSearchConfig: [
+    #foreach($column in $columns)
+    #if($column.queryOperation && !$column.quickSearch)
+    #comSearchRender($column)
+    { label: '${column.comment}', prop: '${column.javaField}', placeholder: '${column.comment}', render: '${render}'#if("$!column.dictType" != ""), dictType: DictTypeEnum.${column.dictType.toUpperCase()}#end },
+    #end
+    #end
+  ],
+  tableConfig: {
+    rowKey: 'id',
+    selection: true,
+    #if($table.requirePage)
+    pagination: true,
+    #end
+    columns: [
+      #foreach($column in $columns)
+      #comSearchRender($column)
+      #if($column.listOperationResult)
+      { label: '${column.comment}', prop: '${column.javaField}'#if($render != 'dict'), render: 'text'#else, dictRender: 'tag', dictType: DictTypeEnum.${column.dictType.toUpperCase()}#end },
+      #end
+      #end
+    ],
+    operate: {
+      buttons: ['edit', 'delete'],
+      width: 120
+    }
+  },
+  popupFormConfig: {
+    title: '新增${table.classComment}',
+    formItemConfigs: [
+    #foreach($column in $columns)
+##    #comSearchRender($column)
+    #if(($column.createOperation || $column.updateOperation) && $column.javaField != 'id' && !$baseModelFields.contains($column.javaField))
+      { label: '${column.comment}', prop: '${column.javaField}',#if($column.nullable) required: false,#end placeholder: '${column.comment}'#if("$!column.dictType" == ""), render: '${column.formShowType}'#else, dictRender: 'select', dictType: DictTypeEnum.${column.dictType.toUpperCase()}#end },
+    #end
+    #end
+    ]
+  }
+})
+
+async function onFieldChange(row: ${fullClassName}UpdateVo) {
+  const data = toRaw(row)
+  await update${table.className}Api(data)
+}
+
+function onAdd() {
+  state.popupFormConfig.title = '新增${table.classComment}'
+  state.popupFormConfig.isEdit = false
+  popupFormRef.value.show()
+}
+
+async function onBatchDelete(ids: number[]) {
+  await delete${table.className}Api(ids.join(','))
+  await ${methodName}()
+}
+
+function onBatchEdit(ids: number[]) {
+  state.popupFormConfig.title = '修改${table.classComment}'
+  state.popupFormConfig.isEdit = true
+  state.popupFormConfig.ids = [...ids]
+  popupFormRef.value.show()
+}
+
+async function onSubmit(cb: Function) {
+  const data = toRaw(state.form)
+  if (state.popupFormConfig.isEdit) {
+    await update${table.className}Api(data as ${fullClassName}UpdateVo)
+  } else {
+    await create${table.className}Api(data)
+  }
+  cb && cb()
+  await ${methodName}()
+}
+
+async function find${table.className}(id: number) {
+  const { data } = await find${table.className}Api(id)
+  state.form = data
+}
+
+async function ${methodName}() {
+  state.tableConfig.loading = true
+  const { data } = await ${methodName}Api(toRaw(state.query))
+  state.tableConfig.loading = false
+  #if($table.requirePage)
+  state.tableData = data.list
+  state.query.total = data.total
+  #else
+  state.tableData = data
+  #end
+}
+
+#if($table.requireExport)
+function export${table.className}() {
+  const service = ElLoading.service({ fullscreen: true })
+  export${table.className}Api(toRaw(state.query)).then(() => {
+    service.close()
+  }).catch(() => {
+    service.close()
+  })
+}
+#end
+
+#if($table.requireImport)
+function batchImport(file: File) {
+  const service = ElLoading.service({ fullscreen: true })
+  import${table.className}Api(file).then(() => {
+    ${methodName}()
+    service.close()
+  }).catch(() => {
+    service.close()
+  })
+}
+
+function downloadTemplate() {
+  //很多方式, 可以先上传文件到后端, 然后直接填一个文件链接(这种不是很安全, 没有权限校验)
+  //或者调用axios的download方法从后端拿文件流(比较安全, 但是后端文件流从哪里来?写死也不太好)
+  //目前没有做到这个业务先放一边
+  console.log('download')
+}
+#end
+
+function onClose() {
+  state.form = {
+    #initForm()
+  }
+}
+
+onMounted(() => {
+  ${methodName}()
+})
+</script>
+
+<script lang='ts'>
+export default defineComponent({
+  name: '${table.moduleName}-${table.businessName}'
+})
+</script>

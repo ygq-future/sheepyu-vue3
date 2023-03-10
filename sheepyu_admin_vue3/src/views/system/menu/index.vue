@@ -3,6 +3,7 @@
     <TableHeader
       ref='tableHeaderRef'
       v-model='state.query.keyword'
+      auth='system:menu'
       :buttons="['add', 'delete', 'edit', 'unfold']"
       :rows='state.selection'
       @unfold='onUnfold'
@@ -26,6 +27,7 @@
     <Table
       ref='tableRef'
       v-model:selection='state.selection'
+      auth='system:menu'
       :data='state.tableData'
       :table-config='state.tableConfig'
       @fieldChange='onFieldChange'
@@ -40,7 +42,7 @@
           placement='top'
           :show-after='500'
         >
-          <el-button v-blur type='success' @click='onAdd(data.id)'>
+          <el-button v-auth="'system:menu:create'" v-blur type='success' @click='onAdd(data.id)'>
             <template #icon>
               <Icon name='el-icon-Plus' />
             </template>
@@ -53,7 +55,7 @@
     <PopupForm
       ref='popupFormRef'
       :form='state.form'
-      :popup-form-config='state.popupFormConfig'
+      :config='state.popupFormConfig'
       @close='onClose'
       @next='findMenuById'
       @submit='onSubmit'
@@ -112,6 +114,7 @@ const state = reactive<{
       { label: 'id', prop: 'id' },
       { label: '名称', prop: 'name' },
       { label: '图标', prop: 'icon', render: 'icon' },
+      { label: '权限标识', prop: 'permission' },
       { label: '排序', prop: 'sort', sortable: true },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_MENU_TYPE },
       { label: '缓存', prop: 'keepAlive', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS },

@@ -154,7 +154,7 @@ public class RecordLogAspect {
     private Integer obtainOperateType(ProceedingJoinPoint pj) {
         RequestMethod requestMethod = obtainFirstLogRequestMethod(obtainRequestMethod(pj));
         if (requestMethod == null) {
-            return null;
+            return GET.getCode();
         }
 
         switch (requestMethod) {
@@ -209,8 +209,7 @@ public class RecordLogAspect {
         if (ArrayUtil.isEmpty(requestMethods)) {
             return null;
         }
-        return Arrays.stream(requestMethods).filter(requestMethod -> requestMethod == RequestMethod.GET
-                        || requestMethod == RequestMethod.POST
+        return Arrays.stream(requestMethods).filter(requestMethod -> requestMethod == RequestMethod.POST
                         || requestMethod == RequestMethod.PUT
                         || requestMethod == RequestMethod.DELETE
                         || requestMethod == RequestMethod.PATCH)

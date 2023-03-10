@@ -6,6 +6,7 @@
     :width='column.width'
     :align='column.align || "center"'
     :sortable='column.sortable'
+    :show-overflow-tooltip='column.showTip === undefined || column.showTip'
   />
 
   <el-table-column
@@ -15,6 +16,7 @@
     :width='column.width'
     :align='column.align || "center"'
     :sortable='column.sortable'
+    :show-overflow-tooltip='column.showTip === undefined || column.showTip'
   >
     <template #default='scope'>
       <Dict v-if='column.dictRender === "tag"'
@@ -38,6 +40,7 @@
     :width='column.width'
     :align='column.align || "center"'
     :sortable='column.sortable'
+    :show-overflow-tooltip='column.showTip === undefined || column.showTip'
   >
     <template #default='scope'>
       <Icon :name='scope.row[column.prop]' />

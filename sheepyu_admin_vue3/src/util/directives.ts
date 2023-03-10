@@ -19,8 +19,11 @@ function blurDirective(app: App) {
 function authDirective(app: App) {
   app.directive('auth', {
     mounted(el, binding) {
-      const admin = useAdmin()
       const auth = binding.value
+      if (auth.startsWith('none')) {
+        return
+      }
+      const admin = useAdmin()
       if (!auth) return
       const result = admin.state.permissions?.some(permission => permission === auth)
       if (!result) {

@@ -11,6 +11,4 @@ import java.util.List;
  **/
 public interface SystemCodegenColumnService extends IServiceX<SystemCodegenColumn> {
     List<SystemCodegenColumn> listByTableId(Long id);
-
-    void removeByTableId(Long id);
 }

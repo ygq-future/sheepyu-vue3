@@ -6,22 +6,23 @@
   <div class='table-header'>
     <el-scrollbar>
       <div class='table-header-content'>
-        <div class='left' :class='enableShrink || shrink ? "btn-shrink" : ""'>
+        <div class='left' :class='shrink ? "btn-shrink" : ""'>
           <el-tooltip :show-after='500' content='刷新' placement='top'>
-            <el-button v-blur type='info' color='#40485b' @click='emits("refresh")'>
+            <el-button v-auth='`${props.auth}:query`' v-blur type='info' color='#40485b' @click='emits("refresh")'>
               <Icon name='fa fa-refresh' />
             </el-button>
           </el-tooltip>
 
           <el-tooltip :show-after='500' v-if="props.buttons.includes('add')" content='新增' placement='top'>
-            <el-button v-blur type='primary' @click='emits("add")'>
+            <el-button v-auth='`${props.auth}:create`' v-blur type='primary' @click='emits("add")'>
               <Icon name='fa fa-plus' />
               <span class='button-text'>新增</span>
             </el-button>
           </el-tooltip>
 
           <el-tooltip :show-after='500' v-if="props.buttons.includes('edit')" content='编辑' placement='top'>
-            <el-button v-blur type='primary' :disabled='rows.length === 0' @click='onBatchEdit'>
+            <el-button v-auth='`${props.auth}:update`' v-blur type='primary' :disabled='rows.length === 0'
+                       @click='onBatchEdit'>
               <Icon name='fa fa-pencil' />
               <span class='button-text'>批量编辑</span>
             </el-button>
@@ -35,7 +36,7 @@
             @confirm='onBatchDelete'
           >
             <template #reference>
-              <div class='button-item'>
+              <div class='button-item' v-auth='`${props.auth}:delete`'>
                 <el-tooltip :show-after='500' content='删除' placement='top'>
                   <el-button v-blur type='danger' :disabled='rows.length === 0'>
                     <Icon name='fa fa-trash' />
@@ -60,6 +61,36 @@
             </div>
           </el-tooltip>
 
+          <el-tooltip v-if="props.buttons.includes('import')" content='导入' placement='top'>
+            <el-upload
+              :http-request='onFileUpload'
+              :show-file-list='false'
+            >
+              <div class='button-item' v-auth='`${props.auth}:import`'>
+                <el-button v-blur type='primary'>
+                  <Icon name='fa fa-sign-in' />
+                  <span class='button-text'>批量导入</span>
+                </el-button>
+              </div>
+            </el-upload>
+
+            <template #content>
+              <div style='display: flex;align-items: center'>
+                <span>导入: </span>
+                <el-link type='danger' @click="emits('download')">下载模板</el-link>
+              </div>
+            </template>
+          </el-tooltip>
+
+          <el-tooltip :show-after='500' v-if="props.buttons.includes('export')" content='导出' placement='top'>
+            <div class='button-item' v-auth='`${props.auth}:export`'>
+              <el-button v-blur type='primary' @click='emits("export")'>
+                <Icon name='fa fa-sign-out' />
+                <span class='button-text'>导出数据</span>
+              </el-button>
+            </div>
+          </el-tooltip>
+
           <div style='margin-left: 12px'>
             <!--
             需要自定义的按钮, 使用这个插槽, 为了适配shrink模式, 按钮如果有文字,
@@ -72,6 +103,7 @@
 
         <div class='right'>
           <el-input
+            v-auth='`${props.auth}:query`'
             v-if='search'
             placeholder='关键字模糊搜索'
             clearable
@@ -81,7 +113,12 @@
             @clear='emits("input-clear")'
           />
           <el-tooltip v-if='comSearch' content='展开通用搜索' placement='top'>
-            <Icon v-blur name='el-icon-Search' :size='16' @click='state.comSearch = !state.comSearch' />
+            <Icon
+              v-auth='`${props.auth}:query`'
+              v-blur name='el-icon-Search'
+              :size='16'
+              @click='state.comSearch = !state.comSearch'
+            />
           </el-tooltip>
         </div>
       </div>
@@ -91,11 +128,13 @@
 
 <script setup lang='ts'>
 import { useConfig } from '@/stores/config/config'
+import type { UploadRequestOptions } from 'element-plus'
+import { ElNotification } from 'element-plus'
 
 const config = useConfig()
 
 //是否开启紧凑模式, 开启之后不会显示按钮的文字, 只会显示icon并带有title提示
-const shrink = computed(() => config.layout.shrink)
+const shrink = ref<boolean>(config.layout.shrink)
 const props = withDefaults(defineProps<{
   //是否开启通用搜索
   comSearch?: boolean
@@ -110,12 +149,15 @@ const props = withDefaults(defineProps<{
   modelValue?: string
   //手动开启shrink模式, 不显示按钮文字
   enableShrink?: boolean
+  //权限前缀
+  auth?: string
 }>(), {
   comSearch: true,
   search: true,
   buttons: () => [],
   rows: () => [],
-  rowKey: 'id'
+  rowKey: 'id',
+  auth: 'none'
 })
 
 const emits = defineEmits<{
@@ -128,6 +170,9 @@ const emits = defineEmits<{
   (e: 'input-enter', searchValue: string): void
   (e: 'input-clear'): void
   (e: 'update:modelValue', modelValue: string): void
+  (e: 'export'): void
+  (e: 'batch-import', file: File): void
+  (e: 'download'): void
 }>()
 
 const state = reactive({
@@ -154,10 +199,28 @@ function onBatchDelete() {
   emits('batch-delete', props.rows.map(item => item[props.rowKey]))
 }
 
+function onFileUpload(options: UploadRequestOptions) {
+  const acceptTypes = [
+    'application/vnd.ms-excel',
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+  ]
+  if (!acceptTypes.includes(options.file.type)) {
+    ElNotification.warning('只支持excel文件!')
+    return
+  }
+  emits('batch-import', options.file)
+}
+
 defineExpose({
   getUnfold: () => state.unfold
 })
 
+onMounted(() => {
+  shrink.value = shrink.value || (props.enableShrink === true)
+  if (props.buttons.length >= 5) {
+    shrink.value = true
+  }
+})
 </script>
 
 <style scoped lang='scss'>

@@ -31,7 +31,7 @@ export interface FormItemConfig {
   //dict和dictRender不为空时, render就为dict
   dictType?: DictTypeEnum
   dictRender?: DictRender
-  //如果render是switch, 或者select, dict, 需要传递数据进行渲染
+  //如果render是switch, 或者select, 需要传递数据进行渲染
   data?: any
   //有些树形渲染的数据需要用到, 配置可自定义
   props?: object
@@ -41,9 +41,10 @@ export interface FormItemConfig {
   required?: boolean
 }
 
-type FormRender =
+//推荐switch, radio, select, checkbox能用字典就用字典
+export type FormRender =
   'number' | 'text' | 'switch' |
   'radio' | 'select' | 'icon' |
-  'dict' | 'slider' | 'upload' |
-  'tree-select' | 'checkbox' | 'datetime' |
-  'part-upload' | 'textarea'
+  'slider' | 'upload' | 'tree-select' |
+  'checkbox' | 'datetime' | 'part-upload' |
+  'textarea'

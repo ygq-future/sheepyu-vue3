@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import top.sheepyu.module.system.dao.codegen.SystemCodegenColumn;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -43,6 +44,21 @@ public class SystemCodegenRespVo {
 
     @ApiModelProperty("作者")
     private String author;
+
+    @ApiModelProperty("列表操作")
+    private Boolean requireList;
+
+    @ApiModelProperty("分页操作")
+    private Boolean requirePage;
+
+    @ApiModelProperty("导出操作")
+    private Boolean requireExport;
+
+    @ApiModelProperty("导入操作")
+    private Boolean requireImport;
+
+    @ApiModelProperty("创建时间")
+    private Date createTime;
 
     @ApiModelProperty("所有列")
     private List<SystemCodegenColumn> columns;

@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public enum OperateTypeEnum implements IterableEnum {
     /**
-     * 查询
-     * <p>
      * 绝大多数情况下，不会记录查询动作，因为过于大量显得没有意义。
      * 在有需要的时候，通过声明 {@link RecordLog} 注解来记录
      */
@@ -27,7 +25,10 @@ public enum OperateTypeEnum implements IterableEnum {
     DELETE(4, "删除"),
     EXPORT(5, "导出"),
     IMPORT(6, "导入"),
-    OTHER(0, "其他");
+    GENERATE(7, "代码生成"),
+    DOWNLOAD(8, "下载"),
+    OTHER(0, "其他"),
+    ;
 
     /**
      * 类型

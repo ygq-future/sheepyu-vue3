@@ -1,0 +1,146 @@
+package top.sheepyu.module.${table.moduleName}.service.${table.businessName};
+
+import lombok.extern.slf4j.Slf4j;
+import cn.hutool.core.util.StrUtil;
+#if($table.requireImport)import cn.hutool.core.collection.CollUtil;
+#end
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
+#if ($table.requirePage)import top.sheepyu.module.common.common.PageResult;
+#end
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}CreateVo;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}QueryVo;
+import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}UpdateVo;
+#if($table.requireImport)import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}ExcelVo;
+#end
+import top.sheepyu.module.${table.moduleName}.dao.${table.businessName}.${fullClassName};
+import top.sheepyu.module.${table.moduleName}.dao.${table.businessName}.${fullClassName}Mapper;
+
+import java.util.*;
+
+import static top.sheepyu.module.${table.moduleName}.constants.ErrorCodeConstants.${notExistsName};
+import static top.sheepyu.module.${table.moduleName}.convert.${table.businessName}.${fullClassName}Convert.CONVERT;
+
+#macro(upperFirst $fieldName)
+#set($javaField = $fieldName.substring(0,1).toUpperCase() + ${fieldName.substring(1)}) ##首字母大写
+#end
+#macro(quickSearch)
+#set($existsNames = '')
+#if($hasQuickSearch)
+#foreach ($column in $quickSearchColumns)
+#set($existsNames = $existsNames + "${column.javaField}Exists#if($foreach.hasNext) || #end")
+#upperFirst($column.javaField)
+#if($column.javaType == 'String')
+        boolean ${column.javaField}Exists = StrUtil.isNotBlank(queryVo.get${javaField}());
+#else
+        boolean ${column.javaField}Exists = queryVo.get${javaField}() != null;
+#end
+#end
+#end
+#end
+#macro(buildQuery)
+buildQuery()#if($hasQuickSearch)
+
+                .and(StrUtil.isNotBlank(queryVo.getKeyword()), q -> q#foreach($column in $quickSearchColumns)
+#upperFirst($column.javaField)
+#if($column.javaType == 'String')
+
+                        .like(${fullClassName}::get${javaField}, queryVo.getKeyword())#if($foreach.hasNext).or()#end#else
+
+                        .eq(${fullClassName}::get${javaField}, queryVo.getKeyword())#if($foreach.hasNext).or()#end#end
+#end)#end#foreach($column in $columns)
+#upperFirst($column.javaField)
+#if($column.queryOperation && !$column.quickSearch)
+#if($column.queryCondition == '=')
+
+                .eqIfPresent(${fullClassName}::get${javaField}, queryVo.get${javaField}())#end
+#if($column.queryCondition == '!=')
+
+                .neIfPresent(${fullClassName}::get${javaField}, queryVo.get${javaField}())#end
+#if($column.queryCondition == '>')
+
+                .gtIfPresent(${fullClassName}::get${javaField}, queryVo.get${javaField}())#end
+#if($column.queryCondition == '<')
+
+                .ltIfPresent(${fullClassName}::get${javaField}, queryVo.get${javaField}())#end
+#if($column.queryCondition == '>=')
+
+                .geIfPresent(${fullClassName}::get${javaField}, queryVo.get${javaField}())#end
+#if($column.queryCondition == '<=')
+
+                .leIfPresent(${fullClassName}::get${javaField}, queryVo.get${javaField}())#end
+#if($column.queryCondition == 'like' && $column.javaType == 'String')
+
+                .likeIfPresent(${fullClassName}::get${javaField}, queryVo.get${javaField}())#end
+#if($column.queryCondition == 'between')
+
+                .betweenIfPresent(${fullClassName}::get${javaField}, queryVo.get${javaField}s())#end
+#end
+#end#foreach($column in $columns)
+#upperFirst($column.javaField)
+#if("$column.sort" == "asc")
+
+                .orderByAsc(${fullClassName}::get${javaField})#elseif("$column.sort" == "desc")
+
+                .orderByDesc(${fullClassName}::get${javaField})#end
+#end#end
+/**
+* @author ${table.author}
+* @date ${date}
+**/
+@Service
+@Slf4j
+@Validated
+public class ${fullClassName}ServiceImpl extends ServiceImplX<${fullClassName}Mapper, ${fullClassName}> implements ${fullClassName}Service {
+    @Override
+    public void create(${fullClassName}CreateVo createVo) {
+        ${fullClassName} ${classVarName} = CONVERT.convert(createVo);
+        save(${classVarName});
+    }
+
+    @Override
+    public void update(${fullClassName}UpdateVo updateVo) {
+        ${fullClassName} ${classVarName} = CONVERT.convert(updateVo);
+        updateById(${classVarName});
+    }
+
+    @Override
+    public void delete(String ids) {
+        batchDelete(ids, ${fullClassName}::getId);
+    }
+
+    @Override
+    public ${fullClassName} findById(Long id) {
+        return findByIdValidateExists(id);
+    }
+
+#if ($table.requireList || $table.requireExport)
+    @Override
+    public List<${fullClassName}> list(${fullClassName}QueryVo queryVo) {
+        return list(#buildQuery());
+    }
+#end
+
+#if ($table.requirePage)
+    @Override
+    public PageResult<${fullClassName}> page(${fullClassName}QueryVo queryVo) {
+        return page(queryVo, #buildQuery());
+    }
+#end
+
+#if($table.requireImport)
+    @Override
+    public void batchImport(List<${fullClassName}ExcelVo> result) {
+        if (CollUtil.isEmpty(result)) {
+            return;
+        }
+        List<${fullClassName}> list = CONVERT.convertExcel2(result);
+        saveBatch(list);
+    }
+#end
+
+    private ${fullClassName} findByIdValidateExists(Long id) {
+        return findByIdValidateExists(id, ${notExistsName});
+    }
+}

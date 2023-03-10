@@ -63,4 +63,11 @@ public interface ErrorCodeConstants {
 
     //role相关 100_010_001
     ErrorCode ROLE_NOT_EXISTS = new ErrorCode(100_010_001, "角色不存在!");
+
+    //codegen相关 100_011_001
+    ErrorCode CODEGEN_NOT_EXISTS = new ErrorCode(100_011_001, "代码生成不存在!");
+
+    //demo相关 100_012_001
+    ErrorCode DEMO_NOT_EXISTS = new ErrorCode(100_012_001, "测试不存在!");
+
 }

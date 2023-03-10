@@ -40,3 +40,33 @@ export function loadCss(url: string): void {
   link.crossOrigin = 'anonymous'
   document.getElementsByTagName('head')[0].appendChild(link)
 }
+
+export function download(fileName: string, data?: Blob) {
+  if (!data) return
+
+  const suffix = fileName.substring(fileName.lastIndexOf('.') + 1)
+  const type: string = contentTypeMap.get(suffix) || 'application/octet-stream'
+  const blob: Blob = new Blob([data], { type })
+  window.URL = window.URL || window.webkitURL
+  const href = URL.createObjectURL(blob)
+  const downA = document.createElement('a')
+  downA.href = href
+  downA.download = fileName
+  downA.click()
+  // 销毁超连接
+  window.URL.revokeObjectURL(href)
+}
+
+
+const contentTypeMap: Map<string, string> = new Map([
+  ['xls', 'application/vnd.ms-excel'],
+  ['doc', 'application/msword'],
+  ['xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'],
+  ['docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'],
+  ['zip', 'application/zip'],
+  ['7zip', 'application/zip'],
+  ['rar', 'application/rar'],
+  ['tar', 'application/x-tar'],
+  ['tgz', 'application/x-tar'],
+  ['pdf', 'application/pdf']
+])

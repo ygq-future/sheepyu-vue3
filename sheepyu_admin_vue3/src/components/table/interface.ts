@@ -34,6 +34,7 @@ export interface ColumnConfig {
   align?: string
   width?: number | string
   sortable?: boolean
+  showTip?: boolean
   dictRender?: DictRender
   dictType?: DictTypeEnum
 }

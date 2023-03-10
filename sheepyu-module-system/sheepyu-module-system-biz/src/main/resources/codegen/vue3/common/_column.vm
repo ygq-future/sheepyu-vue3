@@ -1,0 +1,14 @@
+## 提供给 vue3 ts 生成字段
+#set($javaType = $column.javaType)
+#set($tsType = $javaType)
+#if($javaType == 'String' || $javaType == 'Date')
+    #set($tsType = 'string')
+#elseif($javaType == 'Integer' || $javaType == 'Long' || $javaType == 'BigDecimal' || $javaType == 'Double' || $javaType == 'Float' || ($javaType == 'Boolean' && "$!column.dictType" != ""))
+    #set($tsType = 'number')
+#elseif($javaType == 'Boolean')
+    #set($tsType = 'boolean')
+#end
+  #if("$!column.comment" != '')  //${column.comment}
+  #end
+  #set($isArr = ($isQuery && $column.queryCondition == 'between'))
+  ${column.javaField}#if($isArr)s#end#if($column.nullable || $isQuery)?#end: ${tsType}#if($isArr)[]#end

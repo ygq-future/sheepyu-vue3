@@ -1,0 +1,29 @@
+package top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo;
+
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.format.DateTimeFormat;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+#parse('codegen/java/common/_import.vm')
+import java.util.*;
+/**
+* @author ygq
+* @date 2023-01-19 14:30
+**/
+@Data
+@ApiModel("${table.classComment}excel导入导出vo")
+public class ${fullClassName}ExcelVo {
+#foreach ($column in $columns)
+#if(!$baseModelFields.contains($column.javaField))
+    #parse('codegen/java/common/_type.vm')
+    @ApiModelProperty("${column.comment}")
+    @ExcelProperty("${column.comment}")
+#if($column.javaField == 'Date')
+    @DateTimeFormat("yyyy-MM-dd HH:mm:ss")
+#end
+    private ${javaType} ${column.javaField};
+
+#end
+#end
+}

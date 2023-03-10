@@ -2,6 +2,7 @@ package top.sheepyu.module.system.convert.codegen;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
+import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.system.controller.admin.codegen.vo.SystemCodegenRespVo;
 import top.sheepyu.module.system.controller.admin.codegen.vo.SystemCodegenUpdateVo;
 import top.sheepyu.module.system.dao.codegen.SystemCodegenTable;
@@ -17,4 +18,6 @@ public interface SystemCodegenConvert {
     SystemCodegenRespVo convert(SystemCodegenTable table);
 
     SystemCodegenTable convert(SystemCodegenUpdateVo updateVo);
+
+    PageResult<SystemCodegenRespVo> convertPage(PageResult<SystemCodegenTable> pageResult);
 }

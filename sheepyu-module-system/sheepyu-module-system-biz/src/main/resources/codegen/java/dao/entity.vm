@@ -1,0 +1,33 @@
+package top.sheepyu.module.${table.moduleName}.dao.${table.businessName};
+
+import com.baomidou.mybatisplus.annotation.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
+import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
+#parse('codegen/java/common/_import.vm')
+import java.util.*;
+
+/**
+* @author ${table.author}
+* @date ${date}
+**/
+@TableName("${table.tableName}")
+@Data
+@EqualsAndHashCode(callSuper = true)
+@Accessors(chain = true)
+public class ${fullClassName} extends BaseModel {
+    #foreach($column in $columns)
+    #if(!$baseModelFields.contains($column.javaField))
+    #parse('codegen/java/common/_type.vm')
+    /**
+    * ${column.comment}
+    #if($column.dictType != '')    * 字典: ${column.dictType}
+    #end
+    */
+    #if($column.primaryKey && $column.javaType == 'String')    @TableId(type = IdType.INPUT)
+    #end
+    private ${javaType} ${column.javaField};
+    #end
+    #end
+}

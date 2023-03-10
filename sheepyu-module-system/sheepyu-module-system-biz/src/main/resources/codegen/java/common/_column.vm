@@ -1,0 +1,11 @@
+## 提供给 base、create、update, resp 生成字段
+#parse('codegen/java/common/_type.vm')
+    @ApiModelProperty(value = "${column.comment}"#if(!${column.nullable}), required = true#end#if("$!column.example" != ""), example = "${column.example}"#end)
+#if (!${column.nullable})## 判断 @NotEmpty 和 @NotNull 注解
+#if (${column.javaType} == 'String')
+    @NotEmpty(message = "${column.comment}不能为空")
+#else
+    @NotNull(message = "${column.comment}不能为空")
+#end
+#end
+    private ${javaType} ${column.javaField};

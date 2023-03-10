@@ -1,0 +1,23 @@
+package top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo;
+
+import io.swagger.annotations.*;
+import lombok.*;
+#parse('codegen/java/common/_import.vm')
+import javax.validation.constraints.*;
+import java.util.*;
+
+/**
+* @author ygq
+* @date 2023-01-18 15:03
+**/
+@Data
+@EqualsAndHashCode(callSuper = true)
+@ApiModel("${table.classComment}响应vo")
+public class ${fullClassName}RespVo extends ${fullClassName}BaseVo {
+#foreach($column in $columns)
+    #if($column.listOperationResult && (!$column.updateOperation || !$column.createOperation))
+        #parse('codegen/java/common/_column.vm')
+
+    #end
+#end
+}

@@ -163,6 +163,15 @@ onBeforeRouteUpdate((to) => {
 
 onMounted(() => {
   updateTab(router.currentRoute.value)
+  //关闭当前路由并转向新路由
+  instance?.proxy?.$bus.on('closeCurrentToRoute', (path: string) => {
+    tabs.closeTab(tabs.state.activeRoute as RouteLocationNormalized)
+    router.push(path)
+  })
+})
+
+onUnmounted(() => {
+  instance?.proxy?.$bus.off('closeCurrentToRoute')
 })
 </script>
 
@@ -199,7 +208,7 @@ onMounted(() => {
     }
 
     .icon {
-      transition: 0.3 ease-in;
+      transition: 0.3s ease-in;
       padding: 2px;
       border-radius: 50%;
     }
@@ -248,7 +257,7 @@ onMounted(() => {
     }
 
     .icon {
-      transition: 0.3 ease-in;
+      transition: 0.3s ease-in;
       padding: 2px;
       border-radius: 50%;
     }

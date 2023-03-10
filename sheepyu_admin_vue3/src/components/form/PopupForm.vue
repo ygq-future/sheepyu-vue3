@@ -2,27 +2,28 @@
   <el-dialog
     append-to-body
     v-model='state.dialogVisible'
-    :style='{maxWidth: `${popupFormConfig.maxWidth ?? 700}px`, minWidth: "370px"}'
-    :title='popupFormConfig.title'
-    :width='popupFormConfig.width'
+    :style='{maxWidth: `${props.config.maxWidth ?? 700}px`, minWidth: "370px"}'
+    :title='props.config.title'
+    :width='props.config.width'
     :close-on-click-modal='false'
     @close='hide'
   >
 
     <el-scrollbar max-height='400px' style='padding: 0 15px'>
       <el-form
+        v-if='state.dialogVisible'
         v-loading='state.formLoading'
         ref='formRef'
         :model='form'
         :rules='state.rules'
-        :label-width='popupFormConfig.labelWidth ?? 80'
+        :label-width='props.config.labelWidth ?? 80'
       >
-        <template v-for='config in popupFormConfig.formItemConfigs'>
+        <template v-for='config in props.config.formItemConfigs'>
           <FormItemRender
-            v-if='!popupFormConfig.hideProps.includes(config.prop)'
+            v-if='!props.config.hideProps || !props.config.hideProps.includes(config.prop)'
             :form='form'
             :config='config'
-            :disabled='popupFormConfig.disabledProps.includes(config.prop)'
+            :disabled='props.config.disabledProps && props.config.disabledProps.includes(config.prop)'
           />
         </template>
       </el-form>
@@ -32,7 +33,7 @@
       <span class='dialog-footer'>
         <el-button :disabled='state.formLoading' @click='hide'>取消</el-button>
         <el-button :disabled='state.formLoading' type='primary' @click='onSubmitAndNext'>
-            {{ !popupFormConfig.isEdit || state.isLastEdit ? '确定' : '保存并编辑下一个' }}
+            {{ !props.config.isEdit || state.isLastEdit ? '确定' : '保存并编辑下一个' }}
         </el-button>
       </span>
     </template>
@@ -47,7 +48,7 @@ import { ElNotification } from 'element-plus'
 
 const props = defineProps<{
   form: any
-  popupFormConfig: PopupFormConfig
+  config: PopupFormConfig
 }>()
 
 const emits = defineEmits<{
@@ -83,11 +84,11 @@ async function onSubmitAndNext() {
     ElNotification.warning('回调超时, 操作失败')
     state.formLoading = false
     hide()
-  }, props.popupFormConfig.timeout ?? 5000)
+  }, props.config.timeout ?? 5000)
 
   emits('submit', () => {
     clearTimeout(timer)
-    if (props.popupFormConfig.isEdit && !state.isLastEdit) {
+    if (props.config.isEdit && !state.isLastEdit) {
       state.formLoading = false
       return onNext()
     }
@@ -96,10 +97,10 @@ async function onSubmitAndNext() {
 }
 
 function onNext() {
-  if (!props.popupFormConfig.ids) return
-  const size = props.popupFormConfig.ids.length
+  if (!props.config.ids) return
+  const size = props.config.ids.length
   if (size > 0 && !state.isLastEdit) {
-    emits('next', props.popupFormConfig.ids[state.editIndex++])
+    emits('next', props.config.ids[state.editIndex++])
     if (size === state.editIndex) {
       state.isLastEdit = true
     }
@@ -107,8 +108,8 @@ function onNext() {
 }
 
 function show() {
-  formRef.value?.clearValidate(props.popupFormConfig.formItemConfigs.map(item => item.prop))
-  if (props.popupFormConfig.isEdit) {
+  formRef.value?.clearValidate(props.config.formItemConfigs.map(item => item.prop))
+  if (props.config.isEdit) {
     onNext()
   }
   state.dialogVisible = true
@@ -117,7 +118,7 @@ function show() {
 function hide() {
   state.dialogVisible = false
   state.formLoading = false
-  if (props.popupFormConfig.isEdit) {
+  if (props.config.isEdit) {
     state.editIndex = 0
     state.isLastEdit = false
   }
@@ -130,7 +131,7 @@ defineExpose({
 })
 
 onBeforeMount(() => {
-  props.popupFormConfig.formItemConfigs.forEach(config => {
+  props.config.formItemConfigs.forEach(config => {
     if (config.required === undefined || config.required) {
       state.rules[config.prop] = [{ required: true, message: `${config.label}不能为空`, trigger: 'blur' }]
     }

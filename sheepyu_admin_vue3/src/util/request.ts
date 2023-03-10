@@ -4,11 +4,19 @@ import { ElNotification } from 'element-plus'
 import { useAdmin } from '@/stores/user/user'
 import { refreshToken } from '@/api/system/user'
 import router from '@/router/router'
+import { download } from '@/util/common'
+//@ts-ignore
+import qs from 'qs'
 
 export interface Result<T = any> {
   code: number
   msg: string
   data: T
+}
+
+export interface PageResult<T = any> {
+  list: Array<T>
+  total: number
 }
 
 export enum RequestEnums {
@@ -70,9 +78,9 @@ export class Request {
               this.requestList.forEach(cb => cb())
               return this.service(res.config)
             } catch (e) {
+              admin.clear()
               this.requestList.forEach(cb => cb())
               router.push('/login').then(() => {
-                admin.clear()
                 ElNotification.error('登录已过期')
               })
               return Promise.reject('登录已过期')
@@ -103,7 +111,8 @@ export class Request {
             duration: 2000
           })
         }
-        return data
+        const resType = res.config.responseType
+        return resType === 'blob' || resType === 'arraybuffer' ? res : data
       }, (error: AxiosError) => {
         ElNotification.error(error.message)
       }
@@ -114,24 +123,58 @@ export class Request {
     return axios.CancelToken.source()
   }
 
+  contentType(config?: AxiosRequestConfig): AxiosRequestConfig {
+    return {
+      ...config,
+      headers: { 'Content-Type': 'application/json;charset=utf8' }
+    }
+  }
+
   get<T>(url: string, config?: AxiosRequestConfig): Promise<Result<T>> {
-    return this.service.get(url, config)
+    return this.service.get(url, {
+      ...config,
+      paramsSerializer: {
+        serialize: (params) => {
+          return qs.stringify(params, { arrayFormat: 'indices' })
+        }
+      }
+    })
   }
 
   post<T>(url: string, data?: object, config?: AxiosRequestConfig): Promise<Result<T>> {
-    return this.service.post(url, data, config)
+    return this.service.post(url, data, this.contentType(config))
   }
 
   put<T>(url: string, data?: object, config?: AxiosRequestConfig): Promise<Result<T>> {
-    return this.service.put(url, data, config)
+    return this.service.put(url, data, this.contentType(config))
   }
 
   patch<T>(url: string, data?: object, config?: AxiosRequestConfig): Promise<Result<T>> {
-    return this.service.patch(url, data, config)
+    return this.service.patch(url, data, this.contentType(config))
   }
 
   delete<T>(url: string, config?: AxiosRequestConfig): Promise<Result<T>> {
     return this.service.delete(url, config)
+  }
+
+  /**
+   * 下载文件
+   * @param url url
+   * @param fileName 下载的文件名
+   * @param config 配置
+   */
+  download(url: string, fileName: string, config?: AxiosRequestConfig): Promise<boolean> {
+    return new Promise<boolean>((resolve, reject) => {
+      this.service.get<Blob>(url, {
+        ...config,
+        responseType: 'blob'
+      }).then(res => {
+        download(fileName, res.data)
+        resolve(true)
+      }).catch(() => {
+        reject(false)
+      })
+    })
   }
 }
 

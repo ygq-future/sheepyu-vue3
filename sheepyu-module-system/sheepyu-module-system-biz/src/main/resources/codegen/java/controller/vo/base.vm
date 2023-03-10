@@ -1,0 +1,22 @@
+package top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo;
+
+import io.swagger.annotations.*;
+import lombok.*;
+#parse('codegen/java/common/_import.vm')
+import javax.validation.constraints.*;
+import java.util.*;
+
+/**
+* @author ygq
+* @date 2023-01-18 15:03
+**/
+@Data
+@ApiModel("${table.classComment}基本vo")
+public class ${fullClassName}BaseVo {
+#foreach($column in $columns)
+    #if($column.createOperation && $column.updateOperation && $column.listOperationResult)
+        #parse('codegen/java/common/_column.vm')
+
+    #end
+#end
+}

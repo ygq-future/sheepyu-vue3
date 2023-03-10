@@ -1,29 +1,25 @@
 package top.sheepyu.module.system.service.codegen;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.util.StrUtil;
-import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
-import com.baomidou.mybatisplus.generator.config.StrategyConfig;
-import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
-import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import top.sheepyu.module.system.controller.admin.codegen.vo.SystemCodegenRespVo;
+import top.sheepyu.module.common.common.PageResult;
+import top.sheepyu.module.system.controller.admin.codegen.vo.SystemCodegenQueryVo;
 import top.sheepyu.module.system.controller.admin.codegen.vo.SystemCodegenUpdateVo;
 import top.sheepyu.module.system.controller.admin.codegen.vo.TableInfoRespVo;
 import top.sheepyu.module.system.dao.codegen.SystemCodegenColumn;
 import top.sheepyu.module.system.dao.codegen.SystemCodegenTable;
-import top.sheepyu.module.system.enums.codegen.CodegenSceneEnum;
+import top.sheepyu.module.system.service.codegen.inner.CodegenBuilder;
 
-import javax.sql.DataSource;
+import javax.annotation.Resource;
 import javax.validation.Valid;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import static top.sheepyu.module.system.convert.codegen.SystemCodegenConvert.CONVERT;
 
@@ -34,65 +30,31 @@ import static top.sheepyu.module.system.convert.codegen.SystemCodegenConvert.CON
 @Service
 @Slf4j
 @Validated
-@AllArgsConstructor
 public class SystemCodegenBiz {
-    private final DataSource dataSource;
-    private final SystemCodegenTableService systemCodegenTableService;
-    private final SystemCodegenColumnService systemCodegenColumnService;
+    @Resource
+    private SystemCodegenTableService systemCodegenTableService;
+    @Resource
+    private SystemCodegenColumnService systemCodegenColumnService;
+    @Resource
+    private CodegenBuilder codegenBuilder;
 
-    public List<SystemCodegenRespVo> listCodegen(String keyword) {
-        List<SystemCodegenTable> tableList = systemCodegenTableService.lambdaQuery()
-                .like(SystemCodegenTable::getTableName, keyword).or()
-                .orderByAsc(SystemCodegenTable::getCreateTime)
-                .list();
-        List<SystemCodegenRespVo> result = new ArrayList<>(tableList.size());
+    public PageResult<SystemCodegenTable> pageCodegen(SystemCodegenQueryVo queryVo) {
+        return systemCodegenTableService.page(queryVo);
+    }
 
-        for (SystemCodegenTable table : tableList) {
-            SystemCodegenRespVo respVo = CONVERT.convert(table);
-            respVo.setColumns(systemCodegenColumnService.listByTableId(table.getId()));
-            result.add(respVo);
-        }
-
-        return result;
+    public SystemCodegenTable findCodegen(Long id) {
+        SystemCodegenTable table = systemCodegenTableService.findById(id);
+        table.setColumns(systemCodegenColumnService.listByTableId(id));
+        return table;
     }
 
     @Transactional
     public void createCodegen(List<String> tableNames) {
-        DataSourceConfig dataSourceConfig = new DataSourceConfig.Builder(dataSource).build();
-        StrategyConfig.Builder strategyConfig = new StrategyConfig.Builder();
-        if (CollUtil.isNotEmpty(tableNames)) {
-            strategyConfig.addInclude(tableNames);
-        }
-        ConfigBuilder builder = new ConfigBuilder(null, dataSourceConfig, strategyConfig.build(), null, null, null);
-
-        builder.getTableInfoList().forEach(tableInfo -> {
-            String tableName = tableInfo.getName();
-            SystemCodegenTable table = new SystemCodegenTable();
-            int underline = tableName.indexOf('_');
-            String moduleName = tableName.substring(0, underline);
-            String businessName = StrUtil.toCamelCase(tableName.substring(underline + 1));
-            table.setTableName(tableName).setTableComment(tableInfo.getComment())
-                    .setModuleName(moduleName).setBusinessName(businessName)
-                    .setClassName(StrUtil.upperFirst(businessName)).setClassComment(tableInfo.getComment())
-                    .setAuthor("sheepyu").setScene(CodegenSceneEnum.ADMIN.getCode());
+        codegenBuilder.convertTable(tableNames).forEach(table -> {
             systemCodegenTableService.save(table);
 
-            List<SystemCodegenColumn> columns = new ArrayList<>();
-            for (TableField field : tableInfo.getFields()) {
-                SystemCodegenColumn column = new SystemCodegenColumn();
-                column.setTableId(table.getId()).setName(field.getName()).setType(field.getType())
-                        .setComment(field.getComment()).setPrimaryKey(field.isKeyFlag())
-                        .setNullable(field.getMetaInfo().isNullable())
-                        .setAutoIncrement(field.isKeyIdentityFlag())
-                        .setJavaType(field.getPropertyType()).setJavaField(field.getPropertyName())
-                        .setCreateOperation(filterCreateOperation(field.getName()))
-                        .setUpdateOperation(filterUpdateOperation(field.getName()))
-                        .setQueryOperation(filterQueryOperation(field.getName()))
-                        .setQueryCondition(getDefaultQueryCondition(field.getName()))
-                        .setListOperationResult(filterListOperation(field.getName()))
-                        .setQuickSearch(filterQuickSearch(field.getName()));
-                columns.add(column);
-            }
+            List<SystemCodegenColumn> columns = table.getColumns();
+            columns.forEach(e -> e.setTableId(table.getId()));
             systemCodegenColumnService.saveBatch(columns);
         });
     }
@@ -110,46 +72,88 @@ public class SystemCodegenBiz {
         systemCodegenTableService.batchDelete(ids, SystemCodegenTable::getId);
     }
 
-    public List<TableInfoRespVo> tableList() {
-        DataSourceConfig config = new DataSourceConfig.Builder(dataSource).build();
-        ConfigBuilder builder = new ConfigBuilder(null, config, null, null, null, null);
-        List<TableInfoRespVo> result = new ArrayList<>();
-        for (TableInfo tableInfo : builder.getTableInfoList()) {
-            if (tableInfo.getName().toLowerCase().startsWith("qrtz")) {
-                continue;
+    /**
+     * 只会同步新增的或者删除的或者字段类型改变了的
+     * 其他都不同步, 为了避免影响到之前的配置
+     *
+     * @param id tableId
+     */
+    @Transactional
+    public void syncCodegen(Long id) {
+        SystemCodegenTable table = systemCodegenTableService.findById(id);
+        table = codegenBuilder.convertTable(table.getTableName());
+        table.setId(id);
+        //更新table基本信息
+        systemCodegenTableService.updateById(table);
+
+        //最新的columns信息
+        List<SystemCodegenColumn> newColumns = table.getColumns();
+        newColumns.forEach(co -> co.setTableId(id));
+        //之前旧的column信息
+        List<SystemCodegenColumn> oldColumns = systemCodegenColumnService.listByTableId(id);
+        //需要删除的column
+        List<Long> deleteColumnIds = new ArrayList<>();
+        //需要添加的column
+        List<SystemCodegenColumn> addColumns = new ArrayList<>();
+        //需要更新的column
+        List<SystemCodegenColumn> updateColumns = new ArrayList<>();
+
+        //先找到需要删除的id和需要修改的column
+        for (SystemCodegenColumn oldColumn : oldColumns) {
+            boolean deleted = true;
+            for (SystemCodegenColumn newColumn : newColumns) {
+                String newColumnType = newColumn.getType().replaceAll("\\(.*\\)", "");
+                String oldColumnType = oldColumn.getType().replaceAll("\\(.*\\)", "");
+                if (Objects.equals(newColumn.getName(), oldColumn.getName())) {
+                    //字段名相同但是类型不同, 需要修改
+                    if (!Objects.equals(newColumnType, oldColumnType)) {
+                        updateColumns.add(newColumn);
+                    }
+                    deleted = false;
+                    break;
+                }
             }
-            result.add(new TableInfoRespVo(tableInfo.getName(), tableInfo.getComment() == null ? "" : tableInfo.getComment()));
+            if (deleted) {
+                deleteColumnIds.add(oldColumn.getId());
+            }
+        }
+        //找到需要添加的
+        for (SystemCodegenColumn newColumn : newColumns) {
+            boolean add = true;
+            for (SystemCodegenColumn oldColumn : oldColumns) {
+                if (Objects.equals(newColumn.getName(), oldColumn.getName())) {
+                    add = false;
+                    break;
+                }
+            }
+            if (add) {
+                addColumns.add(newColumn);
+            }
+        }
+
+        //执行操作
+        if (CollUtil.isNotEmpty(deleteColumnIds)) {
+            systemCodegenColumnService.removeBatchByIds(deleteColumnIds);
+        }
+        if (CollUtil.isNotEmpty(addColumns)) {
+            systemCodegenColumnService.saveBatch(addColumns);
+        }
+        if (CollUtil.isNotEmpty(updateColumns)) {
+            systemCodegenColumnService.updateBatchById(updateColumns);
+        }
+    }
+
+    public List<TableInfoRespVo> tableList() {
+        List<TableInfoRespVo> result = new ArrayList<>();
+        for (TableInfo tableInfo : codegenBuilder.tableInfoList()) {
+            result.add(new TableInfoRespVo(tableInfo.getName(), tableInfo.getComment()));
         }
         return result;
     }
 
-    private Boolean filterCreateOperation(String fieldName) {
-        return !Arrays.asList("id", "creator", "create_time", "updater", "update_time", "deleted").contains(fieldName);
-    }
-
-    private Boolean filterUpdateOperation(String fieldName) {
-        return !Arrays.asList("creator", "create_time", "updater", "update_time", "deleted").contains(fieldName);
-    }
-
-    private Boolean filterListOperation(String fieldName) {
-        return !Arrays.asList("creator", "updater", "update_time", "deleted").contains(fieldName);
-    }
-
-    private Boolean filterQueryOperation(String fieldName) {
-        return !Arrays.asList("id", "creator", "updater", "update_time", "deleted").contains(fieldName);
-    }
-
-    private Boolean filterQuickSearch(String fieldName) {
-        return Arrays.asList("id", "name", "title").contains(fieldName);
-    }
-
-    private String getDefaultQueryCondition(String fieldName) {
-        if (Arrays.asList("name", "title").contains(fieldName)) {
-            return "like";
-        }
-        if (fieldName.contains("time")) {
-            return "between";
-        }
-        return "=";
+    public Map<String, String> generateCode(Long id) {
+        SystemCodegenTable table = systemCodegenTableService.findById(id);
+        List<SystemCodegenColumn> columns = systemCodegenColumnService.listByTableId(id);
+        return codegenBuilder.buildCode(table, columns);
     }
 }

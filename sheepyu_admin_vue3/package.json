@@ -15,10 +15,12 @@
   "dependencies": {
     "axios": "^1.2.4",
     "element-plus": "^2.2.28",
+    "highlight.js": "^11.7.0",
     "mitt": "^3.0.0",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.28",
     "pinia-plugin-persistedstate": "^3.0.2",
+    "qs": "^6.11.1",
     "screenfull": "^6.0.2",
     "spark-md5": "^3.0.2",
     "vue": "^3.2.45",
@@ -27,6 +29,7 @@
   "devDependencies": {
     "@types/node": "^18.11.12",
     "@types/nprogress": "^0.2.0",
+    "@types/qs": "^6.9.7",
     "@types/spark-md5": "^3.0.2",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue/tsconfig": "^0.1.3",

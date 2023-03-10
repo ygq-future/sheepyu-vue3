@@ -27,10 +27,6 @@ public class SystemCodegenUpdateVo {
     @InEnum(CodegenSceneEnum.class)
     private Integer scene;
 
-    @ApiModelProperty("表名")
-    @NotEmpty(message = "表名不能为空")
-    private String tableName;
-
     @ApiModelProperty("表注释")
     @NotEmpty(message = "表注释不能为空")
     private String tableComment;

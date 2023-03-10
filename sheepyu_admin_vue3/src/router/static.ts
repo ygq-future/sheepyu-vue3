@@ -6,7 +6,18 @@ export const staticRoutes: Array<RouteRecordRaw> = [
     name: 'layout',
     redirect: '/dashboard',
     component: () => import('@/layouts/layout.vue'),
-    children: []
+    children: [
+      {
+        name: 'system-codegen-edit',
+        path: '/system/codegen/edit/:id',
+        component: () => import('@/views/system/codegen/edit.vue'),
+        meta: {
+          title: '代码生成(修改页)',
+          keepalive: true,
+          fullpath: '/system/codegen/edit/:id'
+        }
+      }
+    ]
   }, {
     path: '/login',
     name: 'login',

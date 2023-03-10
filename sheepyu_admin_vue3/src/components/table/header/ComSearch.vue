@@ -43,15 +43,7 @@
 
           <el-col class='p-15' :sm='12' :xs='24' v-if='item.render === "datetime"'>
             <el-form-item :label='item.label' :prop='item.prop'>
-              <el-date-picker
-                v-model='form[item.prop]'
-                type='datetimerange'
-                unlink-panels
-                range-separator=' - '
-                start-placeholder='开始日期'
-                end-placeholder='结束日期'
-                :shortcuts='shortcuts'
-              />
+              <DateTime v-model='form[item.prop]' range />
             </el-form-item>
           </el-col>
         </template>
@@ -115,56 +107,6 @@ function selectFormat(configItem: ComSearchConfigItem): SelectOptionItem[] {
     return { id, label } as SelectOptionItem
   })
 }
-
-const minute = 1000 * 60
-const hour = 1000 * 60 * 60
-const day = 1000 * 60 * 60 * 24
-
-function getDateTimeRange(offset: number): Date[] {
-  const startTime = new Date()
-  const endTime = new Date(startTime.getTime() + offset)
-  return [startTime, endTime]
-}
-
-const shortcuts = [
-  {
-    text: '最近十分钟',
-    value: () => getDateTimeRange(minute * 10)
-  }, {
-    text: '最近半小时',
-    value: () => getDateTimeRange(minute * 30)
-  }, {
-    text: '最近一小时',
-    value: () => getDateTimeRange(hour)
-  }, {
-    text: '最近十小时',
-    value: () => getDateTimeRange(hour * 10)
-  }, {
-    text: '最近半天',
-    value: () => getDateTimeRange(hour / 12)
-  }, {
-    text: '最近一天',
-    value: () => getDateTimeRange(day)
-  }, {
-    text: '最近三天',
-    value: () => getDateTimeRange(day * 3)
-  }, {
-    text: '最近一周',
-    value: () => getDateTimeRange(day * 7)
-  }, {
-    text: '最近两周',
-    value: () => getDateTimeRange(day * 14)
-  }, {
-    text: '最近一个月',
-    value: () => getDateTimeRange(day * 30)
-  }, {
-    text: '最近半年',
-    value: () => getDateTimeRange(day * 30 * 6)
-  }, {
-    text: '最近一年',
-    value: () => getDateTimeRange(day * 30 * 12)
-  }
-]
 </script>
 
 <style scoped lang='scss'>

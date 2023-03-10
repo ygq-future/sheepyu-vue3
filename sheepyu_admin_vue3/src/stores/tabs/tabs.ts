@@ -5,10 +5,14 @@ import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import type { SystemMenuRespVo } from '@/api/system/menu'
 
 interface NavTabs {
+  //当前激活路由下标
   activeIndex: number
+  //当前激活路由对象
   activeRoute: RouteLocationNormalized | null
+  //topBar上面显示的标签
   tabsView: RouteLocationNormalized[]
   tabFullScreen: boolean
+  //用于右侧菜单渲染
   tabsViewRoutes: RouteRecordRaw[]
   //是否有路由更新, 关联菜单操作
   isRouteUpdated: boolean
