@@ -50,6 +50,15 @@
       :placeholder='config.placeholder'
     />
 
+    <el-select
+      v-if='config.render === "select"'
+      v-model='form[config.prop]'
+      clearable
+      :placeholder='config.placeholder'
+    >
+      <el-option v-for='item in config.data' :label='item[config.props.label]' :value='item[config.props.value]' />
+    </el-select>
+
     <span class='tip' v-if='config.tip'>{{ config.tip }}</span>
   </el-form-item>
 </template>

@@ -14,6 +14,10 @@ export function update${table.className}Api(data: ${fullClassName}UpdateVo) {
 export function delete${table.className}Api(ids: string) {
   return request.delete<boolean>('/${table.moduleName}/${table.businessName}/' + ids)
 }
+
+export function find${table.className}Api(id: number) {
+  return request.get<${fullClassName}RespVo>('/${table.moduleName}/${table.businessName}/' + id)
+}
 #if($table.requireList)
 
 export function list${table.className}Api(params: ${fullClassName}QueryVo) {
@@ -27,10 +31,6 @@ export function page${table.className}Api(params: ${fullClassName}QueryVo) {
 }
 #end
 #if($table.requireExport)
-
-export function find${table.className}Api(id: number) {
-  return request.get<${fullClassName}RespVo>('/${table.moduleName}/${table.businessName}/' + id)
-}
 
 export function export${table.className}Api(params: ${fullClassName}QueryVo) {
   return request.download('/${table.moduleName}/${table.businessName}/export', '${table.classComment}导出数据.xlsx', { params })

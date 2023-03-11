@@ -45,17 +45,20 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
     @Override
     public void createMenu(SystemMenuCreateVo createVo) {
         SystemMenu menu = CONVERT.convert(createVo);
-        SystemMenu parentMenu = findByIdValidateExists(menu.getParentId());
+        //如果不是顶级目录需要进行安全校验
+        if (!Objects.equals(createVo.getParentId(), 0L)) {
+            SystemMenu parentMenu = findByIdValidateExists(menu.getParentId());
 
-        //如果是目录或者菜单, 那么只能在目录下
-        Integer type = menu.getType();
-        if ((Objects.equals(type, CATALOG.getCode()) || Objects.equals(type, MENU.getCode())) &&
-                !Objects.equals(parentMenu.getType(), CATALOG.getCode())) {
-            throw exception(LEVEL_RELATION_ERROR);
-        }
-        //如果是按钮, 那么只能在菜单下
-        if (Objects.equals(type, BUTTON.getCode()) && !Objects.equals(parentMenu.getType(), MENU.getCode())) {
-            throw exception(LEVEL_RELATION_ERROR);
+            //如果是目录或者菜单, 那么只能在目录下
+            Integer type = menu.getType();
+            if ((Objects.equals(type, CATALOG.getCode()) || Objects.equals(type, MENU.getCode())) &&
+                    !Objects.equals(parentMenu.getType(), CATALOG.getCode())) {
+                throw exception(LEVEL_RELATION_ERROR);
+            }
+            //如果是按钮, 那么只能在菜单下
+            if (Objects.equals(type, BUTTON.getCode()) && !Objects.equals(parentMenu.getType(), MENU.getCode())) {
+                throw exception(LEVEL_RELATION_ERROR);
+            }
         }
 
         save(menu);

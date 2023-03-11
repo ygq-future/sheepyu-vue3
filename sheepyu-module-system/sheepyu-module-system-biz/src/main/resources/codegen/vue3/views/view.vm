@@ -56,7 +56,7 @@
     <PopupForm
       ref='popupFormRef'
       :form='state.form'
-      :popup-form-config='state.popupFormConfig'
+      :config='state.popupFormConfig'
       @close='onClose'
       @next='find${table.className}'
       @submit='onSubmit'
