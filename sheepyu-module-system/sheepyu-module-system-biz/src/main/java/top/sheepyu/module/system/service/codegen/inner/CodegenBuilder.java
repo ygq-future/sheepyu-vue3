@@ -57,9 +57,8 @@ public class CodegenBuilder {
             .build();
     //条件查询类型判断
     private static final Map<String, String> QUERY_CONDITIONS = MapUtil.<String, String>builder()
-            .put("title", "like")
-            .put("name", "like")
-            .put("time", "between")
+            .put("String", "like")
+            .put("Date", "between")
             .build();
     //表单显示类型判断
     private static final Map<String, String> FORM_SHOW_TYPES = MapUtil.<String, String>builder()
@@ -244,7 +243,7 @@ public class CodegenBuilder {
                     .setCreateOperation(filterCreateOperation(field.getPropertyName()))
                     .setUpdateOperation(filterUpdateOperation(field.getPropertyName()))
                     .setQueryOperation(filterQueryOperation(field.getPropertyName()))
-                    .setQueryCondition(getDefaultQueryCondition(field.getPropertyName()))
+                    .setQueryCondition(getDefaultQueryCondition(column.getJavaType()))
                     .setListOperationResult(filterListOperation(field.getPropertyName()))
                     .setQuickSearch(filterQuickSearch(field.getPropertyName()))
                     .setFormShowType(filterFormShowType(column.getJavaType()));
@@ -278,13 +277,8 @@ public class CodegenBuilder {
         return QUICK_SEARCH_INCLUDE_FIELD.contains(fieldName);
     }
 
-    private String getDefaultQueryCondition(String fieldName) {
-        for (Map.Entry<String, String> entry : QUERY_CONDITIONS.entrySet()) {
-            if (fieldName.toLowerCase().contains(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-        return "=";
+    private String getDefaultQueryCondition(String javaType) {
+        return QUERY_CONDITIONS.getOrDefault(javaType, "=");
     }
 
     private String filterFormShowType(String javaType) {

@@ -150,7 +150,7 @@ const state = reactive<{
     #foreach($column in $columns)
     #if($column.queryOperation && !$column.quickSearch)
     #comSearchRender($column)
-    { label: '${column.comment}', prop: '${column.javaField}', placeholder: '${column.comment}', render: '${render}'#if("$!column.dictType" != ""), dictType: DictTypeEnum.${column.dictType.toUpperCase()}#end },
+    { label: '${column.comment}', prop: '${column.javaField}#if($column.queryCondition == "between")s#end', placeholder: '${column.comment}', render: '${render}'#if("$!column.dictType" != ""), dictType: DictTypeEnum.${column.dictType.toUpperCase()}#end },
     #end
     #end
   ],
