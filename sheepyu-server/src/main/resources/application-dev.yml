@@ -9,6 +9,11 @@ spring:
     port: 6379
     database: 0
     password:
+  mail:
+    host: smtp.163.com
+    username: ygq__future@163.com
+    password: IKRFOJCYBTWFJFYC
+    test-connection: true
 # 详情请参照SwaggerProperties
 sheepyu:
   swagger:
@@ -22,6 +27,11 @@ sheepyu:
       email: 3029944576@qq.com
   security:
     mock-enable: true
+  file:
+    config:
+      LOCAL:
+        endpoint: http://localhost:18080
+        path: F:/upload
 logging:
   level:
     top.sheepyu: debug

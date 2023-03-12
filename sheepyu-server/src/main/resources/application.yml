@@ -36,11 +36,6 @@ spring:
             threadCount: 25 # 线程数
             threadPriority: 5 # 线程优先级
             class: org.quartz.simpl.SimpleThreadPool # 实现类
-  mail:
-    host: smtp.163.com
-    username: ygq__future@163.com
-    password: IKRFOJCYBTWFJFYC
-    test-connection: true
 mybatis-plus:
   global-config:
     db-config:
@@ -55,9 +50,6 @@ sheepyu:
       - /admin-api/captcha/**
   file:
     config:
-      LOCAL:
-        endpoint: http://localhost:18080
-        path: F:/upload
       ALIYUN:
         key: LTAI5tLLMcvdpWXsnU4pYK7e
         secret: aUbXJb7DbwoKxXV4ImJCtbJNOYniGi

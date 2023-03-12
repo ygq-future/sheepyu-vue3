@@ -1,5 +1,6 @@
 package top.sheepyu.module.system.service.dict;
 
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
@@ -44,8 +45,12 @@ public class SystemDictTypeServiceImpl extends ServiceImplX<SystemDictTypeMapper
 
     @Override
     public PageResult<SystemDictType> pageDictType(SystemDictTypeQueryVo queryVo) {
+        String keyword = queryVo.getKeyword();
         return page(queryVo, buildQuery()
-                .likeIfPresent(SystemDictType::getName, queryVo.getKeyword())
+                .and(StrUtil.isNotBlank(keyword), e -> e
+                        .eq(SystemDictType::getId, keyword)
+                        .like(SystemDictType::getType, keyword)
+                        .like(SystemDictType::getName, keyword))
                 .eqIfPresent(SystemDictType::getStatus, queryVo.getStatus()));
     }
 

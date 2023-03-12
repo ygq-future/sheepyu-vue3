@@ -1,7 +1,7 @@
 <template>
-  <div class='default-main'>
-    <el-tabs type='border-card'>
-      <el-tab-pane label='基本配置'>
+  <div class='default-main' v-loading='state.loading'>
+    <el-tabs type='border-card' v-model='state.activeTab'>
+      <el-tab-pane label='基本配置' name='basicTab'>
         <el-form ref='formRef' v-if='state.codegenTable' :model='state.codegenTable' label-width='100px' :rules='rules'>
           <el-row>
             <el-col :xs='24' :sm='12' :md='8' :lg='8'>
@@ -85,30 +85,33 @@
           </el-row>
         </el-form>
       </el-tab-pane>
-      <el-tab-pane label='字段配置'>
+      <el-tab-pane label='字段配置' name='fieldTab'>
         <el-table :data='state.tableData' border stripe>
           <el-table-column fixed='left' label='字段' prop='name' width='120' :show-overflow-tooltip='true' />
           <el-table-column label='字段类型' prop='type' width='120' :show-overflow-tooltip='true' />
           <el-table-column label='描述' prop='comment' :width='state.inputWidth' align='center'>
             <template #default='scope'>
-              <el-input v-model='scope.row.comment' />
+              <CellForm v-model='scope.row.comment' />
             </template>
           </el-table-column>
           <el-table-column label='Java类型' prop='javaType' :width='state.inputWidth' align='center'>
             <template #default='scope'>
-              <el-select v-model='scope.row.javaType'>
-                <el-option v-for='(item, idx) in javaTypes' :label='item' :value='item' :key='idx' />
-              </el-select>
+              <CellForm
+                v-model='scope.row.javaType'
+                render='select'
+                :data='javaTypes'
+                :props='{label: "value", value: "value"}'
+              />
             </template>
           </el-table-column>
           <el-table-column label='Java字段' prop='javaField' :width='state.inputWidth' align='center'>
             <template #default='scope'>
-              <el-input v-model='scope.row.javaField' />
+              <CellForm v-model='scope.row.javaField' />
             </template>
           </el-table-column>
           <el-table-column label='示例' prop='example' :width='state.inputWidth' align='center'>
             <template #default='scope'>
-              <el-input v-model='scope.row.example' />
+              <CellForm v-model='scope.row.example' />
             </template>
           </el-table-column>
           <el-table-column label='允许为空' prop='nullable' :width='100' align='center'>
@@ -138,9 +141,12 @@
           </el-table-column>
           <el-table-column label='查询条件' prop='queryCondition' :width='state.inputWidth' align='center'>
             <template #default='scope'>
-              <el-select v-model='scope.row.queryCondition'>
-                <el-option v-for='(item, idx) in queryTypes' :label='item' :value='item' :key='idx' />
-              </el-select>
+              <CellForm
+                v-model='scope.row.queryCondition'
+                render='select'
+                :data='queryTypes'
+                :props='{label: "value", value: "value"}'
+              />
             </template>
           </el-table-column>
           <el-table-column label='结果' prop='listOperationResult' align='center'>
@@ -150,23 +156,32 @@
           </el-table-column>
           <el-table-column label='表单显示类型' prop='formShowType' :width='state.inputWidth' align='center'>
             <template #default='scope'>
-              <el-select v-model='scope.row.formShowType'>
-                <el-option v-for='(item, idx) in formTypes' :label='item.name' :value='item.value' :key='idx' />
-              </el-select>
+              <CellForm
+                v-model='scope.row.formShowType'
+                render='select'
+                :data='formTypes'
+                :props='{label: "value", value: "value"}'
+              />
             </template>
           </el-table-column>
           <el-table-column label='字典' prop='dictType' :width='state.inputWidth' align='center'>
             <template #default='scope'>
-              <el-select v-model='scope.row.dictType' clearable>
-                <el-option v-for='item in state.dictTypes' :label='item.name' :value='item.type' :key='item.id' />
-              </el-select>
+              <CellForm
+                v-model='scope.row.dictType'
+                render='select'
+                :data='state.dictTypes'
+                :props='{label: "name", value: "type"}'
+              />
             </template>
           </el-table-column>
           <el-table-column label='排序' prop='sort' :width='state.inputWidth' align='center'>
             <template #default='scope'>
-              <el-select v-model='scope.row.sort' clearable>
-                <el-option v-for='(item, idx) in sortTypes' :label='item' :value='item' :key='idx' />
-              </el-select>
+              <CellForm
+                v-model='scope.row.sort'
+                render='select'
+                :data='sortTypes'
+                :props='{label: "value", value: "value"}'
+              />
             </template>
           </el-table-column>
         </el-table>
@@ -195,14 +210,18 @@ const state = reactive<{
   tableData: SystemCodegenColumn[]
   dictTypes: SystemDictTypeRespVo[]
   inputWidth: number
+  loading?: boolean
+  activeTab: string
 }>({
   tableData: [],
   dictTypes: [],
-  inputWidth: 130
+  inputWidth: 130,
+  activeTab: 'fieldTab'
 })
-const javaTypes = ['Long', 'Integer', 'String', 'Double', 'Float', 'Date', 'Boolean', 'BigDecimal']
-const sortTypes = ['asc', 'desc']
-const queryTypes = ['=', '!=', '>', '<', '>=', '<=', 'like', 'between']
+const javaTypes = [{ value: 'Long' }, { value: 'Integer' }, { value: 'String' }, { value: 'Double' }, { value: 'Float' },
+  { value: 'Date' }, { value: 'Boolean' }, { value: 'BigDecimal' }]
+const sortTypes = [{ value: 'asc' }, { value: 'desc' }]
+const queryTypes = [{ value: '=' }, { value: '!=' }, { value: '>' }, { value: '<' }, { value: '>=' }, { value: '<=' }, { value: 'like' }, { value: 'between' }]
 const formTypes: { name: string, value: FormRender }[] = [
   { name: '数字', value: 'number' },
   { name: '文本', value: 'text' },
@@ -246,10 +265,12 @@ async function submit() {
 }
 
 async function findCodegen() {
+  state.loading = true
   const id: any = route.params.id
   const { data } = await findCodegenApi(id)
   state.codegenTable = data
   state.tableData = state.codegenTable.columns
+  state.loading = false
 }
 
 async function findDictTypes() {

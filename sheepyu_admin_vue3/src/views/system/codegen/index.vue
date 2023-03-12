@@ -174,7 +174,7 @@ const state = reactive<{
     pagination: true,
     columns: [
       { label: '场景', prop: 'scene', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_CODEGEN_SCENE },
-      { label: '表名称', prop: 'tableName', render: 'text' },
+      { label: '表名称', prop: 'tableName', render: 'text', width: 150 },
       { label: '表描述', prop: 'tableComment', render: 'text' },
       { label: '模块名', prop: 'moduleName', render: 'text' },
       { label: '业务名', prop: 'businessName', render: 'text' },
