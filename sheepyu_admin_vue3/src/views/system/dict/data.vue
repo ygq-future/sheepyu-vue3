@@ -150,8 +150,10 @@ const state = reactive<{
         label: '颜色类型',
         prop: 'colorType',
         required: false,
-        placeholder: '颜色类型: info, warning, success, error',
-        render: 'text',
+        placeholder: '颜色类型: info, warning, success, danger',
+        render: 'select',
+        data: [{ value: 'info' }, { value: 'warning' }, { value: 'success' }, { value: 'danger' }],
+        props: { label: 'value', value: 'value' },
         tip: '不写就代表主题色蓝色'
       },
       { label: '备注', prop: 'remark', required: false, placeholder: '备注', render: 'textarea' }

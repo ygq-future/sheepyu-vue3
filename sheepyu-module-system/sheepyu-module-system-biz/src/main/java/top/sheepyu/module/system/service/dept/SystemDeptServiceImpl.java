@@ -15,8 +15,10 @@ import top.sheepyu.module.system.dao.dept.SystemDeptMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import static top.sheepyu.module.common.exception.CommonException.exception;
+import static top.sheepyu.module.common.util.CollectionUtil.convertSet;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.DEPT_HAS_CHILDREN;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.DEPT_NOT_EXISTS;
 import static top.sheepyu.module.system.convert.dept.SystemDeptConvert.CONVERT;
@@ -60,21 +62,21 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
     public List<SystemDept> listDept(SystemDeptQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
         List<SystemDept> list = list(buildQuery()
-                .eqIfPresent(SystemDept::getName, keyword)
-                .likeIfPresent(SystemDept::getEmail, keyword)
+                .eqIfPresent(SystemDept::getId, keyword).or()
+                .likeIfPresent(SystemDept::getName, keyword).or()
+                .likeIfPresent(SystemDept::getEmail, keyword).or()
                 .likeIfPresent(SystemDept::getPhone, keyword)
                 .orderByAsc(SystemDept::getSort));
-
         List<SystemDept> result = new ArrayList<>();
+        Set<Long> deptIds = convertSet(list, SystemDept::getId);
+
         for (SystemDept dept : list) {
-            if (Objects.equals(dept.getParentId(), 0L)) {
+            //筛选没有上级的部门
+            if (!deptIds.contains(dept.getParentId())) {
+                //递归封装数据
+                dept.setChildren(fillTreeData(list, dept.getId()));
                 result.add(dept);
             }
-        }
-
-        //填充数据
-        for (SystemDept dept : result) {
-            dept.setChildren(fillTreeData(list, dept.getId()));
         }
 
         return result;
@@ -99,12 +101,9 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
 
         for (SystemDept dept : list) {
             if (Objects.equals(dept.getParentId(), id)) {
+                dept.setChildren(fillTreeData(list, dept.getId()));
                 result.add(dept);
             }
-        }
-
-        for (SystemDept dept : result) {
-            dept.setChildren(fillTreeData(list, dept.getId()));
         }
 
         return result.isEmpty() ? null : result;

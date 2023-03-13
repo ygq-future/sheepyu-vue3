@@ -131,7 +131,7 @@ const state = reactive<{
     }
   },
   popupFormConfig: {
-    title: '新增字典类型表',
+    title: '新增字典类型',
     formItemConfigs: [
       { label: '类型', prop: 'type', placeholder: '类型', render: 'text' },
       { label: '字典名称', prop: 'name', placeholder: '字典名称', render: 'text' },
@@ -154,7 +154,7 @@ async function onFieldChange(row: SystemDictTypeUpdateVo) {
 }
 
 function onAdd() {
-  state.popupFormConfig.title = '新增字典类型表'
+  state.popupFormConfig.title = '新增字典类型'
   state.popupFormConfig.isEdit = false
   state.popupFormConfig.hideProps = []
   popupFormRef.value.show()
@@ -167,7 +167,7 @@ async function onDelete(id: number) {
 }
 
 function onBatchEdit(ids: number[]) {
-  state.popupFormConfig.title = '修改字典类型表'
+  state.popupFormConfig.title = '修改字典类型'
   state.popupFormConfig.isEdit = true
   state.popupFormConfig.ids = [...ids]
   state.popupFormConfig.hideProps = ['type']
