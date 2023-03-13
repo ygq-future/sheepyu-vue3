@@ -1,6 +1,7 @@
 package top.sheepyu.module.system.service.permission;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,8 +73,12 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
 
     @Override
     public PageResult<SystemRole> pageRole(SystemRoleQueryVo queryVo) {
+        String keyword = queryVo.getKeyword();
         return page(queryVo, buildQuery()
-                .likeIfPresent(SystemRole::getName, queryVo.getKeyword())
+                .and(StrUtil.isNotBlank(keyword), e -> e
+                        .like(SystemRole::getName, keyword).or()
+                        .like(SystemRole::getCode, keyword).or()
+                        .eq(SystemRole::getId, keyword))
                 .eqIfPresent(SystemRole::getStatus, queryVo.getStatus())
                 .orderByAsc(SystemRole::getSort));
     }

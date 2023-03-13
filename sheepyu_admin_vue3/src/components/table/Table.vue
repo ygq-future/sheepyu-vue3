@@ -59,7 +59,16 @@
             </template>
           </el-popconfirm>
 
-          <slot name='buttons' :data='scope.row'></slot>
+          <slot name='buttons' :data='scope.row'>
+            <!--         按钮模板, 需要使用自定义按钮时复制过去改一下即可   -->
+            <!--            <el-tooltip content='自定义' placement='top' :show-after='500'>
+                          <el-button v-auth="'xx:xx:xx'" v-blur type='primary'>
+                            <template #icon>
+                              <Icon name='el-icon-Edit' />
+                            </template>
+                          </el-button>
+                        </el-tooltip>-->
+          </slot>
         </div>
       </template>
     </el-table-column>

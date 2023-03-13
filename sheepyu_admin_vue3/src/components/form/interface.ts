@@ -35,16 +35,24 @@ export interface FormItemConfig {
   data?: any
   //有些树形渲染的数据需要用到, 配置可自定义
   props?: { label: string, value: string }
-  //switch或者select, dict变化调用的函数, 可以解决select联动的问题
-  callback?: Function
+  //switch或者select, dict=select时变化调用的函数, 可以解决select联动的问题
+  change?: Function
   //用于表单校验, 默认为true
   required?: boolean
 }
 
-//推荐switch, radio, select, checkbox能用字典就用字典
+/**
+ * 1. 推荐switch, radio, select, checkbox能用字典就用字典
+ * 2. tree-select-checkbox无法选中父节点的值
+ * 3. tree-checkbox可以选中父节点的值, 但是取消了关联选择
+ *
+ * remark:  其实这些都可以又开发者根据需求去扩展,
+ *          不能修改, 不然会影响现有的功能, 比如你需要关联选择
+ *          你可以自己扩展一个类型tree-checkbox-strictly
+ */
 export type FormRender =
   'number' | 'text' | 'switch' |
   'radio' | 'select' | 'icon' |
   'slider' | 'upload' | 'tree-select' |
   'checkbox' | 'datetime' | 'part-upload' |
-  'textarea'
+  'textarea' | 'tree-select-checkbox' | 'tree-checkbox'
