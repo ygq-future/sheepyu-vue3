@@ -106,7 +106,8 @@
 import TableHeader from '@/components/table/header/TableHeader.vue'
 import Table from '@/components/table/Table.vue'
 import PopupSearch from '@/components/search/PopupSearch.vue'
-import type { ComSearchConfig, TableConfig } from '@/components/table/interface'
+import type { TableConfig } from '@/components/table/interface'
+import type { ComSearchConfig } from '@/components/search/interface'
 import type {
   SystemCodegenQueryVo,
   SystemCodegenRespVo

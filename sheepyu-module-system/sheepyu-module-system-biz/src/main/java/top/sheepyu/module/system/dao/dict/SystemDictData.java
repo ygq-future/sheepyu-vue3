@@ -12,7 +12,7 @@ import java.util.Objects;
  **/
 @Data
 @Accessors(chain = true)
-public class SystemDictData extends BaseModel {
+public class SystemDictData extends BaseModel implements Comparable<SystemDictData> {
     private Long id;
     private String dictType;
     private Integer sort;
@@ -32,6 +32,11 @@ public class SystemDictData extends BaseModel {
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), dictType, value);
+        return Objects.hash(dictType, value);
+    }
+
+    @Override
+    public int compareTo(SystemDictData obj) {
+        return this.sort - obj.sort;
     }
 }

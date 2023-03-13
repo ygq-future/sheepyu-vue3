@@ -14,7 +14,7 @@
   <el-select
     v-if="render === 'select'"
     v-model='state.value'
-    clearable
+    :clearable='props.clearable'
     filterable
     :disabled='disabled'
     @change='onValueChange'
@@ -61,9 +61,11 @@ const props = withDefaults(defineProps<{
   //用于tag组件的显示
   value?: string | number | boolean
   disabled?: boolean
+  clearable?: boolean
 }>(), {
   render: 'tag',
-  disabled: false
+  disabled: false,
+  clearable: true
 })
 
 const emits = defineEmits<{

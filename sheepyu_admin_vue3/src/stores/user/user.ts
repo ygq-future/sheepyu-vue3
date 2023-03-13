@@ -36,7 +36,6 @@ export const useAdmin = defineStore(IdEnum.ADMIN, () => {
     delete state.deptName
     delete state.postIds
     delete state.postNames
-    delete state.permissions
     delete state.userType
     delete state.accessToken
     delete state.refreshToken

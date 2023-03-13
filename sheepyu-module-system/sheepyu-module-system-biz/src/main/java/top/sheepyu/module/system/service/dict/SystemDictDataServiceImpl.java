@@ -73,6 +73,7 @@ public class SystemDictDataServiceImpl extends ServiceImplX<SystemDictDataMapper
         return lambdaQuery()
                 .eq(SystemDictData::getDictType, type)
                 .eq(enable, SystemDictData::getStatus, ENABLE.getCode())
+                .orderByAsc(SystemDictData::getSort)
                 .list();
     }
 

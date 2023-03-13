@@ -8,18 +8,17 @@
               <el-input
                 v-model='form[item.prop]'
                 :placeholder='item.placeholder ? item.placeholder : "关键字模糊搜索"'
-                clearable
+                :clearable='item.clearable === undefined || item.clearable'
               />
             </el-form-item>
           </el-col>
 
           <el-col class='p-15' :sm='6' :xs='24' v-if='item.render === "number"'>
             <el-form-item :label='item.label' :prop='item.prop'>
-              <el-input
-                type='number'
+              <el-input-number
                 v-model.number='form[item.prop]'
                 :placeholder='item.placeholder ? item.placeholder : "精准搜索"'
-                clearable
+                :clearable='item.clearable === undefined || item.clearable'
               />
             </el-form-item>
           </el-col>
@@ -29,7 +28,7 @@
             v-if='item.render === "select" && checkSelectOptions(item)'
           >
             <el-form-item :label='item.label' :prop='item.prop'>
-              <el-select v-model='form[item.prop]' clearable>
+              <el-select v-model='form[item.prop]' :clearable='item.clearable === undefined || item.clearable'>
                 <el-option v-for='option in selectFormat(item)' :label='option.label' :value='option.id' />
               </el-select>
             </el-form-item>
@@ -37,7 +36,7 @@
 
           <el-col class='p-15' :sm='6' :xs='24' v-if='item.render === "dict" && item.dictType'>
             <el-form-item :label='item.label' :prop='item.prop'>
-              <Dict render='select' v-model='form[item.prop]' :type='item.dictType' />
+              <Dict :clearable='item.clearable' render='select' v-model='form[item.prop]' :type='item.dictType' />
             </el-form-item>
           </el-col>
 
@@ -60,7 +59,7 @@
 </template>
 
 <script setup lang='ts'>
-import type { ComSearchConfig, ComSearchConfigItem, SelectOptionItem } from '@/components/table/interface'
+import type { ComSearchConfig, ComSearchConfigItem, SelectOptionItem } from '@/components/search/interface'
 import { ElForm } from 'element-plus'
 
 const props = defineProps<{

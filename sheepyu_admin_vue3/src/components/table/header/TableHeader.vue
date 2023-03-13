@@ -97,7 +97,15 @@
             文字请带上class button-text, 按钮较多时, 可能会超出left区域, 这个时候
             请开启enableShrink模式, 如果还超出, 就没有办法了😁
              -->
-            <slot name='buttons'></slot>
+            <slot name='buttons'>
+              <!--模板代码: 自定义按钮复制过去即可-->
+              <!-- <el-tooltip :show-after='500' content='自定义按钮' placement='top'>
+              <el-button v-auth="'xx:xx:xx'" v-blur type='primary' @click='onBatchEdit'>
+                <Icon name='fa fa-pencil' />
+                <span class='button-text'>自定义按钮</span>
+              </el-button>
+            </el-tooltip>-->
+            </slot>
           </div>
         </div>
 

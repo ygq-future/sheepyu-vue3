@@ -52,6 +52,7 @@ public class SystemDictRedisService {
             return;
         }
 
+        set.remove(dictData);
         set.add(dictData);
         loadDictType(type, set);
     }
@@ -71,8 +72,9 @@ public class SystemDictRedisService {
     }
 
     public HashSet<SystemDictData> listByType(String type) {
-        return redisUtil.getJSONObj(buildKey(type), new TypeReference<HashSet<SystemDictData>>() {
+        HashSet<SystemDictData> result = redisUtil.getJSONObj(buildKey(type), new TypeReference<HashSet<SystemDictData>>() {
         });
+        return result == null ? new HashSet<>() : result;
     }
 
     private String buildKey(String type) {

@@ -5,15 +5,41 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/CellForm.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/vo/SystemCodegenBaseVo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources/mapper/dict/SystemDictTypeMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu-server/src/test/java/system/DictTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/dict/data.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/dict/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/vo/SystemCodegenRespVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/vo/SystemCodegenRespVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/vo/SystemCodegenUpdateVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/codegen/vo/SystemCodegenUpdateVo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/dict/SystemDictData.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/dict/SystemDictData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/dict/SystemDictTypeMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/dao/dict/SystemDictTypeMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictBiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictBiz.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictDataServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictDataServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictRedisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictRedisService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictTypeService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictTypeService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictTypeServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/dict/SystemDictTypeServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources/codegen/vue3/views/view.vm" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources/codegen/vue3/views/view.vm" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-prod.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/.env.prod" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/.env.prod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/dict.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/dict.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/dict/Dict.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/dict/Dict.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/render/FormItemRender.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/render/FormItemRender.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/search/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/search/interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/header/ComSearch.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/search/ComSearch.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/header/TableHeader.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/header/TableHeader.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/interface.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/render/ColumnRender.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/render/ColumnRender.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/router.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/static.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/static.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/user/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/user/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/common.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/common.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/codegen/edit.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/codegen/edit.vue" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/codegen/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/codegen/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/demo/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/demo/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/menu/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/menu/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +105,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
     "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "E:/other project/beautify-system",
+    "last_opened_file_path": "E:/other project/sheepyu/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources/mapper/dict",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -88,7 +114,7 @@
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.26237053",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
     "spring.configuration.checksum": "49bafeeb2f899fc5cd02662a105f4220",
     "ts.external.directory.path": "E:\\other project\\sheepyu\\sheepyu_admin_vue3\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
@@ -102,11 +128,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\other project\sheepyu\sheepyu-module-system\sheepyu-module-system-biz\src\main\resources\mapper\dict" />
       <recent name="E:\other project\sheepyu\sheepyu-module-system\sheepyu-module-system-biz\src\main\java\top\sheepyu\module" />
       <recent name="E:\other project\sheepyu\sheepyu-module-system\sheepyu-module-system-biz" />
       <recent name="E:\other project\sheepyu\sheepyu_admin_vue3" />
       <recent name="E:\other project\sheepyu\sheepyu_admin_vue3\src\views\system" />
-      <recent name="E:\other project\sheepyu\sheepyu_admin_vue3\src\api\system" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="E:\other project\sheepyu\sheepyu-module-system\sheepyu-module-system-biz\src\main\resources\mapper\demo" />
@@ -119,11 +145,11 @@
       <recent name="top.sheepyu.module.system.convert.job" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="system" />
       <recent name="top.sheepyu.module.system.controller.admin.codegen.vo" />
       <recent name="top.sheepyu.module.system.service.codegen" />
       <recent name="top.sheepyu.module.system.dao.codegen" />
       <recent name="top.sheepyu.module.system.controller.admin.role.vo" />
-      <recent name="top.sheepyu.module.system.controller.admin.post.vo" />
     </key>
   </component>
   <component name="RunManager" selected="Spring Boot.SheepyuServer">
@@ -156,7 +182,7 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="SystemJobTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="DictTest.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="sheepyu-server" />
       <extension name="coverage">
         <pattern>
@@ -165,7 +191,7 @@
         </pattern>
       </extension>
       <option name="PACKAGE_NAME" value="system" />
-      <option name="MAIN_CLASS_NAME" value="system.SystemJobTest" />
+      <option name="MAIN_CLASS_NAME" value="system.DictTest" />
       <option name="METHOD_NAME" value="test" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
@@ -214,18 +240,18 @@
     </configuration>
     <list>
       <item itemvalue="Application.DemoTest" />
+      <item itemvalue="JUnit.DictTest.test" />
       <item itemvalue="JUnit.CodegenTest.test" />
-      <item itemvalue="JUnit.SystemJobTest.test" />
       <item itemvalue="JUnit.SystemJobTest.test01" />
       <item itemvalue="Spring Boot.SheepyuServer" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Spring Boot.SheepyuServer" />
+        <item itemvalue="JUnit.DictTest.test" />
         <item itemvalue="JUnit.CodegenTest.test" />
         <item itemvalue="Application.DemoTest" />
         <item itemvalue="JUnit.SystemJobTest.test01" />
-        <item itemvalue="JUnit.SystemJobTest.test" />
       </list>
     </recent_temporary>
   </component>
@@ -276,7 +302,9 @@
       <workItem from="1678273283788" duration="33430000" />
       <workItem from="1678494377413" duration="8178000" />
       <workItem from="1678548976193" duration="6000" />
-      <workItem from="1678581341122" duration="8431000" />
+      <workItem from="1678581341122" duration="9978000" />
+      <workItem from="1678620859085" duration="186000" />
+      <workItem from="1678621056015" duration="12987000" />
     </task>
     <servers />
   </component>

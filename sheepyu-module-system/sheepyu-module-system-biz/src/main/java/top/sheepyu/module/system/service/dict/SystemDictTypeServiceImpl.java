@@ -48,8 +48,8 @@ public class SystemDictTypeServiceImpl extends ServiceImplX<SystemDictTypeMapper
         String keyword = queryVo.getKeyword();
         return page(queryVo, buildQuery()
                 .and(StrUtil.isNotBlank(keyword), e -> e
-                        .eq(SystemDictType::getId, keyword)
-                        .like(SystemDictType::getType, keyword)
+                        .eq(SystemDictType::getId, keyword).or()
+                        .like(SystemDictType::getType, keyword).or()
                         .like(SystemDictType::getName, keyword))
                 .eqIfPresent(SystemDictType::getStatus, queryVo.getStatus()));
     }
@@ -76,6 +76,11 @@ public class SystemDictTypeServiceImpl extends ServiceImplX<SystemDictTypeMapper
     @Override
     public List<SystemDictType> listDictType() {
         return lambdaQuery().eq(SystemDictType::getStatus, ENABLE.getCode()).list();
+    }
+
+    @Override
+    public boolean deleteRealById(Long id) {
+        return baseMapper.deleteRealById(id);
     }
 
     private SystemDictType findByIdValidateExists(Long id) {

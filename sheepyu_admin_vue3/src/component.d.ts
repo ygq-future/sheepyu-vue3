@@ -9,7 +9,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CellForm: typeof import('./components/form/CellForm.vue')['default']
     ColumnRender: typeof import('./components/table/render/ColumnRender.vue')['default']
-    ComSearch: typeof import('./components/table/header/ComSearch.vue')['default']
+    ComSearch: typeof import('./components/search/ComSearch.vue')['default']
     DateTime: typeof import('./components/datetime/DateTime.vue')['default']
     Dict: typeof import('./components/dict/Dict.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']

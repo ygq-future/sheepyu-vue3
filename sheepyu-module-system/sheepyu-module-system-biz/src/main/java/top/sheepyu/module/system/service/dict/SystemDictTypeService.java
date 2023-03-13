@@ -28,4 +28,6 @@ public interface SystemDictTypeService extends IServiceX<SystemDictType> {
     List<String> typeList();
 
     List<SystemDictType> listDictType();
+
+    boolean deleteRealById(Long id);
 }

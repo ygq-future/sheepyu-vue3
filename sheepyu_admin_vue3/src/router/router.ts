@@ -1,4 +1,4 @@
-import type { RouteRecordRaw } from 'vue-router'
+import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 import { staticRoutes } from '@/router/static'
 import NProgress from 'nprogress'
@@ -32,6 +32,7 @@ router.beforeEach(async (to, from, next) => {
   }
 
   if (tabs.hasRoute()) {
+    handlerTitle(to)
     return next()
   }
 
@@ -111,6 +112,20 @@ function getPermissionFromMenuTree(menuTree: SystemMenuRespVo[], permissions: st
       getPermissionFromMenuTree(menu.children, permissions)
     }
   })
+}
+
+function handlerTitle(to: RouteLocationNormalized) {
+  let title = to.meta.title
+  let param
+  const reg = new RegExp('{(.*)}')
+  if (title && (param = reg.exec(title))) {
+    param = to.params[param[1]]
+    if (param) {
+      title = title.replace(reg, `${param}`)
+      to.meta.title = title
+    }
+  }
+  document.title = title || 'SYAdmin'
 }
 
 export default router

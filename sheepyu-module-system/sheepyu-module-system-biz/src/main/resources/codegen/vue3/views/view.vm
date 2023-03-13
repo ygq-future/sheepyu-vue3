@@ -214,7 +214,7 @@ async function onSubmit(cb: Function) {
   if (state.popupFormConfig.isEdit) {
     await update${table.className}Api(data as ${fullClassName}UpdateVo)
   } else {
-    await create${table.className}Api(data)
+    await create${table.className}Api(data as ${fullClassName}CreateVo)
   }
   cb && cb()
   await ${methodName}()

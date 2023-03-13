@@ -34,7 +34,7 @@ export interface FormItemConfig {
   //如果render是switch, 或者select, 需要传递数据进行渲染
   data?: any
   //有些树形渲染的数据需要用到, 配置可自定义
-  props?: object
+  props?: { label: string, value: string }
   //switch或者select, dict变化调用的函数, 可以解决select联动的问题
   callback?: Function
   //用于表单校验, 默认为true

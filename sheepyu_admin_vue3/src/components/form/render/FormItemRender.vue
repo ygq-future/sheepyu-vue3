@@ -4,6 +4,7 @@
       v-if='(!config.render && !config.dictType && !config.dictRender)
       || config.render === "text"'
       v-model='form[config.prop]'
+      :disabled='disabled'
       :placeholder='config.placeholder'
     />
 
@@ -47,6 +48,7 @@
       v-model='form[config.prop]'
       type='textarea'
       :rows='4'
+      :disabled='disabled'
       :placeholder='config.placeholder'
     />
 
@@ -54,6 +56,7 @@
       v-if='config.render === "select"'
       v-model='form[config.prop]'
       clearable
+      :disabled='disabled'
       :placeholder='config.placeholder'
     >
       <el-option v-for='item in config.data' :label='item[config.props.label]' :value='item[config.props.value]' />

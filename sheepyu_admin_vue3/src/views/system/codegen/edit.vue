@@ -192,7 +192,7 @@
 
 <script setup lang='ts'>
 import { findCodegenApi, updateCodegenApi } from '@/api/system/codegen'
-import { dictTypeList } from '@/api/system/dict'
+import { dictTypeListApi } from '@/api/system/dict'
 import type { SystemCodegenColumn, SystemCodegenRespVo, SystemCodegenUpdateVo } from '@/api/system/codegen'
 import type { SystemDictTypeRespVo } from '@/api/system/dict'
 import type { FormRender } from '@/components/form/interface'
@@ -274,7 +274,7 @@ async function findCodegen() {
 }
 
 async function findDictTypes() {
-  const { data } = await dictTypeList()
+  const { data } = await dictTypeListApi()
   state.dictTypes = data
 }
 

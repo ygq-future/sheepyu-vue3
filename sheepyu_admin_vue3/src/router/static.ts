@@ -16,6 +16,15 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           keepalive: true,
           fullpath: '/system/codegen/edit/:id'
         }
+      }, {
+        name: 'system-dict-data',
+        path: '/system/dict/:type',
+        component: () => import('@/views/system/dict/data.vue'),
+        meta: {
+          title: '字典数据({type})',
+          keepalive: true,
+          fullpath: '/system/dict/:type'
+        }
       }
     ]
   }, {

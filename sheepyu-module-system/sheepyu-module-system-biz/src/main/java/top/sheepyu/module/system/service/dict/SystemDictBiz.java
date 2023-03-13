@@ -16,10 +16,7 @@ import top.sheepyu.module.system.dao.dict.SystemDictType;
 
 import javax.annotation.PostConstruct;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static top.sheepyu.module.common.enums.CommonStatusEnum.ENABLE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
@@ -58,8 +55,9 @@ public class SystemDictBiz {
             throw exception(DICT_TYPE_HAS_DATA);
         }
 
-        //同时删除redis中的数据
-        if (systemDictTypeService.removeById(dictType)) {
+        //非逻辑删除
+        if (systemDictTypeService.deleteRealById(dictType.getId())) {
+            //同时删除redis中的数据
             systemDictRedisService.deleteDictType(dictType.getType());
         }
     }
@@ -124,7 +122,9 @@ public class SystemDictBiz {
         List<SystemDictType> dictTypeList = systemDictTypeService.listDictType();
         dictTypeList.forEach(type -> {
             HashSet<SystemDictData> dictDataSet = systemDictRedisService.listByType(type.getType());
-            type.setDictDataList(new ArrayList<>(dictDataSet));
+            ArrayList<SystemDictData> dictDataList = new ArrayList<>(dictDataSet);
+            Collections.sort(dictDataList);
+            type.setDictDataList(dictDataList);
         });
         return dictTypeList;
     }

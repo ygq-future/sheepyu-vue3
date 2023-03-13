@@ -1,8 +1,6 @@
 import type { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { DictRender } from '@/components/dict/interface'
 
-export type ComSearchConfig = Array<ComSearchConfigItem>
-
 export interface TableConfig {
   //是否斑马风格
   stripe?: boolean
@@ -28,7 +26,7 @@ export interface TableConfig {
 }
 
 export interface ColumnConfig {
-  render?: 'text' | 'icon' | 'img'
+  render?: 'text' | 'icon' | 'img' | 'link'
   label: string
   prop: string
   align?: string
@@ -37,23 +35,13 @@ export interface ColumnConfig {
   showTip?: boolean
   dictRender?: DictRender
   dictType?: DictTypeEnum
-}
-
-export interface ComSearchConfigItem {
-  label: string
-  prop: string
-  //默认值 text
-  render?: undefined | 'text' | 'number' | 'datetime' | 'select' | 'dict'
-  placeholder?: string
-  //render为select时必传, 否则组件不会显示
-  selectOptions?: Array<any>
-  selectIdKey?: string
-  selectLabelKey?: string
-  //如果render为dict, 那么字典类型必传
-  dictType?: DictTypeEnum
-}
-
-export interface SelectOptionItem {
-  id: number | string
-  label: number | string
+  /**
+   * render为link时跳转的路由, 只能带路径参数, 参数只能是row数据中的一个属性
+   * 例如我要跳转到 /system/dict/data/:type
+   * 那么path这样写: /system/dict/data/{}, pathParams这样写: [type]
+   * 这样就会取表格行数据中的type属性作为参数, 参数可以传多个, 会按照顺序替换
+   * 如果path不需要参数, 可不传pathParams
+   */
+  path?: string
+  pathProps?: string[]
 }
