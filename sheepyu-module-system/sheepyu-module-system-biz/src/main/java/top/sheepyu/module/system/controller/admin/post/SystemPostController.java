@@ -48,11 +48,11 @@ public class SystemPostController {
         return success(true);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{ids}")
     @ApiOperation("删除系统职位")
     @PreAuthorize("@ss.hasPermission('system:post:delete')")
-    public Result<Boolean> delete(@PathVariable Long id) {
-        systemPostService.deletePost(id);
+    public Result<Boolean> delete(@PathVariable String ids) {
+        systemPostService.deletePost(ids);
         return success(true);
     }
 

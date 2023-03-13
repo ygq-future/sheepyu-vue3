@@ -20,7 +20,7 @@ public interface SystemPostService extends IServiceX<SystemPost> {
 
     void updatePost(@Valid SystemPostUpdateVo updateVo);
 
-    void deletePost(Long id);
+    void deletePost(String ids);
 
     PageResult<SystemPost> pagePost(SystemPostQueryVo queryVo);
 

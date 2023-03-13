@@ -47,8 +47,8 @@ public class SystemPostServiceImpl extends ServiceImplX<SystemPostMapper, System
 
     @Transactional
     @Override
-    public void deletePost(Long id) {
-        removeById(id);
+    public void deletePost(String ids) {
+        batchDelete(ids, SystemPost::getId);
     }
 
     @Override
