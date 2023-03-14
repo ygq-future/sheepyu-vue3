@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  **/
 @Slf4j
 @Component
-@ConditionalOnProperty(prefix = "sheepyu.sms", value = "mailEnable")
+@ConditionalOnProperty(prefix = "sheepyu.sms", value = "mailEnable", matchIfMissing = true)
 public class EmailSmsSender implements SmsSender {
     @Resource
     private JavaMailSender javaMailSender;

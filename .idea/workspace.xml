@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-prod.yml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/.env.prod" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/.env.prod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-sms/src/main/java/top/sheepyu/framework/sms/core/sender/email/EmailSmsSender.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-sms/src/main/java/top/sheepyu/framework/sms/core/sender/email/EmailSmsSender.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -275,7 +272,7 @@
       <workItem from="1678548976193" duration="6000" />
       <workItem from="1678581341122" duration="9978000" />
       <workItem from="1678620859085" duration="186000" />
-      <workItem from="1678621056015" duration="31159000" />
+      <workItem from="1678621056015" duration="31989000" />
     </task>
     <servers />
   </component>
