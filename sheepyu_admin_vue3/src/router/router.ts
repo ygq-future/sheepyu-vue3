@@ -15,22 +15,23 @@ const router = createRouter({
   routes: staticRoutes
 })
 
+const whiteList: Array<string> = ['/login']
+
 router.beforeEach(async (to, from, next) => {
   NProgress.configure({ showSpinner: false })
   NProgress.start()
   const admin = useAdmin()
   const tabs = useTabs()
 
-  const expireTime = admin.state.expireTime || 0
-  const date = new Date(expireTime)
-  if (to.path === '/login') {
-    //登录未过期
-    if (date.getTime() > Date.now() && admin.state.accessToken) {
-      return next(from)
+  //没有token
+  if (!admin.hasToken()) {
+    if (whiteList.includes(to.path)) {
+      return next()
     }
-    return next()
+    return next('/login?redirectUrl=' + to.fullPath)
   }
 
+  //菜单路由是否更新了
   if (tabs.hasRoute()) {
     handlerTitle(to)
     return next()

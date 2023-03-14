@@ -5,14 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/role.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/role/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/permission/role/SystemRoleRespVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/permission/role/SystemRoleRespVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/permission/SystemRoleServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/permission/SystemRoleServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-prod.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-prod.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/.env.prod" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/.env.prod" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/render/FormItemRender.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/render/FormItemRender.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/Table.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/Table.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -53,6 +49,7 @@
   </component>
   <component name="MavenRunner">
     <option name="jreName" value="1.8" />
+    <option name="skipTests" value="true" />
   </component>
   <component name="ProblemsViewState">
     <option name="selectedTabId" value="CurrentFile" />
@@ -278,12 +275,15 @@
       <workItem from="1678548976193" duration="6000" />
       <workItem from="1678581341122" duration="9978000" />
       <workItem from="1678620859085" duration="186000" />
-      <workItem from="1678621056015" duration="26465000" />
+      <workItem from="1678621056015" duration="31159000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName="*.bat" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -295,17 +295,6 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/permission/PermissionBiz.java</url>
-          <line>106</line>
-          <option name="timeStamp" value="16" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -68,7 +68,12 @@ export const useAdmin = defineStore(IdEnum.ADMIN, () => {
     state.permissions = permissions
   }
 
-  return { state, clear, setAuthInfo, setAdminInfo, setPermissions }
+  function hasToken(): boolean {
+    const date = new Date(state.expireTime || 0)
+    return date.getTime() > Date.now() && state.accessToken !== undefined && state.accessToken.length > 0
+  }
+
+  return { state, clear, setAuthInfo, setAdminInfo, setPermissions, hasToken }
 }, {
   persist: {
     key: StorePersistKey.ADMIN_STORE_KEY

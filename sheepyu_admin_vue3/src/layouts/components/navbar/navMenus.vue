@@ -62,10 +62,12 @@ import { ElMessage } from 'element-plus'
 import Config from '@/layouts/components/navbar/config.vue'
 import { useRouter } from 'vue-router'
 import { useAdmin } from '@/stores/user/user'
+import { useTabs } from '@/stores/tabs/tabs'
 
 const router = useRouter()
 const config = useConfig()
 const admin = useAdmin()
+const tabs = useTabs()
 const state = reactive<{
   screenFull: boolean
 }>({
@@ -76,7 +78,7 @@ const topTextColor = computed(() => config.getColor('topTextColor'))
 
 function logout() {
   admin.clear()
-  router.push('/login')
+  router.push('/login?redirectUrl=' + tabs.state.activeRoute?.fullPath)
 }
 
 function changeColorMode(colorModeIndex: number) {

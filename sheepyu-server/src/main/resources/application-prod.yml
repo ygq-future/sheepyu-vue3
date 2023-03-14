@@ -9,6 +9,7 @@ spring:
     port: 6379
     database: 0
     password: 20030519
+  #一般云服务器都禁用了25端口, 所以正式部署需要使用邮件服务的请使用https的465端口
   mail:
     host: smtp.163.com
     username: ygq__future@163.com
@@ -24,8 +25,6 @@ spring:
       mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
 # 详情请参照SwaggerProperties
 sheepyu:
-  sms:
-    mail-enable: false
   swagger:
     product: true
   file:

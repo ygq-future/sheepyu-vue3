@@ -13,7 +13,7 @@ spring:
     host: smtp.163.com
     username: ygq__future@163.com
     password: IKRFOJCYBTWFJFYC
-    test-connection: false
+    test-connection: true
 # 详情请参照SwaggerProperties
 sheepyu:
   swagger:

@@ -7,6 +7,7 @@ import router from '@/router/router'
 import { download } from '@/util/common'
 //@ts-ignore
 import qs from 'qs'
+import { useTabs } from '@/stores/tabs/tabs'
 
 export interface Result<T = any> {
   code: number
@@ -78,9 +79,10 @@ export class Request {
               this.requestList.forEach(cb => cb())
               return this.service(res.config)
             } catch (e) {
+              const tabs = useTabs()
               admin.clear()
               this.requestList.forEach(cb => cb())
-              router.push('/login').then(() => {
+              router.push('/login?redirectUrl=' + tabs.state.activeRoute?.fullPath).then(() => {
                 ElNotification.error('登录已过期')
               })
               return Promise.reject('登录已过期')

@@ -21,6 +21,7 @@
     >
       <el-form-item prop='login'>
         <el-input
+          autofocus
           prefix-icon='el-icon-User'
           v-model='form.login'
           placeholder='用户名/邮箱/手机号'
@@ -70,6 +71,7 @@ let particleLine: ParticleLine
 const config = useConfig()
 const admin = useAdmin()
 const router = useRouter()
+const route = useRoute()
 const formRef = ref<InstanceType<typeof ElForm>>()
 const captchaEnable = ref<boolean>(true)
 const form = reactive<SystemUserLoginVo>({
@@ -101,7 +103,8 @@ function submit(formRef: InstanceType<typeof ElForm>) {
       info().then(res => {
         admin.setAdminInfo(res.data)
         loadDict()
-        router.push('/')
+        const redirectUrl = route.query.redirectUrl as string
+        router.push(redirectUrl ? redirectUrl : '/')
       })
     }).catch(() => {
       getCaptcha()
