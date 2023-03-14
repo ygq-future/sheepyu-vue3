@@ -33,6 +33,8 @@ public interface ErrorCodeConstants {
     ErrorCode LOGIN_FAILED = new ErrorCode(100_003_002, "登录失败, 用户名或密码错误!");
     ErrorCode USER_EXISTS = new ErrorCode(100_003_003, "用户已存在!");
     ErrorCode CODE_ERROR = new ErrorCode(100_003_004, "验证码错误!");
+    ErrorCode FORBID_OPERATE_ADMIN = new ErrorCode(100_003_004, "禁止操作超级管理员!");
+    ErrorCode OLD_PASS_ERROR = new ErrorCode(100_003_004, "原密码错误!");
 
     //systemConfig相关 100_004_001
     ErrorCode CONFIG_NOT_EXISTS = new ErrorCode(100_004_001, "配置不存在!");

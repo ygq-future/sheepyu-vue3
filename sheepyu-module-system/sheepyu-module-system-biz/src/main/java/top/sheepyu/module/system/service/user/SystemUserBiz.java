@@ -1,6 +1,7 @@
 package top.sheepyu.module.system.service.user;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.AllArgsConstructor;
@@ -10,11 +11,11 @@ import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.service.SecurityRedisService;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 import top.sheepyu.module.common.common.PageResult;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserLoginVo;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserQueryVo;
-import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
+import top.sheepyu.module.common.enums.CommonStatusEnum;
+import top.sheepyu.module.common.enums.UserTypeEnum;
+import top.sheepyu.module.system.controller.admin.user.vo.*;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserLoginVo;
+import top.sheepyu.module.system.controller.app.user.vo.AppUserRegisterVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
@@ -104,6 +105,33 @@ public class SystemUserBiz {
     }
 
     public void createUser(SystemUserCreateVo createVo) {
+        createVo.setType(ADMIN.getCode());
+        systemUserService.create(createVo);
+    }
+
+    /**
+     * 用于用户端注册
+     *
+     * @param registerVo 用户创建vo
+     */
+    public void registerUser(@Valid AppUserRegisterVo registerVo) {
+        SystemUserCreateVo createVo = new SystemUserCreateVo();
+        createVo.setNickname(registerVo.getNickname());
+        createVo.setPassword(registerVo.getPassword());
+        createVo.setEmail(registerVo.getEmail());
+        createVo.setMobile(registerVo.getMobile());
+        createVo.setType(UserTypeEnum.MEMBER.getCode());
+        createVo.setStatus(CommonStatusEnum.ENABLE.getCode());
+
+        //设置用户名
+        if (StrUtil.isNotBlank(createVo.getEmail())) {
+            createVo.setUsername(createVo.getEmail());
+        } else if (StrUtil.isNotBlank(createVo.getMobile())) {
+            createVo.setUsername(createVo.getMobile());
+        } else {
+            createVo.setUsername("sheepyu_" + UUID.fastUUID().toString(true).substring(16));
+        }
+
         systemUserService.create(createVo);
     }
 
@@ -149,14 +177,15 @@ public class SystemUserBiz {
 
     private LambdaQueryWrapper<SystemUser> buildQuery(SystemUserQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
-        boolean keywordExists = StrUtil.isNotBlank(keyword);
 
         return systemUserService.buildQuery()
                 .eqIfPresent(SystemUser::getStatus, queryVo.getStatus())
                 .eqIfPresent(SystemUser::getDeptId, queryVo.getDeptId())
                 .betweenIfPresent(SystemUser::getCreateTime, queryVo.getCreateTimes())
-                .eq(SystemUser::getType, ADMIN.getCode())
-                .and(keywordExists, e -> e.like(SystemUser::getUsername, keyword).or()
+                .betweenIfPresent(SystemUser::getLoginTime, queryVo.getLoginTimes())
+                .eqIfPresent(SystemUser::getType, queryVo.getType())
+                .and(StrUtil.isNotBlank(keyword), e -> e
+                        .like(SystemUser::getUsername, keyword).or()
                         .like(SystemUser::getNickname, keyword).or()
                         .like(SystemUser::getMobile, keyword).or()
                         .like(SystemUser::getEmail, keyword));
@@ -186,9 +215,9 @@ public class SystemUserBiz {
         systemUserService.updateAvatar(userId, avatar);
     }
 
-    public void updatePassword(String password) {
+    public void updatePassword(SystemUpdatePassVo updatePassVo) {
         Long userId = SecurityFrameworkUtil.getLoginUserId();
-        systemUserService.updatePassword(userId, password);
+        systemUserService.updatePassword(userId, updatePassVo.getOldPass(), updatePassVo.getNewPass());
     }
 
     private void fillDeptInfo(SystemUser user) {

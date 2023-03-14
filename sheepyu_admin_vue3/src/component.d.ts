@@ -7,6 +7,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    AvatarUpload: typeof import('./components/upload/AvatarUpload.vue')['default']
     CellForm: typeof import('./components/form/CellForm.vue')['default']
     ColumnRender: typeof import('./components/table/render/ColumnRender.vue')['default']
     ComSearch: typeof import('./components/search/ComSearch.vue')['default']
@@ -59,6 +60,7 @@ declare module '@vue/runtime-core' {
     FormItemRender: typeof import('./components/form/render/FormItemRender.vue')['default']
     Icon: typeof import('./components/icon/Icon.vue')['default']
     IconSelector: typeof import('./components/icon/IconSelector.vue')['default']
+    ImageUpload: typeof import('./components/upload/ImageUpload.vue')['default']
     PartUpload: typeof import('./components/upload/PartUpload.vue')['default']
     PopupForm: typeof import('./components/form/PopupForm.vue')['default']
     PopupSearch: typeof import('./components/search/PopupSearch.vue')['default']

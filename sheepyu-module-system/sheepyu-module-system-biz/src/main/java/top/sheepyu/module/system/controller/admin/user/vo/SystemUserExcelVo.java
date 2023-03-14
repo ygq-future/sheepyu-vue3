@@ -16,6 +16,10 @@ public class SystemUserExcelVo {
     @ExcelProperty("id")
     private Long id;
 
+    @ApiModelProperty("用户类型")
+    @ExcelProperty("用户类型")
+    private Integer type;
+
     @ApiModelProperty("用户名")
     @ExcelProperty("用户名")
     private String username;

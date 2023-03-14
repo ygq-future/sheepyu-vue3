@@ -25,6 +25,15 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           keepalive: true,
           fullpath: '/system/dict/:type'
         }
+      }, {
+        name: 'system-user-info',
+        path: '/system/user/info',
+        component: () => import('@/views/system/user/info.vue'),
+        meta: {
+          title: '个人信息',
+          keepalive: true,
+          fullpath: '/system/user/info'
+        }
       }
     ]
   }, {

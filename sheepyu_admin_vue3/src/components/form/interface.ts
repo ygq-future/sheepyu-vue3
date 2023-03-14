@@ -39,6 +39,9 @@ export interface FormItemConfig {
   change?: Function
   //用于表单校验, 默认为true
   required?: boolean
+  //是否开启多选, 用于tree-select和select
+  multiple?: boolean
+  disabled?: boolean
 }
 
 /**
@@ -51,7 +54,7 @@ export interface FormItemConfig {
  *          你可以自己扩展一个类型tree-checkbox-strictly
  */
 export type FormRender =
-  'number' | 'text' | 'switch' |
+  'number' | 'text' | 'switch' | 'password' |
   'radio' | 'select' | 'icon' |
   'slider' | 'upload' | 'tree-select' |
   'checkbox' | 'datetime' | 'part-upload' |

@@ -4,8 +4,11 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import top.sheepyu.module.common.annotations.InEnum;
+import top.sheepyu.module.common.enums.UserTypeEnum;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * @author ygq
@@ -22,4 +25,9 @@ public class SystemUserCreateVo extends SystemUserBaseVo {
     @ApiModelProperty("密码")
     @NotBlank(message = "密码不能为空")
     private String password;
+
+    @ApiModelProperty("用户类型")
+    @NotNull(message = "用户类型不能为空")
+    @InEnum(UserTypeEnum.class)
+    private Integer type;
 }

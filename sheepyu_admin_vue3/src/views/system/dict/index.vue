@@ -23,8 +23,7 @@
 
       <template #buttons>
         <el-tooltip :show-after='500' content='重载全局字典' placement='top'>
-          <el-button v-blur type='success' @click='loadDict'>
-            <Icon name='el-icon-Loading' />
+          <el-button v-blur type='success' @click='onLoadDict' :loading='state.buttonLoading'>
             <span class='button-text'>重载全局字典</span>
           </el-button>
         </el-tooltip>
@@ -84,6 +83,7 @@ const tableHeaderRef = ref()
 const popupFormRef = ref()
 
 const state = reactive<{
+  buttonLoading?: boolean
   selection: any[]
   query: SystemDictTypeQueryVo
   form: SystemDictTypeCreateVo | SystemDictTypeUpdateVo
@@ -150,6 +150,7 @@ const state = reactive<{
 async function onFieldChange(row: SystemDictTypeUpdateVo) {
   const data = toRaw(row)
   await updateDictTypeApi(data)
+  await pageDictType()
   loadDict()
 }
 
@@ -197,6 +198,14 @@ async function pageDictType() {
   state.tableConfig.loading = false
   state.tableData = data.list
   state.query.total = data.total
+}
+
+function onLoadDict() {
+  state.buttonLoading = true
+  loadDict()
+  setTimeout(() => {
+    state.buttonLoading = false
+  }, 1000)
 }
 
 function onClose() {

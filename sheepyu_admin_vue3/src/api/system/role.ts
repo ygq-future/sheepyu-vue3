@@ -18,6 +18,10 @@ export function findRoleApi(id: number) {
   return request.get<SystemRoleRespVo>('/system/permission/role/' + id)
 }
 
+export function listRoleApi() {
+  return request.get<Array<SystemRoleRespVo>>('/system/permission/role')
+}
+
 export function pageRoleApi(params: SystemRoleQueryVo) {
   return request.get<PageResult<SystemRoleRespVo>>('/system/permission/role/page', { params })
 }

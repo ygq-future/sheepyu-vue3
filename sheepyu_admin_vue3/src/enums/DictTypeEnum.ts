@@ -4,4 +4,5 @@ export enum DictTypeEnum {
   SYSTEM_CODEGEN_SCENE = 'system_codegen_scene',
   COMMON_BOOLEAN_STATUS = 'common_boolean_status',
   SEX = 'sex',
+  SYSTEM_USER_TYPE = 'system_user_type',
 }

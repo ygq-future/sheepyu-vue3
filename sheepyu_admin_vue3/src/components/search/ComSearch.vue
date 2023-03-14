@@ -23,14 +23,25 @@
             </el-form-item>
           </el-col>
 
-          <el-col
-            class='p-15' :sm='6' :xs='24'
-            v-if='item.render === "select" && checkSelectOptions(item)'
-          >
+          <el-col class='p-15' :sm='6' :xs='24' v-if='item.render === "select"'>
             <el-form-item :label='item.label' :prop='item.prop'>
               <el-select v-model='form[item.prop]' :clearable='item.clearable === undefined || item.clearable'>
                 <el-option v-for='option in selectFormat(item)' :label='option.label' :value='option.id' />
               </el-select>
+            </el-form-item>
+          </el-col>
+
+          <el-col class='p-15' :sm='6' :xs='24' v-if='item.render === "tree-select"'>
+            <el-form-item :label='item.label' :prop='item.prop'>
+              <el-tree-select
+                v-model='form[item.prop]'
+                default-expand-all
+                check-strictly
+                :node-key='item.selectIdKey'
+                :data='item.selectOptions'
+                :render-after-expand='false'
+                :props='{label: item.selectLabelKey, value: item.selectIdKey}'
+              />
             </el-form-item>
           </el-col>
 
@@ -78,21 +89,6 @@ const formRef = ref<InstanceType<typeof ElForm>>()
 function onReset() {
   formRef.value?.resetFields()
   emits('reset')
-}
-
-function checkSelectOptions(configItem: ComSearchConfigItem): boolean {
-  const selectOptions = configItem.selectOptions
-  if (!selectOptions || selectOptions.length === 0) {
-    return false
-  }
-
-  for (let option of selectOptions) {
-    let id: string | number | undefined = configItem.selectIdKey ? option[configItem.selectIdKey] : option.id
-    let label: string | number | undefined = configItem.selectLabelKey ? option[configItem.selectLabelKey] : option.label
-    if (id === undefined || label === undefined) return false
-  }
-
-  return true
 }
 
 function selectFormat(configItem: ComSearchConfigItem): SelectOptionItem[] {

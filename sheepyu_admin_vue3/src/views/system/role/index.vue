@@ -97,7 +97,7 @@ const state = reactive<{
   selection: any[]
   query: SystemRoleQueryVo
   form: SystemRoleCreateVo | SystemRoleUpdateVo
-  menuAssignForm: { roleId: number, menuIds: Array<number> }
+  menuAssignForm: { roleId: number, menuIds: Array<number>, name?: string, code?: string }
   tableData: SystemRoleRespVo[]
   comSearchConfig: ComSearchConfig
   tableConfig: TableConfig
@@ -171,6 +171,8 @@ const state = reactive<{
   menuAssignFormConfig: {
     title: '分配菜单权限',
     formItemConfigs: [
+      { label: '角色名称', prop: 'name', disabled: true },
+      { label: '角色编码', prop: 'code', disabled: true },
       {
         label: '菜单',
         prop: 'menuIds',
@@ -185,6 +187,7 @@ const state = reactive<{
 async function onFieldChange(row: SystemRoleUpdateVo) {
   const data = toRaw(row)
   await updateRoleApi(data)
+  await pageRole()
 }
 
 function onAdd() {
@@ -199,6 +202,8 @@ async function onAssignMenu(row: any) {
   service.close()
   state.menuAssignForm.menuIds = data
   state.menuAssignForm.roleId = row.id
+  state.menuAssignForm.name = row.name
+  state.menuAssignForm.code = row.code
   menuAssignFormRef.value.show()
 }
 
@@ -246,7 +251,7 @@ async function pageRole() {
 
 async function findMenuList() {
   const { data } = await menuList({ status: 1 })
-  state.menuAssignFormConfig.formItemConfigs[0].data = data
+  state.menuAssignFormConfig.formItemConfigs[2].data = data
 }
 
 function onMenuAssignClose() {

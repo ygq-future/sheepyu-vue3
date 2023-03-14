@@ -190,6 +190,7 @@ const state = reactive<{
 async function onFieldChange(row: ${fullClassName}UpdateVo) {
   const data = toRaw(row)
   await update${table.className}Api(data)
+  await ${methodName}()
 }
 
 function onAdd() {

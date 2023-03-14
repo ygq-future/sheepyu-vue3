@@ -7,7 +7,9 @@ import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.annotations.Permit;
 import top.sheepyu.framework.web.core.annotations.FlowLimit;
 import top.sheepyu.module.common.common.Result;
+import top.sheepyu.module.system.controller.admin.user.vo.SystemUpdatePassVo;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserLoginVo;
+import top.sheepyu.module.system.controller.app.user.vo.AppUserRegisterVo;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserRespVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.convert.user.SystemUserConvert;
@@ -36,6 +38,15 @@ public class AppUserController {
     public Result<LoginUser> login(@RequestBody AppUserLoginVo loginVo) {
         LoginUser loginUser = systemUserBiz.loginOfApp(loginVo);
         return success(loginUser);
+    }
+
+    @Permit
+    @FlowLimit
+    @PostMapping("/register")
+    @ApiOperation("用户注册")
+    public Result<Boolean> register(@RequestBody AppUserRegisterVo registerVo) {
+        systemUserBiz.registerUser(registerVo);
+        return success(true);
     }
 
     @Permit
@@ -110,8 +121,8 @@ public class AppUserController {
 
     @PatchMapping("/password")
     @ApiOperation("修改用户密码")
-    public Result<Boolean> updatePassword(@RequestParam String password) {
-        systemUserBiz.updatePassword(password);
+    public Result<Boolean> updatePassword(@RequestBody SystemUpdatePassVo updatePassVo) {
+        systemUserBiz.updatePassword(updatePassVo);
         return success(true);
     }
 }

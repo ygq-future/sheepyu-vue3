@@ -104,12 +104,12 @@ public class SystemUserController {
 
     @PatchMapping("/password")
     @ApiOperation("修改用户密码")
-    public Result<Boolean> updatePassword(@RequestParam String password) {
-        systemUserBiz.updatePassword(password);
+    public Result<Boolean> updatePassword(@RequestBody SystemUpdatePassVo updatePassVo) {
+        systemUserBiz.updatePassword(updatePassVo);
         return success(true);
     }
 
-    @GetMapping("/info/{id}")
+    @GetMapping("/{id}")
     @ApiOperation("获取指定用户信息")
     @PreAuthorize("@ss.hasPermission('system:user:query')")
     public Result<SystemUserRespVo> infoById(@PathVariable Long id) {
@@ -151,7 +151,7 @@ public class SystemUserController {
 
     @PatchMapping("/reset-password/{id}")
     @ApiOperation(value = "重置指定用户密码", notes = "默认重置为系统配置中的默认密码, 如果传了newPass, 就会为newPass")
-    @PreAuthorize("@ss.hasPermission('system:user:resetPassword')")
+    @PreAuthorize("@ss.hasPermission('system:user:reset-password')")
     public Result<Boolean> resetPassword(@PathVariable Long id, @RequestParam(required = false) String newPass) {
         systemUserBiz.resetPassword(id, newPass);
         return success(true);

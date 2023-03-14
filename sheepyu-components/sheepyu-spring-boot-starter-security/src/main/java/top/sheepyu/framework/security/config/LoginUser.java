@@ -22,4 +22,5 @@ public class LoginUser {
     private String accessToken;
     private String refreshToken;
     private Date expireTime;
+    private Date refreshExpireTime;
 }

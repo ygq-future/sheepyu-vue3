@@ -18,6 +18,9 @@ public class SystemUserRespVo extends SystemUserBaseVo {
     @ApiModelProperty("用户id")
     private Long id;
 
+    @ApiModelProperty("用户类型")
+    private Integer type;
+
     @ApiModelProperty("用户名")
     private String username;
 
@@ -32,4 +35,7 @@ public class SystemUserRespVo extends SystemUserBaseVo {
 
     @ApiModelProperty("上一次登录时间")
     private Date loginTime;
+
+    @ApiModelProperty("注册时间")
+    private Date createTime;
 }

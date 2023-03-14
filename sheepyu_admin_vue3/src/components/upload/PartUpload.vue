@@ -25,7 +25,7 @@
 <script setup lang='ts'>
 import type { UploadProps, UploadRequestOptions, UploadRawFile } from 'element-plus'
 import { ElLoading, ElNotification } from 'element-plus'
-import Md5Worker from '@/util/worker/md5Worker.ts?worker'
+import Md5Worker from '../../util/worker/md5Worker.ts?worker'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
 import { abortPart, checkMd5, completePart, preparePart, uploadPart } from '@/api/system/file'
 

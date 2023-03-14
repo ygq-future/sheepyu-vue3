@@ -17,6 +17,10 @@ export function findPostApi(id: number) {
   return request.get<SystemPostRespVo>('/system/post/' + id)
 }
 
+export function listPostApi() {
+  return request.get<Array<SystemPostRespVo>>('/system/post')
+}
+
 export function pagePostApi(params: SystemPostQueryVo) {
   return request.get<PageResult<SystemPostRespVo>>('/system/post/page', { params })
 }

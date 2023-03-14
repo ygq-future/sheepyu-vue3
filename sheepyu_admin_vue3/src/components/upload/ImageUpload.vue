@@ -1,59 +1,37 @@
 <template>
   <el-upload
-    :show-file-list='false'
+    class='avatar-uploader'
     :http-request='httpRequest'
+    :show-file-list='false'
     :before-upload='beforeUpload'
   >
-    <el-button type='primary'>点击上传</el-button>
-    <template #tip>
-      <div class='el-upload__tip'>
-        请上传类型为
-        <span style='color: #ff4d4d'>{{ fileTypes.join('/') }}</span>
-        且大小不超过
-        <span style='color: #ff4d4d'>{{ size }}MB</span>
-        的文件
-      </div>
-      <div class='operate'>
-        <el-input class='remark' placeholder='文件备注' v-model='remark' />
-      </div>
-    </template>
+    <img v-if='props.modelValue' :src='props.modelValue' class='avatar' alt='' />
+    <Icon v-else name='el-icon-Plus' />
   </el-upload>
 </template>
-<script setup lang='ts'>
-import type { UploadProps } from 'element-plus'
+
+<script lang='ts' setup>
 import { ElLoading, ElNotification } from 'element-plus'
+import type { UploadProps } from 'element-plus'
+import { checkMd5, upload } from '@/api/system/file'
 import Md5Worker from '../../util/worker/md5Worker.ts?worker'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
-import { checkMd5, upload } from '@/api/system/file'
 
-const md5Store = useMd5Worker()
-const emits = defineEmits(['update:modelValue'])
 const props = withDefaults(defineProps<{
-  extendTypes?: string[]
   size?: number
   modelValue: string
+  width?: string
 }>(), {
-  extendTypes: () => [],
-  size: 100,
-  modelValue: ''
+  size: 10,
+  modelValue: '',
+  width: '178px'
 })
-const remark = ref<string>('')
-const fileTypes = ['png', 'jpg', 'mp4', ...props.extendTypes]
 
-const beforeUpload: UploadProps['beforeUpload'] = (file) => {
-  let suffix = file.name.substring(file.name.lastIndexOf('.') + 1)
-  if (!fileTypes.includes(suffix)) {
-    ElNotification.error('文件格式错误!')
-    return false
-  }
+const emits = defineEmits<{
+  (e: 'update:modelValue', modelValue: string): void
+}>()
 
-  if (file.size > props.size * 1024 * 1024) {
-    ElNotification.error(`文件大小不能超过 ${props.size} MB!`)
-    return false
-  }
-
-  return true
-}
+const md5Store = useMd5Worker()
 
 function computeMd5(file: File): Promise<string> {
   return new Promise(resolve => {
@@ -90,29 +68,56 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     const data = new FormData()
     data.append('file', file)
     data.append('md5', md5)
-    data.append('remark', remark.value)
+    data.append('remark', '图片上传')
     emits('update:modelValue', (await upload(data)).data)
     instance.close()
     return resolve(true)
   })
 }
 
+const beforeUpload: UploadProps['beforeUpload'] = (file) => {
+  let suffix = file.name.substring(file.name.lastIndexOf('.') + 1)
+  if (!['jpg', 'png', 'jpeg', 'gif'].includes(suffix)) {
+    ElNotification.error('只能上传图片!')
+    return false
+  }
+
+  if (file.size > props.size * 1024 * 1024) {
+    ElNotification.error(`文件大小不能超过 ${props.size} MB!`)
+    return false
+  }
+
+  return true
+}
 </script>
 
 <style scoped lang='scss'>
-.operate {
-  display: flex;
-  align-items: center;
-  margin-top: 5px;
+$width: v-bind(width);
 
-  .remark {
-    width: 250px;
-    margin-right: 10px;
-  }
+.avatar {
+  width: $width;
+  height: $width;
+  display: block;
 }
 
-:deep(.el-upload__tip) {
-  font-weight: 700;
-  color: gray;
+:deep(.el-upload) {
+  border: 1px dashed var(--el-border-color);
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: var(--el-transition-duration-fast);
+}
+
+:deep(.el-upload):hover {
+  border-color: var(--el-color-primary);
+}
+
+.el-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: $width;
+  height: $width;
+  text-align: center;
 }
 </style>

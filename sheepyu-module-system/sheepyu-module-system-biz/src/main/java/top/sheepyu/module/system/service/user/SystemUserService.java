@@ -38,6 +38,8 @@ public interface SystemUserService extends IServiceX<SystemUser> {
 
     void deleteUser(@NotNull(message = "用户id不能为空") Long id);
 
+    boolean isSuperAdmin(Long userId);
+
     void updateLoginTime(SystemUser user);
 
     SystemUser loginByEmail(@Valid EmailLoginVo loginVo);
@@ -54,5 +56,5 @@ public interface SystemUserService extends IServiceX<SystemUser> {
 
     void updateAvatar(Long userId, @NotBlank(message = "头像不能为空") String avatar);
 
-    void updatePassword(Long userId, @NotBlank(message = "密码不能为空") String password);
+    void updatePassword(Long userId, @NotBlank(message = "密码不能为空") String oldPass, @NotBlank(message = "密码不能为空") String newPass);
 }

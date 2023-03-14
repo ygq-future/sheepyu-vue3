@@ -24,7 +24,7 @@
         :offset='10'
         placement='bottom-start'
         :width='240'
-        trigger='click'
+        trigger='hover'
       >
         <template #reference>
           <div class='user-icon'>
@@ -40,7 +40,7 @@
             <span>{{ admin.state.loginTime }}</span>
           </div>
           <div class='user-footer'>
-            <el-button type='primary' plain v-blur>个人资料</el-button>
+            <el-button type='primary' plain v-blur @click='$router.push("/system/user/info")'>个人资料</el-button>
             <el-button type='danger' plain v-blur @click='logout'>注销</el-button>
           </div>
         </div>
@@ -78,6 +78,7 @@ const topTextColor = computed(() => config.getColor('topTextColor'))
 
 function logout() {
   admin.clear()
+  tabs.clearRoute()
   router.push('/login?redirectUrl=' + tabs.state.activeRoute?.fullPath)
 }
 

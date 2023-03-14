@@ -4,6 +4,16 @@
       v-if='(!config.render && !config.dictType && !config.dictRender)
       || config.render === "text"'
       v-model='form[config.prop]'
+      clearable
+      :disabled='disabled'
+      :placeholder='config.placeholder'
+    />
+
+    <el-input
+      v-if='config.render === "password"'
+      v-model='form[config.prop]'
+      type='password'
+      show-password
       :disabled='disabled'
       :placeholder='config.placeholder'
     />
@@ -31,25 +41,16 @@
       :disabled='disabled'
     />
 
+    <!--  多选情况下默认无法选中父节点  -->
     <el-tree-select
       v-if='config.render === "tree-select"'
       v-model='form[config.prop]'
       check-strictly
-      :node-key='config.props.value'
-      :data='config.data'
-      :render-after-expand='false'
-      :props='config.props'
-      :disabled='disabled'
-    />
-
-    <!--  默认无法选中父节点  -->
-    <el-tree-select
-      v-if='config.render === "tree-select-checkbox"'
-      v-model='form[config.prop]'
-      collapse-tags
-      multiple
       default-expand-all
-      show-checkbox
+      clearable
+      :collapse-tags='config.multiple'
+      :multiple='config.multiple'
+      :show-checkbox='config.multiple'
       :node-key='config.props.value'
       :data='config.data'
       :render-after-expand='false'
@@ -79,6 +80,7 @@
       v-if='config.render === "textarea"'
       v-model='form[config.prop]'
       type='textarea'
+      clearable
       :rows='4'
       :disabled='disabled'
       :placeholder='config.placeholder'
@@ -88,12 +90,15 @@
       v-if='config.render === "select"'
       v-model='form[config.prop]'
       clearable
+      :multiple='config.multiple'
       :disabled='disabled'
       :placeholder='config.placeholder'
       @change='(value) => config.change && config.change(value)'
     >
       <el-option v-for='item in config.data' :label='item[config.props.label]' :value='item[config.props.value]' />
     </el-select>
+
+    <ImageUpload v-if='config.render === "upload"' width='100px' v-model='form[config.prop]' />
 
     <span class='tip' v-if='config.tip'>{{ config.tip }}</span>
   </el-form-item>

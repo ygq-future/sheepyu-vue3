@@ -1,6 +1,7 @@
 const MINUTE = 1000 * 60
 const HOUR = MINUTE * 60
 const DAY = HOUR * 24
+const MONTH = DAY * 30
 
 function getDateTimeRange(offset: number): Date[] {
   const endTime = new Date()
@@ -42,13 +43,16 @@ export const rangeShortcuts = [
     value: () => getDateTimeRange(DAY * 14)
   }, {
     text: '最近一个月',
-    value: () => getDateTimeRange(DAY * 30)
+    value: () => getDateTimeRange(MONTH)
+  }, {
+    text: '最近三个月',
+    value: () => getDateTimeRange(MONTH * 3)
   }, {
     text: '最近半年',
-    value: () => getDateTimeRange(DAY * 30 * 6)
+    value: () => getDateTimeRange(MONTH * 6)
   }, {
     text: '最近一年',
-    value: () => getDateTimeRange(DAY * 30 * 12)
+    value: () => getDateTimeRange(MONTH * 12)
   }, {
     text: '未来十分钟',
     value: () => getDateTimeRange(-MINUTE * 10)
@@ -78,13 +82,16 @@ export const rangeShortcuts = [
     value: () => getDateTimeRange(-DAY * 14)
   }, {
     text: '未来一个月',
-    value: () => getDateTimeRange(-DAY * 30)
+    value: () => getDateTimeRange(-MONTH)
+  }, {
+    text: '未来三个月',
+    value: () => getDateTimeRange(-MONTH * 3)
   }, {
     text: '未来半年',
-    value: () => getDateTimeRange(-DAY * 30 * 6)
+    value: () => getDateTimeRange(-MONTH * 6)
   }, {
     text: '未来一年',
-    value: () => getDateTimeRange(-DAY * 30 * 12)
+    value: () => getDateTimeRange(-MONTH * 12)
   }
 ]
 
@@ -118,13 +125,16 @@ export const shortcuts = [
     value: () => getDateTime(DAY * 14)
   }, {
     text: '最近一个月',
-    value: () => getDateTime(DAY * 30)
+    value: () => getDateTime(MONTH)
+  }, {
+    text: '最近三个月',
+    value: () => getDateTime(MONTH * 3)
   }, {
     text: '最近半年',
-    value: () => getDateTime(DAY * 30 * 6)
+    value: () => getDateTime(MONTH * 6)
   }, {
     text: '最近一年',
-    value: () => getDateTime(DAY * 30 * 12)
+    value: () => getDateTime(MONTH * 12)
   }, {
     text: '未来十分钟',
     value: () => getDateTime(-MINUTE * 10)
@@ -154,12 +164,15 @@ export const shortcuts = [
     value: () => getDateTime(-DAY * 14)
   }, {
     text: '未来一个月',
-    value: () => getDateTime(-DAY * 30)
+    value: () => getDateTime(-MONTH)
+  }, {
+    text: '未来三个月',
+    value: () => getDateTime(-MONTH * 3)
   }, {
     text: '未来半年',
-    value: () => getDateTime(-DAY * 30 * 6)
+    value: () => getDateTime(-MONTH * 6)
   }, {
     text: '未来一年',
-    value: () => getDateTime(-DAY * 30 * 12)
+    value: () => getDateTime(-MONTH * 12)
   }
 ]

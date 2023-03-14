@@ -20,6 +20,7 @@ interface Admin {
   refreshToken?: string
   loginTime?: string
   expireTime?: string
+  refreshExpireTime?: string
 }
 
 export const useAdmin = defineStore(IdEnum.ADMIN, () => {
@@ -36,11 +37,13 @@ export const useAdmin = defineStore(IdEnum.ADMIN, () => {
     delete state.deptName
     delete state.postIds
     delete state.postNames
+    delete state.permissions
     delete state.userType
     delete state.accessToken
     delete state.refreshToken
     delete state.loginTime
     delete state.expireTime
+    delete state.refreshExpireTime
   }
 
   function setAuthInfo(loginUser: LoginUser) {
@@ -50,6 +53,7 @@ export const useAdmin = defineStore(IdEnum.ADMIN, () => {
     state.accessToken = loginUser.accessToken
     state.refreshToken = loginUser.refreshToken
     state.expireTime = loginUser.expireTime
+    state.refreshExpireTime = loginUser.refreshExpireTime
   }
 
   function setAdminInfo(admin: SystemUserRespVo) {
@@ -69,7 +73,7 @@ export const useAdmin = defineStore(IdEnum.ADMIN, () => {
   }
 
   function hasToken(): boolean {
-    const date = new Date(state.expireTime || 0)
+    const date = new Date(state.refreshExpireTime || 0)
     return date.getTime() > Date.now() && state.accessToken !== undefined && state.accessToken.length > 0
   }
 

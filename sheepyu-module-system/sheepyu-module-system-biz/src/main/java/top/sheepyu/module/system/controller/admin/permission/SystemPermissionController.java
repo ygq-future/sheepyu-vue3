@@ -147,25 +147,23 @@ public class SystemPermissionController {
     }
 
     @GetMapping("/role-by-user/{userId}")
-    @ApiOperation("获取用户的角色")
+    @ApiOperation("获取用户的角色id")
     @PreAuthorize("@ss.hasPermission('system:role:query')")
-    public Result<List<SystemRoleRespVo>> listByUser(@PathVariable Long userId) {
-        return success(SystemRoleConvert.CONVERT.convertList(permissionBiz.findRoleByUserId(userId)));
+    public Result<Set<Long>> listByUser(@PathVariable Long userId) {
+        return success(permissionBiz.findRoleByUserId(userId));
     }
 
     @GetMapping("/menu-by-role/{roleId}")
     @ApiOperation("获取角色的菜单id")
     @PreAuthorize("@ss.hasPermission('system:menu:query')")
     public Result<Set<Long>> listMenuByRoleId(@PathVariable Long roleId) {
-        Set<Long> list = permissionBiz.listMenuIdByRoleId(roleId);
-        return success(list);
+        return success(permissionBiz.listMenuIdByRoleId(roleId));
     }
 
     @GetMapping("/user-permission")
     @ApiOperation("获取当前登录用户的权限列表")
     public Result<Set<String>> listPermissionByUser() {
-        Set<String> list = permissionBiz.listPermissionByUser();
-        return success(list);
+        return success(permissionBiz.listPermissionByUser());
     }
 
     @GetMapping("/user-menu")

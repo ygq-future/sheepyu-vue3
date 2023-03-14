@@ -28,6 +28,16 @@
       <Icon v-if='column.render === "icon"' :name='scope.row[column.prop]' />
 
       <el-link v-if='column.render === "link"' @click='linkTo(scope.row)'>{{ scope.row[column.prop] }}</el-link>
+
+      <el-image
+        v-if='column.render === "img"'
+        style='width: 100px; height: 100px'
+        preview-teleported
+        hide-on-click-modal
+        fit='cover'
+        :src='scope.row[column.prop]'
+        :preview-src-list='[scope.row[column.prop]]'
+      />
     </template>
   </el-table-column>
 </template>

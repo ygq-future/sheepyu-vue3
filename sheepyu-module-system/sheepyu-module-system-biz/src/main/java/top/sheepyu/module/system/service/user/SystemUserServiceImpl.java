@@ -1,5 +1,6 @@
 package top.sheepyu.module.system.service.user;
 
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,7 +12,6 @@ import top.sheepyu.framework.sms.core.sender.SmsSender;
 import top.sheepyu.framework.sms.core.sender.email.EmailParams;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 import top.sheepyu.module.common.constants.ErrorCodeConstants;
-import top.sheepyu.module.common.enums.CommonStatusEnum;
 import top.sheepyu.module.common.util.ServletUtil;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
@@ -26,7 +26,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Objects;
 
-import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
+import static top.sheepyu.module.common.enums.CommonStatusEnum.DISABLE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.user.SystemUserConvert.CONVERT;
@@ -115,7 +115,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
     @Override
     public void create(SystemUserCreateVo createVo) {
-        SystemUser user = CONVERT.convert(createVo).setType(ADMIN.getCode());
+        SystemUser user = CONVERT.convert(createVo).setType(createVo.getType());
         SystemUser byUsername = findByUsername(user.getUsername());
         if (byUsername != null) {
             throw exception(USER_EXISTS);
@@ -123,6 +123,10 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
         //根据用户名删除deleted=1的用户
         baseMapper.removeByUsernameDeleted(user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //设置昵称
+        if (StrUtil.isBlank(createVo.getNickname())) {
+            createVo.setNickname("sheepyu_用户" + RandomUtil.randomNumbers(8));
+        }
         save(user);
     }
 
@@ -130,12 +134,25 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     public void updateUser(SystemUserUpdateVo updateVo) {
         findByIdValidateExists(updateVo.getId());
         SystemUser user = CONVERT.convert(updateVo);
+        //安全考虑
+        if (isSuperAdmin(user.getId()) && DISABLE.getCode().equals(user.getStatus())) {
+            throw exception(FORBID_OPERATE_ADMIN);
+        }
         updateById(user);
     }
 
     @Override
     public void deleteUser(Long id) {
+        //安全考虑
+        if (isSuperAdmin(id)) {
+            throw exception(FORBID_OPERATE_ADMIN);
+        }
         removeById(id);
+    }
+
+    @Override
+    public boolean isSuperAdmin(Long userId) {
+        return userId == 1L;
     }
 
     @Override
@@ -172,6 +189,10 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
     @Override
     public void resetPassword(Long id, String newPass) {
+        //安全考虑
+        if (isSuperAdmin(id)) {
+            throw exception(FORBID_OPERATE_ADMIN);
+        }
         SystemUser user = findByIdValidateExists(id);
         String password;
         if (StrUtil.isNotBlank(newPass)) {
@@ -213,14 +234,18 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     }
 
     @Override
-    public void updatePassword(Long userId, String password) {
+    public void updatePassword(Long userId, String oldPass, String newPass) {
         SystemUser user = findByIdValidateExists(userId);
-        user.setPassword(passwordEncoder.encode(password));
+        if (!passwordEncoder.matches(oldPass, user.getPassword())) {
+            throw exception(OLD_PASS_ERROR);
+        }
+
+        user.setPassword(passwordEncoder.encode(newPass));
         updateById(user);
     }
 
     private void checkStatus(SystemUser user, LoginTypeEnum loginType) {
-        if (Objects.equals(CommonStatusEnum.DISABLE.getCode(), user.getStatus())) {
+        if (Objects.equals(DISABLE.getCode(), user.getStatus())) {
             systemAccessLogService.createAccessLog(null, user.getUsername(), null, loginType, USER_DISABLED);
             throw exception(ErrorCodeConstants.USER_DISABLE);
         }

@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import static top.sheepyu.framework.security.core.constants.SecurityRedisConstants.ACCESS_TOKEN_TTL;
+import static top.sheepyu.framework.security.core.constants.SecurityRedisConstants.REFRESH_TOKEN_TTL;
 
 /**
  * @author ygq
@@ -38,6 +39,7 @@ public class SecurityRedisService {
         loginUser.setAccessToken(accessToken);
         loginUser.setRefreshToken(refreshToken);
         loginUser.setExpireTime(DateUtil.offsetMinute(new Date(), ACCESS_TOKEN_TTL.intValue()));
+        loginUser.setRefreshExpireTime(DateUtil.offsetMinute(new Date(), REFRESH_TOKEN_TTL.intValue()));
 
         redisUtil.set(SecurityRedisConstants.ACCESS_TOKEN_KEY.concat(accessToken), loginUser, ACCESS_TOKEN_TTL, TimeUnit.MINUTES);
         redisUtil.set(SecurityRedisConstants.REFRESH_TOKEN_KEY.concat(refreshToken), loginUser, SecurityRedisConstants.REFRESH_TOKEN_TTL, TimeUnit.MINUTES);

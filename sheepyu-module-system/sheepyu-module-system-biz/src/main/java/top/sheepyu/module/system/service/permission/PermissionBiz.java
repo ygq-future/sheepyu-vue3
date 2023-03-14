@@ -179,9 +179,8 @@ public class PermissionBiz {
                 .stream().anyMatch(e -> ArrayUtil.contains(roleCodes, e));
     }
 
-    public List<SystemRole> findRoleByUserId(Long userId) {
-        Set<Long> roleIds = userRolesCache.get(userId);
-        return systemRoleService.findRoleByIdsFromCache(roleIds);
+    public Set<Long> findRoleByUserId(Long userId) {
+        return userRolesCache.get(userId);
     }
 
     @PostConstruct
@@ -226,11 +225,11 @@ public class PermissionBiz {
             roleMenusCache.put(roleId, roleMenuIds);
         }
         //加载菜单对应的角色
-        for (Long menuId : menuIds) {
+     /*   for (Long menuId : menuIds) {
             Set<Long> menuRoleIds = convertSetFilter(roleMenus, SystemRoleMenu::getRoleId,
                     e -> Objects.equals(menuId, e.getMenuId()));
-            roleMenusCache.put(menuId, menuRoleIds);
-        }
+            menuRolesCache.put(menuId, menuRoleIds);
+        }*/
         log.info("加载角色菜单缓存完成");
     }
 

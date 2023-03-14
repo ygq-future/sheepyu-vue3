@@ -23,7 +23,7 @@
             v-if='!props.config.hideProps || !props.config.hideProps.includes(config.prop)'
             :form='form'
             :config='config'
-            :disabled='props.config.disabledProps && props.config.disabledProps.includes(config.prop)'
+            :disabled='(props.config.disabledProps && props.config.disabledProps.includes(config.prop)) || config.disabled'
           />
         </template>
       </el-form>
