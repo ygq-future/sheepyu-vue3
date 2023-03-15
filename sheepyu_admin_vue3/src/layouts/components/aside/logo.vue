@@ -1,5 +1,5 @@
 <template>
-  <div class='logo'>
+  <div class='logo' v-show='config.layout.logoShow'>
     <el-image v-show='!config.layout.asideCollapse' :src='logoPng'></el-image>
     <span v-show='!config.layout.asideCollapse' class='title'>SYAdmin</span>
     <Icon :name="config.layout.asideCollapse ? 'el-icon-Expand' : 'el-icon-Fold'"

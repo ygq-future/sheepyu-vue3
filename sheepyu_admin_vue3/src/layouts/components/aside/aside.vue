@@ -1,7 +1,7 @@
 <template>
   <el-aside :class="[`layout-aside-${config.layout.layoutMode}`, config.layout.shrink ? 'shrink' : '']">
     <Logo />
-    <el-scrollbar class='aside-scrollbar'>
+    <el-scrollbar class='aside-scrollbar' :max-height='scrollHeight'>
       <el-menu router
                :collapse-transition='false'
                :unique-opened='config.layout.asideAccordion'
@@ -21,7 +21,6 @@ import MenuTree from '@/layouts/components/aside/menuTree.vue'
 
 import { useConfig } from '@/stores/config/config'
 import { useRoute } from 'vue-router'
-import { closeShade } from '@/util/pageShade'
 import { useTabs } from '@/stores/tabs/tabs'
 
 const route = useRoute()
@@ -32,12 +31,11 @@ const asideBackColor = computed(() => config.getColor('asideBackColor'))
 const asideTextColor = computed(() => config.getColor('asideTextColor'))
 const asideActiveBackColor = computed(() => config.getColor('asideActiveBackColor'))
 const asideActiveTextColor = computed(() => config.getColor('asideActiveTextColor'))
-const collapseMenu = () => {
-  if (config.layout.shrink) {
-    closeShade()
-    config.collapseMenu()
-  }
-}
+
+const scrollHeight = computed(() => {
+  //视图高度-logo高度-布局占用高度
+  return window.innerHeight - (config.layout.logoShow ? 50 : 0) - (config.layout.layoutMode === 'default' ? 32 : 0)
+})
 </script>
 
 <style scoped lang='scss'>

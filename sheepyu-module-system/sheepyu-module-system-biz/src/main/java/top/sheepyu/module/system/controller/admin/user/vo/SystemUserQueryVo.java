@@ -10,7 +10,6 @@ import top.sheepyu.module.common.common.PageParam;
 import top.sheepyu.module.common.enums.CommonStatusEnum;
 import top.sheepyu.module.common.enums.UserTypeEnum;
 
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 import static top.sheepyu.module.common.constants.CommonConstants.DATE_TIME_FORMAT;
@@ -35,12 +34,10 @@ public class SystemUserQueryVo extends PageParam {
     private Integer deptId;
 
     @ApiModelProperty("最近登录时间")
-    @Size(min = 2, max = 2, message = "最近登录时间不正确")
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private Date[] loginTimes;
 
     @ApiModelProperty("最近创建时间")
-    @Size(min = 2, max = 2, message = "最近创建时间参数不正确")
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)
     private Date[] createTimes;
 }

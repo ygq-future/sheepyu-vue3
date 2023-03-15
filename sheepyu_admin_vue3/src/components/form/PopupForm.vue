@@ -81,9 +81,9 @@ async function onSubmitAndNext() {
   state.formLoading = true
   //回调超时处理
   const timer = setTimeout(() => {
-    ElNotification.warning('回调超时, 操作失败')
+    // ElNotification.warning('回调超时, 操作失败')
     state.formLoading = false
-    hide()
+    // hide()
   }, props.config.timeout ?? 5000)
 
   emits('submit', () => {

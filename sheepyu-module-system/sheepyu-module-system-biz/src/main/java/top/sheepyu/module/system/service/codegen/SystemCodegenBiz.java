@@ -107,7 +107,7 @@ public class SystemCodegenBiz {
                 if (Objects.equals(newColumn.getName(), oldColumn.getName())) {
                     //字段名相同但是类型不同, 需要修改
                     if (!Objects.equals(newColumnType, oldColumnType)) {
-                        updateColumns.add(newColumn);
+                        updateColumns.add(newColumn.setId(oldColumn.getId()));
                     }
                     deleted = false;
                     break;
