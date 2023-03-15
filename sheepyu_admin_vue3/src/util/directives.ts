@@ -1,6 +1,6 @@
 import type { App } from 'vue'
 import { useEventListener } from '@vueuse/core'
-import { useAdmin } from '@/stores/user/user'
+import { useUser } from '@/stores/user/user'
 
 export function registerDirectives(app: App) {
   blurDirective(app)
@@ -23,9 +23,9 @@ function authDirective(app: App) {
       if (auth.startsWith('none')) {
         return
       }
-      const admin = useAdmin()
+      const user = useUser()
       if (!auth) return
-      const result = admin.state.permissions?.some(permission => permission === auth)
+      const result = user.get().permissions?.some(permission => permission === auth)
       if (!result) {
         el.parentNode.removeChild(el)
       }

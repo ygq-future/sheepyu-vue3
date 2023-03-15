@@ -3,6 +3,6 @@ export enum StorePersistKey {
   CONFIG_STORE_KEY = 'sheepyu-config-store',
   TABS_STORE_KEY = 'sheepyu-tabs-store',
   RESIZE_BEFORE_KEY = 'sheepyu-resize',
-  ADMIN_STORE_KEY = 'sheepyu-admin-store',
+  USER_STORE_KEY = 'sheepyu-user-store',
   DICT_STORE_KEY = 'sheepyu-dict-store'
 }

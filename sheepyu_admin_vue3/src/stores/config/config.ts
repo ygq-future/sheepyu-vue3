@@ -69,10 +69,6 @@ interface Layout {
   classicTopMenuActiveBackColor: string[]
 }
 
-interface SystemConfig {
-  enableCaptcha: boolean
-}
-
 const lightBackColor = '#ffffff'
 const lightTextColor = '#303133'
 const lightActiveTextColor = '#409eff'
@@ -115,11 +111,6 @@ export const useConfig = defineStore(IdEnum.CONFIG, () => {
     topMenuActiveBackColor: [...backColor],
     topMenuActiveTextColor: [...activeTextColor],
     classicTopMenuActiveBackColor: [...classicTopMenuActiveBackColor]
-  })
-
-  //暂时没用, 登录页实时获取验证码开启状态
-  const system = reactive<SystemConfig>({
-    enableCaptcha: import.meta.env.VITE_APP_ENABLE_CAPTCHA
   })
 
   watch(() => layout.layoutMode, (value) => {
@@ -221,7 +212,6 @@ export const useConfig = defineStore(IdEnum.CONFIG, () => {
 
   return {
     layout,
-    system,
     menuWidth,
     getColor,
     resetCurrentTheme,

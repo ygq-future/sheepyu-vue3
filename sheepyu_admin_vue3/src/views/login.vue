@@ -58,7 +58,7 @@
 
 <script setup lang='ts'>
 import { useConfig } from '@/stores/config/config'
-import { useAdmin } from '@/stores/user/user'
+import { useUser } from '@/stores/user/user'
 import { useRouter } from 'vue-router'
 import type { CaptchaRespVo, SystemUserLoginVo } from '@/api/system/user'
 import { captcha, info, login } from '@/api/system/user'
@@ -69,7 +69,7 @@ import { ConfigKeyEnum, getConfig } from '@/api/system/config'
 
 let particleLine: ParticleLine
 const config = useConfig()
-const admin = useAdmin()
+const user = useUser()
 const router = useRouter()
 const route = useRoute()
 const formRef = ref<InstanceType<typeof ElForm>>()
@@ -99,9 +99,9 @@ function submit(formRef: InstanceType<typeof ElForm>) {
     data.key = captchaInfo.key
     data.code = captchaInfo.arithmetic + data.code
     login(data).then(res => {
-      admin.setAuthInfo(res.data)
+      user.setAuthInfo(res.data)
       info().then(res => {
-        admin.setAdminInfo(res.data)
+        user.setUserInfo(res.data)
         loadDict()
         const redirectUrl = route.query.redirectUrl as string
         router.push(redirectUrl ? redirectUrl : '/')

@@ -5,45 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/user/vo/AppUserRegisterVo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/ImageUpload.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/user/index.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/user/info.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-security/src/main/java/top/sheepyu/framework/security/config/LoginUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-security/src/main/java/top/sheepyu/framework/security/config/LoginUser.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-security/src/main/java/top/sheepyu/framework/security/core/service/SecurityRedisService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-security/src/main/java/top/sheepyu/framework/security/core/service/SecurityRedisService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/ErrorCodeConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-api/src/main/java/top/sheepyu/module/system/constants/ErrorCodeConstants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/permission/SystemPermissionController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/permission/SystemPermissionController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/SystemUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/SystemUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserCreateVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserCreateVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserExcelVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserExcelVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserQueryVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserQueryVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserRespVo.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/admin/user/vo/SystemUserRespVo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/user/AppUserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/controller/app/user/AppUserController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/permission/PermissionBiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/permission/PermissionBiz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserBiz.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserBiz.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/java/top/sheepyu/module/system/service/user/SystemUserServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources/codegen/vue3/views/view.vm" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources/codegen/vue3/views/view.vm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/post.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/post.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/role.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/role.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/user.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/datetime/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/datetime/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/PopupForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/PopupForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/render/FormItemRender.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/form/render/FormItemRender.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/search/ComSearch.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/search/ComSearch.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/search/interface.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/search/interface.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/render/ColumnRender.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/table/render/ColumnRender.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/PartUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/PartUpload.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/Upload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/Upload.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/enums/DictTypeEnum.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/enums/DictTypeEnum.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/navMenus.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/navMenus.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/static.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/static.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/router.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/router/router.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/storeId.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/storeId.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/storePersistKey.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/storePersistKey.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/user/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/user/user.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/codegen/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/codegen/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/dict/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/dict/index.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/role/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/role/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/directives.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/directives.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/request.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/request.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/login.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/user/info.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/views/system/user/info.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -99,33 +70,33 @@
     <option name="showLibraryContents" value="true" />
     <option name="showVisibilityIcons" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_ADD_EXTERNAL_FILES": "true",
-    "DefaultHtmlFileTemplate": "HTML File",
-    "RequestMappingsPanelOrder0": "0",
-    "RequestMappingsPanelOrder1": "1",
-    "RequestMappingsPanelWidth0": "75",
-    "RequestMappingsPanelWidth1": "75",
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "jdk.selected.JAVA_MODULE": "1.8",
-    "last_opened_file_path": "E:/other project/sheepyu/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources/mapper/dict",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Project",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.26237053",
-    "settings.editor.selected.configurable": "reference.settings.project.maven.runner",
-    "spring.configuration.checksum": "49bafeeb2f899fc5cd02662a105f4220",
-    "ts.external.directory.path": "E:\\other project\\sheepyu\\sheepyu_admin_vue3\\node_modules\\typescript\\lib",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_ADD_EXTERNAL_FILES&quot;: &quot;true&quot;,
+    &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
+    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
+    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
+    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
+    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/other project/sheepyu/sheepyu-module-system/sheepyu-module-system-biz/src/main/resources/mapper/dict&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.26237053&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settings.project.maven.runner&quot;,
+    &quot;spring.configuration.checksum&quot;: &quot;49bafeeb2f899fc5cd02662a105f4220&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;E:\\other project\\sheepyu\\sheepyu_admin_vue3\\node_modules\\typescript\\lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="ReactorSettings">
     <option name="notificationShown" value="true" />
   </component>
@@ -310,7 +281,8 @@
       <workItem from="1678548976193" duration="6000" />
       <workItem from="1678581341122" duration="9978000" />
       <workItem from="1678620859085" duration="186000" />
-      <workItem from="1678621056015" duration="44258000" />
+      <workItem from="1678621056015" duration="45928000" />
+      <workItem from="1678841232908" duration="765000" />
     </task>
     <servers />
   </component>

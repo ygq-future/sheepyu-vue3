@@ -1,7 +1,7 @@
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSource } from 'axios'
 import axios, { AxiosError } from 'axios'
 import { ElNotification } from 'element-plus'
-import { useAdmin } from '@/stores/user/user'
+import { useUser } from '@/stores/user/user'
 import { refreshToken } from '@/api/system/user'
 import router from '@/router/router'
 import { download } from '@/util/common'
@@ -51,8 +51,8 @@ export class Request {
      * token校验(JWT) : 接受服务器返回的token,存储到vuex/pinia/本地储存当中
      */
     this.service.interceptors.request.use((config): any => {
-      const admin = useAdmin()
-      const token = admin.state.accessToken
+      const user = useUser()
+      const token = user.get().accessToken
       return {
         ...config,
         headers: {
@@ -66,7 +66,7 @@ export class Request {
      * 服务器换返回信息 -> [拦截统一处理] -> 客户端JS获取到信息
      */
     this.service.interceptors.response.use(async (res: AxiosResponse) => {
-        const admin = useAdmin()
+        const user = useUser()
         const { data } = res
         //未登录, 或者登录失效
         if (data.code === RequestEnums.NOT_AUTHORIZE) {
@@ -74,15 +74,16 @@ export class Request {
             this.isRefreshing = true
 
             try {
-              const result = await refreshToken(admin.state.refreshToken as string)
-              admin.setAuthInfo(result.data)
+              const result = await refreshToken(user.get().refreshToken as string)
+              user.setAuthInfo(result.data)
               this.requestList.forEach(cb => cb())
               return this.service(res.config)
             } catch (e) {
               const tabs = useTabs()
-              admin.clear()
+              const path = tabs.state.activeRoute?.fullPath || '/'
+              user.clear()
               this.requestList.forEach(cb => cb())
-              router.push('/login?redirectUrl=' + tabs.state.activeRoute?.fullPath).then(() => {
+              router.push('/login?redirectUrl=' + path).then(() => {
                 ElNotification.error('登录已过期')
               })
               return Promise.reject('登录已过期')

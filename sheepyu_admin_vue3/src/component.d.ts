@@ -7,7 +7,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AvatarUpload: typeof import('./components/upload/AvatarUpload.vue')['default']
     CellForm: typeof import('./components/form/CellForm.vue')['default']
     ColumnRender: typeof import('./components/table/render/ColumnRender.vue')['default']
     ComSearch: typeof import('./components/search/ComSearch.vue')['default']

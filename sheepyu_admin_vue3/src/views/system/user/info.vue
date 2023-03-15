@@ -97,11 +97,11 @@ import { info, updateUserApi, updatePassApi } from '@/api/system/user'
 import type { SystemUserRespVo } from '@/api/system/user'
 import type { FormRules } from 'element-plus'
 import { ElForm, ElNotification } from 'element-plus'
-import { useAdmin } from '@/stores/user/user'
+import { useUser } from '@/stores/user/user'
 
 const instance = getCurrentInstance()
 const passFormRef = ref<InstanceType<typeof ElForm>>()
-const admin = useAdmin()
+const user = useUser()
 
 const state = reactive<{
   user: SystemUserRespVo
@@ -168,7 +168,7 @@ async function userInfo() {
   state.userForm.nickname = data.nickname
   state.userForm.mobile = data.mobile || ''
   state.userForm.email = data.email || ''
-  admin.setAdminInfo(data)
+  user.setUserInfo(data)
 }
 
 onMounted(() => {

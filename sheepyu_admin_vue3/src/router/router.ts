@@ -5,7 +5,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import type { SystemMenuRespVo } from '@/api/system/menu'
 import { userMenu } from '@/api/system/menu'
-import { useAdmin } from '@/stores/user/user'
+import { useUser } from '@/stores/user/user'
 import { useTabs } from '@/stores/tabs/tabs'
 import { MenuTypeEnum } from '@/enums/MenuTypeEnum'
 
@@ -20,11 +20,11 @@ const whiteList: Array<string> = ['/login']
 router.beforeEach(async (to, from, next) => {
   NProgress.configure({ showSpinner: false })
   NProgress.start()
-  const admin = useAdmin()
+  const user = useUser()
   const tabs = useTabs()
 
   //没有token
-  if (!admin.hasToken()) {
+  if (!user.hasToken()) {
     if (whiteList.includes(to.path)) {
       return next()
     }
@@ -41,7 +41,7 @@ router.beforeEach(async (to, from, next) => {
   //从菜单中抽取permissions并保存
   const permission: string[] = []
   getPermissionFromMenuTree(data, permission)
-  admin.setPermissions(permission)
+  user.setPermissions(permission)
 
   //添加动态路由
   const routes: RouteRecordRaw[] = []

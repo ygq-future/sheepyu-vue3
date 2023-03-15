@@ -28,16 +28,16 @@
       >
         <template #reference>
           <div class='user-icon'>
-            <el-avatar :size='25' :src='admin.state.avatar' />
-            <span class='user-name'>{{ admin.state.nickname }}</span>
+            <el-avatar :size='25' :src='user.get().avatar' />
+            <span class='user-name'>{{ user.get().nickname }}</span>
           </div>
         </template>
 
         <div class='user-info'>
-          <el-avatar :size='60' :src='admin.state.avatar' />
+          <el-avatar :size='60' :src='user.get().avatar' />
           <div class='user-other'>
-            <span>{{ admin.state.nickname }}</span>
-            <span>{{ admin.state.loginTime }}</span>
+            <span>{{ user.get().nickname }}</span>
+            <span>{{ user.get().loginTime }}</span>
           </div>
           <div class='user-footer'>
             <el-button type='primary' plain v-blur @click='$router.push("/system/user/info")'>个人资料</el-button>
@@ -61,12 +61,12 @@ import screenfull from 'screenfull'
 import { ElMessage } from 'element-plus'
 import Config from '@/layouts/components/navbar/config.vue'
 import { useRouter } from 'vue-router'
-import { useAdmin } from '@/stores/user/user'
+import { useUser } from '@/stores/user/user'
 import { useTabs } from '@/stores/tabs/tabs'
 
 const router = useRouter()
 const config = useConfig()
-const admin = useAdmin()
+const user = useUser()
 const tabs = useTabs()
 const state = reactive<{
   screenFull: boolean
@@ -77,7 +77,7 @@ const state = reactive<{
 const topTextColor = computed(() => config.getColor('topTextColor'))
 
 function logout() {
-  admin.clear()
+  user.clear()
   tabs.clearRoute()
   router.push('/login?redirectUrl=' + tabs.state.activeRoute?.fullPath)
 }
