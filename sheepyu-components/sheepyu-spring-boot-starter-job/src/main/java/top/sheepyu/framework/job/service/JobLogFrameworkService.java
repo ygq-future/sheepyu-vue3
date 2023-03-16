@@ -13,14 +13,14 @@ public interface JobLogFrameworkService {
      * @param beginTime       开始时间
      * @param jobHandlerName  Job 处理器的名字
      * @param jobHandlerParam Job 处理器的参数
-     * @param executeIndex    第几次执行
+     * @param refireCount     重试次数
      * @return Job 日志的编号
      */
     Long createJobLog(@NotNull(message = "任务编号不能为空") Long jobId,
                       @NotNull(message = "开始时间") Date beginTime,
                       @NotEmpty(message = "Job 处理器的名字不能为空") String jobHandlerName,
                       String jobHandlerParam,
-                      @NotNull(message = "第几次执行不能为空") Integer executeIndex);
+                      @NotNull(message = "重试次数不能为空") Integer refireCount);
 
     /**
      * 更新 Job 日志的执行结果

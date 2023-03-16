@@ -3,6 +3,11 @@ package top.sheepyu.module.system.enums.job;
 import cn.hutool.core.util.ArrayUtil;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import top.sheepyu.module.common.common.IterableEnum;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.STATUS_ERROR;
@@ -12,7 +17,7 @@ import static top.sheepyu.module.system.constants.ErrorCodeConstants.STATUS_ERRO
  */
 @Getter
 @AllArgsConstructor
-public enum JobStatusEnum {
+public enum JobStatusEnum implements IterableEnum {
     INIT(0), //初始化
     NORMAL(1), //已开启
     STOP(2), //已暂停
@@ -26,5 +31,10 @@ public enum JobStatusEnum {
             throw exception(STATUS_ERROR);
         }
         return status;
+    }
+
+    @Override
+    public List<Integer> list() {
+        return Arrays.stream(values()).map(JobStatusEnum::getCode).collect(Collectors.toList());
     }
 }

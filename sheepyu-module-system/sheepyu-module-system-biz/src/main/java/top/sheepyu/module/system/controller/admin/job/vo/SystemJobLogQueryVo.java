@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.sheepyu.module.common.annotations.InEnum;
 import top.sheepyu.module.common.common.PageParam;
-import top.sheepyu.module.system.enums.job.JobStatusEnum;
+import top.sheepyu.module.system.enums.job.JobLogStatusEnum;
 
 /**
  * @author ygq
@@ -14,9 +14,15 @@ import top.sheepyu.module.system.enums.job.JobStatusEnum;
  **/
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ApiModel("系统任务分页查询vo")
-public class SystemJobQueryVo extends PageParam {
-    @ApiModelProperty("任务状态")
-    @InEnum(JobStatusEnum.class)
+@ApiModel("定时任务日志表分页查询vo")
+public class SystemJobLogQueryVo extends PageParam {
+    @ApiModelProperty("任务编号")
+    private Long jobId;
+
+    @ApiModelProperty("执行时长")
+    private Integer[] durations;
+
+    @ApiModelProperty("任务状态(成功,失败)")
+    @InEnum(JobLogStatusEnum.class)
     private Integer status;
 }

@@ -42,7 +42,7 @@ public class JobHandlerInvoke implements Job {
         Throwable ex = null;
         try {
             //创建日志
-            jogLogId = jobLogFrameworkService.createJobLog(jobId, beginTime, jobHandlerName, jobHandlerParam, refireCount + 1);
+            jogLogId = jobLogFrameworkService.createJobLog(jobId, beginTime, jobHandlerName, jobHandlerParam, refireCount);
             result = this.execute(jobHandlerName, jobHandlerParam);
         } catch (Throwable e) {
             ex = e;

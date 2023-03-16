@@ -29,6 +29,7 @@
       v-if='config.dictType && config.dictRender'
       v-model='form[config.prop]'
       :render='config.dictRender'
+      :value='form[config.prop]'
       :type='config.dictType'
       :disabled='disabled'
       @change='(value) => config.change && config.change(value)'

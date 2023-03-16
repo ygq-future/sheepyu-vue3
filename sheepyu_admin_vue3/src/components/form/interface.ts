@@ -19,6 +19,8 @@ export interface PopupFormConfig {
   ids?: any[]
   //回调超时时间, 默认5000ms
   timeout?: number
+  //是否为查看模式
+  looked?: boolean
 }
 
 export interface FormItemConfig {

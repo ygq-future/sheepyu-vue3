@@ -29,7 +29,22 @@
       @current-change='pageApiLog'
       @size-change='pageApiLog'
     >
+      <template #buttons='scope'>
+        <el-tooltip content='查看详情' placement='top' :show-after='500'>
+          <el-button v-auth="'system:log-api:query'" v-blur type='primary' @click='onDetail(scope.data)'>
+            <template #icon>
+              <Icon name='fa fa-info-circle' />
+            </template>
+          </el-button>
+        </el-tooltip>
+      </template>
     </Table>
+
+    <PopupForm
+      ref='popupFormRef'
+      :config='state.popupFormConfig'
+      :form='state.form'
+    />
   </div>
 </template>
 <script setup lang='ts'>
@@ -43,6 +58,7 @@ import {
   processApiLogApi
 } from '@/api/system/log'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
+import type { PopupFormConfig } from '@/components/form/interface'
 
 const tableRef = ref()
 const tableHeaderRef = ref()
@@ -53,7 +69,10 @@ const state = reactive<{
   tableData: SystemApiLogRespVo[]
   comSearchConfig: ComSearchConfig
   tableConfig: TableConfig
+  popupFormConfig: PopupFormConfig
+  form: any
 }>({
+  form: {},
   query: {
     current: 1,
     size: 10,
@@ -95,9 +114,6 @@ const state = reactive<{
       { label: '结果码', prop: 'resultCode', render: 'text' },
       { label: '结果状态', prop: 'status', dictRender: 'tag', dictType: DictTypeEnum.API_LOG_STATUS, width: 100 },
       { label: '异常发生时间', prop: 'exceptionTime', render: 'text', width: 150 },
-      // { label: '异常根信息', prop: 'exceptionRootCauseMessage', render: 'text' },
-      // { label: '异常栈信息', prop: 'exceptionStackTraceFull', render: 'text' },
-      // { label: '异常关键信息', prop: 'exceptionStackTraceCrucial', render: 'text' },
       { label: '异常类', prop: 'exceptionName', render: 'text' },
       {
         label: '处理状态',
@@ -108,9 +124,52 @@ const state = reactive<{
       },
       { label: '处理时间', prop: 'processTime', render: 'text', width: 100 },
       { label: '处理用户', prop: 'processUserId', render: 'text', width: 100 }
+    ],
+    operate: {
+      buttons: [],
+      width: 80
+    }
+  },
+  popupFormConfig: {
+    title: '日志详情',
+    labelWidth: 120,
+    width: 700,
+    looked: true,
+    formItemConfigs: [
+      { label: '用户编号', prop: 'userId', render: 'text' },
+      { label: '用户类型', prop: 'userType', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_USER_TYPE },
+      { label: '操作名', prop: 'name', render: 'text' },
+      { label: '操作类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.OPERATE_TYPE },
+      { label: '方法名', prop: 'requestMethod', render: 'text' },
+      { label: 'url', prop: 'requestUrl', render: 'text' },
+      { label: '请求参数', prop: 'requestParams', render: 'textarea' },
+      { label: '请求时间', prop: 'createTime', render: 'text' },
+      { label: '访问IP', prop: 'userIp', render: 'text' },
+      { label: '执行时长(ms)', prop: 'duration', render: 'text' },
+      { label: '结果码', prop: 'resultCode', render: 'text' },
+      { label: '结果状态', prop: 'status', dictRender: 'tag', dictType: DictTypeEnum.API_LOG_STATUS },
+      { label: '结果数据', prop: 'resultData', render: 'textarea' },
+      { label: '异常发生时间', prop: 'exceptionTime', render: 'text' },
+      { label: '异常根信息', prop: 'exceptionRootCauseMessage', render: 'textarea' },
+      { label: '异常栈信息', prop: 'exceptionStackTraceFull', render: 'textarea' },
+      { label: '异常关键信息', prop: 'exceptionStackTraceCrucial', render: 'textarea' },
+      { label: '异常类', prop: 'exceptionName', render: 'text' },
+      {
+        label: '处理状态',
+        prop: 'processStatus',
+        dictRender: 'tag',
+        dictType: DictTypeEnum.API_LOG_PROCESS_STATUS
+      },
+      { label: '处理时间', prop: 'processTime', render: 'text' },
+      { label: '处理用户', prop: 'processUserId', render: 'text' }
     ]
   }
 })
+
+function onDetail(row: any) {
+  state.form = { ...row }
+  popupFormRef.value.show()
+}
 
 async function onFieldChange(row: any) {
   await processApiLogApi(row.id)

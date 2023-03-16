@@ -6,11 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.job.service.JobLogFrameworkService;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
+import top.sheepyu.module.common.common.PageResult;
+import top.sheepyu.module.system.controller.admin.job.vo.SystemJobLogQueryVo;
 import top.sheepyu.module.system.dao.job.SystemJobLog;
 import top.sheepyu.module.system.dao.job.SystemJobLogMapper;
 
 import java.util.Date;
-import java.util.List;
 
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.LOG_NOT_EXISTS;
 import static top.sheepyu.module.system.enums.job.JobLogStatusEnum.FAILED;
@@ -25,9 +26,9 @@ import static top.sheepyu.module.system.enums.job.JobLogStatusEnum.SUCCESS;
 @Validated
 public class SystemJobLogServiceImpl extends ServiceImplX<SystemJobLogMapper, SystemJobLog> implements SystemJobLogService, JobLogFrameworkService {
     @Override
-    public Long createJobLog(Long jobId, Date beginTime, String jobHandlerName, String jobHandlerParam, Integer executeIndex) {
+    public Long createJobLog(Long jobId, Date beginTime, String jobHandlerName, String jobHandlerParam, Integer refireCount) {
         SystemJobLog jobLog = new SystemJobLog();
-        jobLog.setJobId(jobId).setBeginTime(beginTime).setHandlerName(jobHandlerName).setHandlerParam(jobHandlerParam).setRetryCount(executeIndex);
+        jobLog.setJobId(jobId).setBeginTime(beginTime).setHandlerName(jobHandlerName).setHandlerParam(jobHandlerParam).setRetryCount(refireCount);
         save(jobLog);
         return jobLog.getId();
     }
@@ -46,7 +47,11 @@ public class SystemJobLogServiceImpl extends ServiceImplX<SystemJobLogMapper, Sy
     }
 
     @Override
-    public List<SystemJobLog> findByJobId(Long id) {
-        return lambdaQuery().eq(SystemJobLog::getJobId, id).list();
+    public PageResult<SystemJobLog> page(SystemJobLogQueryVo queryVo) {
+        return page(queryVo, buildQuery()
+                .eqIfPresent(SystemJobLog::getJobId, queryVo.getJobId())
+                .betweenIfPresent(SystemJobLog::getDuration, queryVo.getDurations())
+                .eqIfPresent(SystemJobLog::getStatus, queryVo.getStatus())
+                .orderByDesc(SystemJobLog::getCreateTime));
     }
 }

@@ -23,7 +23,7 @@
             v-if='!props.config.hideProps || !props.config.hideProps.includes(config.prop)'
             :form='form'
             :config='config'
-            :disabled='(props.config.disabledProps && props.config.disabledProps.includes(config.prop)) || config.disabled'
+            :disabled='(props.config.disabledProps && props.config.disabledProps.includes(config.prop)) || config.disabled || props.config.looked'
           />
         </template>
       </el-form>
@@ -32,7 +32,7 @@
     <template #footer>
       <span class='dialog-footer'>
         <el-button :disabled='state.formLoading' @click='hide'>取消</el-button>
-        <el-button :disabled='state.formLoading' type='primary' @click='onSubmitAndNext'>
+        <el-button v-if='!props.config.looked' :disabled='state.formLoading' type='primary' @click='onSubmitAndNext'>
             {{ !props.config.isEdit || state.isLastEdit ? '确定' : '保存并编辑下一个' }}
         </el-button>
       </span>
@@ -44,7 +44,6 @@
 import type { PopupFormConfig } from '@/components/form/interface'
 import FormItemRender from './render/FormItemRender.vue'
 import type { FormInstance, FormRules } from 'element-plus'
-import { ElNotification } from 'element-plus'
 
 const props = defineProps<{
   form: any
@@ -81,9 +80,7 @@ async function onSubmitAndNext() {
   state.formLoading = true
   //回调超时处理
   const timer = setTimeout(() => {
-    // ElNotification.warning('回调超时, 操作失败')
     state.formLoading = false
-    // hide()
   }, props.config.timeout ?? 5000)
 
   emits('submit', () => {

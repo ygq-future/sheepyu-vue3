@@ -111,7 +111,9 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
 
     @Override
     public PageResult<SystemJob> findJobPage(SystemJobQueryVo queryVo) {
-        return page(queryVo, buildQuery().likeIfPresent(SystemJob::getName, queryVo.getKeyword()));
+        return page(queryVo, buildQuery()
+                .likeIfPresent(SystemJob::getName, queryVo.getKeyword())
+                .eqIfPresent(SystemJob::getStatus, queryVo.getStatus()));
     }
 
     private void validateCronExpression(String cron) {

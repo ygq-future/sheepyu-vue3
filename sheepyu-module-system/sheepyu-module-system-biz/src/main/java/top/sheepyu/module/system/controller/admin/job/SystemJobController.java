@@ -11,11 +11,10 @@ import top.sheepyu.module.system.controller.admin.job.vo.*;
 import top.sheepyu.module.system.convert.job.SystemJobLogConvert;
 import top.sheepyu.module.system.dao.job.SystemJob;
 import top.sheepyu.module.system.dao.job.SystemJobLog;
-import top.sheepyu.module.system.service.job.SystemJobService;
 import top.sheepyu.module.system.service.job.SystemJobLogService;
+import top.sheepyu.module.system.service.job.SystemJobService;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 import static top.sheepyu.module.common.common.Result.success;
 import static top.sheepyu.module.system.convert.job.SystemJobConvert.CONVERT;
@@ -89,11 +88,11 @@ public class SystemJobController {
         return success(CONVERT.convertPage(pageData));
     }
 
-    @GetMapping("/log/{id}")
-    @ApiOperation("获取定时任务的执行日志")
+    @GetMapping("/log/page")
+    @ApiOperation("获取定时任务的执行日志分页")
     @PreAuthorize("@ss.hasPermission('system:job:query')")
-    public Result<List<SystemJobLogRespVo>> logList(@PathVariable Long id) {
-        List<SystemJobLog> list = systemJobLogService.findByJobId(id);
-        return success(SystemJobLogConvert.CONVERT.convertList(list));
+    public Result<PageResult<SystemJobLogRespVo>> logList(SystemJobLogQueryVo queryVo) {
+        PageResult<SystemJobLog> pageResult = systemJobLogService.page(queryVo);
+        return success(SystemJobLogConvert.CONVERT.convertPage(pageResult));
     }
 }

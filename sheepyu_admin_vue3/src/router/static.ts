@@ -34,6 +34,15 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           keepalive: true,
           fullpath: '/system/user/info'
         }
+      }, {
+        name: 'system-job-log',
+        path: '/system/job/log/:jobId',
+        component: () => import('@/views/system/job/log.vue'),
+        meta: {
+          title: '定时任务日志',
+          keepalive: true,
+          fullpath: '/system/job/log/:jobId'
+        }
       }
     ]
   }, {

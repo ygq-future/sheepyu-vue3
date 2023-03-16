@@ -25,6 +25,5 @@ public enum LoginResultEnum implements IterableEnum {
     @Override
     public List<Integer> list() {
         return Arrays.stream(values()).map(LoginResultEnum::getCode).collect(Collectors.toList());
-
     }
 }

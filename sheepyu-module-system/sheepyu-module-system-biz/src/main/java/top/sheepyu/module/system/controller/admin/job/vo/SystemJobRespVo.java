@@ -17,10 +17,16 @@ import java.util.Date;
 public class SystemJobRespVo extends SystemJobBaseVo {
     @ApiModelProperty("任务id")
     private Long id;
+
     @ApiModelProperty("处理器名称")
     private String handlerName;
+
+    @ApiModelProperty("任务状态")
+    private Integer status;
+
     @ApiModelProperty("创建者")
     private String creator;
+
     @ApiModelProperty("创建时间")
     private Date createTime;
 }
