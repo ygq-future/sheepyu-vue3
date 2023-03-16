@@ -40,12 +40,14 @@ public class SystemAccessLogServiceImpl extends ServiceImplX<SystemAccessLogMapp
     @Override
     public PageResult<SystemAccessLog> pageAccessLog(SystemAccessLogQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
-        boolean keywordExists = StrUtil.isNotBlank(keyword);
         return page(queryVo, buildQuery()
+                .and(StrUtil.isNotBlank(keyword), q -> q
+                        .like(SystemAccessLog::getUsername, keyword).or()
+                        .like(SystemAccessLog::getNickname, keyword))
                 .eqIfPresent(SystemAccessLog::getUserType, queryVo.getUserType())
                 .eqIfPresent(SystemAccessLog::getLoginType, queryVo.getLoginType())
                 .eqIfPresent(SystemAccessLog::getLoginResult, queryVo.getLoginResult())
-                .and(keywordExists, q -> q.like(SystemAccessLog::getUsername, keyword).or()
-                        .like(SystemAccessLog::getNickname, keyword)));
+                .betweenIfPresent(SystemAccessLog::getCreateTime, queryVo.getCreateTimes())
+                .orderByDesc(SystemAccessLog::getCreateTime));
     }
 }

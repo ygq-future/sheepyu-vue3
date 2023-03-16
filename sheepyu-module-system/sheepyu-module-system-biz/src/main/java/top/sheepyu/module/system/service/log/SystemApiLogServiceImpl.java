@@ -48,9 +48,11 @@ public class SystemApiLogServiceImpl extends ServiceImplX<SystemApiLogMapper, Sy
         return page(queryVo, buildQuery()
                 .eqIfPresent(SystemApiLog::getType, queryVo.getType())
                 .betweenIfPresent(SystemApiLog::getDuration, queryVo.getDurations())
+                .betweenIfPresent(SystemApiLog::getCreateTime, queryVo.getCreateTimes())
                 .eqIfPresent(SystemApiLog::getStatus, queryVo.getStatus())
                 .eqIfPresent(SystemApiLog::getProcessStatus, queryVo.getProcessStatus())
-                .likeIfPresent(SystemApiLog::getName, queryVo.getKeyword()));
+                .likeIfPresent(SystemApiLog::getName, queryVo.getKeyword())
+                .orderByDesc(SystemApiLog::getCreateTime));
     }
 
     @Override

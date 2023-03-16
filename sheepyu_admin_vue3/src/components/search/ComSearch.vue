@@ -16,9 +16,8 @@
           <el-col class='p-15' :sm='6' :xs='24' v-if='item.render === "number"'>
             <el-form-item :label='item.label' :prop='item.prop'>
               <el-input-number
-                v-model.number='form[item.prop]'
+                v-model='form[item.prop]'
                 :placeholder='item.placeholder ? item.placeholder : "精准搜索"'
-                :clearable='item.clearable === undefined || item.clearable'
               />
             </el-form-item>
           </el-col>
@@ -54,6 +53,12 @@
           <el-col class='p-15' :sm='12' :xs='24' v-if='item.render === "datetime"'>
             <el-form-item :label='item.label' :prop='item.prop'>
               <DateTime v-model='form[item.prop]' range />
+            </el-form-item>
+          </el-col>
+
+          <el-col class='p-15' :sm='12' :xs='24' v-if='item.render === "number-range"'>
+            <el-form-item :label='item.label' :prop='item.prop'>
+              <NumberRange v-model='form[item.prop]' :step='50' :placeholder='item.placeholder' />
             </el-form-item>
           </el-col>
         </template>

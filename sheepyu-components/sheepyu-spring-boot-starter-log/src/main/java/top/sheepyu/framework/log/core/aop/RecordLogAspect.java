@@ -141,6 +141,8 @@ public class RecordLogAspect {
         //设置用户信息
         apiLog.setUserId(WebFrameworkUtil.getLoginUserId());
         apiLog.setUserType(WebFrameworkUtil.getLoginUserType());
+        //请求方法名称
+        apiLog.setRequestMethod(pj.getSignature().getName());
 
         //设置api信息
         if (recordLog != null) {
@@ -178,8 +180,7 @@ public class RecordLogAspect {
         if (request == null) {
             return;
         }
-        //不全请求信息
-        apiLog.setRequestMethod(request.getMethod());
+        //补全请求信息
         apiLog.setRequestUrl(request.getRequestURI());
         apiLog.setUserIp(ServletUtil.getClientIp(request));
         apiLog.setRequestParams(obtainMethodArgs(jp));
@@ -194,7 +195,7 @@ public class RecordLogAspect {
 
     private static boolean isLogEnable(ProceedingJoinPoint joinPoint, RecordLog recordLog, Throwable ex) {
         //如果发生了异常
-        if(ex != null) {
+        if (ex != null) {
             return true;
         }
         // 有 @RecordLog 注解的情况下

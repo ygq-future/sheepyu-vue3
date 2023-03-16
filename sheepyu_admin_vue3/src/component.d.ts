@@ -60,6 +60,7 @@ declare module '@vue/runtime-core' {
     Icon: typeof import('./components/icon/Icon.vue')['default']
     IconSelector: typeof import('./components/icon/IconSelector.vue')['default']
     ImageUpload: typeof import('./components/upload/ImageUpload.vue')['default']
+    NumberRange: typeof import('./components/form/NumberRange.vue')['default']
     PartUpload: typeof import('./components/upload/PartUpload.vue')['default']
     PopupForm: typeof import('./components/form/PopupForm.vue')['default']
     PopupSearch: typeof import('./components/search/PopupSearch.vue')['default']

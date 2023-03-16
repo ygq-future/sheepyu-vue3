@@ -33,7 +33,7 @@ public class SystemLogController {
 
     @GetMapping("/access/page")
     @ApiOperation("系统访问日志分页")
-    @PreAuthorize("@ss.hasPermission('system:access-log:query')")
+    @PreAuthorize("@ss.hasPermission('system:log-access:query')")
     public Result<PageResult<SystemAccessLogRespVo>> page(SystemAccessLogQueryVo queryVo) {
         PageResult<SystemAccessLog> pageResult = systemAccessLogService.pageAccessLog(queryVo);
         return Result.success(CONVERT.convertPage(pageResult));
@@ -41,7 +41,7 @@ public class SystemLogController {
 
     @GetMapping("/api/page")
     @ApiOperation("系统api日志分页")
-    @PreAuthorize("@ss.hasPermission('system:api-log:query')")
+    @PreAuthorize("@ss.hasPermission('system:log-api:query')")
     public Result<PageResult<SystemApiLogRespVo>> page(SystemApiLogQueryVo queryVo) {
         PageResult<SystemApiLog> pageResult = systemApiLogService.pageApiLog(queryVo);
         return Result.success(SystemApiLogConvert.CONVERT.convertPage(pageResult));
@@ -49,7 +49,7 @@ public class SystemLogController {
 
     @PatchMapping("/api/process/{id}")
     @ApiOperation("修改api日志的处理状态")
-    @PreAuthorize("@ss.hasPermission('system:api-log:update')")
+    @PreAuthorize("@ss.hasPermission('system:log-api:update')")
     public Result<Boolean> process(@PathVariable Long id) {
         systemApiLogService.process(id);
         return Result.success(true);

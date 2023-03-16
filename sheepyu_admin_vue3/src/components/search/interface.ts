@@ -15,7 +15,7 @@ export interface ComSearchConfigItem {
   label: string
   prop: string
   //默认值 text
-  render?: undefined | 'text' | 'number' | 'datetime' | 'select' | 'dict' | 'tree-select'
+  render?: undefined | 'text' | 'number' | 'datetime' | 'select' | 'dict' | 'tree-select' | 'number-range'
   placeholder?: string
   //render为select或者tree-select时必传
   selectOptions?: Array<any>

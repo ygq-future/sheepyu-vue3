@@ -75,4 +75,7 @@ public class SystemApiLogRespVo {
 
     @ApiModelProperty("处理人id")
     private Long processUserId;
+
+    @ApiModelProperty("请求时间")
+    private Date createTime;
 }
