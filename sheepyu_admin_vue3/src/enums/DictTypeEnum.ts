@@ -12,5 +12,6 @@ export enum DictTypeEnum {
   OPERATE_TYPE = 'operate_type',
   SYSTEM_JOB_STATUS = 'system_job_status',
   SYSTEM_JOG_LOG_STATUS = 'system_jog_log_status',
-  SYSTEM_FILE_COMPLETE = 'system_file_complete'
+  SYSTEM_FILE_COMPLETE = 'system_file_complete',
+  FILE_TYPE = 'file_type'
 }

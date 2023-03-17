@@ -7,7 +7,6 @@ import router from '@/router/router'
 import { download } from '@/util/common'
 //@ts-ignore
 import qs from 'qs'
-import { useTabs } from '@/stores/tabs/tabs'
 
 export interface Result<T = any> {
   code: number
@@ -79,10 +78,9 @@ export class Request {
               this.requestList.forEach(cb => cb())
               return this.service(res.config)
             } catch (e) {
-              const tabs = useTabs()
-              const path = tabs.state.activeRoute?.fullPath || '/'
               user.clear()
-              this.requestList.forEach(cb => cb())
+              const route = useRoute()
+              const path = route.fullPath || '/'
               router.push('/login?redirectUrl=' + path).then(() => {
                 ElNotification.error('登录已过期')
               })
@@ -108,9 +106,11 @@ export class Request {
           return Promise.reject(data)
         }
 
-        if (res.config.method !== 'get' && !this.isRefreshing) {
+        const url = res.config.url
+        const notPartUpload = (url?.indexOf('uploadPart') || 0) < 0
+        if (res.config.method !== 'get' && !this.isRefreshing && notPartUpload) {
           ElNotification.success({
-            message: res.config.url === '/system/user/login' ? '登录成功' : '操作成功',
+            message: url === '/system/user/login' ? '登录成功' : '操作成功',
             duration: 2000
           })
         }

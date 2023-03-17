@@ -13,13 +13,5 @@ public interface FileApi {
 
     List<FilePartDto> listByUploadId(String uploadId);
 
-    FileDto createFile(FileDto dto);
-
     void updateFileByUploadId(FileDto dto);
-
-    FileDto findFileByUploadId(String uploadId);
-
-    boolean deleteFileByUploadId(String uploadId);
-
-    void updatePartIndex(String uploadId, int partIndex);
 }

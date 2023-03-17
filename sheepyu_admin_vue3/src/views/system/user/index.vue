@@ -232,7 +232,7 @@ const state = reactive<{
       { label: '昵称', prop: 'nickname', required: false, placeholder: '用户昵称', render: 'text' },
       { label: '邮箱', prop: 'email', required: false, placeholder: '用户邮箱', render: 'text' },
       { label: '手机号码', prop: 'mobile', required: false, placeholder: '手机号码', render: 'text' },
-      { label: '头像', prop: 'avatar', required: false, placeholder: '头像地址', render: 'upload' },
+      { label: '头像', prop: 'avatar', required: false, placeholder: '头像地址', render: 'image-upload' },
       {
         label: '部门',
         prop: 'deptId',

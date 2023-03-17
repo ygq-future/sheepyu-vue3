@@ -11,26 +11,16 @@ import top.sheepyu.framework.file.config.FileProperties;
 import top.sheepyu.framework.file.config.FileProperties.BaseConfig;
 import top.sheepyu.framework.file.core.enums.FileUploadTypeEnum;
 import top.sheepyu.framework.file.core.oss.FileUpload;
-import top.sheepyu.module.common.constants.ErrorCodeConstants;
-import top.sheepyu.module.system.api.file.FileApi;
-import top.sheepyu.module.system.api.file.FileDto;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
-
-import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.COMPLETE;
-import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.INCOMPLETE;
-import static top.sheepyu.module.common.exception.CommonException.exception;
-import static top.sheepyu.module.common.util.FileUtil.*;
-import static top.sheepyu.module.common.util.MyStrUtil.getDatePath;
-import static top.sheepyu.module.common.util.MyStrUtil.getUUID;
+import java.util.stream.Collectors;
 
 /**
  * @author ygq
@@ -41,31 +31,16 @@ import static top.sheepyu.module.common.util.MyStrUtil.getUUID;
 public class AliyunFileUpload implements FileUpload {
     @Resource
     private FileProperties fileProperties;
-    @Resource
-    private FileApi fileApi;
     private BaseConfig config;
 
+    @PostConstruct
+    public void loadConfig() {
+        config = fileProperties.getConfig().get(FileUploadTypeEnum.ALIYUN.getCode());
+    }
+
     @Override
-    public String upload(InputStream in, String md5, String filename, String remark) {
-        //获取基本信息
-        long size = getSize(in);
-        String domain = buildDomain();
-        String mimeType = getMimeType(filename);
-        String path = getDatePath() + getUUID() + getSuffix(filename);
-        String url = domain + path;
-
-        //创建文件
-        FileDto file = new FileDto()
-                .setComplete(COMPLETE.getCode())
-                .setUploadId(getUUID())
-                .setFilename(filename)
-                .setSize(size)
-                .setDomain(domain)
-                .setMimeType(mimeType)
-                .setPath(path)
-                .setUrl(url)
-                .setRemark(remark);
-
+    public String upload(InputStream in, String path, long size) {
+        AtomicReference<String> md5 = new AtomicReference<>();
         execute(ossClient -> {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(size);
@@ -73,51 +48,18 @@ public class AliyunFileUpload implements FileUpload {
             putObjectRequest.setProcess("true");
             PutObjectResult result = ossClient.putObject(putObjectRequest);
             //aliyun返回的md5默认是大写, 为了保持一致, 这里转成小写
-            fileApi.createFile(file.setMd5(result.getETag().toLowerCase()));
+            md5.set(result.getETag().toLowerCase());
         });
-        return file.getUrl();
+        return md5.get();
     }
 
     @Override
-    public String uploadMini(InputStream in, String filename) {
-        return upload(in, null, filename, null);
-    }
-
-    @Override
-    public String preparePart(String md5, String filename, String remark) {
-        //封装基本属性
-        String mimeType = getMimeType(filename);
-        String domain = buildDomain();
-        String path = getDatePath() + getUUID() + getSuffix(filename);
-        String url = domain + path;
-
-        FileDto file = new FileDto()
-                .setComplete(INCOMPLETE.getCode())
-                .setMd5(md5)
-                .setFilename(filename)
-                .setMimeType(mimeType)
-                .setDomain(domain)
-                .setPath(path)
-                .setUrl(url)
-                .setUploadId(buildUploadId(path.substring(1)))
-                .setRemark(remark);
-        file = fileApi.createFile(file);
-        if (Objects.equals(file.getComplete(), COMPLETE.getCode())) {
-            throw exception(ErrorCodeConstants.EXISTS);
-        }
-        return file.getUploadId();
-    }
-
-    @Override
-    public String uploadPart(String uploadId, InputStream in, int partIndex) {
-        FileDto file = fileApi.findFileByUploadId(uploadId);
-        //获取基本信息
-        long size = getSize(in);
+    public String uploadPart(InputStream in, String uploadId, String path, long size, int partIndex) {
         AtomicReference<String> md5 = new AtomicReference<>();
         execute(oss -> {
             UploadPartRequest uploadPartRequest = new UploadPartRequest();
             uploadPartRequest.setBucketName(config.getBucket());
-            uploadPartRequest.setKey(file.getPath().substring(1));
+            uploadPartRequest.setKey(path.substring(1));
             uploadPartRequest.setUploadId(uploadId);
             uploadPartRequest.setInputStream(in);
             // 设置分片大小。除了最后一个分片没有大小限制，其他的分片最小为100 KB。
@@ -128,17 +70,12 @@ public class AliyunFileUpload implements FileUpload {
             // 每次上传分片之后，OSS的返回结果包含PartETag。PartETag将被保存在partETags中。
             PartETag partETag = uploadPartResult.getPartETag();
             md5.set(partETag.getETag());
-            fileApi.updatePartIndex(uploadId, partIndex);
         });
         return md5.get();
     }
 
     @Override
-    public String completePart(String uploadId) {
-        //准备参数
-        FileDto file = fileApi.findFileByUploadId(uploadId);
-        String path = file.getPath().substring(1);
-
+    public long completePart(String uploadId, String path) {
         //文件属性收集
         AtomicLong size = new AtomicLong(0);
         //创建文件流序列,合并文件
@@ -146,7 +83,7 @@ public class AliyunFileUpload implements FileUpload {
         // 查询分片信息
         execute(oss -> {
             PartListing partListing;
-            ListPartsRequest listPartsRequest = new ListPartsRequest(config.getBucket(), path, uploadId);
+            ListPartsRequest listPartsRequest = new ListPartsRequest(config.getBucket(), path.substring(1), uploadId);
             do {
                 partListing = oss.listParts(listPartsRequest);
                 for (PartSummary part : partListing.getParts()) {
@@ -159,19 +96,21 @@ public class AliyunFileUpload implements FileUpload {
 
         //合并分片
         execute(oss -> {
-            CompleteMultipartUploadRequest complete = new CompleteMultipartUploadRequest(config.getBucket(), path, uploadId, partETags);
+            CompleteMultipartUploadRequest complete = new CompleteMultipartUploadRequest(config.getBucket(), path.substring(1), uploadId, partETags);
             oss.completeMultipartUpload(complete);
-            //设置参数, 更新文件信息
-            fileApi.updateFileByUploadId(file.setComplete(COMPLETE.getCode()).setSize(size.get()));
         });
-        return file.getUrl();
+        return size.get();
     }
 
     @Override
-    public boolean deleteFile(String uploadId) {
-        FileDto file = fileApi.findFileByUploadId(uploadId);
-        execute(oss -> oss.deleteObject(config.getBucket(), file.getPath().substring(1)));
-        return fileApi.deleteFileByUploadId(uploadId);
+    public void deleteFile(List<String> paths) {
+        paths = paths.stream().map(e -> e.substring(1)).collect(Collectors.toList());
+        List<String> finalPaths = paths;
+        execute(oss -> {
+            DeleteObjectsRequest request = new DeleteObjectsRequest(config.getBucket());
+            request.setKeys(finalPaths);
+            oss.deleteObjects(request);
+        });
     }
 
     @Override
@@ -207,22 +146,19 @@ public class AliyunFileUpload implements FileUpload {
         return new OSSClientBuilder().build(config.getEndpoint(), config.getKey(), config.getSecret());
     }
 
-    private String buildUploadId(String objectName) {
+    @Override
+    public String buildUploadId(String path) {
         AtomicReference<String> reference = new AtomicReference<>();
         execute(oss -> {
-            InitiateMultipartUploadRequest request = new InitiateMultipartUploadRequest(config.getBucket(), objectName);
+            InitiateMultipartUploadRequest request = new InitiateMultipartUploadRequest(config.getBucket(), path.substring(1));
             String uploadId = oss.initiateMultipartUpload(request).getUploadId();
             reference.set(uploadId);
         });
         return reference.get();
     }
 
-    private String buildDomain() {
+    @Override
+    public String buildDomain() {
         return "https://" + config.getBucket() + "." + config.getEndpoint();
-    }
-
-    @PostConstruct
-    public void loadConfig() {
-        config = fileProperties.getConfig().get(FileUploadTypeEnum.ALIYUN.getCode());
     }
 }

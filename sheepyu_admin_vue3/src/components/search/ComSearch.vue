@@ -58,7 +58,7 @@
 
           <el-col class='p-15' :sm='12' :xs='24' v-if='item.render === "number-range"'>
             <el-form-item :label='item.label' :prop='item.prop'>
-              <NumberRange v-model='form[item.prop]' :step='50' :placeholder='item.placeholder' />
+              <NumberRange v-model='form[item.prop]' :placeholder='item.placeholder' />
             </el-form-item>
           </el-col>
         </template>

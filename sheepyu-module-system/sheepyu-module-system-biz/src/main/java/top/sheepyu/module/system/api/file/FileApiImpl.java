@@ -2,7 +2,6 @@ package top.sheepyu.module.system.api.file;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import top.sheepyu.module.system.dao.file.SystemFile;
 import top.sheepyu.module.system.dao.file.SystemFilePart;
 import top.sheepyu.module.system.service.file.SystemFilePartService;
 import top.sheepyu.module.system.service.file.SystemFileService;
@@ -41,28 +40,7 @@ public class FileApiImpl implements FileApi {
     }
 
     @Override
-    public FileDto createFile(FileDto dto) {
-        return systemFileService.createFile(dto);
-    }
-
-    @Override
     public void updateFileByUploadId(FileDto dto) {
         systemFileService.updateFileByUploadId(dto);
-    }
-
-    @Override
-    public FileDto findFileByUploadId(String uploadId) {
-        SystemFile file = systemFileService.findFileByUploadId(uploadId);
-        return CONVERT.convertDto(file);
-    }
-
-    @Override
-    public boolean deleteFileByUploadId(String uploadId) {
-        return systemFileService.deleteFileByUploadId(uploadId);
-    }
-
-    @Override
-    public void updatePartIndex(String uploadId, int partIndex) {
-        systemFileService.updatePartIndex(uploadId, partIndex);
     }
 }

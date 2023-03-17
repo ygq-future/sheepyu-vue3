@@ -1,5 +1,6 @@
 import { request } from '@/util/request'
 import type { CancelTokenSource } from 'axios'
+import type { PageResult } from '@/util/request'
 
 let source: CancelTokenSource = request.getSource()
 let isCancel: boolean = false
@@ -17,18 +18,29 @@ export function checkMd5(md5: string) {
   return request.get<SystemFileRespVo>(`/system/file/checkMd5/${md5}`)
 }
 
-export function upload(data: FormData) {
-  return request.post<string>('/system/file/upload', data)
+export function upload(data: UploadData) {
+  const formData = new FormData()
+  formData.append('file', data.file)
+  formData.append('md5', data.md5)
+  formData.append('remark', data.remark || '')
+  return request.post<string>('/system/file/upload', formData)
 }
 
-export function preparePart(data: FormData) {
+export function preparePart(data: PreparePartData) {
   checkCancel()
-  return request.post<string>('/system/file/preparePart', data, { cancelToken: source.token })
+  const formData = new FormData()
+  formData.append('md5', data.md5)
+  formData.append('filename', data.filename)
+  formData.append('remark', data.remark || '')
+  return request.post<string>('/system/file/preparePart', formData, { cancelToken: source.token })
 }
 
-export function uploadPart(data: FormData, uploadId: string) {
+export function uploadPart(uploadId: string, data: UploadPartData) {
   checkCancel()
-  return request.post<string>(`/system/file/uploadPart/${uploadId}`, data, { cancelToken: source.token })
+  const formData = new FormData()
+  formData.append('part', data.part)
+  formData.append('index', data.index.toString())
+  return request.post<string>(`/system/file/uploadPart/${uploadId}`, formData, { cancelToken: source.token })
 }
 
 export function abortPart() {
@@ -44,27 +56,77 @@ export function completePart(uploadId: string) {
   return request.post<string>(`/system/file/completePart/${uploadId}`, { cancelToken: source.token })
 }
 
-interface SystemFileRespVo {
-  id: number;
-  uploadId: string
-  //("文件名")
-  filename: string;
-  //("md5")
-  md5: string;
-  //("url")
-  url: string;
-  //("mimeType")
-  mimeType: string;
-  //("size")
-  size: number;
-  //("地域")
-  domain: string;
-  //("相对路径")
-  path: string;
-  //("是否完成")
-  complete: boolean;
-  //("备注")
-  remark: string;
-  //("如果没有完成, 已完成的最后一块分片的坐标")
-  partIndex: number;
+export function deleteFileApi(ids: string) {
+  return request.delete<boolean>('/system/file/' + ids)
+}
+
+export function pageFileApi(params: SystemFileQueryVo) {
+  return request.get<PageResult<SystemFileRespVo>>('/system/file/page', { params })
+}
+
+export interface UploadData {
+  file: File
+  md5: string
+  remark?: string
+}
+
+export interface PreparePartData {
+  md5: string
+  filename: string
+  remark?: string
+}
+
+export interface UploadPartData {
+  part: Blob
+  index: number
+}
+
+export interface SystemFileBaseVo {
+  //兼容s3协议唯一上传id
+  uploadId?: string
+  //如果是分片上传, 当前上传了几块, 1代表上传了一块
+  partIndex: number
+  //文件名
+  filename: string
+  //文件md5
+  md5?: string
+  //文件 URL
+  url: string
+  //MIME类型
+  mimeType?: string
+  //文件大小, 字节
+  size: number
+  //文件上传地域, 例如: http://localhost
+  domain?: string
+  //文件上传相对路径, 例如: /2022/08/xxx.jpg
+  path?: string
+  //是否完成
+  complete: number
+  //备注
+  remark?: string
+}
+
+export interface SystemFileRespVo extends SystemFileBaseVo {
+  id: number
+  //创建者
+  creator: string
+  //创建时间
+  createTime: string
+}
+
+export interface SystemFileQueryVo {
+  //当前页
+  current?: number
+  //页大小
+  size?: number
+  //总记录数
+  total?: number
+  //快速搜索关键字
+  keyword?: string
+  //文件大小, 字节
+  sizes?: number[]
+  //是否完成
+  complete?: number
+  //创建时间
+  createTimes?: string[]
 }

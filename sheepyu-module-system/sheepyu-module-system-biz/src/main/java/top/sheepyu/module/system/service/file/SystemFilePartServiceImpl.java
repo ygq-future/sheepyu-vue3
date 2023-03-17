@@ -25,7 +25,8 @@ public class SystemFilePartServiceImpl extends ServiceImplX<SystemFilePartMapper
     @Override
     public boolean createFilePart(FilePartDto dto) {
         //根据上传id和索引找文件的部分
-        SystemFilePart filePart = lambdaQuery().eq(SystemFilePart::getUploadId, dto.getUploadId())
+        SystemFilePart filePart = lambdaQuery()
+                .eq(SystemFilePart::getUploadId, dto.getUploadId())
                 .eq(SystemFilePart::getPartIndex, dto.getPartIndex())
                 .one();
 

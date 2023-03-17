@@ -1,13 +1,13 @@
 <template>
   <el-upload
     :show-file-list='false'
-    :http-request='(options: UploadRequestOptions) => httpRequest(options)'
-    :before-upload='(file: UploadRawFile) => beforeUpload(file)'
+    :http-request='httpRequest'
+    :before-upload='beforeUpload'
   >
     <el-button type='primary'>点击上传</el-button>
     <template #tip>
       <div class='el-upload__tip'>
-        <el-progress :percentage='pageData.percentage' />
+        <el-progress :percentage='state.percentage' />
         请上传类型为
         <span style='color: #ff4d4d'>{{ fileTypes.join('/') }}</span>
         且大小不超过
@@ -15,22 +15,33 @@
         的文件
       </div>
       <div class='operate'>
-        <el-input class='remark' placeholder='文件备注' v-model='pageData.remark' />
+        <el-form-item prop='remark'>
+          <el-input class='remark' placeholder='文件备注' v-model='state.remark' />
+        </el-form-item>
         <el-button type='danger' @click='cancelUpload'>取消上传</el-button>
       </div>
+      <el-input v-model='url' style='margin-top: 5px' placeholder='文件url' />
     </template>
   </el-upload>
 </template>
 
 <script setup lang='ts'>
-import type { UploadProps, UploadRequestOptions, UploadRawFile } from 'element-plus'
+import type { UploadProps } from 'element-plus'
 import { ElLoading, ElNotification } from 'element-plus'
 import Md5Worker from '../../util/worker/md5Worker.ts?worker'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
-import { abortPart, checkMd5, completePart, preparePart, uploadPart } from '@/api/system/file'
+import {
+  abortPart,
+  checkMd5,
+  completePart,
+  preparePart,
+  uploadPart
+} from '@/api/system/file'
+import type { WritableComputedRef } from '@vue/reactivity'
+import type { UploadPartData, PreparePartData } from '@/api/system/file'
 
 const md5Store = useMd5Worker()
-const emit = defineEmits(['update:modelValue'])
+
 const props = withDefaults(defineProps<{
   extendTypes?: string[]
   size?: number
@@ -43,7 +54,20 @@ const props = withDefaults(defineProps<{
   modelValue: ''
 })
 
-const pageData = reactive<{
+const emits = defineEmits<{
+  (e: 'update:modelValue', url: string): void
+}>()
+
+const url: WritableComputedRef<string> = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emits('update:modelValue', value)
+  }
+})
+
+const state = reactive<{
   uploadId: string
   remark: string
   percentage: number
@@ -55,7 +79,7 @@ const pageData = reactive<{
 //将props.size转为字节单位, 作为每一份part的大小
 const partSize = props.size * 1024 * 1024
 //文件类型
-const fileTypes = ['png', 'jpg', 'mp4', ...props.extendTypes]
+const fileTypes = ['mp4', 'zip', '7z', 'rar', ...props.extendTypes]
 
 const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   let suffix = file.name.substring(file.name.lastIndexOf('.') + 1)
@@ -73,7 +97,7 @@ const beforeUpload: UploadProps['beforeUpload'] = (file) => {
 }
 
 function cancelUpload() {
-  if (!pageData.uploadId) {
+  if (!state.uploadId) {
     return ElNotification.warning('没有正在上传的文件')
   }
   abortPart()
@@ -84,18 +108,12 @@ function cancelUpload() {
  * @param file 文件
  * @param index 从哪个分片开始切割
  */
-function createPartFile(file: File, index: number = 0): FormData[] {
-  const partList: FormData[] = []
+function createPartFile(file: File, index: number = 0): Array<UploadPartData> {
+  const partList: Array<UploadPartData> = []
   let cur = index * partSize
   while (cur < file.size) {
     const blob = file.slice(cur, cur = cur + partSize)
-    const part = new FormData()
-    part.append('file', blob)
-    part.append('index', `${++index}`)
-    partList.push(part)
-  }
-  if (index > props.chunkNum) {
-    ElNotification.error('文件超出设置大小')
+    partList.push({ part: blob, index: ++index })
   }
   return partList
 }
@@ -128,19 +146,16 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     //如果没有这个文件
     if (!data) {
       //调用分片准备接口, 创建全局唯一id
-      const prepareData = new FormData()
-      prepareData.append('md5', md5)
-      prepareData.append('filename', file.name)
-      prepareData.append('remark', pageData.remark)
-      pageData.uploadId = <string>(await preparePart(prepareData)).data
+      const prepareData: PreparePartData = { md5, filename: file.name, remark: state.remark }
+      state.uploadId = <string>(await preparePart(prepareData)).data
     } else {
       //如果已经有此md5的文件, 直接取uploadId
-      pageData.uploadId = data.uploadId
+      state.uploadId = data.uploadId!
       //如果完成了, 直接返回
       if (data.complete) {
         //如果文件存在会返回url, 直接回调更新值
-        emit('update:modelValue', data.url)
-        pageData.percentage = 100
+        emits('update:modelValue', data.url)
+        state.percentage = 100
         return resolve(true)
       }
     }
@@ -151,14 +166,14 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     //逐个上传分片
     const total = i + partList.length
     for (const part of partList) {
-      pageData.percentage = Math.ceil((++i / total) * 100) - 1
-      await uploadPart(part, pageData.uploadId)
+      state.percentage = Math.ceil((++i / total) * 100) - 1
+      await uploadPart(state.uploadId, part)
     }
 
     //合并分片
-    emit('update:modelValue', (await completePart(pageData.uploadId)).data)
-    pageData.percentage = 100
-    pageData.uploadId = ''
+    emits('update:modelValue', (await completePart(state.uploadId)).data)
+    state.percentage = 100
+    state.uploadId = ''
     ElNotification.success('上传成功')
     resolve(true)
   })
@@ -185,5 +200,6 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
 :deep(.el-upload__tip) {
   font-weight: 700;
   color: gray;
+  line-height: 16px;
 }
 </style>

@@ -14,8 +14,11 @@
         的文件
       </div>
       <div class='operate'>
-        <el-input class='remark' placeholder='文件备注' v-model='remark' />
+        <el-form-item prop='remark'>
+          <el-input class='remark' placeholder='文件备注' v-model='remark' />
+        </el-form-item>
       </div>
+      <el-input v-model='url' style='margin-top: 5px' placeholder='文件url' />
     </template>
   </el-upload>
 </template>
@@ -25,20 +28,36 @@ import { ElLoading, ElNotification } from 'element-plus'
 import Md5Worker from '../../util/worker/md5Worker.ts?worker'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
 import { checkMd5, upload } from '@/api/system/file'
+import type { UploadData } from '@/api/system/file'
+import type { WritableComputedRef } from '@vue/reactivity'
 
 const md5Store = useMd5Worker()
-const emits = defineEmits(['update:modelValue'])
+
 const props = withDefaults(defineProps<{
   extendTypes?: string[]
   size?: number
   modelValue: string
 }>(), {
   extendTypes: () => [],
-  size: 100,
+  size: 50,
   modelValue: ''
 })
+
+const emits = defineEmits<{
+  (e: 'update:modelValue', value: string): void
+}>()
+
+const url: WritableComputedRef<string> = computed({
+  get() {
+    return props.modelValue
+  },
+  set(value) {
+    emits('update:modelValue', value)
+  }
+})
+
 const remark = ref<string>('')
-const fileTypes = ['png', 'jpg', 'mp4', ...props.extendTypes]
+const fileTypes = ['png', 'jpg', 'jpeg', 'xls', 'xlsx', 'ppt', 'pptx', 'doc', 'docx', 'pdf', ...props.extendTypes]
 
 const beforeUpload: UploadProps['beforeUpload'] = (file) => {
   let suffix = file.name.substring(file.name.lastIndexOf('.') + 1)
@@ -87,12 +106,12 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     }
 
     const instance = ElLoading.service({ text: '正在上传文件...', fullscreen: true })
-    const data = new FormData()
-    data.append('file', file)
-    data.append('md5', md5)
-    data.append('remark', remark.value)
-    emits('update:modelValue', (await upload(data)).data)
-    instance.close()
+    try {
+      const data: UploadData = { file, md5, remark: remark.value }
+      emits('update:modelValue', (await upload(data)).data)
+    } finally {
+      instance.close()
+    }
     return resolve(true)
   })
 }
@@ -101,8 +120,6 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
 
 <style scoped lang='scss'>
 .operate {
-  display: flex;
-  align-items: center;
   margin-top: 5px;
 
   .remark {
@@ -114,5 +131,6 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
 :deep(.el-upload__tip) {
   font-weight: 700;
   color: gray;
+  line-height: 16px;
 }
 </style>

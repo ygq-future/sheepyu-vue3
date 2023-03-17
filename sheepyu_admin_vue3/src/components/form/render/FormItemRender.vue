@@ -99,7 +99,22 @@
       <el-option v-for='item in config.data' :label='item[config.props.label]' :value='item[config.props.value]' />
     </el-select>
 
-    <ImageUpload v-if='config.render === "upload"' width='100px' v-model='form[config.prop]' />
+    <ImageUpload v-if='config.render === "image-upload"' width='100px' v-model='form[config.prop]' />
+
+    <Upload
+      v-if='config.render === "upload"'
+      v-model='form[config.prop]'
+      :extend-types='config.uploadProps?.extendTypes'
+      :size='config.uploadProps?.size'
+    />
+
+    <PartUpload
+      v-if='config.render === "part-upload"'
+      v-model='form[config.prop]'
+      :extend-types='config.uploadProps?.extendTypes'
+      :size='config.uploadProps?.size'
+      :chunk-num='config.uploadProps?.chunkNum'
+    />
 
     <span class='tip' v-if='config.tip'>{{ config.tip }}</span>
   </el-form-item>

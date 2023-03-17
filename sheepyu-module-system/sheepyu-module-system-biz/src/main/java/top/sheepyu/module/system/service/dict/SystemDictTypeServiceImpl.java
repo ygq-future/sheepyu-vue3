@@ -51,7 +51,8 @@ public class SystemDictTypeServiceImpl extends ServiceImplX<SystemDictTypeMapper
                         .eq(SystemDictType::getId, keyword).or()
                         .like(SystemDictType::getType, keyword).or()
                         .like(SystemDictType::getName, keyword))
-                .eqIfPresent(SystemDictType::getStatus, queryVo.getStatus()));
+                .eqIfPresent(SystemDictType::getStatus, queryVo.getStatus())
+                .orderByDesc(SystemDictType::getCreateTime));
     }
 
     @Override

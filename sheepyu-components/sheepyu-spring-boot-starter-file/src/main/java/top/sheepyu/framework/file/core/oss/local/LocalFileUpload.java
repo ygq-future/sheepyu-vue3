@@ -1,6 +1,5 @@
 package top.sheepyu.framework.file.core.oss.local;
 
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
@@ -10,7 +9,6 @@ import top.sheepyu.framework.file.config.FileProperties;
 import top.sheepyu.framework.file.config.FileProperties.BaseConfig;
 import top.sheepyu.framework.file.core.enums.FileUploadTypeEnum;
 import top.sheepyu.framework.file.core.oss.FileUpload;
-import top.sheepyu.module.common.constants.ErrorCodeConstants;
 import top.sheepyu.module.common.util.FileUtil;
 import top.sheepyu.module.common.util.MyStrUtil;
 import top.sheepyu.module.system.api.file.FileApi;
@@ -24,12 +22,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.List;
-import java.util.Objects;
 import java.util.Vector;
 
-import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.COMPLETE;
 import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.INCOMPLETE;
-import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.common.util.FileUtil.*;
 import static top.sheepyu.module.common.util.MyStrUtil.getDatePath;
 import static top.sheepyu.module.common.util.MyStrUtil.getUUID;
@@ -48,84 +43,32 @@ public class LocalFileUpload implements FileUpload {
     private FileApi fileApi;
     private BaseConfig config;
 
+    @PostConstruct
+    public void loadConfig() {
+        config = fileProperties.getConfig().get(FileUploadTypeEnum.LOCAL.getCode());
+    }
+
     @Override
-    public String upload(InputStream in, String md5, String filename, String remark) {
-        //获取基本信息
-        long size = getSize(in);
-        String domain = config.getEndpoint();
-        String mimeType = getMimeType(filename);
-        String path = getDatePath() + getUUID() + getSuffix(filename);
-        String url = domain + "/file" + path;
-
-        //写入磁盘, 如果md5为空会计算md5
-        if (StrUtil.isBlank(md5)) {
-            byte[] data = readAllData(in);
-            md5 = MD5.create().digestHex(data);
-            in = new ByteArrayInputStream(data);
-        }
-
-        //创建文件
-        FileDto file = new FileDto()
-                .setComplete(COMPLETE.getCode())
-                .setUploadId(getUUID())
-                .setMd5(md5)
-                .setFilename(filename)
-                .setSize(size)
-                .setDomain(domain)
-                .setMimeType(mimeType)
-                .setPath(path)
-                .setUrl(url)
-                .setRemark(remark);
-        file = fileApi.createFile(file);
-
-        //写入磁盘
+    public String upload(InputStream in, String path, long size) {
+        byte[] data = readAllData(in);
+        String md5 = MD5.create().digestHex(data);
+        in = new ByteArrayInputStream(data);
         writeFromStream(in, buildLocalPathFile(path));
-        return file.getUrl();
+        return md5;
     }
 
     @Override
-    public String uploadMini(InputStream in, String filename) {
-        return upload(in, null, filename, null);
-    }
-
-    @Override
-    public String preparePart(String md5, String filename, String remark) {
-        //封装基本属性
-        String mimeType = getMimeType(filename);
-        String domain = config.getEndpoint();
-        String path = getDatePath() + getUUID() + getSuffix(filename);
-        String url = domain + "/file" + path;
-
-        FileDto file = new FileDto()
-                .setComplete(INCOMPLETE.getCode())
-                .setMd5(md5)
-                .setFilename(filename)
-                .setMimeType(mimeType)
-                .setDomain(domain)
-                .setPath(path)
-                .setUrl(url)
-                .setUploadId(MyStrUtil.getUUID())
-                .setRemark(remark);
-        file = fileApi.createFile(file);
-        if (Objects.equals(file.getComplete(), COMPLETE.getCode())) {
-            throw exception(ErrorCodeConstants.EXISTS);
-        }
-        return file.getUploadId();
-    }
-
-    @Override
-    public String uploadPart(String uploadId, InputStream in, int partIndex) {
+    public String uploadPart(InputStream in, String uploadId, String path, long size, int partIndex) {
         //获取基本信息
         byte[] data = FileUtil.readAllData(in);
-        int size = data.length;
         String md5 = MD5.create().digestHex(data);
-        String path = getDatePath() + uploadId + "/" + getUUID();
+        path = getDatePath() + uploadId + "/" + getUUID();
 
         //创建文件分片信息
         FilePartDto filePart = new FilePartDto()
                 .setUploadId(uploadId)
                 .setPartIndex(partIndex)
-                .setSize(size)
+                .setSize(Long.valueOf(size).intValue())
                 .setMd5(md5)
                 .setPath(path);
         boolean result = fileApi.createFilePart(filePart);
@@ -136,15 +79,11 @@ public class LocalFileUpload implements FileUpload {
 
         //写入磁盘
         FileUtil.writeBytes(data, buildLocalPathFile(path));
-        //更新文件index
-        fileApi.updatePartIndex(uploadId, partIndex);
         return md5;
     }
 
     @Override
-    public String completePart(String uploadId) {
-        //准备参数
-        FileDto file = fileApi.findFileByUploadId(uploadId);
+    public long completePart(String uploadId, String path) {
         List<FilePartDto> partList = fileApi.listByUploadId(uploadId);
         Vector<InputStream> vector = new Vector<>(partList.size());
 
@@ -157,24 +96,18 @@ public class LocalFileUpload implements FileUpload {
             vector.add(in);
         }
         //异步合并流
-        mergeAsync(uploadId, vector.elements(), buildLocalPathStr(file.getPath()));
-
-        //设置参数, 更新文件信息
-        fileApi.updateFileByUploadId(file.setComplete(COMPLETE.getCode()).setSize(size));
+        mergeAsync(uploadId, vector.elements(), buildLocalPathStr(path));
 
         //清理文件分片信息
         del(new File(buildLocalPathStr(partList.get(0).getPath())).getParentFile());
         fileApi.deletePartByUploadId(uploadId);
-        return file.getUrl();
+        return size;
     }
 
     @Override
-    public boolean deleteFile(String uploadId) {
-        //根据uploadId查找文件
-        FileDto file = fileApi.findFileByUploadId(uploadId);
+    public void deleteFile(List<String> paths) {
         //删除本地磁盘上的文件
-        del(buildLocalPathFile(file.getPath()));
-        return fileApi.deleteFileByUploadId(uploadId);
+        paths.forEach(path -> del(buildLocalPathFile(path)));
     }
 
     @Override
@@ -182,9 +115,14 @@ public class LocalFileUpload implements FileUpload {
         return FileUploadTypeEnum.LOCAL.getCode();
     }
 
-    @PostConstruct
-    public void loadConfig() {
-        config = fileProperties.getConfig().get(FileUploadTypeEnum.LOCAL.getCode());
+    @Override
+    public String buildUploadId(String path) {
+        return MyStrUtil.getUUID();
+    }
+
+    @Override
+    public String buildDomain() {
+        return config.getEndpoint() + "/file";
     }
 
     @Async

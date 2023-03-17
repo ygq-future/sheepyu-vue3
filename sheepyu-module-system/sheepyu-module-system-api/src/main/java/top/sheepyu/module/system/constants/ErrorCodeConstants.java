@@ -48,6 +48,7 @@ public interface ErrorCodeConstants {
 
     //file相关 100_006_001
     ErrorCode FILE_NOT_EXISTS = new ErrorCode(100_006_001, "文件不存在!");
+    ErrorCode FILE_EXISTS = new ErrorCode(100_006_001, "文件已存在!");
 
     //dept相关 100_007_001
     ErrorCode DEPT_NOT_EXISTS = new ErrorCode(100_007_001, "部门不存在!");

@@ -44,6 +44,8 @@ export interface FormItemConfig {
   //是否开启多选, 用于tree-select和select
   multiple?: boolean
   disabled?: boolean
+  //render为文件上传时可以传递的自定义属性
+  uploadProps?: { extendTypes?: Array<string>, size?: number, chunkNum?: number }
 }
 
 /**
@@ -60,4 +62,5 @@ export type FormRender =
   'radio' | 'select' | 'icon' |
   'slider' | 'upload' | 'tree-select' |
   'checkbox' | 'datetime' | 'part-upload' |
-  'textarea' | 'tree-select-checkbox' | 'tree-checkbox'
+  'textarea' | 'tree-select-checkbox' | 'tree-checkbox' |
+  'image-upload'

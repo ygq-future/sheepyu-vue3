@@ -30,7 +30,7 @@ sheepyu:
   file:
     config:
       LOCAL:
-        endpoint: http://localhost:18080
+        endpoint: https://demo.sheepyu.top/api
         path: /home/upload
 logging:
   level:
