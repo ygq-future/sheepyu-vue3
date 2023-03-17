@@ -1,7 +1,9 @@
 package top.sheepyu.module.system.service.config;
 
 import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
+import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigCreateVo;
+import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigQueryVo;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigUpdateVo;
 import top.sheepyu.module.system.dao.config.SystemConfig;
 import top.sheepyu.module.system.enums.config.SystemConfigKeyEnum;
@@ -32,4 +34,6 @@ public interface SystemConfigService extends IServiceX<SystemConfig> {
     List<SystemConfig> listConfig(String keyword);
 
     SystemConfig findById(Long id);
+
+    PageResult<SystemConfig> page(@Valid SystemConfigQueryVo queryVo);
 }

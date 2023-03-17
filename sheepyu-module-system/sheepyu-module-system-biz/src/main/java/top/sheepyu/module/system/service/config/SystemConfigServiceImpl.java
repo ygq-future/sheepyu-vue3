@@ -1,12 +1,15 @@
 package top.sheepyu.module.system.service.config;
 
 import cn.hutool.core.util.BooleanUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
 import top.sheepyu.framework.redis.util.RedisUtil;
+import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigCreateVo;
+import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigQueryVo;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigUpdateVo;
 import top.sheepyu.module.system.dao.config.SystemConfig;
 import top.sheepyu.module.system.dao.config.SystemConfigMapper;
@@ -100,6 +103,15 @@ public class SystemConfigServiceImpl extends ServiceImplX<SystemConfigMapper, Sy
     @Override
     public SystemConfig findById(Long id) {
         return findByIdValidateExists(id);
+    }
+
+    @Override
+    public PageResult<SystemConfig> page(SystemConfigQueryVo queryVo) {
+        return page(queryVo, buildQuery()
+                .and(StrUtil.isNotBlank(queryVo.getKeyword()), q -> q
+                        .eq(SystemConfig::getId, queryVo.getKeyword()).or()
+                        .like(SystemConfig::getName, queryVo.getKeyword()))
+                .orderByDesc(SystemConfig::getCreateTime));
     }
 
     private SystemConfig findByIdValidateExists(Long id) {

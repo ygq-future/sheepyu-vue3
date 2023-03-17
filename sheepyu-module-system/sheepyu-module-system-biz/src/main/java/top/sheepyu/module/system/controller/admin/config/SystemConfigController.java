@@ -6,8 +6,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import top.sheepyu.framework.security.core.annotations.Permit;
 import top.sheepyu.framework.web.core.annotations.FlowLimit;
+import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigCreateVo;
+import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigQueryVo;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigRespVo;
 import top.sheepyu.module.system.controller.admin.config.vo.SystemConfigUpdateVo;
 import top.sheepyu.module.system.dao.config.SystemConfig;
@@ -61,6 +63,13 @@ public class SystemConfigController {
     public Result<List<SystemConfigRespVo>> list(@RequestParam(required = false) String keyword) {
         List<SystemConfig> result = systemConfigService.listConfig(keyword);
         return success(CONVERT.convertList(result));
+    }
+
+    @GetMapping("/page")
+    @ApiOperation("获取配置分页")
+    @PreAuthorize("@ss.hasPermission('system:config:query')")
+    public Result<PageResult<SystemConfigRespVo>> page(SystemConfigQueryVo queryVo) {
+        return success(CONVERT.convertPage(systemConfigService.page(queryVo)));
     }
 
     @GetMapping("/{id}")

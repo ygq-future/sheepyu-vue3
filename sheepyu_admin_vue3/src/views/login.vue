@@ -65,7 +65,8 @@ import { captcha, info, login } from '@/api/system/user'
 import { ParticleLine } from '@/util/particleLine'
 import type { ElForm, FormRules } from 'element-plus'
 import { loadDict } from '@/util/common'
-import { ConfigKeyEnum, getConfig } from '@/api/system/config'
+import { getConfig } from '@/api/system/config'
+import { ConfigKeyEnum } from '@/enums/ConfigKeyEnum'
 
 let particleLine: ParticleLine
 const config = useConfig()

@@ -5,8 +5,10 @@ import io.swagger.annotations.ApiOperation;
 import org.quartz.SchedulerException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import top.sheepyu.framework.job.util.CronUtils;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.common.Result;
+import top.sheepyu.module.system.constants.ErrorCodeConstants;
 import top.sheepyu.module.system.controller.admin.job.vo.*;
 import top.sheepyu.module.system.convert.job.SystemJobLogConvert;
 import top.sheepyu.module.system.dao.job.SystemJob;
@@ -15,8 +17,11 @@ import top.sheepyu.module.system.service.job.SystemJobLogService;
 import top.sheepyu.module.system.service.job.SystemJobService;
 
 import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
 
 import static top.sheepyu.module.common.common.Result.success;
+import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.convert.job.SystemJobConvert.CONVERT;
 
 /**
@@ -94,5 +99,16 @@ public class SystemJobController {
     public Result<PageResult<SystemJobLogRespVo>> logList(SystemJobLogQueryVo queryVo) {
         PageResult<SystemJobLog> pageResult = systemJobLogService.page(queryVo);
         return success(SystemJobLogConvert.CONVERT.convertPage(pageResult));
+    }
+
+    @GetMapping("/next-times")
+    @ApiOperation("获取定时任务下几次执行的时间")
+    @PreAuthorize("@ss.hasPermission('system:job:query')")
+    public Result<List<Date>> nextTimes(String cron, Integer count) {
+        boolean valid = CronUtils.isValid(cron);
+        if (!valid) {
+            throw exception(ErrorCodeConstants.CRON_ERROR);
+        }
+        return success(CronUtils.getNextTimes(cron, count));
     }
 }
