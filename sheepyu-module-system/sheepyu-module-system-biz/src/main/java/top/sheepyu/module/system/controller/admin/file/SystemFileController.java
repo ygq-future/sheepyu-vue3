@@ -61,7 +61,6 @@ public class SystemFileController {
     public Result<String> preparePart(@RequestParam String md5,
                                       @RequestParam String filename,
                                       @RequestParam(required = false) String remark) {
-//        String uploadId = fileUploadFactory.get().preparePart(md5, filename, remark);
         String uploadId = systemFileService.preparePart(md5, filename, remark);
         return success(uploadId);
     }
@@ -72,7 +71,6 @@ public class SystemFileController {
     public Result<String> uploadPart(@PathVariable String uploadId,
                                      @RequestParam MultipartFile part,
                                      @RequestParam Integer index) throws IOException {
-//        String md5 = fileUploadFactory.get().uploadPart(uploadId, part.getInputStream(), index);
         String md5 = systemFileService.uploadPart(part, uploadId, index);
         return success(md5);
     }
@@ -81,7 +79,6 @@ public class SystemFileController {
     @ApiOperation("完成分片上传")
     @PreAuthorize("@ss.hasPermission('system:file:create')")
     public Result<String> completePart(@PathVariable String uploadId) {
-//        String url = fileUploadFactory.get().completePart(uploadId);
         String url = systemFileService.completePart(uploadId);
         return success(url);
     }

@@ -14,7 +14,6 @@ spring:
     host: smtp.163.com
     username: ygq__future@163.com
     password: IKRFOJCYBTWFJFYC
-    test-connection: true
     port: 465
     properties:
       mail.smtp.auth: true
@@ -25,6 +24,11 @@ spring:
       mail.smtp.socketFactory.class: javax.net.ssl.SSLSocketFactory
 # 详情请参照SwaggerProperties
 sheepyu:
+  web:
+    demo: true
+    demo-exclude-url:
+      - /admin-api/system/user/login
+      - /admin-api/system/user/refreshToken/*
   swagger:
     product: true
   file:

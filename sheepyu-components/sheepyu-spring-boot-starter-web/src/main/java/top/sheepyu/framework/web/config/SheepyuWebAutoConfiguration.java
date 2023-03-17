@@ -60,7 +60,7 @@ public class SheepyuWebAutoConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnProperty(prefix = "sheepyu.web", value = "demo")
     public FilterRegistrationBean<DemoFilter> demoFilter() {
-        return createFilterBean(new DemoFilter(), Integer.MAX_VALUE);
+        return createFilterBean(new DemoFilter(webProperties), Integer.MAX_VALUE);
     }
 
     @Bean

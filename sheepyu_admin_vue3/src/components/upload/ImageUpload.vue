@@ -65,12 +65,12 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     }
 
     const instance = ElLoading.service({ text: '正在上传文件...', fullscreen: true })
-    const data = new FormData()
-    data.append('file', file)
-    data.append('md5', md5)
-    data.append('remark', '图片上传')
-    emits('update:modelValue', (await upload(data)).data)
-    instance.close()
+    try {
+      const data = { file, md5, remark: '图片上传' }
+      emits('update:modelValue', (await upload(data)).data)
+    } finally {
+      instance.close()
+    }
     return resolve(true)
   })
 }
