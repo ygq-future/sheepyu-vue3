@@ -249,12 +249,12 @@ public class SystemUserBiz {
         //获取今日注册人数
         long todayIncrement = systemUserService.count(systemUserService
                 .buildQuery()
-                .between(SystemUser::getCreateTime, DateUtil.beginOfDay(now), DateUtil.beginOfDay(now))
+                .between(SystemUser::getCreateTime, DateUtil.beginOfDay(now), DateUtil.endOfDay(now))
         );
         //获取昨天增加的人数
         long lastDayIncrement = systemUserService.count(systemUserService
                 .buildQuery()
-                .between(SystemUser::getCreateTime, DateUtil.beginOfDay(lastDay), DateUtil.beginOfDay(lastDay))
+                .between(SystemUser::getCreateTime, DateUtil.beginOfDay(lastDay), DateUtil.endOfDay(lastDay))
         );
         int todayPercent = (int) ((todayIncrement - lastDayIncrement) / (lastDayIncrement == 0 ? 1 : lastDayIncrement)) * 100;
         vo.setTotal(total);

@@ -188,10 +188,10 @@ public class SystemFileServiceImpl extends ServiceImplX<SystemFileMapper, System
         long total = count();
         //获取今日上传数量
         long todayIncrement = count(buildQuery()
-                .between(SystemFile::getCreateTime, DateUtil.beginOfDay(now), DateUtil.beginOfDay(now)));
+                .between(SystemFile::getCreateTime, DateUtil.beginOfDay(now), DateUtil.endOfDay(now)));
         //获取昨天上传数量
         long lastDayIncrement = count(buildQuery()
-                .between(SystemFile::getCreateTime, DateUtil.beginOfDay(lastDay), DateUtil.beginOfDay(lastDay)));
+                .between(SystemFile::getCreateTime, DateUtil.beginOfDay(lastDay), DateUtil.endOfDay(lastDay)));
         int todayPercent = (int) ((todayIncrement - lastDayIncrement) / (lastDayIncrement == 0 ? 1 : lastDayIncrement)) * 100;
         vo.setTotal(total);
         vo.setTodayIncrement(Long.valueOf(todayIncrement).intValue());

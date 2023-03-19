@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : local@mysql01
+ Source Server         : 47.115.214.79(aliyun)
  Source Server Type    : MySQL
- Source Server Version : 80028
- Source Host           : localhost:3001
+ Source Server Version : 80029
+ Source Host           : 47.115.214.79:3306
  Source Schema         : sheepyu
 
  Target Server Type    : MySQL
- Target Server Version : 80028
+ Target Server Version : 80029
  File Encoding         : 65001
 
- Date: 17/03/2023 20:25:25
+ Date: 19/03/2023 20:58:21
 */
 
 SET NAMES utf8mb4;
@@ -173,7 +173,7 @@ CREATE TABLE `QRTZ_SCHEDULER_STATE`  (
 -- ----------------------------
 -- Records of QRTZ_SCHEDULER_STATE
 -- ----------------------------
-INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('quartzScheduler', 'NON_CLUSTERED', 1679055921842, 15000);
+INSERT INTO `QRTZ_SCHEDULER_STATE` VALUES ('quartzScheduler', 'NON_CLUSTERED', 1679230691340, 15000);
 
 -- ----------------------------
 -- Table structure for QRTZ_SIMPLE_TRIGGERS
@@ -284,7 +284,7 @@ CREATE TABLE `system_access_log`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2816 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统访问记录' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2820 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统访问记录' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_access_log
@@ -450,6 +450,10 @@ INSERT INTO `system_access_log` VALUES (2812, 1, 2, 100, 0, 'admin', '洋芋_she
 INSERT INTO `system_access_log` VALUES (2813, 1, 2, 100, 0, 'admin', '洋芋_sheepyu', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36', NULL, '2023-03-15 18:29:10', NULL, '2023-03-15 18:29:10', b'0');
 INSERT INTO `system_access_log` VALUES (2814, 1, 2, 100, 0, 'admin', '洋芋_sheepyu', '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36', NULL, '2023-03-16 10:49:07', NULL, '2023-03-16 10:49:07', b'0');
 INSERT INTO `system_access_log` VALUES (2815, 1, 2, 100, 0, 'admin', '洋芋_sheepyu', '8.8.8.8', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.41', NULL, '2023-03-17 19:15:46', NULL, '2023-03-17 19:15:46', b'0');
+INSERT INTO `system_access_log` VALUES (2816, 1, 2, 100, 0, 'admin', '洋芋_sheepyu', '111.8.38.205', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36', NULL, '2023-03-17 22:22:49', NULL, '2023-03-17 22:22:49', b'0');
+INSERT INTO `system_access_log` VALUES (2817, NULL, 2, 100, 10, 'admin', NULL, '8.8.8.8', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.41', NULL, '2023-03-18 09:16:14', NULL, '2023-03-18 09:16:14', b'0');
+INSERT INTO `system_access_log` VALUES (2818, 1, 2, 100, 0, 'admin', '洋芋_sheepyu', '8.8.8.8', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.41', NULL, '2023-03-18 09:16:22', NULL, '2023-03-18 09:16:22', b'0');
+INSERT INTO `system_access_log` VALUES (2819, 1, 2, 100, 0, 'admin', '洋芋_sheepyu', '8.8.8.8', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.41', NULL, '2023-03-18 09:20:04', NULL, '2023-03-18 09:20:04', b'0');
 
 -- ----------------------------
 -- Table structure for system_api_log
@@ -483,7 +487,7 @@ CREATE TABLE `system_api_log`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1830 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统异常日志' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1889 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '系统异常日志' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_api_log
@@ -1071,6 +1075,11 @@ INSERT INTO `system_api_log` VALUES (1880, 1, 2, '分片上传', 2, 'uploadPart'
 INSERT INTO `system_api_log` VALUES (1881, 1, 2, '完成分片上传', 2, 'completePart', '/admin-api/system/file/completePart/bac2175861204d339226914010bad4f9', '{\"uploadId\":\"bac2175861204d339226914010bad4f9\"}', '8.8.8.8', 700, 200, 'http://localhost:18080/file/2023/03/17/4d0c1cd7e5324904ba7942c79355d700.mp4', 1, NULL, '', NULL, NULL, NULL, 0, NULL, NULL, NULL, '2023-03-17 20:21:42', NULL, '2023-03-17 20:21:42', b'0');
 INSERT INTO `system_api_log` VALUES (1882, 1, 2, '修改系统配置', 3, 'update', '/admin-api/system/config', '{\"updateVo\":{\"id\":3,\"name\":\"文件上传实现\",\"configValue\":\"LOCAL\",\"remark\":\"默认的文件上传实现, 值传LOCAL, ALIYUN, QCLOUD\"}}', '8.8.8.8', 15, 200, '{}', 1, NULL, '', NULL, NULL, NULL, 0, NULL, NULL, NULL, '2023-03-17 20:23:49', NULL, '2023-03-17 20:23:49', b'0');
 INSERT INTO `system_api_log` VALUES (1883, 1, 2, '修改系统配置', 3, 'update', '/admin-api/system/config', '{\"updateVo\":{\"id\":3,\"name\":\"文件上传实现\",\"configValue\":\"LOCAL\",\"remark\":\"默认的文件上传实现, 修改立马生效\\nLOCAL: 本地上传\\nALIYUN: 阿里云\\nQCLOUD: 腾讯\"}}', '8.8.8.8', 16, 200, '{}', 1, NULL, '', NULL, NULL, NULL, 0, NULL, NULL, NULL, '2023-03-17 20:24:41', NULL, '2023-03-17 20:24:41', b'0');
+INSERT INTO `system_api_log` VALUES (1884, 1, 2, '批量删除文件', 4, 'delete', '/admin-api/system/file/91,90,69', '{\"ids\":\"91,90,69\"}', '111.8.38.205', 156, 200, '{}', 1, NULL, '', NULL, NULL, NULL, 0, NULL, NULL, NULL, '2023-03-17 22:23:31', NULL, '2023-03-17 22:23:31', b'0');
+INSERT INTO `system_api_log` VALUES (1885, 1, 2, '文件上传', 2, 'upload', '/admin-api/system/file/upload', '{\"remark\":\"图片上传\",\"file\":\"[ignore]\",\"md5\":\"da500c2c4a0b5808f698161f0153c92b\"}', '111.8.38.205', 32, 200, 'https://demo.sheepyu.top/api/file/2023/03/17/5215155db39b47cf97a185551bce25ad.jpeg', 1, NULL, '', NULL, NULL, NULL, 0, NULL, NULL, NULL, '2023-03-17 22:27:29', NULL, '2023-03-17 22:27:29', b'0');
+INSERT INTO `system_api_log` VALUES (1886, 1, 2, '修改管理员', 3, 'update', '/admin-api/system/user', '{\"updateVo\":{\"id\":1,\"nickname\":\"洋芋_sheepyu\",\"email\":\"3029944576@qq.com\",\"mobile\":\"19507413455\",\"avatar\":\"https://demo.sheepyu.top/api/file/2023/03/17/5215155db39b47cf97a185551bce25ad.jpeg\",\"status\":1,\"deptId\":1,\"postIds\":[1,2],\"remark\":\"我是管理员,嘿嘿\"}}', '111.8.38.205', 38, 200, '{}', 1, NULL, '', NULL, NULL, NULL, 0, NULL, NULL, NULL, '2023-03-17 22:28:02', NULL, '2023-03-17 22:28:02', b'0');
+INSERT INTO `system_api_log` VALUES (1887, 1, 2, '文件上传', 2, 'upload', '/admin-api/system/file/upload', '{\"remark\":\"图片上传\",\"file\":\"[ignore]\",\"md5\":\"f27ea4eb3e246d74ec8dc97097e80b35\"}', '111.8.38.205', 15, 200, 'https://demo.sheepyu.top/api/file/2023/03/17/77282f8c12e04db9a554c505106cbd60.jpg', 1, NULL, '', NULL, NULL, NULL, 0, NULL, NULL, NULL, '2023-03-17 22:28:15', NULL, '2023-03-17 22:28:15', b'0');
+INSERT INTO `system_api_log` VALUES (1888, 1, 2, '修改管理员', 3, 'update', '/admin-api/system/user', '{\"updateVo\":{\"id\":3,\"nickname\":\"heihei\",\"email\":\"xxx@163.com\",\"mobile\":\"\",\"avatar\":\"https://demo.sheepyu.top/api/file/2023/03/17/77282f8c12e04db9a554c505106cbd60.jpg\",\"status\":1,\"deptId\":3,\"postIds\":[1],\"remark\":\"\"}}', '111.8.38.205', 15, 200, '{}', 1, NULL, '', NULL, NULL, NULL, 0, NULL, NULL, NULL, '2023-03-17 22:28:17', NULL, '2023-03-17 22:28:17', b'0');
 
 -- ----------------------------
 -- Table structure for system_codegen_column
@@ -1103,7 +1112,7 @@ CREATE TABLE `system_codegen_column`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1589 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '代码生成表字段定义' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 1589 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '代码生成表字段定义' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_codegen_column
@@ -1337,7 +1346,7 @@ CREATE TABLE `system_codegen_table`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 131 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '代码生成表定义' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 131 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '代码生成表定义' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_codegen_table
@@ -1406,7 +1415,7 @@ CREATE TABLE `system_demo`  (
   `update_time` datetime NOT NULL ON UPDATE CURRENT_TIMESTAMP,
   `deleted` bit(1) NULL DEFAULT b'0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '测试' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci COMMENT = '测试' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_demo
@@ -1605,14 +1614,13 @@ CREATE TABLE `system_file`  (
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_upload_id`(`upload_id` ASC) USING BTREE,
   UNIQUE INDEX `idx_md5`(`md5` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 81 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '文件表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 94 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '文件表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_file
 -- ----------------------------
-INSERT INTO `system_file` VALUES (69, '301a16faedbc4d0ba920ed0fea60b6db', 0, '314de3ab72c8754af42ed9159b0f582a.jpeg', '67cc0c4b2cda3070eb0121a95f885d25', 'http://localhost:18080/file/2023/03/14/f0eef27fdd9d4d649d6d35c76e9592a1.jpeg', 'image/jpeg', 32354, 'http://localhost:18080', '/2023/03/14/f0eef27fdd9d4d649d6d35c76e9592a1.jpeg', b'1', '图片上传', 'admin', '2023-03-14 22:32:47');
-INSERT INTO `system_file` VALUES (90, 'dd8a190f2e514d40b3d22171f7418cc2', 2, 'Clash.for.Windows-0.20.17-win.7z', '6777cad02b3a3ec06059df0237b5da74', 'http://localhost:18080/file/2023/03/17/1f8f59726a354d989f6387e108e0c7c9.7z', 'application/x-7z-compressed', 71772618, 'http://localhost:18080/file', '/2023/03/17/1f8f59726a354d989f6387e108e0c7c9.7z', b'1', '', 'admin', '2023-03-17 20:13:29');
-INSERT INTO `system_file` VALUES (91, 'bac2175861204d339226914010bad4f9', 3, '20221205_204302.mp4', '618d76dfcc4a42cfb81328eb87ed44a1', 'http://localhost:18080/file/2023/03/17/4d0c1cd7e5324904ba7942c79355d700.mp4', 'video/mp4', 144648989, 'http://localhost:18080/file', '/2023/03/17/4d0c1cd7e5324904ba7942c79355d700.mp4', b'1', '', 'admin', '2023-03-17 20:21:38');
+INSERT INTO `system_file` VALUES (92, '985a7fd39f3844f08a1d80fced92bcba', 0, 'b879aedc1bdd9aab794de3bf7e57aada.jpeg', 'da500c2c4a0b5808f698161f0153c92b', 'https://demo.sheepyu.top/api/file/2023/03/17/5215155db39b47cf97a185551bce25ad.jpeg', 'image/jpeg', 17047, 'https://demo.sheepyu.top/api/file', '/2023/03/17/5215155db39b47cf97a185551bce25ad.jpeg', b'1', '图片上传', 'admin', '2023-03-17 22:27:29');
+INSERT INTO `system_file` VALUES (93, 'ca00fa761d704554a4819d0604a9566a', 0, 'avatar.jpg', 'f27ea4eb3e246d74ec8dc97097e80b35', 'https://demo.sheepyu.top/api/file/2023/03/17/77282f8c12e04db9a554c505106cbd60.jpg', 'image/jpeg', 153745, 'https://demo.sheepyu.top/api/file', '/2023/03/17/77282f8c12e04db9a554c505106cbd60.jpg', b'1', '图片上传', 'admin', '2023-03-17 22:28:15');
 
 -- ----------------------------
 -- Table structure for system_file_part
@@ -1627,7 +1635,7 @@ CREATE TABLE `system_file_part`  (
   `size` int UNSIGNED NOT NULL COMMENT '文件部分大小(字节)',
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `idx_upload_idx`(`upload_id` ASC, `part_index` ASC) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 385 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 385 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of system_file_part
@@ -2100,7 +2108,7 @@ CREATE TABLE `system_menu`  (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 66 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 66 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci COMMENT = '菜单权限表' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of system_menu
@@ -2129,19 +2137,19 @@ INSERT INTO `system_menu` VALUES (23, '预约管理', 'hotel:subscription:query'
 INSERT INTO `system_menu` VALUES (24, '新增预约', 'hotel:subscription:create', 3, 0, 23, '', '#', '', b'1', b'1', 'admin', '2023-03-11 11:09:00', 'admin', '2023-03-11 11:54:03', b'1');
 INSERT INTO `system_menu` VALUES (25, '修改预约', 'hotel:subscription:update', 3, 0, 23, '', '#', '', b'1', b'1', 'admin', '2023-03-11 11:09:50', 'admin', '2023-03-11 11:54:03', b'1');
 INSERT INTO `system_menu` VALUES (26, '删除预约', 'hotel:subscription:delete', 3, 0, 23, '', '#', '', b'1', b'1', 'admin', '2023-03-11 11:10:21', 'admin', '2023-03-11 11:54:03', b'1');
-INSERT INTO `system_menu` VALUES (27, '字典管理', 'system:dict:query', 2, 3, 1, 'dict', '', 'system/dict/index', b'1', b'1', 'admin', '2023-03-12 10:05:37', 'admin', '2023-03-14 16:21:08', b'0');
+INSERT INTO `system_menu` VALUES (27, '字典管理', 'system:dict:query', 2, 3, 1, 'dict', 'el-icon-Collection', 'system/dict/index', b'1', b'1', 'admin', '2023-03-12 10:05:37', 'admin', '2023-03-18 09:03:16', b'0');
 INSERT INTO `system_menu` VALUES (28, '删除字典', 'system:dict:delete', 3, 0, 27, '', '#', '', b'1', b'1', 'admin', '2023-03-12 10:06:10', NULL, '2023-03-12 10:06:10', b'0');
 INSERT INTO `system_menu` VALUES (29, '修改字典', 'system:dict:update', 3, 0, 27, '', '#', '', b'1', b'1', 'admin', '2023-03-12 10:06:28', NULL, '2023-03-12 10:06:28', b'0');
 INSERT INTO `system_menu` VALUES (30, '新增字典', 'system:dict:create', 3, 0, 27, '', '#', '', b'1', b'1', 'admin', '2023-03-12 10:06:43', NULL, '2023-03-12 10:06:43', b'0');
-INSERT INTO `system_menu` VALUES (31, '部门管理', 'system:dept:query', 2, 4, 1, 'dept', '', 'system/dept/index', b'1', b'1', 'admin', '2023-03-13 16:35:14', 'admin', '2023-03-14 16:21:20', b'0');
+INSERT INTO `system_menu` VALUES (31, '部门管理', 'system:dept:query', 2, 4, 1, 'dept', 'fa fa-sitemap', 'system/dept/index', b'1', b'1', 'admin', '2023-03-13 16:35:14', 'admin', '2023-03-18 09:04:40', b'0');
 INSERT INTO `system_menu` VALUES (32, '添加部门', 'system:dept:create', 3, 0, 31, '', '#', '', b'1', b'1', 'admin', '2023-03-13 16:36:05', NULL, '2023-03-13 16:36:05', b'0');
 INSERT INTO `system_menu` VALUES (33, '删除部门', 'system:dept:delete', 3, 0, 31, '', '#', '', b'1', b'1', 'admin', '2023-03-13 16:36:28', NULL, '2023-03-13 16:36:28', b'0');
 INSERT INTO `system_menu` VALUES (34, '修改部门', 'system:dept:update', 3, 0, 31, '', '#', '', b'1', b'1', 'admin', '2023-03-13 16:36:44', NULL, '2023-03-13 16:36:44', b'0');
-INSERT INTO `system_menu` VALUES (35, '岗位管理', 'system:post:query', 2, 5, 1, 'post', '', 'system/post/index', b'1', b'1', 'admin', '2023-03-13 17:27:25', 'admin', '2023-03-14 16:21:28', b'0');
+INSERT INTO `system_menu` VALUES (35, '岗位管理', 'system:post:query', 2, 5, 1, 'post', 'fa fa-sitemap', 'system/post/index', b'1', b'1', 'admin', '2023-03-13 17:27:25', 'admin', '2023-03-18 09:05:01', b'0');
 INSERT INTO `system_menu` VALUES (36, '添加岗位', 'system:post:create', 3, 0, 35, '', '#', '', b'1', b'1', 'admin', '2023-03-13 17:28:19', NULL, '2023-03-13 17:28:19', b'0');
 INSERT INTO `system_menu` VALUES (37, '删除岗位', 'system:post:delete', 3, 0, 35, '', '#', '', b'1', b'1', 'admin', '2023-03-13 17:28:32', NULL, '2023-03-13 17:28:32', b'0');
 INSERT INTO `system_menu` VALUES (38, '修改岗位', 'system:post:update', 3, 0, 35, '', '#', '', b'1', b'1', 'admin', '2023-03-13 17:28:52', 'admin', '2023-03-13 17:30:33', b'0');
-INSERT INTO `system_menu` VALUES (39, '角色管理', 'system:role:query', 2, 2, 1, 'role', '', 'system/role/index', b'1', b'1', 'admin', '2023-03-13 18:44:10', 'admin', '2023-03-14 16:20:44', b'0');
+INSERT INTO `system_menu` VALUES (39, '角色管理', 'system:role:query', 2, 2, 1, 'role', 'fa fa-group', 'system/role/index', b'1', b'1', 'admin', '2023-03-13 18:44:10', 'admin', '2023-03-18 09:02:42', b'0');
 INSERT INTO `system_menu` VALUES (40, '添加角色', 'system:role:create', 3, 0, 39, '', '#', '', b'1', b'1', 'admin', '2023-03-13 18:44:33', 'admin', '2023-03-13 18:45:10', b'0');
 INSERT INTO `system_menu` VALUES (41, '删除角色', 'system:role:delete', 3, 0, 39, '', '#', '', b'1', b'1', 'admin', '2023-03-13 18:44:50', 'admin', '2023-03-13 18:45:15', b'0');
 INSERT INTO `system_menu` VALUES (42, '修改角色', 'system:role:update', 3, 0, 39, '', '#', '', b'1', b'1', 'admin', '2023-03-13 18:45:05', NULL, '2023-03-13 18:45:05', b'0');
@@ -2153,8 +2161,8 @@ INSERT INTO `system_menu` VALUES (47, '导出用户', 'system:user:export', 3, 0
 INSERT INTO `system_menu` VALUES (48, '分配角色', 'system:role:assign', 3, 0, 39, '', '#', '', b'1', b'1', 'admin', '2023-03-14 17:45:00', NULL, '2023-03-14 17:45:00', b'0');
 INSERT INTO `system_menu` VALUES (49, '重置用户密码', 'system:user:reset-password', 3, 0, 14, '', '#', '', b'1', b'1', 'admin', '2023-03-14 17:46:08', NULL, '2023-03-14 17:46:08', b'0');
 INSERT INTO `system_menu` VALUES (50, '日志管理', '', 1, 10, 1, 'log', 'fa fa-list-alt', '', b'1', b'1', 'admin', '2023-03-15 18:04:15', 'admin', '2023-03-15 18:04:31', b'0');
-INSERT INTO `system_menu` VALUES (51, '访问日志', 'system:log-access:query', 2, 0, 50, 'access', '', 'system/log/access', b'1', b'1', 'admin', '2023-03-15 18:06:14', 'admin', '2023-03-16 11:59:45', b'0');
-INSERT INTO `system_menu` VALUES (52, 'API日志', 'system:log-api:query', 2, 0, 50, 'api', '', 'system/log/api', b'1', b'1', 'admin', '2023-03-15 18:06:40', 'admin', '2023-03-16 11:59:53', b'0');
+INSERT INTO `system_menu` VALUES (51, '访问日志', 'system:log-access:query', 2, 0, 50, 'access', 'fa fa-universal-access', 'system/log/access', b'1', b'1', 'admin', '2023-03-15 18:06:14', 'admin', '2023-03-18 09:06:15', b'0');
+INSERT INTO `system_menu` VALUES (52, 'API日志', 'system:log-api:query', 2, 0, 50, 'api', 'fa fa-connectdevelop', 'system/log/api', b'1', b'1', 'admin', '2023-03-15 18:06:40', 'admin', '2023-03-18 09:07:41', b'0');
 INSERT INTO `system_menu` VALUES (53, '定时任务', 'system:job:query', 2, 10, 1, 'job', 'fa fa-tasks', 'system/job/index', b'1', b'1', 'admin', '2023-03-15 18:07:58', 'admin', '2023-03-16 14:59:05', b'0');
 INSERT INTO `system_menu` VALUES (54, '创建定时任务', 'system:job:create', 3, 0, 53, '', '#', '', b'1', b'1', 'admin', '2023-03-15 18:08:29', NULL, '2023-03-15 18:08:29', b'0');
 INSERT INTO `system_menu` VALUES (55, '修改定时任务', 'system:job:update', 3, 0, 53, '', '#', '', b'1', b'1', 'admin', '2023-03-15 18:08:43', NULL, '2023-03-15 18:08:43', b'0');
@@ -2286,9 +2294,9 @@ CREATE TABLE `system_user`  (
 -- ----------------------------
 -- Records of system_user
 -- ----------------------------
-INSERT INTO `system_user` VALUES (1, 'admin', '$2a$10$ruiKtNKXEXxHYO6ZQQNwmO3m6moo0d2yTHhBwHb5JCay0qRYhOBgW', '洋芋_sheepyu', '3029944576@qq.com', '19507413455', 'http://localhost:18080/file/2023/03/14/f0eef27fdd9d4d649d6d35c76e9592a1.jpeg', 1, '[1,2]', 1, 2, '我是管理员,嘿嘿', '8.8.8.8', '2023-03-17 19:15:46', 'admin', '2023-01-19 14:59:42', 'admin', '2023-03-17 19:15:46', b'0');
+INSERT INTO `system_user` VALUES (1, 'admin', '$2a$10$ruiKtNKXEXxHYO6ZQQNwmO3m6moo0d2yTHhBwHb5JCay0qRYhOBgW', '洋芋_sheepyu', '3029944576@qq.com', '19507413455', 'https://demo.sheepyu.top/api/file/2023/03/17/5215155db39b47cf97a185551bce25ad.jpeg', 1, '[1,2]', 1, 2, '我是管理员,嘿嘿', '8.8.8.8', '2023-03-18 09:20:04', 'admin', '2023-01-19 14:59:42', 'admin', '2023-03-18 09:20:04', b'0');
 INSERT INTO `system_user` VALUES (2, 'sheepyu_CFq03WGoKm', '$2a$10$P6AXMyJm0Q3E9Li2f2ts6OBK0uyPUPo/Wlm7U4mUy019TuxoXnjLe', '小黑', '1126882717@qq.com', '18311113333', 'https://thirdwx.qlogo.cn/mmopen/vi_32/XF9G5zQOXaLVgO739DoicP1ibNtDSl52swglcDOiclNcNtzLicpYcrXjKBsibiaMkxY9MrQ13vdBiaGjM2EjGhVI24m7Q/132', NULL, NULL, 1, 1, NULL, '127.0.0.1', '2023-01-22 17:34:40', '', '2023-01-22 09:31:17', 'admin', '2023-01-22 17:34:40', b'0');
-INSERT INTO `system_user` VALUES (3, 'xiaohei', '$2a$10$f8q4L4s6bZLp9tUF7tetfu8dNreV2fFMyQzAwY2jMOhMnrC9BMLSy', 'heihei', 'xxx@163.com', '', 'http://localhost:18080/file/2023/03/14/855797991c9c47d89449e806fab37914.jpeg', 3, '[1]', 1, 2, '', '8.8.8.8', '2023-03-14 19:08:59', 'admin', '2023-01-31 16:45:10', 'admin', '2023-03-14 22:36:04', b'0');
+INSERT INTO `system_user` VALUES (3, 'xiaohei', '$2a$10$f8q4L4s6bZLp9tUF7tetfu8dNreV2fFMyQzAwY2jMOhMnrC9BMLSy', 'heihei', 'xxx@163.com', '', 'https://demo.sheepyu.top/api/file/2023/03/17/77282f8c12e04db9a554c505106cbd60.jpg', 3, '[1]', 1, 2, '', '8.8.8.8', '2023-03-14 19:08:59', 'admin', '2023-01-31 16:45:10', 'admin', '2023-03-17 22:28:17', b'0');
 
 -- ----------------------------
 -- Table structure for system_user_role

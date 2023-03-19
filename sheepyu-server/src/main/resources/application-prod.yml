@@ -25,7 +25,7 @@ spring:
 # 详情请参照SwaggerProperties
 sheepyu:
   web:
-    demo: true
+    demo: false
     demo-exclude-url:
       - /admin-api/system/user/login
       - /admin-api/system/user/refreshToken/*
