@@ -8,6 +8,8 @@ import top.sheepyu.module.system.enums.log.LoginTypeEnum;
 import top.sheepyu.module.system.enums.log.LoginResultEnum;
 
 import javax.validation.Valid;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author ygq
@@ -17,4 +19,6 @@ public interface SystemAccessLogService extends IServiceX<SystemAccessLog> {
     void createAccessLog(Long userId, String username, String nickname, LoginTypeEnum logType, LoginResultEnum result);
 
     PageResult<SystemAccessLog> pageAccessLog(@Valid SystemAccessLogQueryVo queryVo);
+
+    List<Integer> countByWeek(Date beginWeek, Date endWeek);
 }

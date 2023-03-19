@@ -2,10 +2,8 @@
   <div class='default-main'>
     <TableHeader
       ref='tableHeaderRef'
-      v-model='state.query.keyword'
       auth='system:dict'
       :buttons="['add', 'delete', 'edit']"
-      :rows='state.selection'
       :search='false'
       @refresh='listDictData'
       @add='onAdd'
@@ -26,7 +24,6 @@
 
     <Table
       ref='tableRef'
-      v-model:selection='state.selection'
       auth='system:dict'
       :data='state.tableData'
       :table-config='state.tableConfig'

@@ -21,10 +21,6 @@ html.light {
 
 .default-main {
   margin: 16px;
-  box-sizing: border-box;
-  box-shadow: var(--el-box-shadow-light);
-  border-radius: var(--el-border-radius-base);
-  overflow: hidden;
 }
 
 .layout-shade {
@@ -51,11 +47,5 @@ html.light {
 .el-dialog__header {
   padding-bottom: 15px !important;
   padding-top: 15px !important;
-}
-
-@media screen and (max-width: 768px) {
-  .xs-hide {
-    display: none;
-  }
 }
 </style>

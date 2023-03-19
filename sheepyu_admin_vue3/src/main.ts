@@ -11,6 +11,7 @@ import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import Dict from '@/components/dict/Dict.vue'
 
 import 'element-plus/theme-chalk/dark/css-vars.css'
+import 'element-plus/theme-chalk/display.css'
 
 //注册mit
 const Mit: Emitter<{

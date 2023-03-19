@@ -15,6 +15,8 @@ import top.sheepyu.module.system.enums.log.LoginTypeEnum;
 import top.sheepyu.module.system.enums.log.LoginResultEnum;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author ygq
@@ -49,5 +51,10 @@ public class SystemAccessLogServiceImpl extends ServiceImplX<SystemAccessLogMapp
                 .eqIfPresent(SystemAccessLog::getLoginResult, queryVo.getLoginResult())
                 .betweenIfPresent(SystemAccessLog::getCreateTime, queryVo.getCreateTimes())
                 .orderByDesc(SystemAccessLog::getCreateTime));
+    }
+
+    @Override
+    public List<Integer> countByWeek(Date beginWeek, Date endWeek) {
+        return baseMapper.countByWeek(beginWeek, endWeek);
     }
 }

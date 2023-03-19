@@ -10,6 +10,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author ygq
@@ -57,4 +59,6 @@ public interface SystemUserService extends IServiceX<SystemUser> {
     void updateAvatar(Long userId, @NotBlank(message = "头像不能为空") String avatar);
 
     void updatePassword(Long userId, @NotBlank(message = "密码不能为空") String oldPass, @NotBlank(message = "密码不能为空") String newPass);
+
+    List<Integer> countByWeek(Date beginWeek, Date endWeek);
 }

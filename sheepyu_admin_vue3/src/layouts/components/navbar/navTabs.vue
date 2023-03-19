@@ -1,6 +1,6 @@
 <template>
   <div class='tab-wrapper'>
-    <el-scrollbar>
+    <el-scrollbar ref='scrollRef'>
       <div :class='`tabs-${config.layout.layoutMode}`' ref='tabsRef'>
         <div
           :class="['tab', index === tabs.state.activeIndex ? 'active' : '']"
@@ -28,6 +28,7 @@ import type { RouteLocationNormalized } from 'vue-router'
 import { onBeforeRouteUpdate, useRoute, useRouter } from 'vue-router'
 import type { ContextMenuItem, ContextmenuItemClickEmitArg } from '@/layouts/components/navbar/interface'
 import ContextMenu from '@/layouts/components/navbar/contextMenu.vue'
+import { ElScrollbar } from 'element-plus'
 
 const instance = getCurrentInstance()
 const router = useRouter()
@@ -36,6 +37,7 @@ const config = useConfig()
 const tabs = useTabs()
 const tabsRef = ref<HTMLDivElement>()
 const contextMenuRef = ref()
+const scrollRef = ref<InstanceType<typeof ElScrollbar>>()
 const topMenuActiveBackColor = computed(() => config.getColor('topMenuActiveBackColor'))
 const closeHoverBackColor = computed(() => {
   return config.layout.isDark ? '#2e366e' : '#c8f2fc'
@@ -64,6 +66,7 @@ function changeNavTab() {
 
     navTabBackStyle.width = `${div.clientWidth}px`
     navTabBackStyle.transform = `translateX(${div.offsetLeft}px)`
+    scrollRef.value?.setScrollLeft(div.offsetLeft)
   })
 }
 

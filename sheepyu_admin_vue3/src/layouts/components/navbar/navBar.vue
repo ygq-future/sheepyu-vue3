@@ -6,7 +6,7 @@
       :size='22'
       :color='logoTextColor'
       @click='menuCollapse' />
-    <NavTabs class='nav-tabs xs-hide' />
+    <NavTabs class='nav-tabs hidden-xs-only' />
     <NavMenus class='nav-menus' />
   </el-header>
 </template>

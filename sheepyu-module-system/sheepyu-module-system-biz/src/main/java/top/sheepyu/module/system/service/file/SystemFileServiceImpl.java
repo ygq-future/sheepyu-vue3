@@ -1,5 +1,8 @@
 package top.sheepyu.module.system.service.file;
 
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,14 +16,15 @@ import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.util.MyStrUtil;
 import top.sheepyu.module.system.api.file.FileDto;
 import top.sheepyu.module.system.controller.admin.file.vo.SystemFileQueryVo;
+import top.sheepyu.module.system.controller.admin.file.vo.SystemFileStatisticsVo;
 import top.sheepyu.module.system.dao.file.SystemFile;
 import top.sheepyu.module.system.dao.file.SystemFileMapper;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import static top.sheepyu.framework.file.core.enums.FileUploadCompleteEnum.COMPLETE;
@@ -174,6 +178,85 @@ public class SystemFileServiceImpl extends ServiceImplX<SystemFileMapper, System
         systemFile.setSize(size).setComplete(COMPLETE.getCode());
         updateById(systemFile);
         return systemFile.getUrl();
+    }
+
+    @Override
+    public SystemFileStatisticsVo statistics() {
+        SystemFileStatisticsVo vo = new SystemFileStatisticsVo();
+        Date now = new Date();
+        DateTime lastDay = DateUtil.offsetDay(now, -1);
+        long total = count();
+        //获取今日上传数量
+        long todayIncrement = count(buildQuery()
+                .between(SystemFile::getCreateTime, DateUtil.beginOfDay(now), DateUtil.beginOfDay(now)));
+        //获取昨天上传数量
+        long lastDayIncrement = count(buildQuery()
+                .between(SystemFile::getCreateTime, DateUtil.beginOfDay(lastDay), DateUtil.beginOfDay(lastDay)));
+        int todayPercent = (int) ((todayIncrement - lastDayIncrement) / (lastDayIncrement == 0 ? 1 : lastDayIncrement)) * 100;
+        vo.setTotal(total);
+        vo.setTodayIncrement(Long.valueOf(todayIncrement).intValue());
+        vo.setTodayPercent(todayPercent);
+        //获取上周开始和结束
+        Date beginWeek = DateUtil.beginOfWeek(DateUtil.lastWeek());
+        Date endWeek = DateUtil.endOfWeek(DateUtil.lastWeek());
+        //查询上周的数据, 只查createTime和mimeType就行
+        List<SystemFile> fileList = list(buildQuery()
+                .select(SystemFile::getMimeType, SystemFile::getCreateTime)
+                .between(SystemFile::getCreateTime, beginWeek, endWeek));
+        //按照日期分组排序
+        TreeMap<Date, List<SystemFile>> fileByDateMap = fileList.stream()
+                .peek(e -> e.setCreateTime(DateUtil.beginOfDay(e.getCreateTime())))
+                .collect(Collectors.groupingBy(SystemFile::getCreateTime, TreeMap::new, Collectors.toList()));
+        //补全头一天和最后一天
+        if (CollUtil.isEmpty(fileByDateMap)) {
+            //说明头和尾都没有
+            fileByDateMap.put(beginWeek, Collections.emptyList());
+            fileByDateMap.put(endWeek, Collections.emptyList());
+        } else {
+            //说明开头的不是这个星期的头一天, 所以补全一下
+            if (!DateUtil.isSameDay(fileByDateMap.firstKey(), beginWeek)) {
+                fileByDateMap.put(beginWeek, Collections.emptyList());
+            }
+            //说明结尾的不是这个星期的结尾一天, 所以补全一下
+            if (!DateUtil.isSameDay(fileByDateMap.lastKey(), endWeek)) {
+                fileByDateMap.put(endWeek, Collections.emptyList());
+            }
+        }
+        //封装数据
+        List<List<Integer>> weekIncrement = new ArrayList<>();
+        AtomicReference<Date> lastCreateTime = new AtomicReference<>();
+        fileByDateMap.forEach((date, files) -> {
+            //判断是否和前一天是连续的天
+            if (lastCreateTime.get() != null) {
+                while (!DateUtil.isSameDay(DateUtil.offsetDay(lastCreateTime.get(), 1), date)) {
+                    weekIncrement.add(Arrays.asList(0, 0, 0, 0));
+                    lastCreateTime.set(DateUtil.offsetDay(lastCreateTime.get(), 1));
+                }
+            }
+            //根据mime_type判断文件类型并计数
+            int fileCount = 0;
+            int imgCount = 0;
+            int mediaCount = 0;
+            int compressCount = 0;
+            for (SystemFile file : files) {
+                if (DOCUMENT_TYPE.contains(file.getMimeType())) {
+                    fileCount++;
+                }
+                if (IMAGE_TYPE.contains(file.getMimeType())) {
+                    imgCount++;
+                }
+                if (MEDIA_TYPE.contains(file.getMimeType())) {
+                    mediaCount++;
+                }
+                if (COMPRESS_TYPE.contains(file.getMimeType())) {
+                    compressCount++;
+                }
+            }
+            weekIncrement.add(Arrays.asList(fileCount, imgCount, mediaCount, compressCount));
+            lastCreateTime.set(date);
+        });
+        vo.setWeekIncrement(weekIncrement);
+        return vo;
     }
 
     /**

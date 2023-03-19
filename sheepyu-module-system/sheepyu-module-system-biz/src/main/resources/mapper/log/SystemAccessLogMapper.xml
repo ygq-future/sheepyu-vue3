@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="top.sheepyu.module.system.dao.user.SystemUserMapper">
-    <delete id="removeByUsernameDeleted">
-        delete from system_user where username = #{username} and deleted = 1
-    </delete>
-
+<mapper namespace="top.sheepyu.module.system.dao.log.SystemAccessLogMapper">
     <select id="countByWeek" resultType="java.lang.Integer">
         SELECT IFNULL(sac.count, 0) count
         FROM (SELECT @startDay := DATE_FORMAT(#{beginWeek}, '%Y-%m-%d') today
@@ -22,7 +18,7 @@
               SELECT DATE_ADD(@startDay, interval 6 day)) t
                  LEFT JOIN
              (SELECT count(*) count, DATE_FORMAT(create_time, '%Y-%m-%d') today
-              FROM `system_user`
+              FROM `system_access_log`
               WHERE create_time &gt;= #{beginWeek}
                 and create_time &lt;= #{endWeek}
               GROUP BY today) sac

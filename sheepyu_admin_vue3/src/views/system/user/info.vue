@@ -242,8 +242,4 @@ export default defineComponent({
 .card-container {
   display: flex;
 }
-
-.default-main {
-  box-shadow: none !important;
-}
 </style>

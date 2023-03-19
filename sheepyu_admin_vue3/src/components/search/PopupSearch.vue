@@ -24,7 +24,6 @@
         v-model:selection='state.selection'
         :data='props.config.data || []'
         :table-config='props.config.tableConfig'
-        :pagination='state.query'
       />
     </el-scrollbar>
 

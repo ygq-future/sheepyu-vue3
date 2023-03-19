@@ -166,4 +166,11 @@ public class SystemUserController {
         List<SystemUserExcelVo> data = SystemUserConvert.CONVERT.convertExcel(list);
         ExcelUtil.write(response, "系统用户", SystemUserExcelVo.class, data);
     }
+
+    @GetMapping("/statistics")
+    @ApiOperation("用户统计")
+    @PreAuthorize("@ss.hasPermission('dashboard')")
+    public Result<SystemUserStatisticsVo> statistics() {
+        return success(systemUserBiz.statistics());
+    }
 }

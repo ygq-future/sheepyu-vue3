@@ -5,6 +5,7 @@ import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.system.api.file.FileDto;
 import top.sheepyu.module.system.controller.admin.file.vo.SystemFileQueryVo;
+import top.sheepyu.module.system.controller.admin.file.vo.SystemFileStatisticsVo;
 import top.sheepyu.module.system.dao.file.SystemFile;
 
 import javax.validation.Valid;
@@ -32,4 +33,6 @@ public interface SystemFileService extends IServiceX<SystemFile> {
     String uploadPart(MultipartFile part, String uploadId, Integer index) throws IOException;
 
     String completePart(String uploadId);
+
+    SystemFileStatisticsVo statistics();
 }

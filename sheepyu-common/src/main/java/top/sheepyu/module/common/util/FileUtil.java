@@ -6,7 +6,9 @@ import org.apache.tika.Tika;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.List;
 
 /**
  * @author ygq
@@ -14,6 +16,23 @@ import java.util.Enumeration;
  **/
 @Slf4j
 public class FileUtil {
+    public static final List<String> DOCUMENT_TYPE = Arrays.asList(
+            "application/vnd.ms-powerpoint",
+            "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+            "application/vnd.ms-excel",
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "application/msword",
+            "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "application/pdf"
+    );
+    public static final List<String> IMAGE_TYPE = Arrays.asList("image/jpeg", "image/gif", "image/png");
+    public static final List<String> MEDIA_TYPE = Arrays.asList("video/mp4", "video/mpeg", "audio/mpeg", "audio/mp3");
+    public static final List<String> COMPRESS_TYPE = Arrays.asList(
+            "application/x-7z-compressed",
+            "application/zip",
+            "application/x-tar",
+            "application/x-rar-compressed"
+    );
     public static final Tika TIKA = new Tika();
 
     public static String getMimeType(byte[] data, String filename) {

@@ -9,6 +9,7 @@ import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.system.controller.admin.file.vo.SystemFileQueryVo;
 import top.sheepyu.module.system.controller.admin.file.vo.SystemFileRespVo;
+import top.sheepyu.module.system.controller.admin.file.vo.SystemFileStatisticsVo;
 import top.sheepyu.module.system.dao.file.SystemFile;
 import top.sheepyu.module.system.service.file.SystemFileService;
 
@@ -88,5 +89,12 @@ public class SystemFileController {
     @PreAuthorize("@ss.hasPermission('system:file:query')")
     public Result<PageResult<SystemFileRespVo>> page(SystemFileQueryVo queryVo) {
         return success(CONVERT.convertPage(systemFileService.page(queryVo)));
+    }
+
+    @GetMapping("/statistics")
+    @ApiOperation("文件统计")
+    @PreAuthorize("@ss.hasPermission('dashboard')")
+    public Result<SystemFileStatisticsVo> statistics() {
+        return success(systemFileService.statistics());
     }
 }

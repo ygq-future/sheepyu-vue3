@@ -24,6 +24,7 @@ import top.sheepyu.module.system.service.log.SystemAccessLogService;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static top.sheepyu.module.common.enums.CommonStatusEnum.DISABLE;
@@ -242,6 +243,11 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
         user.setPassword(passwordEncoder.encode(newPass));
         updateById(user);
+    }
+
+    @Override
+    public List<Integer> countByWeek(Date beginWeek, Date endWeek) {
+        return baseMapper.countByWeek(beginWeek, endWeek);
     }
 
     private void checkStatus(SystemUser user, LoginTypeEnum loginType) {

@@ -20,7 +20,6 @@
 
     <Table
       ref='tableRef'
-      v-model:selection='state.selection'
       auth='system:log-api'
       :data='state.tableData'
       :table-config='state.tableConfig'

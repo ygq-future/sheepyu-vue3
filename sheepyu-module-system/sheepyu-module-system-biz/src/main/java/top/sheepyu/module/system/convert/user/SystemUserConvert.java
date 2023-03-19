@@ -28,6 +28,8 @@ public interface SystemUserConvert {
 
     AppUserRespVo convertApp(SystemUser systemUser);
 
+    List<SystemUserRespVo> convertList(List<SystemUser> list);
+
     List<SystemUserExcelVo> convertExcel(List<SystemUser> list);
 
     PageResult<SystemUserRespVo> convertPage(PageResult<SystemUser> pageResult);

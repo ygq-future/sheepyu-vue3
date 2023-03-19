@@ -1,7 +1,7 @@
 <template>
   <template v-for='menu in props.menus'>
     <template v-if='menu.children && menu.children.length > 0'>
-      <el-sub-menu :index='menu.meta.fullpath' :key='menu.meta.fullpath'>
+      <el-sub-menu :index='menu.meta?.fullpath' :key='menu.meta?.fullpath'>
         <template #title>
           <Icon :name='menu.meta?.icon ? menu.meta.icon : config.layout.asideDefaultIcon' />
           <span>{{ menu.meta?.title }}</span>

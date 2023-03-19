@@ -1,9 +1,8 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      v-model='state.query.keyword'
       auth='system:job'
-      :rows='state.selection'
+      :search='false'
       @refresh='pageJobLog'
       @input-enter='pageJobLog'
       @input-clear='$nextTick(() => pageJobLog())'
@@ -19,7 +18,6 @@
     </TableHeader>
 
     <Table
-      v-model:selection='state.selection'
       auth='system:job'
       :data='state.tableData'
       :table-config='state.tableConfig'

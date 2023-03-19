@@ -64,6 +64,17 @@ export function pageFileApi(params: SystemFileQueryVo) {
   return request.get<PageResult<SystemFileRespVo>>('/system/file/page', { params })
 }
 
+export function statisticsFileApi() {
+  return request.get<SystemFileStatisticsVo>('/system/file/statistics')
+}
+
+export interface SystemFileStatisticsVo {
+  todayIncrement: number
+  todayPercent: number
+  total: number
+  weekIncrement: Array<Array<number>>
+}
+
 export interface UploadData {
   file: File
   md5: string

@@ -1,6 +1,7 @@
 import { request } from '@/util/request'
 import type { PageResult } from '@/util/request'
 import type { SystemRoleRespVo } from '@/api/system/role'
+import type { SystemMenuRespVo } from '@/api/system/menu'
 
 export function login(data: SystemUserLoginVo) {
   return request.post<LoginUser>('/system/user/login', data)
@@ -56,6 +57,19 @@ export function assignRoleApi(userId: number, roleIds: Array<number>) {
 
 export function roleByUserApi(userId: number) {
   return request.get<Array<number>>('/system/permission/role-by-user/' + userId)
+}
+
+export function statisticsUserApi() {
+  return request.get<SystemUserStatisticsVo>('/system/user/statistics')
+}
+
+export interface SystemUserStatisticsVo {
+  todayIncrement: number
+  todayPercent: number
+  total: number
+  weekIncrement: Array<number>
+  weekAccess: Array<number>
+  nearUserList: Array<SystemMenuRespVo>
 }
 
 export interface SystemUpdatePassVo {

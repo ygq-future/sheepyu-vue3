@@ -1,6 +1,8 @@
 package top.sheepyu.module.system.service.user;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.date.DateTime;
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
@@ -10,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.service.SecurityRedisService;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
+import top.sheepyu.module.common.common.PageParam;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.enums.CommonStatusEnum;
 import top.sheepyu.module.common.enums.UserTypeEnum;
@@ -17,6 +20,7 @@ import top.sheepyu.module.system.controller.admin.user.vo.*;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserLoginVo;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserRegisterVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
+import top.sheepyu.module.system.convert.user.SystemUserConvert;
 import top.sheepyu.module.system.dao.user.SystemUser;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
 import top.sheepyu.module.system.service.dept.SystemDeptService;
@@ -24,6 +28,7 @@ import top.sheepyu.module.system.service.log.SystemAccessLogService;
 import top.sheepyu.module.system.service.post.SystemPostService;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -33,6 +38,8 @@ import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
 import static top.sheepyu.module.system.enums.log.LoginResultEnum.CAPTCHA_CODE_ERROR;
+import static top.sheepyu.module.system.enums.log.LoginResultEnum.SUCCESS;
+import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_TOKEN;
 import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_USERNAME;
 
 /**
@@ -84,6 +91,8 @@ public class SystemUserBiz {
         securityRedisService.setLoginUser(loginUser);
         //删除旧的refreshToken
         securityRedisService.delRefreshToken(refreshToken);
+        //记录日志
+        systemAccessLogService.createAccessLog(loginUser.getId(), loginUser.getUsername(), null, LOGIN_TOKEN, SUCCESS);
         return loginUser;
     }
 
@@ -230,5 +239,43 @@ public class SystemUserBiz {
             List<String> postNames = systemPostService.findNamesByIds(user.getPostIds());
             user.setPostNames(String.join(",", postNames));
         }
+    }
+
+    public SystemUserStatisticsVo statistics() {
+        SystemUserStatisticsVo vo = new SystemUserStatisticsVo();
+        Date now = new Date();
+        DateTime lastDay = DateUtil.offsetDay(now, -1);
+        long total = systemUserService.count();
+        //获取今日注册人数
+        long todayIncrement = systemUserService.count(systemUserService
+                .buildQuery()
+                .between(SystemUser::getCreateTime, DateUtil.beginOfDay(now), DateUtil.beginOfDay(now))
+        );
+        //获取昨天增加的人数
+        long lastDayIncrement = systemUserService.count(systemUserService
+                .buildQuery()
+                .between(SystemUser::getCreateTime, DateUtil.beginOfDay(lastDay), DateUtil.beginOfDay(lastDay))
+        );
+        int todayPercent = (int) ((todayIncrement - lastDayIncrement) / (lastDayIncrement == 0 ? 1 : lastDayIncrement)) * 100;
+        vo.setTotal(total);
+        vo.setTodayIncrement(Long.valueOf(todayIncrement).intValue());
+        vo.setTodayPercent(todayPercent);
+        //获取上周开始时间和结束时间
+        Date beginWeek = DateUtil.beginOfWeek(DateUtil.lastWeek());
+        Date endWeek = DateUtil.endOfWeek(DateUtil.lastWeek());
+        //获取上周注册量统计
+        List<Integer> weekIncrement = systemUserService.countByWeek(beginWeek, endWeek);
+        //获取上周访问量
+        List<Integer> weekAccess = systemAccessLogService.countByWeek(beginWeek, endWeek);
+        vo.setWeekIncrement(weekIncrement);
+        vo.setWeekAccess(weekAccess);
+        //获取最近注册的5个用户
+        List<SystemUser> userList = systemUserService.page(new PageParam(1, 5), systemUserService
+                .buildQuery()
+                .select(SystemUser::getNickname, SystemUser::getAvatar, SystemUser::getCreateTime)
+                .orderByDesc(SystemUser::getCreateTime)).getList();
+        List<SystemUserRespVo> nearUserList = SystemUserConvert.CONVERT.convertList(userList);
+        vo.setNearUserList(nearUserList);
+        return vo;
     }
 }
