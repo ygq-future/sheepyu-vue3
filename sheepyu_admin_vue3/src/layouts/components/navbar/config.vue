@@ -176,30 +176,32 @@ function resetConfig(type: 'current' | 'all') {
   }
 }
 
+function resizeAdapter() {
+  let defaultBeforeResizeLayout = {
+    layoutMode: config.layout.layoutMode,
+    asideCollapse: config.layout.asideCollapse
+  }
+
+  let beforeResizeLayout = Local.get(StorePersistKey.RESIZE_BEFORE_KEY)
+  if (!beforeResizeLayout) {
+    Local.set(StorePersistKey.RESIZE_BEFORE_KEY, defaultBeforeResizeLayout)
+  }
+
+  if (document.body.clientWidth <= 1024) {
+    config.layout.shrink = true
+    config.layout.layoutMode = 'classic'
+    config.layout.asideCollapse = true
+  } else {
+    const tempResizeLayout = beforeResizeLayout || defaultBeforeResizeLayout
+    config.layout.shrink = false
+    config.layout.layoutMode = tempResizeLayout.layoutMode
+    config.layout.asideCollapse = tempResizeLayout.asideCollapse
+  }
+}
+
 onBeforeMount(() => {
-  window.dispatchEvent(new Event('resize'))
-  useEventListener(window, 'resize', () => {
-    let defaultBeforeResizeLayout = {
-      layoutMode: config.layout.layoutMode,
-      asideCollapse: config.layout.asideCollapse
-    }
-
-    let beforeResizeLayout = Local.get(StorePersistKey.RESIZE_BEFORE_KEY)
-    if (!beforeResizeLayout) {
-      Local.set(StorePersistKey.RESIZE_BEFORE_KEY, defaultBeforeResizeLayout)
-    }
-
-    if (document.body.clientWidth <= 1024) {
-      config.layout.shrink = true
-      config.layout.layoutMode = 'classic'
-      config.layout.asideCollapse = true
-    } else {
-      const tempResizeLayout = beforeResizeLayout || defaultBeforeResizeLayout
-      config.layout.shrink = false
-      config.layout.layoutMode = tempResizeLayout.layoutMode
-      config.layout.asideCollapse = tempResizeLayout.asideCollapse
-    }
-  })
+  resizeAdapter()
+  useEventListener(window, 'resize', resizeAdapter)
 })
 </script>
 

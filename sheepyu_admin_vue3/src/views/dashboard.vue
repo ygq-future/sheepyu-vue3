@@ -30,7 +30,10 @@
               <Icon color='#8595F4' name='fa fa-line-chart' />
               <span id='today-user-register'>{{ state.statisticsUser?.todayIncrement }}</span>
             </div>
-            <span class='card-content-tip'>+{{ state.statisticsUser?.todayPercent }}%</span>
+            <span class='card-content-tip'>
+              <span v-if='state.statisticsUser?.todayPercent >= 0'>+</span>
+              {{ state.statisticsUser?.todayPercent }}%
+            </span>
           </div>
         </div>
       </el-col>
@@ -42,7 +45,10 @@
               <Icon color='#8595F4' name='fa fa-line-chart' />
               <span id='today-file-upload'>{{ state.statisticsFile?.todayIncrement }}</span>
             </div>
-            <span class='card-content-tip'>+{{ state.statisticsFile?.todayPercent }}%</span>
+            <span class='card-content-tip'>
+              <span v-if='state.statisticsFile?.todayPercent >= 0'>+</span>
+              {{ state.statisticsFile?.todayPercent }}%
+            </span>
           </div>
         </div>
       </el-col>
@@ -264,10 +270,13 @@ function initChart() {
       }
     },
     visualMap: {
+      type: 'continuous',
       top: 'middle',
       right: 10,
-      color: ['red', 'yellow'],
-      calculable: true
+      calculable: true,
+      inRange: {
+        color: ['yellow', 'red']
+      }
     },
     radar: {
       indicator: [
@@ -352,21 +361,20 @@ function startWorking() {
     work.date = date
     work.startTime = now.getTime()
     work.pauseTime = 0
-  } else {
-    if (work.pauseTime) {
-      state.seconds = parseInt(((work.pauseTime - work.startTime) / 1000).toString())
-      state.workingText = '继续工作'
-      state.isWorking = false
-    } else {
-      state.workingText = '休息一下'
-      state.isWorking = true
-      state.seconds = parseInt(((now.getTime() - work.startTime) / 1000).toString())
-      state.timer = setInterval(() => {
-        state.seconds++
-      }, 1000)
-    }
   }
   Local.set(StorePersistKey.WORK_TIME, work)
+  if (work.pauseTime) {
+    state.workingText = '继续工作'
+    state.isWorking = false
+    state.seconds = parseInt(((work.pauseTime - work.startTime) / 1000).toString())
+    return
+  }
+  state.workingText = '休息一下'
+  state.isWorking = true
+  state.seconds = parseInt(((now.getTime() - work.startTime) / 1000).toString())
+  state.timer = setInterval(() => {
+    state.seconds++
+  }, 1000)
 }
 
 watch(() => tabs.state.tabFullScreen, () => {
@@ -380,16 +388,17 @@ onMounted(async () => {
   await statisticsFile()
   startCount()
   initChart()
-  useEventListener('resize', echartsResize)
   startWorking()
-})
-
-onUnmounted(() => {
-  clearInterval(state.timer)
+  useEventListener('resize', echartsResize)
 })
 
 onActivated(() => {
   startCount()
+  echartsResize()
+})
+
+onUnmounted(() => {
+  clearInterval(state.timer)
 })
 </script>
 

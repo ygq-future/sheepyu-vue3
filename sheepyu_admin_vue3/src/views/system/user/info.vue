@@ -1,94 +1,97 @@
 <template>
   <div class='default-main'>
-    <div class='card-container'>
-      <el-card>
-        <template #header>
-          <span class='info'>个人信息</span>
-        </template>
-        <div class='content-list'>
-          <div class='content-item flex-center'>
-            <ImageUpload v-model='state.user.avatar' width='150px' />
+    <el-row :gutter='20'>
+      <el-col :xs='24' :md='8' :lg='8'>
+        <el-card>
+          <template #header>
+            <span class='info'>个人信息</span>
+          </template>
+          <div class='content-list'>
+            <div class='content-item flex-center'>
+              <ImageUpload v-model='state.user.avatar' width='150px' />
+            </div>
+            <div class='content-item'>
+              <span><Icon name='fa fa-user' />用户名:</span>
+              <span>{{ state.user.username }}</span>
+            </div>
+            <div class='content-item'>
+              <span><Icon name='el-icon-Coordinate' />昵称:</span>
+              <span>{{ state.user.nickname }}</span>
+            </div>
+            <div class='content-item'>
+              <span><Icon name='fa fa-phone' />电话:</span>
+              <span>{{ state.user.mobile }}</span>
+            </div>
+            <div class='content-item'>
+              <span><Icon name='fa fa-envelope-o' />邮箱:</span>
+              <span>{{ state.user.email }}</span>
+            </div>
+            <div class='content-item'>
+              <span><Icon name='fa fa-sitemap' />部门:</span>
+              <span>{{ state.user.deptName }}</span>
+            </div>
+            <div class='content-item'>
+              <span><Icon name='fa fa-sitemap' />职位:</span>
+              <span>{{ state.user.postNames }}</span>
+            </div>
+            <div class='content-item'>
+              <span><Icon name='fa fa-calendar-plus-o' />注册日期:</span>
+              <span>{{ state.user.createTime }}</span>
+            </div>
           </div>
-          <div class='content-item'>
-            <span><Icon name='fa fa-user' />用户名:</span>
-            <span>{{ state.user.username }}</span>
-          </div>
-          <div class='content-item'>
-            <span><Icon name='el-icon-Coordinate' />昵称:</span>
-            <span>{{ state.user.nickname }}</span>
-          </div>
-          <div class='content-item'>
-            <span><Icon name='fa fa-phone' />电话:</span>
-            <span>{{ state.user.mobile }}</span>
-          </div>
-          <div class='content-item'>
-            <span><Icon name='fa fa-envelope-o' />邮箱:</span>
-            <span>{{ state.user.email }}</span>
-          </div>
-          <div class='content-item'>
-            <span><Icon name='fa fa-sitemap' />部门:</span>
-            <span>{{ state.user.deptName }}</span>
-          </div>
-          <div class='content-item'>
-            <span><Icon name='fa fa-sitemap' />职位:</span>
-            <span>{{ state.user.postNames }}</span>
-          </div>
-          <div class='content-item'>
-            <span><Icon name='fa fa-calendar-plus-o' />注册日期:</span>
-            <span>{{ state.user.createTime }}</span>
-          </div>
-        </div>
-      </el-card>
+        </el-card>
+      </el-col>
+      <el-col :xs='24' :md='16' :lg='16'>
+        <el-card class='right'>
+          <template #header>
+            <span class='info'>基本资料</span>
+          </template>
+          <el-tabs>
+            <el-tab-pane label='基本资料'>
+              <el-form :model='state.userForm' label-width='80px'>
+                <el-form-item label='用户昵称'>
+                  <el-input v-model='state.userForm.nickname' />
+                </el-form-item>
 
-      <el-card class='right'>
-        <template #header>
-          <span class='info'>基本资料</span>
-        </template>
-        <el-tabs>
-          <el-tab-pane label='基本资料'>
-            <el-form :model='state.userForm' label-width='120px'>
-              <el-form-item label='用户昵称'>
-                <el-input v-model='state.userForm.nickname' />
-              </el-form-item>
+                <el-form-item label='手机号码'>
+                  <el-input v-model='state.userForm.mobile' />
+                </el-form-item>
 
-              <el-form-item label='手机号码'>
-                <el-input v-model='state.userForm.mobile' />
-              </el-form-item>
+                <el-form-item label='邮箱'>
+                  <el-input v-model='state.userForm.email' />
+                </el-form-item>
 
-              <el-form-item label='邮箱'>
-                <el-input v-model='state.userForm.email' />
-              </el-form-item>
+                <el-form-item>
+                  <el-button type='primary' @click='updateUser'>保存</el-button>
+                  <el-button type='danger' @click='close'>关闭</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
 
-              <el-form-item>
-                <el-button type='primary' @click='updateUser'>保存</el-button>
-                <el-button type='danger' @click='close'>关闭</el-button>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
+            <el-tab-pane label='修改密码'>
+              <el-form ref='passFormRef' :model='state.passForm' label-width='80px' :rules='passRule'>
+                <el-form-item prop='password' label='旧密码'>
+                  <el-input type='password' show-password v-model='state.passForm.password' />
+                </el-form-item>
 
-          <el-tab-pane label='修改密码'>
-            <el-form ref='passFormRef' :model='state.passForm' label-width='120px' :rules='passRule'>
-              <el-form-item prop='password' label='旧密码'>
-                <el-input type='password' show-password v-model='state.passForm.password' />
-              </el-form-item>
+                <el-form-item prop='newPass' label='新密码'>
+                  <el-input type='password' show-password v-model='state.passForm.newPass' />
+                </el-form-item>
 
-              <el-form-item prop='newPass' label='新密码'>
-                <el-input type='password' show-password v-model='state.passForm.newPass' />
-              </el-form-item>
+                <el-form-item prop='confirmPass' label='确认密码'>
+                  <el-input type='password' show-password v-model='state.passForm.confirmPass' />
+                </el-form-item>
 
-              <el-form-item prop='confirmPass' label='确认密码'>
-                <el-input type='password' show-password v-model='state.passForm.confirmPass' />
-              </el-form-item>
-
-              <el-form-item>
-                <el-button type='primary' @click='updatePass'>保存</el-button>
-                <el-button type='danger' @click='close'>关闭</el-button>
-              </el-form-item>
-            </el-form>
-          </el-tab-pane>
-        </el-tabs>
-      </el-card>
-    </div>
+                <el-form-item>
+                  <el-button type='primary' @click='updatePass'>保存</el-button>
+                  <el-button type='danger' @click='close'>关闭</el-button>
+                </el-form-item>
+              </el-form>
+            </el-tab-pane>
+          </el-tabs>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -185,8 +188,7 @@ export default defineComponent({
 
 <style scoped lang='scss'>
 .right {
-  flex: 1;
-  margin-left: 20px;
+  width: 100%;
   height: fit-content;
 }
 
@@ -221,8 +223,9 @@ export default defineComponent({
 }
 
 .el-card {
-  width: 280px;
+  width: 100%;
   font-size: 14px;
+  margin-bottom: 20px;
 }
 
 .info {
@@ -237,9 +240,5 @@ export default defineComponent({
 
 :deep(.el-card__body) {
   padding: 0 20px 20px 20px !important;
-}
-
-.card-container {
-  display: flex;
 }
 </style>
