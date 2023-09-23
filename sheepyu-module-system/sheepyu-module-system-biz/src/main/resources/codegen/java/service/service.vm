@@ -16,8 +16,8 @@ import javax.validation.constraints.*;
 #end
 
 /**
-* @author ygq
-* @date 2023-01-18 14:40
+* @author ${table.author}
+* @date ${date}
 **/
 public interface ${fullClassName}Service extends IServiceX<${fullClassName}> {
     void create(@Valid ${fullClassName}CreateVo createVo);

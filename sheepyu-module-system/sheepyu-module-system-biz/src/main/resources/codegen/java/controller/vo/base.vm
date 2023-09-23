@@ -7,8 +7,8 @@ import javax.validation.constraints.*;
 import java.util.*;
 
 /**
-* @author ygq
-* @date 2023-01-18 15:03
+* @author ${table.author}
+* @date ${date}
 **/
 @Data
 @ApiModel("${table.classComment}基本vo")

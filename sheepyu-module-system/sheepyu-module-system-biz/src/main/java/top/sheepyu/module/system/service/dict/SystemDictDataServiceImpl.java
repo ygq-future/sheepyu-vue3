@@ -36,10 +36,10 @@ public class SystemDictDataServiceImpl extends ServiceImplX<SystemDictDataMapper
     @Override
     public SystemDictData createDictData(SystemDictDataCreateVo createVo) {
         SystemDictData dictData = CONVERT.convert(createVo);
-        checkRepeatByFieldsThrow(dictData, DICT_DATA_EXISTS, Arrays.asList(
+        checkRepeatByFieldsThrow(dictData, Arrays.asList(
                 SystemDictData::getDictType,
                 SystemDictData::getValue
-        ));
+        ), DICT_DATA_EXISTS);
         save(dictData);
         return dictData;
     }

@@ -26,6 +26,8 @@ public interface SystemFileService extends IServiceX<SystemFile> {
 
     void delete(String ids);
 
+    String simpleUpload(MultipartFile file) throws IOException;
+
     String upload(MultipartFile file, String md5, String remark) throws IOException;
 
     String preparePart(String md5, String filename, String remark);

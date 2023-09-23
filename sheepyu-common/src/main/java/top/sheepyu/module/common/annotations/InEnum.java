@@ -13,7 +13,7 @@ import java.lang.annotation.*;
  **/
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Constraint(validatedBy = InEnumValidator.class)
 public @interface InEnum {
     Class<? extends IterableEnum> value();

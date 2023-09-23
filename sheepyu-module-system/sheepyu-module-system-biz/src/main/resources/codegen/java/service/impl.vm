@@ -6,6 +6,8 @@ import cn.hutool.core.util.StrUtil;
 #end
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+#if($table.requirePage || $table.requireList || $table.requireExport)import top.sheepyu.framework.mybatisplus.core.query.LambdaQueryWrapperX;
+#end
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
 #if ($table.requirePage)import top.sheepyu.module.common.common.PageResult;
 #end
@@ -118,17 +120,17 @@ public class ${fullClassName}ServiceImpl extends ServiceImplX<${fullClassName}Ma
 #if ($table.requireList || $table.requireExport)
     @Override
     public List<${fullClassName}> list(${fullClassName}QueryVo queryVo) {
-        return list(#buildQuery());
+        return list(buildQuery(queryVo));
     }
-#end
 
+#end
 #if ($table.requirePage)
     @Override
     public PageResult<${fullClassName}> page(${fullClassName}QueryVo queryVo) {
-        return page(queryVo, #buildQuery());
+        return page(queryVo, buildQuery(queryVo));
     }
-#end
 
+#end
 #if($table.requireImport)
     @Override
     public void batchImport(List<${fullClassName}ExcelVo> result) {
@@ -138,8 +140,14 @@ public class ${fullClassName}ServiceImpl extends ServiceImplX<${fullClassName}Ma
         List<${fullClassName}> list = CONVERT.convertExcel2(result);
         saveBatch(list);
     }
-#end
 
+#end
+#if ($table.requirePage || $table.requireList || $table.requireExport)
+    private LambdaQueryWrapperX<${fullClassName}> buildQuery(${fullClassName}QueryVo queryVo) {
+        return #buildQuery();
+    }
+
+#end
     private ${fullClassName} findByIdValidateExists(Long id) {
         return findByIdValidateExists(id, ${notExistsName});
     }

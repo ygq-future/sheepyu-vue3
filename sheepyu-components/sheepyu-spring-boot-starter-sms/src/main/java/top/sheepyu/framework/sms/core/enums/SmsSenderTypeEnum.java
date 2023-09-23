@@ -14,7 +14,6 @@ import static top.sheepyu.module.common.exception.CommonException.exception;
 @AllArgsConstructor
 @Getter
 public enum SmsSenderTypeEnum {
-    DEFAULT("DEFAULT"),
     EMAIL("EMAIL"),
     ;
     private final String code;

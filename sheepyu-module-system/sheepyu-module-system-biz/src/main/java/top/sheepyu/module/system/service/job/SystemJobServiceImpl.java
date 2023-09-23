@@ -43,7 +43,7 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
         validateCronExpression(createVo.getCron());
         SystemJob job = CONVERT.convert(createVo);
         //检查处理器名字是否重复
-        checkRepeatByFieldThrow(job, JOB_HANDLER_EXISTS, SystemJob::getHandlerParam);
+        checkRepeatByFieldThrow(job, SystemJob::getHandlerParam, JOB_HANDLER_EXISTS);
 
         job.setStatus(INIT.getCode());
         save(job);

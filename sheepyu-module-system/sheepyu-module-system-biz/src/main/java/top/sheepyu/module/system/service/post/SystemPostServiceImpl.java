@@ -35,7 +35,7 @@ public class SystemPostServiceImpl extends ServiceImplX<SystemPostMapper, System
     @Override
     public void createPost(SystemPostCreateVo createVo) {
         SystemPost post = CONVERT.convert(createVo);
-        checkRepeatByFieldThrow(post, POST_EXISTS, SystemPost::getName);
+        checkRepeatByFieldThrow(post, SystemPost::getName, POST_EXISTS);
         save(post);
     }
 

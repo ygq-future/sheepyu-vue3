@@ -36,7 +36,13 @@ public class SecurityProperties {
      * 一定要配置密钥，保证安全性
      */
     private String mockSecret = "test";
+    /**
+     * 配置不需要认证的接口url
+     */
     private List<String> permitUrls = new ArrayList<>();
+    /**
+     * 配置需要认证的接口url
+     */
     private List<String> authenticateUrls = new ArrayList<>();
 
     /**
@@ -45,7 +51,7 @@ public class SecurityProperties {
      * 所以我把系统分为两个模式, 用户中心模式, 非用户中心模式, 如果是用户心中模式那么默认app-api下所有请求都需要
      * 认证, 可使用Permit注解和permitAllUrls排除少量不需要认证的接口, 如果是非用户中心模式, 那么app-api下的
      * 所有请求默认都会放行, 可以使用PreAuthenticated注解和authenticateUrls排除少量需要认证的接口,
-     * 默认值为false, 也就是非用户中心模式
+     * 默认值为true, 也就是用户中心模式
      */
     private boolean userCenterMode;
 }

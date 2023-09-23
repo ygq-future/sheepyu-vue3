@@ -13,6 +13,7 @@ import top.sheepyu.module.common.common.PageParam;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.util.MyStrUtil;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -39,28 +40,11 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
         return new PageResult<>(page.getRecords(), page.getTotal());
     }
 
-    /**
-     * 检查多字段在表中是否已经存在, 但是会抛出自定义异常
-     *
-     * @param entity    实体类
-     * @param fields    字段表达式
-     * @param errorCode 错误码
-     */
     @Override
-    public void checkRepeatByFieldsThrow(T entity, ErrorCode errorCode, Collection<SFunction<T, ?>> fields) {
-        boolean result = checkRepeatByFields(entity, fields);
-        if (result) {
-            throw exception(errorCode);
-        }
+    public boolean checkRepeatByField(T entity, SFunction<T, ?> field) {
+        return checkRepeatByFields(entity, Collections.singletonList(field));
     }
 
-    /**
-     * 检查多字段在表中是否已经存在
-     *
-     * @param entity 实体类
-     * @param fields 字段表达式
-     * @return result
-     */
     @Override
     public boolean checkRepeatByFields(T entity, Collection<SFunction<T, ?>> fields) {
         if (CollUtil.isEmpty(fields)) {
@@ -87,13 +71,16 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
     }
 
     @Override
-    public boolean checkRepeatByField(T entity, SFunction<T, ?> field) {
-        return checkRepeatByFields(entity, Collections.singletonList(field));
+    public void checkRepeatByFieldThrow(T entity, SFunction<T, ?> field, ErrorCode errorCode) {
+        checkRepeatByFieldsThrow(entity, Collections.singletonList(field), errorCode);
     }
 
     @Override
-    public void checkRepeatByFieldThrow(T entity, ErrorCode errorCode, SFunction<T, ?> field) {
-        checkRepeatByFieldsThrow(entity, errorCode, Collections.singletonList(field));
+    public void checkRepeatByFieldsThrow(T entity, Collection<SFunction<T, ?>> fields, ErrorCode errorCode) {
+        boolean result = checkRepeatByFields(entity, fields);
+        if (result) {
+            throw exception(errorCode);
+        }
     }
 
     @Override
@@ -132,11 +119,11 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
         batchDelete(ids, fieldLambda, buildQuery());
     }
 
-    /**
-     * @param ids         要删除的资源的唯一标识
-     * @param fieldLambda 要根据哪个字段进行删除的表达式
-     * @param wrapperX    删除需要什么条件, 注意这里就不要加需要删除的字段了
-     */
+    @Override
+    public void batchDelete(List<? extends Serializable> idList, SFunction<T, ?> fieldLambda) {
+        batchDelete(idList, fieldLambda, buildQuery());
+    }
+
     @Override
     public void batchDelete(String ids, SFunction<T, ?> fieldLambda, LambdaQueryWrapperX<T> wrapperX) {
         List<String> idList = MyStrUtil.split(ids, ',');
@@ -144,6 +131,16 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
             return;
         }
 
+        wrapperX.in(fieldLambda, idList);
+        boolean result = remove(wrapperX);
+
+        if (!result) {
+            throw exception(OPERATION_FAILED);
+        }
+    }
+
+    @Override
+    public void batchDelete(List<? extends Serializable> idList, SFunction<T, ?> fieldLambda, LambdaQueryWrapperX<T> wrapperX) {
         wrapperX.in(fieldLambda, idList);
         boolean result = remove(wrapperX);
 

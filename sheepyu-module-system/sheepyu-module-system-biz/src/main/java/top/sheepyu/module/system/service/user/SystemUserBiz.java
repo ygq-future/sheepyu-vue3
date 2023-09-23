@@ -3,7 +3,7 @@ package top.sheepyu.module.system.service.user;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.lang.UUID;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.AllArgsConstructor;
@@ -37,6 +37,7 @@ import static top.sheepyu.module.common.constants.ErrorCodeConstants.OPERATION_F
 import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
+import static top.sheepyu.module.system.constants.ErrorCodeConstants.EMAIL_OR_MOBILE_NONNULL;
 import static top.sheepyu.module.system.enums.log.LoginResultEnum.CAPTCHA_CODE_ERROR;
 import static top.sheepyu.module.system.enums.log.LoginResultEnum.SUCCESS;
 import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_TOKEN;
@@ -124,6 +125,10 @@ public class SystemUserBiz {
      * @param registerVo 用户创建vo
      */
     public void registerUser(@Valid AppUserRegisterVo registerVo) {
+        //邮箱或者手机号一者一定不能为空
+        if (StrUtil.isAllBlank(registerVo.getEmail(), registerVo.getMobile())) {
+            throw exception(EMAIL_OR_MOBILE_NONNULL);
+        }
         SystemUserCreateVo createVo = new SystemUserCreateVo();
         createVo.setNickname(registerVo.getNickname());
         createVo.setPassword(registerVo.getPassword());
@@ -133,14 +138,7 @@ public class SystemUserBiz {
         createVo.setStatus(CommonStatusEnum.ENABLE.getCode());
 
         //设置用户名
-        if (StrUtil.isNotBlank(createVo.getEmail())) {
-            createVo.setUsername(createVo.getEmail());
-        } else if (StrUtil.isNotBlank(createVo.getMobile())) {
-            createVo.setUsername(createVo.getMobile());
-        } else {
-            createVo.setUsername("sheepyu_" + UUID.fastUUID().toString(true).substring(16));
-        }
-
+        createVo.setUsername("sheepyu_user" + RandomUtil.randomNumbers(12));
         systemUserService.create(createVo);
     }
 

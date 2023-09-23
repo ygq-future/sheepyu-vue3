@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static top.sheepyu.module.system.convert.codegen.SystemCodegenConvert.CONVERT;
 
@@ -143,9 +144,17 @@ public class SystemCodegenBiz {
         }
     }
 
-    public List<TableInfoRespVo> tableList() {
+    public List<TableInfoRespVo> tableList(String keyword) {
+        List<String> tableNames = systemCodegenTableService.lambdaQuery()
+                .select(SystemCodegenTable::getTableName)
+                .list().stream().map(SystemCodegenTable::getTableName)
+                .collect(Collectors.toList());
         List<TableInfoRespVo> result = new ArrayList<>();
-        for (TableInfo tableInfo : codegenBuilder.tableInfoList()) {
+        for (TableInfo tableInfo : codegenBuilder.tableInfoList(keyword)) {
+            //排除已经生成过的表, 不然表太多了, 眼花缭乱
+            if (tableNames.contains(tableInfo.getName())) {
+                continue;
+            }
             result.add(new TableInfoRespVo(tableInfo.getName(), tableInfo.getComment()));
         }
         return result;

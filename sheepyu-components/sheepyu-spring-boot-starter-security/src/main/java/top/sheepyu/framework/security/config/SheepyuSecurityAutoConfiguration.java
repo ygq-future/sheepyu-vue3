@@ -95,14 +95,15 @@ public class SheepyuSecurityAutoConfiguration extends WebSecurityConfigurerAdapt
                 //不需要认证的请求
                 .antMatchers(securityProperties.getPermitUrls().toArray(new String[]{})).permitAll()
                 //需要认证的请求
-                .antMatchers(securityProperties.getAuthenticateUrls().toArray(new String[]{})).authenticated()
-                .anyRequest().authenticated();
+                .antMatchers(securityProperties.getAuthenticateUrls().toArray(new String[]{})).authenticated();
 
-        //如果是用户中心模式
-        if (securityProperties.isUserCenterMode()) {
+        //如果不是用户中心模式
+        if (!securityProperties.isUserCenterMode()) {
             http.authorizeRequests().antMatchers(buildAppApi("/**")).permitAll();
         }
 
+        //兜底请求
+        http.authorizeRequests().anyRequest().authenticated();
         http.addFilterBefore(securityTokenFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

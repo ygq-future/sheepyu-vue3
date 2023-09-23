@@ -52,7 +52,6 @@ public class SystemMenuBaseVo {
     private Integer status;
 
     @ApiModelProperty("是否缓存")
-    @NotNull(message = "是否缓存不能为空")
     @InEnum(CommonStatusEnum.class)
     private Integer keepAlive;
 }

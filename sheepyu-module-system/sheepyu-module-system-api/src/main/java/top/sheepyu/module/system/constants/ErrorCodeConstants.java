@@ -20,21 +20,22 @@ public interface ErrorCodeConstants {
     ErrorCode JOB_HANDLER_NOT_EXISTS = new ErrorCode(100_001_003, "任务处理器不存在");
     ErrorCode JOB_UPDATE_ONLY_NORMAL_STATUS = new ErrorCode(100_001_004, "只能在开启状态下修改任务");
     ErrorCode STATUS_ERROR = new ErrorCode(100_001_005, "错误的状态!");
-    ErrorCode LOG_NOT_EXISTS = new ErrorCode(100_002_001, "任务日志不存在!");
+    ErrorCode LOG_NOT_EXISTS = new ErrorCode(100_001_006, "任务日志不存在!");
 
     //dict相关 100_002_001
     ErrorCode DICT_TYPE_NOT_EXISTS = new ErrorCode(100_002_001, "字典类型不存在!");
     ErrorCode DICT_DATA_NOT_EXISTS = new ErrorCode(100_002_002, "字典数据不存在!");
-    ErrorCode DICT_DATA_EXISTS = new ErrorCode(100_002_002, "字典数据已存在!");
-    ErrorCode DICT_TYPE_HAS_DATA = new ErrorCode(100_002_003, "字典类型下还有数据!");
+    ErrorCode DICT_DATA_EXISTS = new ErrorCode(100_002_003, "字典数据已存在!");
+    ErrorCode DICT_TYPE_HAS_DATA = new ErrorCode(100_002_004, "字典类型下还有数据!");
 
     //systemUser相关 100_003_001
     ErrorCode USER_NOT_EXISTS = new ErrorCode(100_003_001, "用户不存在!");
     ErrorCode LOGIN_FAILED = new ErrorCode(100_003_002, "登录失败, 用户名或密码错误!");
     ErrorCode USER_EXISTS = new ErrorCode(100_003_003, "用户已存在!");
     ErrorCode CODE_ERROR = new ErrorCode(100_003_004, "验证码错误!");
-    ErrorCode FORBID_OPERATE_ADMIN = new ErrorCode(100_003_004, "禁止操作超级管理员!");
-    ErrorCode OLD_PASS_ERROR = new ErrorCode(100_003_004, "原密码错误!");
+    ErrorCode FORBID_OPERATE_ADMIN = new ErrorCode(100_003_005, "禁止操作超级管理员!");
+    ErrorCode OLD_PASS_ERROR = new ErrorCode(100_003_006, "原密码错误!");
+    ErrorCode EMAIL_OR_MOBILE_NONNULL = new ErrorCode(100_003_007, "邮箱或者手机号不能为空!");
 
     //systemConfig相关 100_004_001
     ErrorCode CONFIG_NOT_EXISTS = new ErrorCode(100_004_001, "配置不存在!");
@@ -48,7 +49,7 @@ public interface ErrorCodeConstants {
 
     //file相关 100_006_001
     ErrorCode FILE_NOT_EXISTS = new ErrorCode(100_006_001, "文件不存在!");
-    ErrorCode FILE_EXISTS = new ErrorCode(100_006_001, "文件已存在!");
+    ErrorCode FILE_EXISTS = new ErrorCode(100_006_002, "文件已存在!");
 
     //dept相关 100_007_001
     ErrorCode DEPT_NOT_EXISTS = new ErrorCode(100_007_001, "部门不存在!");
@@ -56,13 +57,13 @@ public interface ErrorCodeConstants {
 
     //post相关 100_008_001
     ErrorCode POST_NOT_EXISTS = new ErrorCode(100_008_001, "职位不存在!");
-    ErrorCode POST_EXISTS = new ErrorCode(100_008_001, "职位已存在!");
+    ErrorCode POST_EXISTS = new ErrorCode(100_008_002, "职位已存在!");
 
     //menu相关 100_009_001
     ErrorCode MENU_NOT_EXISTS = new ErrorCode(100_009_001, "菜单不存在!");
     ErrorCode MENU_HAS_CHILDREN = new ErrorCode(100_009_002, "菜单还有子菜单!");
-    ErrorCode FORBID_REMOVE = new ErrorCode(100_009_002, "系统菜单禁止删除!");
-    ErrorCode LEVEL_RELATION_ERROR = new ErrorCode(100_009_002, "错误的层次关系!");
+    ErrorCode FORBID_REMOVE = new ErrorCode(100_009_003, "系统菜单禁止删除!");
+    ErrorCode LEVEL_RELATION_ERROR = new ErrorCode(100_009_004, "错误的层次关系!");
 
     //role相关 100_010_001
     ErrorCode ROLE_NOT_EXISTS = new ErrorCode(100_010_001, "角色不存在!");

@@ -89,11 +89,7 @@ public class SystemCodegenController {
     @ApiOperation("数据库表列表")
     @PreAuthorize("@ss.hasPermission('system:codegen:query')")
     public Result<List<TableInfoRespVo>> tableList(@RequestParam(required = false, defaultValue = "") String keyword) {
-        return success(systemCodegenBiz.tableList()
-                .stream()
-                .filter(tableInfo -> tableInfo.getName().contains(keyword) ||
-                        tableInfo.getComment().contains(keyword))
-                .collect(Collectors.toList()));
+        return success(systemCodegenBiz.tableList(keyword));
     }
 
     @GetMapping("/generate/{id}")

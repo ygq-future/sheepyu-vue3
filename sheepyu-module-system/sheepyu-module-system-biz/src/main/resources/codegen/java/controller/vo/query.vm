@@ -12,8 +12,8 @@ import java.util.*;
 import static top.sheepyu.module.common.constants.CommonConstants.DATE_TIME_FORMAT;
 
 /**
-* @author ygq
-* @date 2023-01-17 10:37
+* @author ${table.author}
+* @date ${date}
 **/
 @Data
 #if($table.requirePage)@EqualsAndHashCode(callSuper = true)

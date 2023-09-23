@@ -65,7 +65,7 @@ public class SystemConfigServiceImpl extends ServiceImplX<SystemConfigMapper, Sy
     @Override
     public void createConfig(SystemConfigCreateVo createVo) {
         SystemConfig config = CONVERT.convert(createVo);
-        checkRepeatByFieldThrow(config, CONFIG_KEY_EXISTS, SystemConfig::getConfigKey);
+        checkRepeatByFieldThrow(config, SystemConfig::getConfigKey, CONFIG_KEY_EXISTS);
         boolean result = save(config);
         if (result) {
             redisUtil.put(SYSTEM_CONFIG_KEY, config.getConfigKey(), config.getConfigValue());

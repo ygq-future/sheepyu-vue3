@@ -13,6 +13,7 @@ public interface ErrorCodeConstants {
     ErrorCode NOT_AUTHORIZE = new ErrorCode(401, "未登录");
     ErrorCode NOT_PERMISSION = new ErrorCode(403, "没有权限");
     ErrorCode NOT_FOUND = new ErrorCode(404, "请求资源未找到");
+    ErrorCode REQUEST_METHOD_NOT_SUPPORT = new ErrorCode(405, "请求方法不支持");
     ErrorCode UNKNOWN_ERROR = new ErrorCode(500, "未知错误, 查看日志");
     ErrorCode USERTYPE_ERROR = new ErrorCode(501, "错误的用户类型");
     ErrorCode DEMO_DENY = new ErrorCode(502, "演示模式, 不能操作!");
@@ -26,4 +27,5 @@ public interface ErrorCodeConstants {
     ErrorCode SMS_SENDER_DONT_MATCH = new ErrorCode(509, "sms没有开启或者没有匹配的smsSender!");
     ErrorCode FILE_UPLOAD_DONT_MATCH = new ErrorCode(510, "没有对应的文件上传实现!");
     ErrorCode USER_DISABLE = new ErrorCode(511, "用户已被禁用!");
+    ErrorCode SQL_ERROR = new ErrorCode(512, "SQL异常!");
 }

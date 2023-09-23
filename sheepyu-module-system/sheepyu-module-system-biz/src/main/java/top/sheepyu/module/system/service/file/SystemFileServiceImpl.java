@@ -96,6 +96,16 @@ public class SystemFileServiceImpl extends ServiceImplX<SystemFileMapper, System
     }
 
     @Override
+    public String simpleUpload(MultipartFile file) throws IOException {
+        String filename = file.getOriginalFilename();
+        String path = getDatePath() + getUUID() + getSuffix(filename);
+        InputStream in = file.getInputStream();
+        FileUpload upload = fileUploadFactory.get();
+        upload.upload(in, path, getSize(in));
+        return upload.buildDomain().concat(path);
+    }
+
+    @Override
     public String upload(MultipartFile file, String md5, String remark) throws IOException {
         SystemFile systemFile = findFileByMd5(md5);
         if (systemFile != null) {

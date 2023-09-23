@@ -9,9 +9,11 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.template.TemplateConfig;
 import cn.hutool.extra.template.TemplateEngine;
 import cn.hutool.extra.template.TemplateUtil;
+import com.baomidou.mybatisplus.core.enums.SqlLike;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
 import com.baomidou.mybatisplus.generator.config.StrategyConfig;
 import com.baomidou.mybatisplus.generator.config.builder.ConfigBuilder;
+import com.baomidou.mybatisplus.generator.config.po.LikeTable;
 import com.baomidou.mybatisplus.generator.config.po.TableField;
 import com.baomidou.mybatisplus.generator.config.po.TableInfo;
 import com.google.common.collect.Lists;
@@ -26,8 +28,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static cn.hutool.core.text.CharSequenceUtil.lowerFirst;
-import static cn.hutool.core.text.CharSequenceUtil.upperFirst;
+import static cn.hutool.core.text.CharSequenceUtil.*;
 import static top.sheepyu.module.system.enums.codegen.CodegenSceneEnum.ADMIN;
 
 /**
@@ -38,6 +39,17 @@ import static top.sheepyu.module.system.enums.codegen.CodegenSceneEnum.ADMIN;
 public class CodegenBuilder {
     @Resource
     private DataSource dataSource;
+    //不需要代码生成的表
+    private static final List<String> EXCLUDE_TABLES = Lists.newArrayList(
+            "system_codegen_column",
+            "system_codegen_table",
+            "system_file_part",
+            "system_menu",
+            "system_role_menu",
+            "system_user_role"
+    );
+    //不需要代码生成的表的代表前缀: 通常用来排除一些框架的表, 例如qrtz
+    private static final List<String> EXCLUDE_TABLES_PREFIX = Lists.newArrayList("QRTZ");
     //基本排除的字段
     private static final List<String> BASE_MODEL_FIELD = Lists.newArrayList();
     //创建操作排序的字段
@@ -46,8 +58,6 @@ public class CodegenBuilder {
     private static final List<String> UPDATE_OPERATION_EXCLUDE_FIELD = Lists.newArrayList();
     //查询结果排除的字段
     private static final List<String> LIST_OPERATION_EXCLUDE_FIELD = Lists.newArrayList();
-    //查询条件排除的字段
-    private static final List<String> QUERY_OPERATION_EXCLUDE_FIELD = Lists.newArrayList("id");
     //快速搜索包含的字段
     private static final List<String> QUICK_SEARCH_INCLUDE_FIELD = Lists.newArrayList("id", "title", "name");
     //需要转换的类型
@@ -74,7 +84,6 @@ public class CodegenBuilder {
             .put("codegen/java/controller/vo/update.vm", buildControllerVoPath("UpdateVo"))
             .put("codegen/java/controller/vo/query.vm", buildControllerVoPath("QueryVo"))
             .put("codegen/java/controller/vo/resp.vm", buildControllerVoPath("RespVo"))
-            .put("codegen/java/controller/vo/excel.vm", buildControllerVoPath("ExcelVo"))
             .put("codegen/java/convert/convert.vm", buildConvertPath())
             .put("codegen/java/dao/entity.vm", buildDaoPath(".java"))
             .put("codegen/java/dao/mapper.vm", buildDaoPath("Mapper.java"))
@@ -93,8 +102,6 @@ public class CodegenBuilder {
         UPDATE_OPERATION_EXCLUDE_FIELD.addAll(BASE_MODEL_FIELD);
         LIST_OPERATION_EXCLUDE_FIELD.addAll(BASE_MODEL_FIELD);
         LIST_OPERATION_EXCLUDE_FIELD.remove("createTime");
-        QUERY_OPERATION_EXCLUDE_FIELD.addAll(BASE_MODEL_FIELD);
-        QUERY_OPERATION_EXCLUDE_FIELD.remove("createTime");
     }
 
     public Map<String, String> buildCode(SystemCodegenTable table, List<SystemCodegenColumn> columns) {
@@ -104,8 +111,12 @@ public class CodegenBuilder {
 
         String sceneName = Objects.equals(table.getScene(), ADMIN.getCode()) ? "admin" : "app";
         String fullClassName = upperFirst(table.getModuleName() + table.getClassName());
+        String notExistsName = toUnderlineCase(table.getClassName()).toUpperCase().concat("_NOT_EXISTS");
         List<SystemCodegenColumn> quickSearchColumns = columns.stream().filter(SystemCodegenColumn::getQuickSearch).collect(Collectors.toList());
-        boolean hasQuickSearch = quickSearchColumns.size() > 0;
+        boolean hasQuickSearch = !quickSearchColumns.isEmpty();
+        //判断是否需要继承BaseModel
+        List<String> fields = columns.stream().map(SystemCodegenColumn::getJavaField).collect(Collectors.toList());
+        boolean requireBaseModel = fields.stream().filter(BASE_MODEL_FIELD::contains).count() == BASE_MODEL_FIELD.size();
         Map<Object, Object> params = MapUtil.builder()
                 .put("table", table)
                 .put("columns", columns)
@@ -116,11 +127,16 @@ public class CodegenBuilder {
                 .put("baseModelFields", BASE_MODEL_FIELD)
                 .put("sceneName", sceneName)
                 .put("date", DateUtil.now())
-                .put("notExistsName", table.getClassName().toUpperCase() + "_NOT_EXISTS")
+                .put("notExistsName", notExistsName)
+                .put("requireBaseModel", requireBaseModel)
                 .build();
 
         MapBuilder<String, String> builder = MapUtil.builder();
-        TEMPLATES.forEach((templatePath, outputPath) -> {
+        Map<String, String> templates = new HashMap<>(TEMPLATES);
+        if (table.getRequireExport() || table.getRequireImport()) {
+            templates.put("codegen/java/controller/vo/excel.vm", buildControllerVoPath("ExcelVo"));
+        }
+        templates.forEach((templatePath, outputPath) -> {
             String path = formatPath(outputPath, table, fullClassName);
             String render = templateEngine.getTemplate(templatePath).render(params);
             builder.put(path, render);
@@ -168,15 +184,15 @@ public class CodegenBuilder {
                 .replace("{fullClassName}", fullClassName);
     }
 
-    public List<TableInfo> tableInfoList() {
+    public List<TableInfo> tableInfoList(String keyword) {
         DataSourceConfig config = new DataSourceConfig.Builder(dataSource).build();
-        ConfigBuilder builder = new ConfigBuilder(null, config, null, null, null, null);
-        return builder.getTableInfoList().stream().filter(e -> {
-            if (e.getComment() == null) {
-                e.setComment("");
-            }
-            String tableName = e.getName().toLowerCase();
-            return !tableName.startsWith("qrtz");
+        StrategyConfig.Builder scbuilder = new StrategyConfig.Builder().addExclude(EXCLUDE_TABLES);
+        EXCLUDE_TABLES_PREFIX.forEach(prefix -> scbuilder.notLikeTable(new LikeTable(prefix, SqlLike.RIGHT)));
+        ConfigBuilder builder = new ConfigBuilder(null, config, scbuilder.build(), null, null, null);
+        return builder.getTableInfoList().stream().filter(tableInfo -> {
+            String name = tableInfo.getName();
+            String comment = tableInfo.getComment();
+            return StrUtil.contains(name, keyword) || StrUtil.contains(comment, keyword);
         }).collect(Collectors.toList());
     }
 
@@ -242,7 +258,7 @@ public class CodegenBuilder {
                     .setJavaType(filterPropertyType(field.getPropertyType()))
                     .setCreateOperation(filterCreateOperation(field.getPropertyName()))
                     .setUpdateOperation(filterUpdateOperation(field.getPropertyName()))
-                    .setQueryOperation(filterQueryOperation(field.getPropertyName()))
+                    .setQueryOperation(false)
                     .setQueryCondition(getDefaultQueryCondition(column.getJavaType()))
                     .setListOperationResult(filterListOperation(field.getPropertyName()))
                     .setQuickSearch(filterQuickSearch(field.getPropertyName()))
@@ -267,10 +283,6 @@ public class CodegenBuilder {
 
     private Boolean filterListOperation(String fieldName) {
         return !LIST_OPERATION_EXCLUDE_FIELD.contains(fieldName);
-    }
-
-    private Boolean filterQueryOperation(String fieldName) {
-        return !QUERY_OPERATION_EXCLUDE_FIELD.contains(fieldName);
     }
 
     private Boolean filterQuickSearch(String fieldName) {

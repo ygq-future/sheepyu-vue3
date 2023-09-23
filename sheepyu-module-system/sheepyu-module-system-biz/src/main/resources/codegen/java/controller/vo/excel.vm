@@ -8,8 +8,8 @@ import lombok.Data;
 #parse('codegen/java/common/_import.vm')
 import java.util.*;
 /**
-* @author ygq
-* @date 2023-01-19 14:30
+* @author ${table.author}
+* @date ${date}
 **/
 @Data
 @ApiModel("${table.classComment}excel导入导出vo")

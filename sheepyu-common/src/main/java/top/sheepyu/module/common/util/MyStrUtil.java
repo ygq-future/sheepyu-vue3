@@ -22,6 +22,11 @@ public class MyStrUtil {
                 .map(Long::parseLong).collect(Collectors.toList());
     }
 
+    /**
+     * 格式: /yyyy/MM/dd/
+     *
+     * @return 字符串路径
+     */
     public static String getDatePath() {
         return LocalDateTime.now().format(DateTimeFormatter.ofPattern("/yyyy/MM/dd/"));
     }

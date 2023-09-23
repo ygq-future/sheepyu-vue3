@@ -14,11 +14,11 @@ import java.util.*;
 **/
 @TableName("${table.tableName}")
 @Data
-@EqualsAndHashCode(callSuper = true)
+#if(${requireBaseModel})@EqualsAndHashCode(callSuper = true)#end
 @Accessors(chain = true)
-public class ${fullClassName} extends BaseModel {
+public class ${fullClassName}#if(${requireBaseModel}) extends BaseModel#end {
     #foreach($column in $columns)
-    #if(!$baseModelFields.contains($column.javaField))
+    #if(!$baseModelFields.contains($column.javaField) || !${requireBaseModel})
     #parse('codegen/java/common/_type.vm')
     /**
     * ${column.comment}

@@ -3,6 +3,7 @@ package top.sheepyu.framework.web.core.handler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -17,8 +18,10 @@ import top.sheepyu.module.common.util.ExceptionUtil;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 
-import static top.sheepyu.module.common.constants.ErrorCodeConstants.INVALID_PARAMS;
-import static top.sheepyu.module.common.constants.ErrorCodeConstants.UNKNOWN_ERROR;
+import java.sql.SQLException;
+
+import static top.sheepyu.module.common.constants.ErrorCodeConstants.*;
+import static top.sheepyu.module.common.constants.ErrorCodeConstants.SQL_ERROR;
 
 @RestControllerAdvice
 @Slf4j
@@ -46,7 +49,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Result<Object> methodArgumentNotValidExceptionExceptionHandler(MethodArgumentNotValidException ex) {
-        return Result.fail(INVALID_PARAMS.getCode(), String.format("请求参数不正确:%s", ex.getBindingResult().getFieldError().getDefaultMessage()));
+        FieldError error = ex.getFieldError();
+        String msg = error == null ? "" : error.getDefaultMessage();
+        return Result.fail(INVALID_PARAMS.getCode(), String.format("请求参数不正确:%s", msg));
     }
 
     /**
@@ -54,7 +59,9 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BindException.class)
     public Result<Object> bindExceptionHandler(BindException ex) {
-        return Result.fail(INVALID_PARAMS.getCode(), String.format("请求参数不正确:%s", ex.getFieldError().getDefaultMessage()));
+        FieldError error = ex.getFieldError();
+        String msg = error == null ? "" : error.getDefaultMessage();
+        return Result.fail(INVALID_PARAMS.getCode(), String.format("请求参数不正确:%s", msg));
     }
 
     /**
@@ -72,7 +79,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public Result<Object> httpRequestMethodNotSupportedExceptionHandler(HttpRequestMethodNotSupportedException ex) {
-        return Result.fail(405, String.format("请求方法不正确:%s", ex.getMessage()));
+        return Result.fail(REQUEST_METHOD_NOT_SUPPORT.getCode(), String.format("请求方法不正确:%s", ex.getMessage()));
+    }
+
+    @ExceptionHandler(SQLException.class)
+    public Result<?> sqlExceptionHandler(SQLException ex) {
+        return Result.fail(SQL_ERROR.getCode(), ex.getMessage());
     }
 
     /**
