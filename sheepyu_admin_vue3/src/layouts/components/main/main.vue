@@ -45,21 +45,22 @@ function removeKeepAlive(menu: RouteLocationNormalized) {
   state.keepAliveList = state.keepAliveList.filter(item => item != name)
 }
 
+function refreshTab(menu: RouteLocationNormalized) {
+  removeKeepAlive(menu)
+  state.componentKey = ''
+  nextTick(() => {
+    state.componentKey = menu.path
+    addKeepAlive(menu)
+  })
+}
+
 watch(() => route.path, (path) => {
   state.componentKey = path
   addKeepAlive(tabs.state.activeRoute as RouteLocationNormalized)
 })
 
 onBeforeMount(() => {
-  instance?.proxy?.$bus.on('onTabRefresh', (menu: RouteLocationNormalized) => {
-    removeKeepAlive(menu)
-    state.componentKey = ''
-    nextTick(() => {
-      state.componentKey = menu.path
-      addKeepAlive(menu)
-    })
-  })
-
+  instance?.proxy?.$bus.on('onTabRefresh', refreshTab)
   instance?.proxy?.$bus.on('onTabClose', removeKeepAlive)
 })
 

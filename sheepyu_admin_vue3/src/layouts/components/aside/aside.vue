@@ -9,7 +9,7 @@
                :default-active='route.path'
                :default-openeds='[route.path]'
       >
-        <MenuTree :menus='tabs.state.tabsViewRoutes' />
+        <MenuTree :menus='tabs.getMenuTree()' />
       </el-menu>
     </el-scrollbar>
   </el-aside>
@@ -74,10 +74,14 @@ const scrollHeight = computed(() => {
 }
 
 :deep(.el-menu-item .icon) {
+  width: 24px;
+  text-align: center;
   margin-right: 5px;
 }
 
 :deep(.el-sub-menu__title .icon) {
+  width: 24px;
+  text-align: center;
   margin-right: 5px;
 }
 

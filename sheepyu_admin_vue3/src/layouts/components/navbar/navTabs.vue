@@ -4,13 +4,18 @@
       <div :class='`tabs-${config.layout.layoutMode}`' ref='tabsRef'>
         <div
           :class="['tab', index === tabs.state.activeIndex ? 'active' : '']"
-          v-for='(item, index) in tabs.state.tabsView'
+          v-for='(item, index) in tabs.getTabsView()'
           @click='onChange(item)'
           @contextmenu.prevent='onContextmenu(item, $event)'
           :key='item.path'
         >
           <span>{{ item.meta.title }}</span>
-          <Icon v-show='tabs.state.tabsView.length > 1' name='el-icon-Close' :size='12' @click.stop='onClose(item)' />
+          <Icon
+            v-show='tabs.state.tabsView.length > 1'
+            name='el-icon-Close'
+            :size='12'
+            @click.stop='onClose(item)'
+          />
         </div>
 
         <div :style='navTabBackStyle' class='nav-tab-back'></div>
@@ -59,11 +64,8 @@ const contextMenuItems = reactive<ContextMenuItem[]>([
 
 function changeNavTab() {
   nextTick(() => {
-    const div = findDiv(tabs.state.activeIndex)
-    if (!div) {
-      return false
-    }
-
+    const div = tabsRef.value?.children[tabs.state.activeIndex] as HTMLDivElement
+    if (!div) return
     navTabBackStyle.width = `${div.clientWidth}px`
     navTabBackStyle.transform = `translateX(${div.offsetLeft}px)`
     scrollRef.value?.setScrollLeft(div.offsetLeft)
@@ -137,12 +139,22 @@ function closeOther(menu: RouteLocationNormalized) {
 
 function onClose(item: RouteLocationNormalized) {
   const isActive = tabs.state.activeRoute?.path === item.path
-  tabs.closeTab(item)
+  const index = tabs.closeTab(item)
   instance?.proxy?.$bus.emit('onTabClose', item)
 
   if (isActive) {
-    router.push(tabs.state.activeRoute as RouteLocationNormalized)
+    if (index > 0) {
+      router.push(tabs.state.tabsView[index - 1])
+    } else {
+      //直接把已经删除的路由设置为激活, setActiveTab中如果参数路由不存在就设置最后一个tab为activeRoute
+      tabs.setActiveTab(tabs.state.activeRoute!)
+      //跳转至激活路由
+      router.push(tabs.state.activeRoute!)
+    }
   } else {
+    //如果不是激活的, 只需要更新当前记录的activeIndex即可
+    //为什么: 因为如果当前关闭的tab再activeTab之前, 那么activeIndex就不对了
+    tabs.updateActiveTabIndex()
     changeNavTab()
   }
 }
@@ -156,21 +168,22 @@ function updateTab(menu: RouteLocationNormalized) {
   changeNavTab()
 }
 
-function findDiv(index: number): HTMLDivElement {
-  return tabsRef.value?.children![index] as HTMLDivElement
+function closeCurrentToRoute(path: string) {
+  tabs.closeTab(tabs.state.activeRoute!)
+  router.push(path)
 }
 
 onBeforeRouteUpdate((to) => {
   updateTab(to)
 })
 
+onBeforeMount(() => {
+  //关闭当前路由并转向新路由
+  instance?.proxy?.$bus.on('closeCurrentToRoute', closeCurrentToRoute)
+})
+
 onMounted(() => {
   updateTab(router.currentRoute.value)
-  //关闭当前路由并转向新路由
-  instance?.proxy?.$bus.on('closeCurrentToRoute', (path: string) => {
-    tabs.closeTab(tabs.state.activeRoute as RouteLocationNormalized)
-    router.push(path)
-  })
 })
 
 onUnmounted(() => {

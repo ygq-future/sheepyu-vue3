@@ -5,9 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/core/handler/GlobalExceptionHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-components/sheepyu-spring-boot-starter-web/src/main/java/top/sheepyu/framework/web/core/handler/GlobalExceptionHandler.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/App.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/App.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/aside/menuTree.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/aside/menuTree.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/aside/aside.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/aside/aside.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/navTabs.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/navTabs.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/tabs/tabs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/tabs/tabs.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -314,7 +314,7 @@
       <workItem from="1695195993828" duration="89000" />
       <workItem from="1695291398912" duration="351000" />
       <workItem from="1695439794713" duration="36000" />
-      <workItem from="1695439837795" duration="1259000" />
+      <workItem from="1695439837795" duration="3330000" />
     </task>
     <servers />
   </component>
