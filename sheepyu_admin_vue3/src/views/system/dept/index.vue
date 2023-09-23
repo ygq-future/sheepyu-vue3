@@ -139,10 +139,8 @@ function onUnfold(value: boolean) {
   tableRef.value.expandAll(value)
 }
 
-function onAdd(id: number) {
-  if (id) {
-    state.form.parentId = id
-  }
+function onAdd(id?: number) {
+  if (id) state.form.parentId = id
   state.popupFormConfig.title = '新增部门'
   state.popupFormConfig.isEdit = false
   popupFormRef.value.show()

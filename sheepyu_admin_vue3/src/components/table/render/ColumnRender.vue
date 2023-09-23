@@ -2,32 +2,32 @@
   <el-table-column
     :label='column.label'
     :prop='column.prop'
-    :width='column.width'
+    :width="column.width || ''"
     :align='column.align || "center"'
-    :sortable='column.sortable'
+    :sortable='column.sortable === true'
     :show-overflow-tooltip='column.showTip === undefined || column.showTip'
   >
-    <template #default='scope'>
+    <template #default='{row}'>
       <span v-if='(!column.render && !column.dictRender) || column.render === "text"'>
-        {{ scope.row[column.prop] }}
+        {{ row[column.prop] }}
       </span>
 
       <Dict v-if='column.dictRender === "tag"  && column.dictType'
-            :value='scope.row[column.prop]'
+            :value='row[column.prop]'
             :render='column.dictRender'
             :type='column.dictType'
       />
 
       <Dict v-if='column.dictRender === "switch" && column.dictType'
-            v-model='scope.row[column.prop]'
+            v-model='row[column.prop]'
             :render='column.dictRender'
             :type='column.dictType'
-            @change='(val) => onFieldChange(scope.row, val)'
+            @change='(val) => onFieldChange(row, val)'
       />
 
-      <Icon v-if='column.render === "icon"' :name='scope.row[column.prop]' />
+      <Icon v-if='column.render === "icon"' :name='row[column.prop]' />
 
-      <el-link v-if='column.render === "link"' @click='linkTo(scope.row)'>{{ scope.row[column.prop] }}</el-link>
+      <el-link v-if='column.render === "link"' @click='linkTo(row)'>{{ row[column.prop] }}</el-link>
 
       <el-image
         v-if='column.render === "img"'
@@ -35,8 +35,8 @@
         preview-teleported
         hide-on-click-modal
         fit='cover'
-        :src='scope.row[column.prop]'
-        :preview-src-list='[scope.row[column.prop]]'
+        :src='row[column.prop]'
+        :preview-src-list='[row[column.prop]]'
       />
     </template>
   </el-table-column>
@@ -88,6 +88,3 @@ function linkTo(row: any) {
 
 </script>
 
-<style scoped lang='scss'>
-
-</style>

@@ -52,10 +52,10 @@
       :collapse-tags='config.multiple'
       :multiple='config.multiple'
       :show-checkbox='config.multiple'
-      :node-key='config.props.value'
+      :node-key="config.props?.value || 'id'"
       :data='config.data'
       :render-after-expand='false'
-      :props='config.props'
+      :props='config.props || defaultProps'
       :disabled='disabled'
     />
 
@@ -67,8 +67,8 @@
       default-expand-all
       check-strictly
       check-on-click-node
-      :node-key='config.props.value'
-      :props='config.props'
+      :node-key="config.props?.value || 'id'"
+      :props='config.props || defaultProps'
       :render-after-expand='false'
       :default-checked-keys='form[config.prop]'
       :data='config.data'
@@ -94,9 +94,13 @@
       :multiple='config.multiple'
       :disabled='disabled'
       :placeholder='config.placeholder'
-      @change='(value) => config.change && config.change(value)'
+      @change='(value) => config.change ? config.change(findSelectItem(value)) : defaultSelectChange(value)'
     >
-      <el-option v-for='item in config.data' :label='item[config.props.label]' :value='item[config.props.value]' />
+      <el-option
+        v-for='item in config.data'
+        :label='item[config.props?.label]'
+        :value='item[config.props?.value]'
+      />
     </el-select>
 
     <ImageUpload v-if='config.render === "image-upload"' width='100px' v-model='form[config.prop]' />
@@ -116,6 +120,8 @@
       :chunk-num='config.uploadProps?.chunkNum'
     />
 
+    <Editor v-if='config.render === "editor"' v-model='form[config.prop]' />
+
     <span class='tip' v-if='config.tip'>{{ config.tip }}</span>
   </el-form-item>
 </template>
@@ -132,11 +138,34 @@ const props = defineProps<{
 }>()
 
 const treeRef = ref<InstanceType<typeof ElTree>>()
+const defaultProps = {
+  label: 'name',
+  value: 'id'
+}
 
 function onCheckChange() {
   if (treeRef.value) {
     props.form[props.config.prop] = treeRef.value.getCheckedKeys()
   }
+}
+
+/**
+ * select组件默认的change事件
+ * @param value
+ */
+function defaultSelectChange(value: any) {
+  let item = findSelectItem(value)
+  if (props.config.props?.labelVModelKey) {
+    props.form[props.config.props?.labelVModelKey] = item[props.config.props?.label || 'name']
+  }
+}
+
+/**
+ * select的change事件回调参数不是value值, 而是对象, 方便处理
+ * @param value
+ */
+function findSelectItem(value: any) {
+  return props.config.data.find((item: any) => item[props.config.props?.value || 'id'] === value)
 }
 
 onUnmounted(() => {

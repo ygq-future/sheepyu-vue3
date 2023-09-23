@@ -125,6 +125,7 @@ const state = reactive<{
   },
   popupFormConfig: {
     title: '新增字典数据表',
+    disabledProps: ['dictType'],
     formItemConfigs: [
       {
         label: '字典类型',

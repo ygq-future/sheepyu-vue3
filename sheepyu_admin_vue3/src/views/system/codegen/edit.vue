@@ -100,7 +100,7 @@
                 v-model='scope.row.javaType'
                 render='select'
                 :data='javaTypes'
-                :props='{label: "value", value: "value"}'
+                :render-props='{label: "value", value: "value"}'
               />
             </template>
           </el-table-column>
@@ -145,7 +145,7 @@
                 v-model='scope.row.queryCondition'
                 render='select'
                 :data='queryTypes'
-                :props='{label: "value", value: "value"}'
+                :render-props='{label: "value", value: "value"}'
               />
             </template>
           </el-table-column>
@@ -160,7 +160,7 @@
                 v-model='scope.row.formShowType'
                 render='select'
                 :data='formTypes'
-                :props='{label: "value", value: "value"}'
+                :render-props='{label: "value", value: "value"}'
               />
             </template>
           </el-table-column>
@@ -170,7 +170,7 @@
                 v-model='scope.row.dictType'
                 render='select'
                 :data='state.dictTypes'
-                :props='{label: "name", value: "type"}'
+                :render-props='{label: "name", value: "type"}'
               />
             </template>
           </el-table-column>
@@ -180,7 +180,7 @@
                 v-model='scope.row.sort'
                 render='select'
                 :data='sortTypes'
-                :props='{label: "value", value: "value"}'
+                :render-props='{label: "value", value: "value"}'
               />
             </template>
           </el-table-column>
@@ -233,7 +233,9 @@ const formTypes: { name: string, value: FormRender }[] = [
   { name: '树形选择', value: 'tree-select' },
   { name: '日期', value: 'datetime' },
   { name: '文件上传', value: 'upload' },
-  { name: '文件分片上传', value: 'part-upload' }
+  { name: '文件分片上传', value: 'part-upload' },
+  { name: '图片上传', value: 'image-upload' },
+  { name: '富文本', value: 'editor' },
 ]
 const rules: FormRules = {
   scene: [{ required: true, message: '场景不能为空', trigger: 'blur' }],

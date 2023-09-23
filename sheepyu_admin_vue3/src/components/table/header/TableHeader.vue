@@ -8,20 +8,20 @@
       <div class='table-header-content'>
         <div class='left' :class='shrink ? "btn-shrink" : ""'>
           <el-tooltip :show-after='500' content='刷新' placement='top'>
-            <el-button v-auth='`${props.auth}:query`' v-blur type='info' color='#40485b' @click='emits("refresh")'>
+            <el-button v-auth='`${auth}:query`' v-blur type='info' color='#40485b' @click='emits("refresh")'>
               <Icon name='fa fa-refresh' />
             </el-button>
           </el-tooltip>
 
-          <el-tooltip :show-after='500' v-if="props.buttons.includes('add')" content='新增' placement='top'>
-            <el-button v-auth='`${props.auth}:create`' v-blur type='primary' @click='emits("add")'>
+          <el-tooltip :show-after='500' v-if="buttons.includes('add')" content='新增' placement='top'>
+            <el-button v-auth='`${auth}:create`' v-blur type='primary' @click='emits("add")'>
               <Icon name='fa fa-plus' />
               <span class='button-text'>新增</span>
             </el-button>
           </el-tooltip>
 
-          <el-tooltip :show-after='500' v-if="props.buttons.includes('edit')" content='编辑' placement='top'>
-            <el-button v-auth='`${props.auth}:update`' v-blur type='primary' :disabled='rows.length === 0'
+          <el-tooltip :show-after='500' v-if="buttons.includes('edit')" content='编辑' placement='top'>
+            <el-button v-auth='`${auth}:update`' v-blur type='primary' :disabled='!rows || rows.length === 0'
                        @click='onBatchEdit'>
               <Icon name='fa fa-pencil' />
               <span class='button-text'>批量编辑</span>
@@ -29,16 +29,16 @@
           </el-tooltip>
 
           <el-popconfirm
-            v-if="props.buttons.includes('delete')"
+            v-if="buttons.includes('delete')"
             confirm-button-type='danger'
             title='确认删除这些记录吗?'
-            :disabled='rows.length === 0'
+            :disabled='!rows || rows.length === 0'
             @confirm='onBatchDelete'
           >
             <template #reference>
-              <div class='button-item' v-auth='`${props.auth}:delete`'>
+              <div class='button-item' v-auth='`${auth}:delete`'>
                 <el-tooltip :show-after='500' content='删除' placement='top'>
-                  <el-button v-blur type='danger' :disabled='rows.length === 0'>
+                  <el-button v-blur type='danger' :disabled='!rows || rows.length === 0'>
                     <Icon name='fa fa-trash' />
                     <span class='button-text'>批量删除</span>
                   </el-button>
@@ -48,7 +48,7 @@
           </el-popconfirm>
 
           <el-tooltip
-            v-if="props.buttons.includes('unfold')"
+            v-if="buttons.includes('unfold')"
             :content="state.unfold ? '全部展开' : '全部折叠'"
             :show-after='500'
             placement='top'
@@ -61,12 +61,12 @@
             </div>
           </el-tooltip>
 
-          <el-tooltip v-if="props.buttons.includes('import')" content='导入' placement='top'>
+          <el-tooltip v-if="buttons.includes('import')" content='导入' placement='top'>
             <el-upload
               :http-request='onFileUpload'
               :show-file-list='false'
             >
-              <div class='button-item' v-auth='`${props.auth}:import`'>
+              <div class='button-item' v-auth='`${auth}:import`'>
                 <el-button v-blur type='primary'>
                   <Icon name='fa fa-sign-in' />
                   <span class='button-text'>批量导入</span>
@@ -82,8 +82,8 @@
             </template>
           </el-tooltip>
 
-          <el-tooltip :show-after='500' v-if="props.buttons.includes('export')" content='导出' placement='top'>
-            <div class='button-item' v-auth='`${props.auth}:export`'>
+          <el-tooltip :show-after='500' v-if="buttons.includes('export')" content='导出' placement='top'>
+            <div class='button-item' v-auth='`${auth}:export`'>
               <el-button v-blur type='primary' @click='emits("export")'>
                 <Icon name='fa fa-sign-out' />
                 <span class='button-text'>导出数据</span>
@@ -111,7 +111,7 @@
 
         <div class='right'>
           <el-input
-            v-auth='`${props.auth}:query`'
+            v-auth='`${auth}:query`'
             v-if='search'
             placeholder='关键字模糊搜索'
             clearable
@@ -122,7 +122,7 @@
           />
           <el-tooltip v-if='comSearch' content='展开通用搜索' placement='top'>
             <Icon
-              v-auth='`${props.auth}:query`'
+              v-auth='`${auth}:query`'
               v-blur name='el-icon-Search'
               :size='16'
               @click='state.comSearch = !state.comSearch'

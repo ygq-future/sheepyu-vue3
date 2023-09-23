@@ -1,5 +1,5 @@
 <template>
-  <template v-for='menu in props.menus'>
+  <template v-for='menu in menus'>
     <template v-if='menu.children && menu.children.length > 0'>
       <el-sub-menu :index='menu.meta?.fullpath' :key='menu.meta?.fullpath'>
         <template #title>
@@ -36,7 +36,3 @@ const collapseMenu = () => {
   }
 }
 </script>
-
-<style scoped lang='scss'>
-
-</style>

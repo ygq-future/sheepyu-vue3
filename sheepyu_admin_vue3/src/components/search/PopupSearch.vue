@@ -3,9 +3,9 @@
     append-to-body
     destroy-on-close
     v-model='state.dialogVisible'
-    :style='{maxWidth: `${props.config.maxWidth ?? 700}px`, minWidth: "370px"}'
-    :title='props.config.title'
-    :width='props.config.width'
+    :style='{maxWidth: `${config.maxWidth ?? 700}px`, minWidth: "370px"}'
+    :title='config.title'
+    :width="config.width || '50%'"
     :close-on-click-modal='false'
     @close='hide'
   >
@@ -22,8 +22,8 @@
       <Table
         ref='tableRef'
         v-model:selection='state.selection'
-        :data='props.config.data || []'
-        :table-config='props.config.tableConfig'
+        :data='config.data || []'
+        :table-config='config.tableConfig'
       />
     </el-scrollbar>
 
@@ -72,6 +72,7 @@ function show() {
 function hide() {
   emits('close')
   state.dialogVisible = false
+  state.keyword = ''
 }
 
 defineExpose({
@@ -79,7 +80,3 @@ defineExpose({
   hide
 })
 </script>
-
-<style scoped lang='scss'>
-
-</style>

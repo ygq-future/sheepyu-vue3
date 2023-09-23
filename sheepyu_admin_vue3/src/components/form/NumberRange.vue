@@ -2,18 +2,18 @@
   <el-input-number
     style='margin-right: 10px'
     v-model='firstValue'
-    :step='props.step'
-    :placeholder='props.placeholder'
-    :min='props.min'
-    :max='props.max'
+    :step='step'
+    :placeholder='placeholder'
+    :min='min'
+    :max='max'
   />
 
   <el-input-number
     v-model='lastValue'
-    :step='props.step'
-    :placeholder='props.placeholder'
-    :min='props.min'
-    :max='props.max'
+    :step='step'
+    :placeholder='placeholder'
+    :min='min'
+    :max='max'
   />
 </template>
 

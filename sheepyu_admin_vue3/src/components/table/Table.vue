@@ -21,7 +21,7 @@
     <el-table-column
       v-if='tableConfig.operate'
       label='操作'
-      :width='tableConfig.operate.width'
+      :width="tableConfig.operate.width || ''"
       :fixed='tableConfig.operate.fixed || "right"'
       :align='tableConfig.operate.align || "center"'
     >
@@ -33,7 +33,7 @@
             placement='top'
             :show-after='500'
           >
-            <el-button v-auth='`${props.auth}:update`' v-blur type='primary' @click='onEdit(scope.row)'>
+            <el-button v-auth='`${auth}:update`' v-blur type='primary' @click='onEdit(scope.row)'>
               <template #icon>
                 <Icon name='el-icon-Edit' />
               </template>
@@ -49,7 +49,7 @@
             <template #reference>
               <div>
                 <el-tooltip :show-after='500' content='删除' placement='top'>
-                  <el-button v-auth='`${props.auth}:delete`' v-blur type='danger'>
+                  <el-button v-auth='`${auth}:delete`' v-blur type='danger'>
                     <template #icon>
                       <Icon name='el-icon-Delete' />
                     </template>
@@ -103,7 +103,7 @@ const props = withDefaults(defineProps<{
   tableConfig: TableConfig
   //如果开启了selection, 也可以使用双向绑定, 更加方便
   selection?: any[]
-  pagination?: object
+  pagination?: unknown
   auth?: string
 }>(), {
   auth: 'none'

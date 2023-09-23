@@ -2,12 +2,12 @@
   <transition name='el-zoom-in-center'>
     <div
       class='menu'
-      :style='`top: ${state.axis.y + 5}px;left: ${state.axis.x - 14}px;width:${props.width}px`'
+      :style='`top: ${state.axis.y + 5}px;left: ${state.axis.x - 14}px;width:${width}px`'
       :key='Math.random()'
       v-show='state.show'
     >
       <div
-        v-for='(item, idx) in props.items'
+        v-for='(item, idx) in items'
         class='menu-item'
         :key='idx'
         :class='item.disabled ? "disabled" : ""'

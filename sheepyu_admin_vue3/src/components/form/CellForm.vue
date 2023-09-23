@@ -1,6 +1,6 @@
 <template>
   <div class='cell'>
-    <div class='cell-text' v-show='!visible' @click='show'>{{ props.modelValue }}</div>
+    <div class='cell-text' v-show='!visible' @click='show'>{{ modelValue }}</div>
     <div v-show='visible'>
       <el-input ref='textRef' @blur='visible = false' v-if='render === "text"' v-model='value' />
       <el-input-number ref='numRef' @blur='visible = false' v-if='render === "number"' v-model='value' />
@@ -12,9 +12,9 @@
         @visible-change='visibleChange'
       >
         <el-option
-          v-for='(item, idx) in props.data'
-          :label='item[props.props.label]'
-          :value='item[props.props.value]'
+          v-for='(item, idx) in data'
+          :label='item[renderProps.label]'
+          :value='item[renderProps.value]'
           :key='idx' />
       </el-select>
     </div>
@@ -31,10 +31,10 @@ const props = withDefaults(defineProps<{
   render?: 'text' | 'select' | 'number'
   //select时渲染的数据
   data?: any[]
-  props?: { label: string, value: string }
+  renderProps?: { label: string, value: string }
 }>(), {
   render: 'text',
-  props: () => ({
+  renderProps: () => ({
     label: 'label',
     value: 'value'
   }),

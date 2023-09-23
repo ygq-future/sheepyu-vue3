@@ -14,7 +14,7 @@
   <el-select
     v-if="render === 'select'"
     v-model='state.value'
-    :clearable='props.clearable'
+    :clearable='clearable'
     filterable
     :disabled='disabled'
     @change='onValueChange'
@@ -128,6 +128,3 @@ onBeforeMount(() => {
 })
 </script>
 
-<style scoped lang='scss'>
-
-</style>

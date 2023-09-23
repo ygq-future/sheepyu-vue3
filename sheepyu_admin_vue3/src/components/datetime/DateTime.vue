@@ -1,13 +1,13 @@
 <template>
   <el-date-picker
     v-model='datetime'
-    :type='props.range ? "datetimerange" : "datetime"'
+    :type='range ? "datetimerange" : "datetime"'
     unlink-panels
     range-separator=' - '
     start-placeholder='开始日期'
     end-placeholder='结束日期'
     value-format='YYYY-MM-DD HH:mm:ss'
-    :shortcuts='props.range ? rangeShortcuts : shortcuts'
+    :shortcuts='range ? rangeShortcuts : shortcuts'
   />
 </template>
 

@@ -37,12 +37,12 @@
 
       <template #buttons='{data}'>
         <el-tooltip
-          v-if='data.type !== MenuTypeEnum.BUTTON'
+          v-if='data?.type !== MenuTypeEnum.BUTTON'
           content='新增'
           placement='top'
           :show-after='500'
         >
-          <el-button v-auth="'system:menu:create'" v-blur type='success' @click='onAdd(data.id)'>
+          <el-button v-auth="'system:menu:create'" v-blur type='success' @click='onAdd(data)'>
             <template #icon>
               <Icon name='el-icon-Plus' />
             </template>
@@ -165,13 +165,18 @@ function onUnfold(value: boolean) {
   tableRef.value.expandAll(value)
 }
 
-function onAdd(parentId?: number) {
-  if (parentId) {
-    state.form.parentId = parentId
+function onAdd(data?: any) {
+  state.popupFormConfig.disabledProps = []
+  if (data && data.id) {
+    state.form.parentId = data.id
+    state.popupFormConfig.disabledProps.push('parentId')
+    if (data.type === MenuTypeEnum.MENU) {
+      state.form.type = MenuTypeEnum.BUTTON
+      state.popupFormConfig.disabledProps.push('type')
+    }
   }
   state.popupFormConfig.title = '新增菜单'
   state.popupFormConfig.isEdit = false
-  state.popupFormConfig.disabledProps = []
   popupFormRef.value.show()
 }
 

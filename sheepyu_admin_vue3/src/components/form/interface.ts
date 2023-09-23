@@ -19,8 +19,9 @@ export interface PopupFormConfig {
   ids?: any[]
   //回调超时时间, 默认5000ms
   timeout?: number
-  //是否为查看模式
-  looked?: boolean
+  //是否为查看模式, 会禁用所有表单
+  looked?: boolean,
+  closeOnClickModal?: boolean
 }
 
 export interface FormItemConfig {
@@ -35,10 +36,12 @@ export interface FormItemConfig {
   dictRender?: DictRender
   //如果render是switch, 或者select, 需要传递数据进行渲染
   data?: any
-  //有些树形渲染的数据需要用到, 配置可自定义
-  props?: { label: string, value: string }
+  //select这些组件, 有些树形渲染的数据需要用到, 配置可自定义
+  //labelVModelKey就是指是否要把select组件(也有可能是其他组件)的label进行双向绑定, 这里就填需要绑定label的key
+  //例如: 'categoryName'
+  props?: { label: string, value: string, labelVModelKey?: string }
   //switch或者select, dict=select时变化调用的函数, 可以解决select联动的问题
-  change?: Function
+  change?: (val: any) => void
   //用于表单校验, 默认为true
   required?: boolean
   //是否开启多选, 用于tree-select和select
@@ -63,4 +66,4 @@ export type FormRender =
   'slider' | 'upload' | 'tree-select' |
   'checkbox' | 'datetime' | 'part-upload' |
   'textarea' | 'tree-select-checkbox' | 'tree-checkbox' |
-  'image-upload'
+  'image-upload' | 'editor'

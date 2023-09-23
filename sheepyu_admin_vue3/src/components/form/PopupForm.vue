@@ -2,10 +2,10 @@
   <el-dialog
     append-to-body
     v-model='state.dialogVisible'
-    :style='{maxWidth: `${props.config.maxWidth ?? 700}px`, minWidth: "370px"}'
-    :title='props.config.title'
-    :width='props.config.width'
-    :close-on-click-modal='false'
+    :style='{maxWidth: `${config.maxWidth ?? 700}px`, minWidth: "370px"}'
+    :title='config.title'
+    :width="config.width || '50%'"
+    :close-on-click-modal='config.closeOnClickModal ?? true'
     @close='hide'
   >
 
@@ -16,14 +16,14 @@
         ref='formRef'
         :model='form'
         :rules='state.rules'
-        :label-width='props.config.labelWidth ?? 80'
+        :label-width='config.labelWidth ?? 80'
       >
-        <template v-for='config in props.config.formItemConfigs'>
+        <template v-for='itemConfig in config.formItemConfigs'>
           <FormItemRender
-            v-if='!props.config.hideProps || !props.config.hideProps.includes(config.prop)'
+            v-if='!config.hideProps || !config.hideProps.includes(itemConfig.prop)'
             :form='form'
-            :config='config'
-            :disabled='(props.config.disabledProps && props.config.disabledProps.includes(config.prop)) || config.disabled || props.config.looked'
+            :config='itemConfig'
+            :disabled='(config.disabledProps && config.disabledProps.includes(itemConfig.prop)) || itemConfig.disabled || config.looked'
           />
         </template>
       </el-form>
@@ -32,8 +32,8 @@
     <template #footer>
       <span class='dialog-footer'>
         <el-button :disabled='state.formLoading' @click='hide'>取消</el-button>
-        <el-button v-if='!props.config.looked' :disabled='state.formLoading' type='primary' @click='onSubmitAndNext'>
-            {{ !props.config.isEdit || state.isLastEdit ? '确定' : '保存并编辑下一个' }}
+        <el-button v-if='!config.looked' :disabled='state.formLoading' type='primary' @click='onSubmitAndNext'>
+            {{ !config.isEdit || state.isLastEdit ? '确定' : '保存并编辑下一个' }}
         </el-button>
       </span>
     </template>
@@ -136,6 +136,3 @@ onBeforeMount(() => {
 })
 </script>
 
-<style scoped lang='scss'>
-
-</style>

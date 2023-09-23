@@ -13,6 +13,4 @@ setTimeout(() => {
 }, 1000)
 </script>
 
-<style scoped lang='scss'>
 
-</style>

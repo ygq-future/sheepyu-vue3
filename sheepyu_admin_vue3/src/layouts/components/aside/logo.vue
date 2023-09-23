@@ -55,5 +55,4 @@ const menuCollapse = () => {
     cursor: pointer;
   }
 }
-
 </style>
