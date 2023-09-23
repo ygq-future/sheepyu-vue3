@@ -10,8 +10,8 @@
       </el-sub-menu>
     </template>
     <template v-else>
-      <el-menu-item :index='menu.meta.fullpath' :key='menu.meta.fullpath' @click='collapseMenu'>
-        <Icon :name='menu.meta?.icon ? menu.meta?.icon : config.layout.asideDefaultIcon' />
+      <el-menu-item :index='menu.meta?.fullpath' :key='menu.meta?.fullpath' @click='collapseMenu'>
+        <Icon :name='menu.meta?.icon ? menu.meta.icon : config.layout.asideDefaultIcon' />
         <span>{{ menu.meta?.title }}</span>
       </el-menu-item>
     </template>

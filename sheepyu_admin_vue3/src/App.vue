@@ -19,6 +19,13 @@ html.light {
   background-color: #f5f5f5;
 }
 
+html.dark {
+  --w-e-textarea-bg-color: #333;
+  --w-e-textarea-color: #fff;
+  --w-e-toolbar-color: #fff !important;
+  --w-e-toolbar-bg-color: #333 !important;
+}
+
 .default-main {
   margin: 16px;
 }
