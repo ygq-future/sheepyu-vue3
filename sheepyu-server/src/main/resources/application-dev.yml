@@ -30,7 +30,7 @@ sheepyu:
     config:
       LOCAL:
         endpoint: http://localhost:18080
-        path: F:/upload
+        path: E:/upload
 logging:
   level:
     top.sheepyu: debug

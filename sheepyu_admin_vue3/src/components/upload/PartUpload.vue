@@ -20,15 +20,14 @@
         </el-form-item>
         <el-button type='danger' @click='cancelUpload'>取消上传</el-button>
       </div>
-      <el-input v-model='url' style='margin-top: 5px' placeholder='文件url' />
+      <el-input disabled v-model='url' style='margin-top: 5px' placeholder='文件url' />
     </template>
   </el-upload>
 </template>
 
 <script setup lang='ts'>
 import type { UploadProps } from 'element-plus'
-import { ElLoading, ElNotification } from 'element-plus'
-import Md5Worker from '../../util/worker/md5Worker.ts?worker'
+import { ElNotification } from 'element-plus'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
 import {
   abortPart,
@@ -118,29 +117,11 @@ function createPartFile(file: File, index: number = 0): Array<UploadPartData> {
   return partList
 }
 
-function computeMd5(file: File): Promise<string> {
-  return new Promise(resolve => {
-    let md5 = md5Store.findCache(file.name, file.lastModified)
-    if (md5) {
-      return resolve(md5)
-    }
-    //使用worker线程计算md5值
-    const worker = new Md5Worker()
-    const instance = ElLoading.service({ text: '正在计算文件...', fullscreen: true })
-    worker.postMessage(file)
-    worker.onmessage = (e) => {
-      instance.close()
-      md5Store.addCache(file.name, file.lastModified, md5 = e.data)
-      resolve(md5)
-    }
-  })
-}
-
 const httpRequest: UploadProps['httpRequest'] = (options) => {
   return new Promise(async (resolve) => {
     const file = options.file
     //计算md5
-    const md5 = await computeMd5(file)
+    const md5 = await md5Store.computeMd5(file)
     //查看是否有这个文件
     const { data } = await checkMd5(md5)
     //如果没有这个文件

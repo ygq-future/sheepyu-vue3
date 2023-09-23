@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import { IdEnum } from '@/stores/storeId'
 import { StorePersistKey } from '@/stores/storePersistKey'
+import Md5Worker from '@/util/md5Worker?worker'
+import { ElLoading } from 'element-plus'
 
 interface FileCache {
   name: string
@@ -35,7 +37,25 @@ export const useMd5Worker = defineStore(IdEnum.MD5_WORKER, () => {
     return ''
   }
 
-  return { md5Caches, addCache, findCache }
+  function computeMd5(file: File): Promise<string> {
+    return new Promise(resolve => {
+      let md5 = findCache(file.name, file.lastModified)
+      if (md5) {
+        return resolve(md5)
+      }
+      //使用worker线程计算md5值
+      const worker = new Md5Worker()
+      const instance = ElLoading.service({ text: '正在计算文件...', fullscreen: true })
+      worker.postMessage(file)
+      worker.onmessage = (e) => {
+        instance.close()
+        addCache(file.name, file.lastModified, md5 = e.data)
+        resolve(md5)
+      }
+    })
+  }
+
+  return { md5Caches, addCache, findCache, computeMd5 }
 }, {
   persist: {
     key: StorePersistKey.MD5_WORKER_STORE_KEY

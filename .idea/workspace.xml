@@ -5,9 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/aside/aside.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/aside/aside.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/navTabs.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/layouts/components/navbar/navTabs.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/tabs/tabs.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/tabs/tabs.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/ImageUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/ImageUpload.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/PartUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/PartUpload.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/Upload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/Upload.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/worker/md5Worker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/worker/md5Worker.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/worker/md5Worker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/md5Worker.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,11 +118,11 @@
       <recent name="E:\other project\sheepyu\sheepyu-module-system\sheepyu-module-system-biz\src\main\resources\mapper\dict" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Project\other project\sheepyu\sheepyu_admin_vue3\src\util" />
       <recent name="E:\other project\sheepyu\sheepyu-module-system\sheepyu-module-system-biz\src\main\resources\mapper\demo" />
       <recent name="E:\other project\sheepyu\sheepyu-module-system\sheepyu-module-system-biz\src\main\resources\codegen\java\common" />
       <recent name="E:\other project\sheepyu\sheepyu_admin_vue3\src\enums" />
       <recent name="E:\other project\sheepyu\sheepyu_admin_vue3\src\views" />
-      <recent name="E:\other project\sheepyu\sheepyu-server\src\main\resources" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="top.sheepyu.module.system.convert.job" />
@@ -314,7 +316,7 @@
       <workItem from="1695195993828" duration="89000" />
       <workItem from="1695291398912" duration="351000" />
       <workItem from="1695439794713" duration="36000" />
-      <workItem from="1695439837795" duration="3330000" />
+      <workItem from="1695439837795" duration="5552000" />
     </task>
     <servers />
   </component>
