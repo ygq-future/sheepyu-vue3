@@ -5,7 +5,6 @@ import { useUser } from '@/stores/user/user'
 import { refreshToken } from '@/api/system/user'
 import router from '@/router/router'
 import { download } from '@/util/common'
-//@ts-ignore
 import qs from 'qs'
 
 export interface Result<T = any> {
@@ -52,9 +51,14 @@ export class Request {
     this.service.interceptors.request.use((config): any => {
       const user = useUser()
       const token = user.get().accessToken
+      let contentType = config.headers['Content-Type']
+      if (!contentType) {
+        contentType = 'application/json;charset=UTF-8'
+      }
       return {
         ...config,
         headers: {
+          'Content-Type': contentType,
           'Authorization': token
         }
       }
@@ -126,13 +130,6 @@ export class Request {
     return axios.CancelToken.source()
   }
 
-  contentType(config?: AxiosRequestConfig): AxiosRequestConfig {
-    return {
-      ...config,
-      headers: { 'Content-Type': 'application/json;charset=utf8' }
-    }
-  }
-
   get<T>(url: string, config?: AxiosRequestConfig): Promise<Result<T>> {
     return this.service.get(url, {
       ...config,
@@ -145,15 +142,15 @@ export class Request {
   }
 
   post<T>(url: string, data?: object, config?: AxiosRequestConfig): Promise<Result<T>> {
-    return this.service.post(url, data, this.contentType(config))
+    return this.service.post(url, data, config)
   }
 
   put<T>(url: string, data?: object, config?: AxiosRequestConfig): Promise<Result<T>> {
-    return this.service.put(url, data, this.contentType(config))
+    return this.service.put(url, data, config)
   }
 
   patch<T>(url: string, data?: object, config?: AxiosRequestConfig): Promise<Result<T>> {
-    return this.service.patch(url, data, this.contentType(config))
+    return this.service.patch(url, data, config)
   }
 
   delete<T>(url: string, config?: AxiosRequestConfig): Promise<Result<T>> {
