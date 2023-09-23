@@ -69,7 +69,7 @@ export interface SystemUserStatisticsVo {
   total: number
   weekIncrement: Array<number>
   weekAccess: Array<number>
-  nearUserList: Array<SystemMenuRespVo>
+  nearUserList: Array<SystemUserRespVo>
 }
 
 export interface SystemUpdatePassVo {

@@ -5,11 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/ImageUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/ImageUpload.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/PartUpload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/PartUpload.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/Upload.vue" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/upload/Upload.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/worker/md5Worker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/stores/worker/md5Worker.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/worker/md5Worker.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/util/md5Worker.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/components/editor/Editor.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/api/system/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -316,7 +316,7 @@
       <workItem from="1695195993828" duration="89000" />
       <workItem from="1695291398912" duration="351000" />
       <workItem from="1695439794713" duration="36000" />
-      <workItem from="1695439837795" duration="5552000" />
+      <workItem from="1695439837795" duration="6989000" />
     </task>
     <servers />
   </component>

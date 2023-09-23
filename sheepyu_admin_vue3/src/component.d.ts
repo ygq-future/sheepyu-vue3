@@ -12,6 +12,7 @@ declare module '@vue/runtime-core' {
     ComSearch: typeof import('./components/search/ComSearch.vue')['default']
     DateTime: typeof import('./components/datetime/DateTime.vue')['default']
     Dict: typeof import('./components/dict/Dict.vue')['default']
+    Editor: typeof import('./components/editor/Editor.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']

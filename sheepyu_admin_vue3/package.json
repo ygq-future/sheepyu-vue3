@@ -13,6 +13,8 @@
     "type-check": "vue-tsc --noEmit"
   },
   "dependencies": {
+    "@wangeditor/editor": "^5.1.23",
+    "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^1.2.4",
     "countup.js": "^2.6.0",
     "echarts": "^5.4.1",
