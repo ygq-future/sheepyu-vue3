@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.sheepyu.module.system.dao.log.SystemAccessLogMapper">
-    <select id="countByWeek" resultType="java.lang.Integer">
-        SELECT IFNULL(sac.count, 0) count
+    <select id="countByWeek" resultType="java.lang.Long">
+        SELECT IFNULL(sac.count, 0) as count
         FROM (SELECT @startDay := DATE_FORMAT(#{beginWeek}, '%Y-%m-%d') today
               union all
               SELECT DATE_ADD(@startDay, interval 1 day)

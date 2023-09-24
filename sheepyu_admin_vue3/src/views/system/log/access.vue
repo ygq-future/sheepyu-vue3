@@ -40,6 +40,7 @@ import {
   pageAccessLogApi
 } from '@/api/system/log'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

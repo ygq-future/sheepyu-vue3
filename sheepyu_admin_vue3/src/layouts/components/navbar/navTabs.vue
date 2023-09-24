@@ -10,7 +10,7 @@
           :key='item.path'
         >
           <span>{{ item.meta.title }}</span>
-          <Icon
+          <MyIcon
             v-show='tabs.state.tabsView.length > 1'
             name='el-icon-Close'
             :size='12'

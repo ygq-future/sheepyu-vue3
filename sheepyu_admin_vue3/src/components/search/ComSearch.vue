@@ -77,10 +77,12 @@
 <script setup lang='ts'>
 import type { ComSearchConfig, ComSearchConfigItem, SelectOptionItem } from '@/components/search/interface'
 import { ElForm } from 'element-plus'
+import NumberRange from '@/components/form/NumberRange.vue'
+import DateTime from '@/components/datetime/DateTime.vue'
 
 const props = defineProps<{
   comSearchConfig: ComSearchConfig
-  form: object
+  form: Partial<any>
 }>()
 
 const emits = defineEmits<{

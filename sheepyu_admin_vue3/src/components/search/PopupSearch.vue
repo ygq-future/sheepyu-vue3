@@ -38,6 +38,7 @@
 
 <script setup lang='ts'>
 import type { PopupSearchConfig } from '@/components/search/interface'
+import TableHeader from '@/components/table/header/TableHeader.vue'
 
 const props = defineProps<{
   config: PopupSearchConfig

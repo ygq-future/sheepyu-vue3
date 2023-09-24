@@ -20,5 +20,5 @@ public interface SystemAccessLogService extends IServiceX<SystemAccessLog> {
 
     PageResult<SystemAccessLog> pageAccessLog(@Valid SystemAccessLogQueryVo queryVo);
 
-    List<Integer> countByWeek(Date beginWeek, Date endWeek);
+    List<Long> countByWeek(Date beginWeek, Date endWeek);
 }

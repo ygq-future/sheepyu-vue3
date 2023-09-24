@@ -24,7 +24,7 @@
         <el-tooltip :show-after='500' content='导入代码生成表' placement='top'>
           <div class='button-item' v-auth="'system:codegen:create'">
             <el-button v-blur type='primary' @click='popupSearchRef.show()'>
-              <Icon name='fa fa-sign-in' />
+              <MyIcon name='fa fa-sign-in' />
               <span class='button-text'>导入生成表</span>
             </el-button>
           </div>
@@ -48,7 +48,7 @@
         <el-tooltip content='预览' placement='top' :show-after='500'>
           <el-button v-auth="'system:codegen:generate'" v-blur type='warning' @click='previewCodegen(scope.data.id)'>
             <template #icon>
-              <Icon name='el-icon-View' />
+              <MyIcon name='el-icon-View' />
             </template>
           </el-button>
         </el-tooltip>
@@ -56,7 +56,7 @@
         <el-tooltip content='生成代码' placement='top' :show-after='500'>
           <el-button v-auth="'system:codegen:generate'" v-blur type='success' @click='codegenGenerate(scope.data.id)'>
             <template #icon>
-              <Icon name='fa fa-file-code-o' />
+              <MyIcon name='fa fa-file-code-o' />
             </template>
           </el-button>
         </el-tooltip>
@@ -64,7 +64,7 @@
         <el-tooltip content='同步' placement='top' :show-after='500'>
           <el-button v-auth="'system:codegen:create'" v-blur type='info' @click='syncCodegen(scope.data.id)'>
             <template #icon>
-              <Icon name='el-icon-Refresh' />
+              <MyIcon name='el-icon-Refresh' />
             </template>
           </el-button>
         </el-tooltip>
@@ -129,6 +129,7 @@ import java from 'highlight.js/lib/languages/java'
 import xml from 'highlight.js/lib/languages/java'
 import vue from 'highlight.js/lib/languages/java'
 import ts from 'highlight.js/lib/languages/java'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 highlight.registerLanguage('java', java)
 highlight.registerLanguage('xml', xml)

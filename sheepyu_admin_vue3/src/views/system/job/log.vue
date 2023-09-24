@@ -38,6 +38,7 @@ import {
   pageJobLogApi
 } from '@/api/system/job'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const route = useRoute()
 

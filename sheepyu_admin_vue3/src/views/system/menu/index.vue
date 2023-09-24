@@ -44,7 +44,7 @@
         >
           <el-button v-auth="'system:menu:create'" v-blur type='success' @click='onAdd(data)'>
             <template #icon>
-              <Icon name='el-icon-Plus' />
+              <MyIcon name='el-icon-Plus' />
             </template>
           </el-button>
         </el-tooltip>
@@ -76,6 +76,7 @@ import type { PopupFormConfig } from '@/components/form/interface'
 import { useTabs } from '@/stores/tabs/tabs'
 import { MenuTypeEnum } from '@/enums/MenuTypeEnum'
 import { ElNotification } from 'element-plus'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const tabs = useTabs()
 const tableRef = ref()

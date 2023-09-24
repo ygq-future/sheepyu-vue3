@@ -32,7 +32,7 @@
         <el-tooltip content='查看详情' placement='top' :show-after='500'>
           <el-button v-auth="'system:log-api:query'" v-blur type='primary' @click='onDetail(scope.data)'>
             <template #icon>
-              <Icon name='fa fa-info-circle' />
+              <MyIcon name='fa fa-info-circle' />
             </template>
           </el-button>
         </el-tooltip>
@@ -58,6 +58,8 @@ import {
 } from '@/api/system/log'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
+import ComSearch from '@/components/search/ComSearch.vue'
+import PopupForm from '@/components/form/PopupForm.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

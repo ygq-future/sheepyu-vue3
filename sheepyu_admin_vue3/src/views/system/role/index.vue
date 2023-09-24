@@ -41,7 +41,7 @@
         <el-tooltip content='分配菜单' placement='top' :show-after='500'>
           <el-button v-auth="'system:menu:assign'" v-blur type='warning' @click='onAssignMenu(scope.data)'>
             <template #icon>
-              <Icon name='fa fa-sitemap' />
+              <MyIcon name='fa fa-sitemap' />
             </template>
           </el-button>
         </el-tooltip>
@@ -87,6 +87,7 @@ import { menuList } from '@/api/system/menu'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

@@ -63,8 +63,8 @@ import {
   pagePostApi,
   updatePostApi
 } from '@/api/system/post'
-import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

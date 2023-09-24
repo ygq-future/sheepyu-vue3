@@ -13,7 +13,7 @@
         :class='item.disabled ? "disabled" : ""'
         @click='onItemClick(item)'
       >
-        <Icon :size='14' :name="item.icon ? item.icon : 'el-icon-Plus'" />
+        <MyIcon :size='14' :name="item.icon ? item.icon : 'el-icon-Plus'" />
         <span>{{ item.label }}</span>
       </div>
     </div>

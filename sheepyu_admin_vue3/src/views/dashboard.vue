@@ -27,11 +27,11 @@
           <span class='card-title'>今日会员注册量</span>
           <div class='card-content'>
             <div class='card-content-main'>
-              <Icon color='#8595F4' name='fa fa-line-chart' />
+              <MyIcon color='#8595F4' name='fa fa-line-chart' />
               <span id='today-user-register'>{{ state.statisticsUser?.todayIncrement }}</span>
             </div>
             <span class='card-content-tip'>
-              <span v-if='state.statisticsUser?.todayPercent >= 0'>+</span>
+              <span v-if='state.statisticsUser?.todayPercent'>+</span>
               {{ state.statisticsUser?.todayPercent }}%
             </span>
           </div>
@@ -42,11 +42,11 @@
           <span class='card-title'>今日附件上传量</span>
           <div class='card-content'>
             <div class='card-content-main'>
-              <Icon color='#8595F4' name='fa fa-line-chart' />
+              <MyIcon color='#8595F4' name='fa fa-line-chart' />
               <span id='today-file-upload'>{{ state.statisticsFile?.todayIncrement }}</span>
             </div>
             <span class='card-content-tip'>
-              <span v-if='state.statisticsFile?.todayPercent >= 0'>+</span>
+              <span v-if='state.statisticsFile?.todayPercent'>+</span>
               {{ state.statisticsFile?.todayPercent }}%
             </span>
           </div>
@@ -57,7 +57,7 @@
           <span class='card-title'>会员总数量</span>
           <div class='card-content'>
             <div class='card-content-main'>
-              <Icon color='#F48595' name='fa fa-users' />
+              <MyIcon color='#F48595' name='fa fa-users' />
               <span id='user-register'>{{ state.statisticsUser?.total }}</span>
             </div>
             <span class='card-content-tip'>+{{ state.statisticsUser?.todayIncrement }}</span>
@@ -69,7 +69,7 @@
           <span class='card-title'>附件上传总数量</span>
           <div class='card-content'>
             <div class='card-content-main'>
-              <Icon color='#AD85F4' name='fa fa-file-text' />
+              <MyIcon color='#AD85F4' name='fa fa-file-text' />
               <span id='file-upload'>{{ state.statisticsFile?.total }}</span>
             </div>
             <span class='card-content-tip'>+{{ state.statisticsFile?.todayIncrement }}</span>
@@ -108,7 +108,7 @@
                   <span class='nickname'>{{ item.nickname }}</span>
                   <span>注册时间: {{ item.createTime }}</span>
                 </div>
-                <Icon name='el-icon-ArrowRightBold' :size='14' color='#8598f6' />
+                <MyIcon name='el-icon-ArrowRightBold' :size='14' color='#8598f6' />
               </div>
             </el-scrollbar>
           </div>

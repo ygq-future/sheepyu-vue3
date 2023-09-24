@@ -89,8 +89,8 @@ const rules: FormRules = {
   password: [{ required: true, message: '密码不能为空', trigger: 'blur' }]
 }
 
-function submit(formRef: InstanceType<typeof ElForm>) {
-  formRef.validate(isValid => {
+function submit(formRef?: InstanceType<typeof ElForm>) {
+  formRef?.validate(isValid => {
     if (!isValid) {
       return
     }

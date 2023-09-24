@@ -39,7 +39,7 @@
         <el-tooltip content='执行一次' placement='top' :show-after='500'>
           <el-button v-auth="'system:job:update'" v-blur type='warning' @click='execute(scope.data.id)'>
             <template #icon>
-              <Icon name='fa fa-flash' />
+              <MyIcon name='fa fa-flash' />
             </template>
           </el-button>
         </el-tooltip>
@@ -52,7 +52,7 @@
             @click='updateStatus(scope.data.id)'
           >
             <template #icon>
-              <Icon name='fa fa-stop-circle' />
+              <MyIcon name='fa fa-stop-circle' />
             </template>
           </el-button>
         </el-tooltip>
@@ -64,7 +64,7 @@
             @click='updateStatus(scope.data.id)'
           >
             <template #icon>
-              <Icon name='fa fa-play-circle' />
+              <MyIcon name='fa fa-play-circle' />
             </template>
           </el-button>
         </el-tooltip>
@@ -97,6 +97,7 @@ import {
 } from '@/api/system/job'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

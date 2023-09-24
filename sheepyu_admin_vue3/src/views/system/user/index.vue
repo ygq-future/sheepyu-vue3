@@ -43,7 +43,7 @@
             @click='onBatchEdit([scope.data.id])'
           >
             <template #icon>
-              <Icon name='el-icon-Edit' />
+              <MyIcon name='el-icon-Edit' />
             </template>
           </el-button>
         </el-tooltip>
@@ -59,7 +59,7 @@
               <el-tooltip :show-after='500' content='删除' placement='top'>
                 <el-button v-auth='`system:user:delete`' v-blur type='danger'>
                   <template #icon>
-                    <Icon name='el-icon-Delete' />
+                    <MyIcon name='el-icon-Delete' />
                   </template>
                 </el-button>
               </el-tooltip>
@@ -78,7 +78,7 @@
               <el-tooltip content='重置密码' placement='top' :show-after='500'>
                 <el-button v-auth="'system:user:reset-password'" v-blur type='warning'>
                   <template #icon>
-                    <Icon name='el-icon-RefreshRight' />
+                    <MyIcon name='el-icon-RefreshRight' />
                   </template>
                 </el-button>
               </el-tooltip>
@@ -89,7 +89,7 @@
         <el-tooltip v-if='scope.data.type === 2' content='分配角色' placement='top' :show-after='500'>
           <el-button v-auth="'system:role:assign'" v-blur type='success' @click='onAssignRole(scope.data)'>
             <template #icon>
-              <Icon name='fa fa-odnoklassniki' />
+              <MyIcon name='fa fa-odnoklassniki' />
             </template>
           </el-button>
         </el-tooltip>
@@ -138,6 +138,7 @@ import { listRoleApi } from '@/api/system/role'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

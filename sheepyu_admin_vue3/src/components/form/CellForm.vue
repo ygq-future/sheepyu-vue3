@@ -3,7 +3,7 @@
     <div class='cell-text' v-show='!visible' @click='show'>{{ modelValue }}</div>
     <div v-show='visible'>
       <el-input ref='textRef' @blur='visible = false' v-if='render === "text"' v-model='value' />
-      <el-input-number ref='numRef' @blur='visible = false' v-if='render === "number"' v-model='value' />
+      <el-input-number ref='numRef' @blur='visible = false' v-if='render === "number"' v-model='numberValue' />
       <el-select
         ref='selectRef'
         v-if='render === "select"'
@@ -44,6 +44,15 @@ const props = withDefaults(defineProps<{
 const emits = defineEmits<{
   (e: 'update:modelValue', modelValue: string | number): void
 }>()
+
+const numberValue: WritableComputedRef<number> = computed({
+  set(value) {
+    emits('update:modelValue', value)
+  },
+  get() {
+    return props.modelValue as number
+  }
+})
 
 const value: WritableComputedRef<string | number> = computed({
   set(value) {

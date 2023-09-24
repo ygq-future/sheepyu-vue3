@@ -254,17 +254,19 @@ public class SystemUserBiz {
                 .buildQuery()
                 .between(SystemUser::getCreateTime, DateUtil.beginOfDay(lastDay), DateUtil.endOfDay(lastDay))
         );
-        int todayPercent = (int) ((todayIncrement - lastDayIncrement) / (lastDayIncrement == 0 ? 1 : lastDayIncrement)) * 100;
+        long difference = (todayIncrement - lastDayIncrement);
+        if (difference < 0L) difference = 0L;
+        int todayPercent = (int) (difference / (lastDayIncrement == 0 ? 1 : lastDayIncrement)) * 100;
         vo.setTotal(total);
-        vo.setTodayIncrement(Long.valueOf(todayIncrement).intValue());
+        vo.setTodayIncrement(todayIncrement);
         vo.setTodayPercent(todayPercent);
         //获取上周开始时间和结束时间
         Date beginWeek = DateUtil.beginOfWeek(DateUtil.lastWeek());
         Date endWeek = DateUtil.endOfWeek(DateUtil.lastWeek());
         //获取上周注册量统计
-        List<Integer> weekIncrement = systemUserService.countByWeek(beginWeek, endWeek);
+        List<Long> weekIncrement = systemUserService.countByWeek(beginWeek, endWeek);
         //获取上周访问量
-        List<Integer> weekAccess = systemAccessLogService.countByWeek(beginWeek, endWeek);
+        List<Long> weekAccess = systemAccessLogService.countByWeek(beginWeek, endWeek);
         vo.setWeekIncrement(weekIncrement);
         vo.setWeekAccess(weekAccess);
         //获取最近注册的5个用户

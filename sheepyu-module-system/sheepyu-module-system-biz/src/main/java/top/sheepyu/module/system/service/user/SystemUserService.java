@@ -60,5 +60,5 @@ public interface SystemUserService extends IServiceX<SystemUser> {
 
     void updatePassword(Long userId, @NotBlank(message = "密码不能为空") String oldPass, @NotBlank(message = "密码不能为空") String newPass);
 
-    List<Integer> countByWeek(Date beginWeek, Date endWeek);
+    List<Long> countByWeek(Date beginWeek, Date endWeek);
 }

@@ -13,5 +13,5 @@ import java.util.List;
 public interface SystemUserMapper extends BaseMapper<SystemUser> {
     void removeByUsernameDeleted(@Param("username") String username);
 
-    List<Integer> countByWeek(@Param("beginWeek") Date beginWeek, @Param("endWeek") Date endWeek);
+    List<Long> countByWeek(@Param("beginWeek") Date beginWeek, @Param("endWeek") Date endWeek);
 }

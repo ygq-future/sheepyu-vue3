@@ -37,9 +37,9 @@
 
       <template #buttons='{data}'>
         <el-tooltip content='新增' placement='top' :show-after='500'>
-          <el-button v-auth="'system:dept:create'" v-blur type='success' @click='onAdd(data.id)'>
+          <el-button v-auth="'system:dept:create'" v-blur type='success' @click='onAdd(data?.id)'>
             <template #icon>
-              <Icon name='el-icon-Plus' />
+              <MyIcon name='el-icon-Plus' />
             </template>
           </el-button>
         </el-tooltip>
@@ -72,6 +72,7 @@ import {
   updateDeptApi
 } from '@/api/system/dept'
 import type { PopupFormConfig } from '@/components/form/interface'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

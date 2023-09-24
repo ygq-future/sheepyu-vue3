@@ -2,21 +2,21 @@
   <div :class="['menus', `menus-${config.layout.layoutMode}`]">
     <el-tooltip content='首页' effect='light' :offset='0' :show-arrow='false' :show-after='600' placement='bottom'>
       <div class='menu-item' @click='toHome'>
-        <Icon name='el-icon-Monitor' :color='topTextColor'></Icon>
+        <MyIcon name='el-icon-Monitor' :color='topTextColor' />
       </div>
     </el-tooltip>
 
     <div class='menu-item' @click='onScreenFull'>
-      <Icon name='el-icon-FullScreen' :color='topTextColor'></Icon>
+      <MyIcon name='el-icon-FullScreen' :color='topTextColor' />
     </div>
 
     <div class='menu-item'>
-      <Icon v-if='config.layout.colorModeIndex === 0'
-            name='fa fa-moon-o'
-            title='暗黑模式'
-            @click='changeColorMode(1)'
+      <MyIcon v-if='config.layout.colorModeIndex === 0'
+              name='fa fa-moon-o'
+              title='暗黑模式'
+              @click='changeColorMode(1)'
       />
-      <Icon v-else name='fa fa-sun-o' title='明亮模式' @click='changeColorMode(0)' />
+      <MyIcon v-else name='fa fa-sun-o' title='明亮模式' @click='changeColorMode(0)' />
     </div>
 
     <div class='menu-item'>
@@ -48,7 +48,7 @@
     </div>
 
     <div class='menu-item' @click='onShowConfig'>
-      <Icon name='el-icon-Setting' :color='topTextColor' />
+      <MyIcon name='el-icon-Setting' :color='topTextColor' />
     </div>
 
     <Config />

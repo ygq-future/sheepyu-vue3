@@ -11,5 +11,5 @@ import java.util.List;
  * @date 2023-01-20 16:55
  **/
 public interface SystemAccessLogMapper extends BaseMapper<SystemAccessLog> {
-    List<Integer> countByWeek(@Param("beginWeek") Date beginWeek, @Param("endWeek") Date endWeek);
+    List<Long> countByWeek(@Param("beginWeek") Date beginWeek, @Param("endWeek") Date endWeek);
 }

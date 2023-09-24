@@ -6,7 +6,7 @@
     :before-upload='beforeUpload'
   >
     <img v-if='modelValue' :src='modelValue' class='avatar' alt='' />
-    <Icon v-else name='el-icon-Plus' />
+    <MyIcon v-else name='el-icon-Plus' />
   </el-upload>
 </template>
 

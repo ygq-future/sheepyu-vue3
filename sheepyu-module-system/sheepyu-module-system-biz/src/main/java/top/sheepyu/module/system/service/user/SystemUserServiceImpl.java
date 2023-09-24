@@ -246,7 +246,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     }
 
     @Override
-    public List<Integer> countByWeek(Date beginWeek, Date endWeek) {
+    public List<Long> countByWeek(Date beginWeek, Date endWeek) {
         return baseMapper.countByWeek(beginWeek, endWeek);
     }
 

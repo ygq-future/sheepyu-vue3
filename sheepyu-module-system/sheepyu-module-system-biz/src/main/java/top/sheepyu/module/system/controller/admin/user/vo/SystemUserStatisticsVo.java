@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class SystemUserStatisticsVo {
     @ApiModelProperty("今日注册人数")
-    private Integer todayIncrement;
+    private Long todayIncrement;
 
     @ApiModelProperty("今日较昨日注册人数增加百分比")
     private Integer todayPercent;
@@ -23,10 +23,10 @@ public class SystemUserStatisticsVo {
     private Long total;
 
     @ApiModelProperty("周注册统计")
-    private List<Integer> weekIncrement;
+    private List<Long> weekIncrement;
 
     @ApiModelProperty("周访问统计")
-    private List<Integer> weekAccess;
+    private List<Long> weekAccess;
 
     @ApiModelProperty("最近注册的5个用户")
     private List<SystemUserRespVo> nearUserList;

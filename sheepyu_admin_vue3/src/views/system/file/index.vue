@@ -22,7 +22,7 @@
       <template #buttons>
         <el-tooltip :show-after='500' content='上传文件' placement='top'>
           <el-button v-auth="'system:file:create'" v-blur type='primary' @click='onCreate'>
-            <Icon name='el-icon-UploadFilled' />
+            <MyIcon name='el-icon-UploadFilled' />
             <span class='button-text'>上传文件</span>
           </el-button>
         </el-tooltip>
@@ -60,6 +60,8 @@ import { deleteFileApi, pageFileApi } from '@/api/system/file'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import { onMounted, reactive, ref, toRaw } from 'vue'
 import type { PopupFormConfig } from '@/components/form/interface'
+import ComSearch from '@/components/search/ComSearch.vue'
+import PopupForm from '@/components/form/PopupForm.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

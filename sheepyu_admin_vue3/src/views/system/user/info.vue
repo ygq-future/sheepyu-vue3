@@ -11,31 +11,31 @@
               <ImageUpload v-model='state.user.avatar' width='150px' />
             </div>
             <div class='content-item'>
-              <span><Icon name='fa fa-user' />用户名:</span>
+              <span><MyIcon name='fa fa-user' />用户名:</span>
               <span>{{ state.user.username }}</span>
             </div>
             <div class='content-item'>
-              <span><Icon name='el-icon-Coordinate' />昵称:</span>
+              <span><MyIcon name='el-icon-Coordinate' />昵称:</span>
               <span>{{ state.user.nickname }}</span>
             </div>
             <div class='content-item'>
-              <span><Icon name='fa fa-phone' />电话:</span>
+              <span><MyIcon name='fa fa-phone' />电话:</span>
               <span>{{ state.user.mobile }}</span>
             </div>
             <div class='content-item'>
-              <span><Icon name='fa fa-envelope-o' />邮箱:</span>
+              <span><MyIcon name='fa fa-envelope-o' />邮箱:</span>
               <span>{{ state.user.email }}</span>
             </div>
             <div class='content-item'>
-              <span><Icon name='fa fa-sitemap' />部门:</span>
+              <span><MyIcon name='fa fa-sitemap' />部门:</span>
               <span>{{ state.user.deptName }}</span>
             </div>
             <div class='content-item'>
-              <span><Icon name='fa fa-sitemap' />职位:</span>
+              <span><MyIcon name='fa fa-sitemap' />职位:</span>
               <span>{{ state.user.postNames }}</span>
             </div>
             <div class='content-item'>
-              <span><Icon name='fa fa-calendar-plus-o' />注册日期:</span>
+              <span><MyIcon name='fa fa-calendar-plus-o' />注册日期:</span>
               <span>{{ state.user.createTime }}</span>
             </div>
           </div>
@@ -101,6 +101,7 @@ import type { SystemUserRespVo } from '@/api/system/user'
 import type { FormRules } from 'element-plus'
 import { ElForm, ElNotification } from 'element-plus'
 import { useUser } from '@/stores/user/user'
+import ImageUpload from '@/components/upload/ImageUpload.vue'
 
 const instance = getCurrentInstance()
 const passFormRef = ref<InstanceType<typeof ElForm>>()

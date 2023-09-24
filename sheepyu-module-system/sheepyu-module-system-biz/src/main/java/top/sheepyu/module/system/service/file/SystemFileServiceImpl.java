@@ -202,9 +202,11 @@ public class SystemFileServiceImpl extends ServiceImplX<SystemFileMapper, System
         //获取昨天上传数量
         long lastDayIncrement = count(buildQuery()
                 .between(SystemFile::getCreateTime, DateUtil.beginOfDay(lastDay), DateUtil.endOfDay(lastDay)));
-        int todayPercent = (int) ((todayIncrement - lastDayIncrement) / (lastDayIncrement == 0 ? 1 : lastDayIncrement)) * 100;
+        long difference = (todayIncrement - lastDayIncrement);
+        if (difference < 0L) difference = 0L;
+        int todayPercent = (int) (difference / (lastDayIncrement == 0 ? 1 : lastDayIncrement)) * 100;
         vo.setTotal(total);
-        vo.setTodayIncrement(Long.valueOf(todayIncrement).intValue());
+        vo.setTodayIncrement(todayIncrement);
         vo.setTodayPercent(todayPercent);
         //获取上周开始和结束
         Date beginWeek = DateUtil.beginOfWeek(DateUtil.lastWeek());
@@ -233,21 +235,21 @@ public class SystemFileServiceImpl extends ServiceImplX<SystemFileMapper, System
             }
         }
         //封装数据
-        List<List<Integer>> weekIncrement = new ArrayList<>();
+        List<List<Long>> weekIncrement = new ArrayList<>();
         AtomicReference<Date> lastCreateTime = new AtomicReference<>();
         fileByDateMap.forEach((date, files) -> {
             //判断是否和前一天是连续的天
             if (lastCreateTime.get() != null) {
                 while (!DateUtil.isSameDay(DateUtil.offsetDay(lastCreateTime.get(), 1), date)) {
-                    weekIncrement.add(Arrays.asList(0, 0, 0, 0));
+                    weekIncrement.add(Arrays.asList(0L, 0L, 0L, 0L));
                     lastCreateTime.set(DateUtil.offsetDay(lastCreateTime.get(), 1));
                 }
             }
             //根据mime_type判断文件类型并计数
-            int fileCount = 0;
-            int imgCount = 0;
-            int mediaCount = 0;
-            int compressCount = 0;
+            long fileCount = 0;
+            long imgCount = 0;
+            long mediaCount = 0;
+            long compressCount = 0;
             for (SystemFile file : files) {
                 if (DOCUMENT_TYPE.contains(file.getMimeType())) {
                     fileCount++;

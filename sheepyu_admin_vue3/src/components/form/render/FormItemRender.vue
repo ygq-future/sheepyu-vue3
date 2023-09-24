@@ -32,7 +32,7 @@
       :value='form[config.prop]'
       :type='config.dictType'
       :disabled='disabled'
-      @change='(value) => config.change && config.change(value)'
+      @change='(value: any) => config.change && config.change(value)'
     />
 
     <IconSelector
@@ -94,12 +94,12 @@
       :multiple='config.multiple'
       :disabled='disabled'
       :placeholder='config.placeholder'
-      @change='(value) => config.change ? config.change(findSelectItem(value)) : defaultSelectChange(value)'
+      @change='(value: any) => config.change ? config.change(findSelectItem(value)) : defaultSelectChange(value)'
     >
       <el-option
         v-for='item in config.data'
-        :label='item[config.props?.label]'
-        :value='item[config.props?.value]'
+        :label='item[config.props?.label || defaultProps.label]'
+        :value='item[config.props?.value || defaultProps.value]'
       />
     </el-select>
 
@@ -130,6 +130,10 @@
 import IconSelector from '@/components/icon/IconSelector.vue'
 import type { FormItemConfig } from '@/components/form/interface'
 import { ElTree } from 'element-plus'
+import DateTime from '@/components/datetime/DateTime.vue'
+import ImageUpload from '@/components/upload/ImageUpload.vue'
+import Upload from '@/components/upload/Upload.vue'
+import PartUpload from '@/components/upload/PartUpload.vue'
 
 const props = defineProps<{
   config: FormItemConfig

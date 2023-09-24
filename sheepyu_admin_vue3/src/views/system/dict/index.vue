@@ -24,7 +24,7 @@
       <template #buttons>
         <el-tooltip :show-after='500' content='重载全局字典' placement='top'>
           <el-button v-blur type='success' @click='onLoadDict' :loading='state.buttonLoading'>
-            <Icon name='el-icon-Cpu' />
+            <MyIcon name='el-icon-Cpu' />
             <span class='button-text'>重载全局字典</span>
           </el-button>
         </el-tooltip>
@@ -78,6 +78,7 @@ import {
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { loadDict } from '@/util/common'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const tableRef = ref()
 const tableHeaderRef = ref()

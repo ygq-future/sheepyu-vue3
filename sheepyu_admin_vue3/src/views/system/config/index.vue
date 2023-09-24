@@ -58,7 +58,6 @@ import {
   pageConfigApi,
   updateConfigApi
 } from '@/api/system/config'
-import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 
 const tableRef = ref()

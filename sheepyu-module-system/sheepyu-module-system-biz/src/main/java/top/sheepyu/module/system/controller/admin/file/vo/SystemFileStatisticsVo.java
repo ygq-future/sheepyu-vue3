@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 public class SystemFileStatisticsVo {
     @ApiModelProperty("今日上传量")
-    private Integer todayIncrement;
+    private Long todayIncrement;
 
     @ApiModelProperty("今日较昨日上传量增加百分比")
     private Integer todayPercent;
@@ -26,5 +26,5 @@ public class SystemFileStatisticsVo {
      * 第一层list代表一周每一天, 第二层代表每天的 图片:0(下标), 文档: 1, 影音: 2, 压缩包: 3 的数量
      */
     @ApiModelProperty("周上传统计")
-    private List<List<Integer>> weekIncrement;
+    private List<List<Long>> weekIncrement;
 }

@@ -1,5 +1,5 @@
 <template>
-  <el-tag v-if="render === 'tag'" :type='tagItem.colorType'>{{ tagItem.label }}</el-tag>
+  <el-tag v-if="render === 'tag'" :type="tagItem.colorType || ''">{{ tagItem.label }}</el-tag>
 
   <el-switch
     v-model='state.value'
@@ -70,7 +70,7 @@ const props = withDefaults(defineProps<{
 
 const emits = defineEmits<{
   (e: 'update:modelValue', modelValue: number): void
-  (e: 'change', value: number): void
+  (e: 'change', value: any): void
 }>()
 
 const state = reactive<{
@@ -122,7 +122,7 @@ watch(() => props.modelValue, value => {
 onBeforeMount(() => {
   if (typeof props.modelValue === 'number') {
     state.valueType = 'number'
-  } else if (typeof props.modelValue === 'boolean') {
+  } else {
     state.valueType = 'boolean'
   }
 })

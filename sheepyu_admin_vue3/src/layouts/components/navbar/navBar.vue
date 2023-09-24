@@ -1,6 +1,6 @@
 <template>
   <el-header :class='`nav-bar-${config.layout.layoutMode}`'>
-    <Icon
+    <MyIcon
       v-if='config.layout.shrink'
       :name="config.layout.asideCollapse ? 'el-icon-Expand' : 'el-icon-Fold'"
       :size='22'
@@ -17,6 +17,7 @@ import NavTabs from '@/layouts/components/navbar/navTabs.vue'
 
 import { useConfig } from '@/stores/config/config'
 import { showShade } from '@/util/pageShade'
+import MyIcon from '@/components/icon/Icon.vue'
 
 const config = useConfig()
 const logoTextColor = computed(() => config.getColor('logoTextColor'))

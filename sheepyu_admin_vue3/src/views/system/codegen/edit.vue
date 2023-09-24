@@ -199,6 +199,7 @@ import type { FormRender } from '@/components/form/interface'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { FormRules } from 'element-plus'
 import { ElForm, ElMessageBox } from 'element-plus'
+import CellForm from '@/components/form/CellForm.vue'
 
 const instance = getCurrentInstance()
 const route = useRoute()

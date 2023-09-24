@@ -9,13 +9,13 @@
         <div class='left' :class='shrink ? "btn-shrink" : ""'>
           <el-tooltip :show-after='500' content='刷新' placement='top'>
             <el-button v-auth='`${auth}:query`' v-blur type='info' color='#40485b' @click='emits("refresh")'>
-              <Icon name='fa fa-refresh' />
+              <MyIcon name='fa fa-refresh' />
             </el-button>
           </el-tooltip>
 
           <el-tooltip :show-after='500' v-if="buttons.includes('add')" content='新增' placement='top'>
             <el-button v-auth='`${auth}:create`' v-blur type='primary' @click='emits("add")'>
-              <Icon name='fa fa-plus' />
+              <MyIcon name='fa fa-plus' />
               <span class='button-text'>新增</span>
             </el-button>
           </el-tooltip>
@@ -23,7 +23,7 @@
           <el-tooltip :show-after='500' v-if="buttons.includes('edit')" content='编辑' placement='top'>
             <el-button v-auth='`${auth}:update`' v-blur type='primary' :disabled='!rows || rows.length === 0'
                        @click='onBatchEdit'>
-              <Icon name='fa fa-pencil' />
+              <MyIcon name='fa fa-pencil' />
               <span class='button-text'>批量编辑</span>
             </el-button>
           </el-tooltip>
@@ -39,7 +39,7 @@
               <div class='button-item' v-auth='`${auth}:delete`'>
                 <el-tooltip :show-after='500' content='删除' placement='top'>
                   <el-button v-blur type='danger' :disabled='!rows || rows.length === 0'>
-                    <Icon name='fa fa-trash' />
+                    <MyIcon name='fa fa-trash' />
                     <span class='button-text'>批量删除</span>
                   </el-button>
                 </el-tooltip>
@@ -55,7 +55,7 @@
           >
             <div class='button-item'>
               <el-button v-blur :type="state.unfold ? 'warning' : 'danger'" @click='onUnfold'>
-                <Icon :name='state.unfold ? "fa fa-folder-open" : "fa fa-folder"' />
+                <MyIcon :name='state.unfold ? "fa fa-folder-open" : "fa fa-folder"' />
                 <span class='button-text'>{{ state.unfold ? '全部展开' : '全部折叠' }}</span>
               </el-button>
             </div>
@@ -68,7 +68,7 @@
             >
               <div class='button-item' v-auth='`${auth}:import`'>
                 <el-button v-blur type='primary'>
-                  <Icon name='fa fa-sign-in' />
+                  <MyIcon name='fa fa-sign-in' />
                   <span class='button-text'>批量导入</span>
                 </el-button>
               </div>
@@ -85,7 +85,7 @@
           <el-tooltip :show-after='500' v-if="buttons.includes('export')" content='导出' placement='top'>
             <div class='button-item' v-auth='`${auth}:export`'>
               <el-button v-blur type='primary' @click='emits("export")'>
-                <Icon name='fa fa-sign-out' />
+                <MyIcon name='fa fa-sign-out' />
                 <span class='button-text'>导出数据</span>
               </el-button>
             </div>
@@ -101,7 +101,7 @@
               <!--模板代码: 自定义按钮复制过去即可-->
               <!-- <el-tooltip :show-after='500' content='自定义按钮' placement='top'>
               <el-button v-auth="'xx:xx:xx'" v-blur type='primary' @click='onBatchEdit'>
-                <Icon name='fa fa-pencil' />
+                <MyIcon name='fa fa-pencil' />
                 <span class='button-text'>自定义按钮</span>
               </el-button>
             </el-tooltip>-->
@@ -121,7 +121,7 @@
             @clear='emits("input-clear")'
           />
           <el-tooltip v-if='comSearch' content='展开通用搜索' placement='top'>
-            <Icon
+            <MyIcon
               v-auth='`${auth}:query`'
               v-blur name='el-icon-Search'
               :size='16'
@@ -224,7 +224,7 @@ defineExpose({
 })
 
 onMounted(() => {
-  shrink.value = shrink.value || (props.enableShrink === true)
+  shrink.value = shrink.value || props.enableShrink
   if (props.buttons.length >= 5) {
     shrink.value = true
   }

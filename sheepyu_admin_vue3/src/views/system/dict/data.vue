@@ -66,6 +66,7 @@ import {
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { loadDict } from '@/util/common'
+import ComSearch from '@/components/search/ComSearch.vue'
 
 const route = useRoute()
 const router = useRouter()

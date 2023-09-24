@@ -101,7 +101,7 @@ export interface SystemDictDataBaseVo {
   //通用状态
   status: number
   //颜色类型: primary, info, warning, success, error
-  colorType?: string
+  colorType?: 'success' | 'info' | 'warning' | 'danger' | ''
   //备注
   remark?: string
 }

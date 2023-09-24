@@ -22,10 +22,10 @@
             v-model='row[column.prop]'
             :render='column.dictRender'
             :type='column.dictType'
-            @change='(val) => onFieldChange(row, val)'
+            @change='(val: any) => onFieldChange(row, val)'
       />
 
-      <Icon v-if='column.render === "icon"' :name='row[column.prop]' />
+      <MyIcon v-if='column.render === "icon"' :name='row[column.prop]' />
 
       <el-link v-if='column.render === "link"' @click='linkTo(row)'>{{ row[column.prop] }}</el-link>
 
@@ -52,10 +52,10 @@ const props = defineProps<{
 }>()
 
 const emits = defineEmits<{
-  (e: 'field-change', row: any, val: number): void
+  (e: 'field-change', row: any, val: any): void
 }>()
 
-function onFieldChange(row: any, val: number) {
+function onFieldChange(row: any, val: any) {
   emits('field-change', row, val)
 }
 

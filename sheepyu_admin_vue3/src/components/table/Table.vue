@@ -35,7 +35,7 @@
           >
             <el-button v-auth='`${auth}:update`' v-blur type='primary' @click='onEdit(scope.row)'>
               <template #icon>
-                <Icon name='el-icon-Edit' />
+                <MyIcon name='el-icon-Edit' />
               </template>
             </el-button>
           </el-tooltip>
@@ -51,7 +51,7 @@
                 <el-tooltip :show-after='500' content='删除' placement='top'>
                   <el-button v-auth='`${auth}:delete`' v-blur type='danger'>
                     <template #icon>
-                      <Icon name='el-icon-Delete' />
+                      <MyIcon name='el-icon-Delete' />
                     </template>
                   </el-button>
                 </el-tooltip>
@@ -64,7 +64,7 @@
             <!--            <el-tooltip content='自定义' placement='top' :show-after='500'>
                           <el-button v-auth="'xx:xx:xx'" v-blur type='primary'>
                             <template #icon>
-                              <Icon name='el-icon-Edit' />
+                              <MyIcon name='el-icon-Edit' />
                             </template>
                           </el-button>
                         </el-tooltip>-->
@@ -79,10 +79,10 @@
       <el-pagination
         background
         :layout="config.layout.shrink ? 'prev, pager, next' : 'sizes, total, prev, pager, next, jumper'"
-        v-model:current-page='paginationObj.current'
-        v-model:page-size='paginationObj.size'
+        v-model:current-page='pagination.current'
+        v-model:page-size='pagination.size'
         :page-sizes='[10, 20, 30, 50, 100]'
-        :total='paginationObj.total'
+        :total='pagination.total'
         @size-change='onSizeChange'
         @current-change='onCurrentChange'
       />
@@ -103,19 +103,23 @@ const props = withDefaults(defineProps<{
   tableConfig: TableConfig
   //如果开启了selection, 也可以使用双向绑定, 更加方便
   selection?: any[]
-  pagination?: unknown
+  pagination?: any & {current?: number, size?: number, total?: number}
   auth?: string
 }>(), {
-  auth: 'none'
+  auth: 'none',
+  pagination: () => ({
+    current: 1,
+    size: 10,
+    total: 0
+  })
 })
 
 const emits = defineEmits<{
-  (e: 'field-change', row: any, val: number): void
-  (e: 'select', selection: Array<object>, row: object): void
-  (e: 'select-all', selection: Array<object>): void
-  (e: 'selection-change', selection: Array<object>): void
-  (e: 'update:selection', selection: Array<object>): void
-  (e: 'update:pagination', obj: object): void
+  (e: 'field-change', row: any, val: any): void
+  (e: 'select', selection: Array<any>, row: any): void
+  (e: 'select-all', selection: Array<any>): void
+  (e: 'selection-change', selection: Array<any>): void
+  (e: 'update:selection', selection: Array<any>): void
   (e: 'edit', row: any): void
   (e: 'delete', row: any): void
   (e: 'size-change', size: number): void
@@ -123,21 +127,20 @@ const emits = defineEmits<{
 }>()
 
 const tableRef = ref<InstanceType<typeof ElTable>>()
-const paginationObj = computed(() => props.pagination)
 
-function onFieldChange(row: any, val: number) {
+function onFieldChange(row: any, val: any) {
   emits('field-change', row, val)
 }
 
-function onSelect(selection: Array<object>, row: object) {
+function onSelect(selection: Array<any>, row: any) {
   emits('select', selection, row)
 }
 
-function onSelectAll(selection: Array<object>) {
+function onSelectAll(selection: Array<any>) {
   emits('select-all', selection)
 }
 
-function onSelectionChange(selection: Array<object>) {
+function onSelectionChange(selection: Array<any>) {
   emits('selection-change', selection)
   emits('update:selection', selection)
 }
@@ -157,12 +160,10 @@ function onDelete(row: any) {
 }
 
 function onSizeChange(size: number) {
-  emits('update:pagination', paginationObj)
   emits('size-change', size)
 }
 
 function onCurrentChange(current: number) {
-  emits('update:pagination', paginationObj)
   emits('current-change', current)
 }
 

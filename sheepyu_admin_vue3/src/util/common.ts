@@ -1,15 +1,14 @@
 import type { App } from 'vue'
-import Icon from '@/components/icon/Icon.vue'
 import * as elIcons from '@element-plus/icons-vue'
 import { useDict } from '@/stores/dict/dict'
 import { dictTypeListApi } from '@/api/system/dict'
 
 export function registerIcons(app: App) {
   /*
-   * 全局注册 Icon
-   * 使用方式: <Icon name="name" size="size" color="color" />
+   * 全局注册 MyIcon, 在main.ts中已经注册, 在这里注册编辑器没有提示
+   * 使用方式: <MyIcon name="name" size="size" color="color" />
    */
-  app.component('Icon', Icon)
+  // app.component('MyIcon', Icon)
 
   /*
    * 全局注册element Plus的icon

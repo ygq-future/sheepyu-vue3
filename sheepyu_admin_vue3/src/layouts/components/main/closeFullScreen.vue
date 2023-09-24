@@ -1,7 +1,7 @@
 <template>
   <div title='退出全屏' @mouseover.stop='onMouseover' @mouseout.stop='onMouseout'>
     <div @click.stop='onCloseFullScreen' class='close-full-screen' :style="{ top: state.closeBoxTop + 'px' }">
-      <Icon name='el-icon-Close' />
+      <MyIcon name='el-icon-Close' />
     </div>
     <div class='close-full-screen-on'></div>
   </div>

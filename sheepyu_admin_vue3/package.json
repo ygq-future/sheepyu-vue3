@@ -5,12 +5,12 @@
   "scripts": {
     "start": "npm run dev",
     "dev": "vite --mode dev --host 0.0.0.0",
-    "build:test": "run-p type-check & vite build --mode test",
-    "build:prod": "run-p type-check & vite build --mode prod",
-    "build": "run-p type-check & vite build",
+    "build:dev": "run-p tc & vite build --mode dev",
+    "build:test": "run-p tc & vite build --mode test",
+    "build:prod": "run-p tc & vite build --mode prod",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit"
+    "tc": "vue-tsc --noEmit"
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.1.0",
@@ -21,7 +21,7 @@
     "axios": "^1.2.4",
     "countup.js": "^2.6.0",
     "echarts": "^5.4.1",
-    "element-plus": "^2.2.28",
+    "element-plus": "^2.3.14",
     "highlight.js": "^11.7.0",
     "mitt": "^3.0.0",
     "nprogress": "^0.2.0",
@@ -30,7 +30,7 @@
     "qs": "^6.11.1",
     "screenfull": "^6.0.2",
     "spark-md5": "^3.0.2",
-    "vue": "^3.2.45",
+    "vue": "^3.3.4",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

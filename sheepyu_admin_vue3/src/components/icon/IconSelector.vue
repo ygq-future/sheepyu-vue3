@@ -23,7 +23,7 @@
           <el-scrollbar height='180'>
             <div v-if='renderIconNames.length > 0'>
               <div class='icon-item' @click='onIcon(item)' :key='key' v-for='(item, key) in renderIconNames'>
-                <Icon :name='item' />
+                <MyIcon :name='item' />
               </div>
             </div>
           </el-scrollbar>
@@ -39,11 +39,11 @@
                   placeholder='搜索图标'
                   ref='selectorInput'>
           <template #prepend>
-            <Icon :key='`icon-${iconValue}`' :name='iconValue'></Icon>
+            <MyIcon :key='`icon-${iconValue}`' :name='iconValue' />
             <span v-show='showIconText' style='font-size: 12px;margin-left: 5px'>{{ iconValue }}</span>
           </template>
           <template #append>
-            <Icon style='cursor: pointer' :size='22' name='el-icon-RefreshRight' @click='resetIcon' />
+            <MyIcon style='cursor: pointer' :size='22' name='el-icon-RefreshRight' @click='resetIcon' />
           </template>
         </el-input>
       </template>
