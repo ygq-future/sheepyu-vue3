@@ -34,7 +34,7 @@ public interface SystemUserService extends IServiceX<SystemUser> {
      */
     SystemUser insensitiveInfo(@NotNull(message = "用户id不能为空") Long userId);
 
-    void create(@Valid SystemUserCreateVo createVo);
+    Long create(@Valid SystemUserCreateVo createVo);
 
     void updateUser(@Valid SystemUserUpdateVo updateVo);
 

@@ -20,11 +20,25 @@ export function listDeptApi(params: SystemDeptQueryVo) {
   return request.get<Array<SystemDeptRespVo>>('/system/dept', { params })
 }
 
+export function treeDeptApi() {
+  return request.get<Array<SystemDeptRespVo>>('/system/dept/tree')
+}
+
+export function assignRoleToDeptApi(deptId: number, roleIds: Array<number>) {
+  return request.put<boolean>('/system/permission/role/assign/dept/' + deptId, roleIds)
+}
+
+export function roleByDeptApi(deptId: number) {
+  return request.get<Array<number>>('/system/permission/role-by-dept/' + deptId)
+}
+
 export interface SystemDeptBaseVo {
   //部门名称
   name: string
   //父部门id
-  parentId: number
+  parentId?: number
+  //类型
+  type: number
   //显示顺序
   sort: number
   //负责人

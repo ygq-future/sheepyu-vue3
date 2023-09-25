@@ -7,25 +7,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
+import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.util.MyStrUtil;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleCreateVo;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleQueryVo;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleUpdateVo;
-import top.sheepyu.module.system.dao.permission.menu.SystemRoleMenuMapper;
+import top.sheepyu.module.system.dao.dept.SystemDeptRoleMapper;
 import top.sheepyu.module.system.dao.permission.role.SystemRole;
 import top.sheepyu.module.system.dao.permission.role.SystemRoleMapper;
-import top.sheepyu.module.system.dao.permission.role.SystemUserRoleMapper;
+import top.sheepyu.module.system.dao.permission.role.SystemRoleMenuMapper;
+import top.sheepyu.module.system.dao.user.SystemUserRoleMapper;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
-import static top.sheepyu.module.system.constants.ErrorCodeConstants.ROLE_NOT_EXISTS;
+import static top.sheepyu.framework.security.util.SecurityFrameworkUtil.getLoginUserUsername;
+import static top.sheepyu.module.common.exception.CommonException.exception;
+import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.permission.SystemRoleConvert.CONVERT;
 
 /**
@@ -39,47 +41,49 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
     @Resource
     private SystemUserRoleMapper systemUserRoleMapper;
     @Resource
+    private SystemDeptRoleMapper systemDeptRoleMapper;
+    @Resource
     private SystemRoleMenuMapper systemRoleMenuMapper;
-    private static final Map<Long, SystemRole> ROLES = new ConcurrentHashMap<>();
 
     @Override
     public void createRole(SystemRoleCreateVo createVo) {
+        findByFieldThrowIfExists(SystemRole::getCode, createVo.getCode(), ROLE_EXISTS);
         SystemRole role = CONVERT.convert(createVo);
         save(role);
-        ROLES.put(role.getId(), role);
     }
 
     @Override
     public void updateRole(SystemRoleUpdateVo updateVo) {
         SystemRole role = CONVERT.convert(updateVo);
-        boolean result = updateById(role);
-        if (result) {
-            role = findByIdValidateExists(role.getId());
-            ROLES.put(role.getId(), role);
-        }
+        updateById(role);
     }
 
     @Transactional
     @Override
     public void deleteRole(String ids) {
         List<Long> idList = MyStrUtil.splitToLong(ids, ',');
+        if (hasAnySuperAdmin(new HashSet<>(idList))) {
+            throw exception(DONT_REMOVE_SUPER_ROLE);
+        }
         batchDelete(ids, SystemRole::getId);
 
         //同步删除用户角色数据和角色菜单数据
         systemUserRoleMapper.deleteByRoleIds(idList);
+        systemDeptRoleMapper.deleteByRoleIds(idList);
         systemRoleMenuMapper.deleteByRoleIds(idList);
-        idList.forEach(ROLES::remove);
     }
 
     @Override
     public PageResult<SystemRole> pageRole(SystemRoleQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
+        //只有超级管理员才能查看所有角色, 其他的人只能查看自己创建的角色
+        boolean superAdmin = SecurityFrameworkUtil.isSuperAdmin();
         return page(queryVo, buildQuery()
                 .and(StrUtil.isNotBlank(keyword), e -> e
                         .like(SystemRole::getName, keyword).or()
                         .like(SystemRole::getCode, keyword).or()
                         .eq(SystemRole::getId, keyword))
-                .eqIfPresent(SystemRole::getStatus, queryVo.getStatus())
+                .eq(!superAdmin, SystemRole::getCreator, getLoginUserUsername())
                 .orderByAsc(SystemRole::getSort));
     }
 
@@ -89,8 +93,16 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
     }
 
     @Override
+    public List<SystemRole> listRoleByCreator() {
+        return lambdaQuery()
+                .eq(SystemRole::getCreator, getLoginUserUsername())
+                .orderByAsc(SystemRole::getSort)
+                .list();
+    }
+
+    @Override
     public SystemRole findById(Long id) {
-        return findByIdValidateExists(id);
+        return findByIdThrowIfNotExists(id);
     }
 
     @Override
@@ -107,19 +119,14 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
     }
 
     @Override
-    public List<SystemRole> findRoleByIdsFromCache(Set<Long> roleIds) {
-        return roleIds.stream().map(ROLES::get).collect(Collectors.toList());
-    }
-
-    private SystemRole findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, ROLE_NOT_EXISTS);
-    }
-
-    @PostConstruct
-    public void initRoles() {
-        log.info("初始化加载角色缓存");
-        for (SystemRole role : list()) {
-            ROLES.put(role.getId(), role);
+    public List<SystemRole> findRoleByIds(Set<Long> roleIds) {
+        if (CollUtil.isEmpty(roleIds)) {
+            return Collections.emptyList();
         }
+        return lambdaQuery().in(SystemRole::getId, roleIds).list();
+    }
+
+    private SystemRole findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, ROLE_NOT_EXISTS);
     }
 }

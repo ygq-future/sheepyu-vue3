@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
+#if(${requireBaseModel})import top.sheepyu.framework.mybatisplus.core.model.BaseModel;#end
 #parse('codegen/java/common/_import.vm')
 import java.util.*;
 
@@ -26,6 +26,8 @@ public class ${fullClassName}#if(${requireBaseModel}) extends BaseModel#end {
     #end
     */
     #if($column.primaryKey && $column.javaType == 'String')    @TableId(type = IdType.INPUT)
+    #end
+    #if($column.nullable)    @TableField(updateStrategy = FieldStrategy.IGNORED)
     #end
     private ${javaType} ${column.javaField};
     #end

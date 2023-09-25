@@ -46,34 +46,34 @@ public class SystemDemoServiceImpl extends ServiceImplX<SystemDemoMapper, System
 
     @Override
     public SystemDemo findById(Long id) {
-        return findByIdValidateExists(id);
+        return findByIdThrowIfNotExists(id);
     }
 
     @Override
     public List<SystemDemo> list(SystemDemoQueryVo queryVo) {
         return list(buildQuery()
-                .and(StrUtil.isNotBlank(queryVo.getKeyword()), q -> q 
-                        .eq(SystemDemo::getId, queryVo.getKeyword()).or() 
-                        .like(SystemDemo::getName, queryVo.getKeyword()))    
-                .eqIfPresent(SystemDemo::getStatus, queryVo.getStatus()) 
-                .betweenIfPresent(SystemDemo::getBeginTime, queryVo.getBeginTimes())  
-                .betweenIfPresent(SystemDemo::getCreateTime, queryVo.getCreateTimes())    
-                .eqIfPresent(SystemDemo::getAge, queryVo.getAge()) 
-                .eqIfPresent(SystemDemo::getSex, queryVo.getSex()) 
+                .and(StrUtil.isNotBlank(queryVo.getKeyword()), q -> q
+                        .eq(SystemDemo::getId, queryVo.getKeyword()).or()
+                        .like(SystemDemo::getName, queryVo.getKeyword()))
+                .eqIfPresent(SystemDemo::getStatus, queryVo.getStatus())
+                .betweenIfPresent(SystemDemo::getBeginTime, queryVo.getBeginTimes())
+                .betweenIfPresent(SystemDemo::getCreateTime, queryVo.getCreateTimes())
+                .eqIfPresent(SystemDemo::getAge, queryVo.getAge())
+                .eqIfPresent(SystemDemo::getSex, queryVo.getSex())
                 .orderByDesc(SystemDemo::getId)           );
     }
 
     @Override
     public PageResult<SystemDemo> page(SystemDemoQueryVo queryVo) {
         return page(queryVo, buildQuery()
-                .and(StrUtil.isNotBlank(queryVo.getKeyword()), q -> q 
-                        .eq(SystemDemo::getId, queryVo.getKeyword()).or() 
-                        .like(SystemDemo::getName, queryVo.getKeyword()))    
-                .eqIfPresent(SystemDemo::getStatus, queryVo.getStatus()) 
-                .betweenIfPresent(SystemDemo::getBeginTime, queryVo.getBeginTimes())  
-                .betweenIfPresent(SystemDemo::getCreateTime, queryVo.getCreateTimes())    
-                .eqIfPresent(SystemDemo::getAge, queryVo.getAge()) 
-                .eqIfPresent(SystemDemo::getSex, queryVo.getSex()) 
+                .and(StrUtil.isNotBlank(queryVo.getKeyword()), q -> q
+                        .eq(SystemDemo::getId, queryVo.getKeyword()).or()
+                        .like(SystemDemo::getName, queryVo.getKeyword()))
+                .eqIfPresent(SystemDemo::getStatus, queryVo.getStatus())
+                .betweenIfPresent(SystemDemo::getBeginTime, queryVo.getBeginTimes())
+                .betweenIfPresent(SystemDemo::getCreateTime, queryVo.getCreateTimes())
+                .eqIfPresent(SystemDemo::getAge, queryVo.getAge())
+                .eqIfPresent(SystemDemo::getSex, queryVo.getSex())
                 .orderByDesc(SystemDemo::getId)           );
     }
 
@@ -86,7 +86,7 @@ public class SystemDemoServiceImpl extends ServiceImplX<SystemDemoMapper, System
         saveBatch(list);
     }
 
-    private SystemDemo findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, DEMO_NOT_EXISTS);
+    private SystemDemo findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, DEMO_NOT_EXISTS);
     }
 }

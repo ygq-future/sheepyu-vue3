@@ -26,8 +26,8 @@ export function pageRoleApi(params: SystemRoleQueryVo) {
   return request.get<PageResult<SystemRoleRespVo>>('/system/permission/role/page', { params })
 }
 
-export function assignMenuApi(roleId: number, menuIds: Array<number>) {
-  return request.put<PageResult<SystemRoleRespVo>>('/system/permission/menu/assign/' + roleId, menuIds)
+export function assignMenuToRoleApi(roleId: number, menuIds: Array<number>) {
+  return request.put<boolean>('/system/permission/menu/assign/role/' + roleId, menuIds)
 }
 
 export function menuByRoleApi(roleId: number) {
@@ -41,8 +41,6 @@ export interface SystemRoleBaseVo {
   code: string
   //显示顺序
   sort: number
-  //角色状态
-  status: number
   //备注
   remark?: string
 }
@@ -58,7 +56,7 @@ export interface SystemRoleUpdateVo extends SystemRoleBaseVo {
 export interface SystemRoleRespVo extends SystemRoleBaseVo {
   //角色ID
   id: number
-  menus?: Array<SystemMenuRespVo>
+  creator?: string
 }
 
 export interface SystemRoleQueryVo {
@@ -70,6 +68,4 @@ export interface SystemRoleQueryVo {
   total?: number
   //快速搜索关键字
   keyword?: string
-  //角色状态
-  status?: number
 }

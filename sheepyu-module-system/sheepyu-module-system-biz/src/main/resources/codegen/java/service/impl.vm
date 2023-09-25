@@ -114,7 +114,7 @@ public class ${fullClassName}ServiceImpl extends ServiceImplX<${fullClassName}Ma
 
     @Override
     public ${fullClassName} findById(Long id) {
-        return findByIdValidateExists(id);
+        return findByIdThrowIfNotExists(id);
     }
 
 #if ($table.requireList || $table.requireExport)
@@ -148,7 +148,7 @@ public class ${fullClassName}ServiceImpl extends ServiceImplX<${fullClassName}Ma
     }
 
 #end
-    private ${fullClassName} findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, ${notExistsName});
+    private ${fullClassName} findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, ${notExistsName});
     }
 }

@@ -57,7 +57,7 @@ public class SystemApiLogServiceImpl extends ServiceImplX<SystemApiLogMapper, Sy
 
     @Override
     public void process(Long id) {
-        SystemApiLog apiLog = findByIdValidateExists(id);
+        SystemApiLog apiLog = findByIdThrowIfNotExists(id);
         //已经处理过的不用处理
         if (Objects.equals(apiLog.getProcessStatus(), PROCESSED.getCode())) {
             throw exception(ALREADY_HANDLE);
@@ -73,8 +73,8 @@ public class SystemApiLogServiceImpl extends ServiceImplX<SystemApiLogMapper, Sy
         updateById(apiLog);
     }
 
-    private SystemApiLog findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, API_LOG_NOT_EXISTS);
+    private SystemApiLog findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, API_LOG_NOT_EXISTS);
     }
 
 }

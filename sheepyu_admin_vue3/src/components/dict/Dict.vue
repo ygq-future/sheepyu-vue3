@@ -77,12 +77,10 @@ const state = reactive<{
   value: string | number | boolean | undefined
   dictList: SystemDictDataRespVo[]
   switchLoading: boolean
-  valueType: 'number' | 'string' | 'boolean'
 }>({
   value: props.modelValue,
   dictList: dict.findDictDataByType(props.type),
-  switchLoading: false,
-  valueType: 'string'
+  switchLoading: false
 })
 
 const tagItem = computed<SystemDictDataRespVo>(() => {
@@ -95,13 +93,13 @@ const tagItem = computed<SystemDictDataRespVo>(() => {
 })
 
 function valueOf(value: string): number | string | boolean {
-  switch (state.valueType) {
-    case 'string':
-      return value
+  switch (typeof props.modelValue) {
     case 'number':
       return parseInt(value)
     case 'boolean':
       return value === 'true'
+    default:
+      return value
   }
 }
 
@@ -117,14 +115,6 @@ function onValueChange(value: number) {
 watch(() => props.modelValue, value => {
   //需要改变组件内的值
   state.value = value
-})
-
-onBeforeMount(() => {
-  if (typeof props.modelValue === 'number') {
-    state.valueType = 'number'
-  } else {
-    state.valueType = 'boolean'
-  }
 })
 </script>
 

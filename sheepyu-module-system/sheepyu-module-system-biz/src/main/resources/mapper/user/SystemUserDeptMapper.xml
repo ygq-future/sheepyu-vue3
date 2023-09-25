@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.sheepyu.module.system.dao.user.SystemUserDeptMapper">
+
+    <select id="list" resultType="top.sheepyu.module.system.dao.user.SystemUserDept">
+        select a.*, b.parent_id as parent_dept_id
+        from system_user_dept a
+                 join system_dept b on a.dept_id = b.id
+    </select>
+</mapper>

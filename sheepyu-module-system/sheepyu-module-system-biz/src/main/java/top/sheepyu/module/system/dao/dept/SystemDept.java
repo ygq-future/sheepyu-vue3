@@ -1,5 +1,6 @@
 package top.sheepyu.module.system.dao.dept;
 
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,8 +21,14 @@ public class SystemDept extends BaseModel {
     private String name;
     private Long parentId;
     private Integer sort;
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private Long leaderUserId;
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
+    private String leaderNickname;
+    private Integer type;
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String phone;
+    @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String email;
 
     @TableField(exist = false)

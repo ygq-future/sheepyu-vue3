@@ -17,6 +17,5 @@ public class SystemRole extends BaseModel {
     private String name;
     private String code;
     private Integer sort;
-    private Integer status;
     private String remark;
 }

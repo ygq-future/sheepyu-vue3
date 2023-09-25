@@ -18,7 +18,7 @@ public interface ErrorCodeConstants {
     ErrorCode CRON_ERROR = new ErrorCode(100_001_001, "cron表达式错误");
     ErrorCode JOB_HANDLER_EXISTS = new ErrorCode(100_001_002, "任务处理器已存在");
     ErrorCode JOB_HANDLER_NOT_EXISTS = new ErrorCode(100_001_003, "任务处理器不存在");
-    ErrorCode JOB_UPDATE_ONLY_NORMAL_STATUS = new ErrorCode(100_001_004, "只能在开启状态下修改任务");
+//    ErrorCode JOB_UPDATE_ONLY_NORMAL_STATUS = new ErrorCode(100_001_004, "只能在开启状态下修改任务");
     ErrorCode STATUS_ERROR = new ErrorCode(100_001_005, "错误的状态!");
     ErrorCode LOG_NOT_EXISTS = new ErrorCode(100_001_006, "任务日志不存在!");
 
@@ -54,19 +54,21 @@ public interface ErrorCodeConstants {
     //dept相关 100_007_001
     ErrorCode DEPT_NOT_EXISTS = new ErrorCode(100_007_001, "部门不存在!");
     ErrorCode DEPT_HAS_CHILDREN = new ErrorCode(100_007_002, "部门还有子部门!");
-
-    //post相关 100_008_001
-    ErrorCode POST_NOT_EXISTS = new ErrorCode(100_008_001, "职位不存在!");
-    ErrorCode POST_EXISTS = new ErrorCode(100_008_002, "职位已存在!");
+    ErrorCode DEPT_HAS_USER = new ErrorCode(100_007_003, "部门下还有用户!");
+    ErrorCode DEPT_TYPE_NOT_EXISTS = new ErrorCode(100_007_004, "部门类型不存在!");
+    ErrorCode DONT_REMOVE_OWN_DEPT = new ErrorCode(100_007_005, "不能删除自己所在的部门!");
 
     //menu相关 100_009_001
     ErrorCode MENU_NOT_EXISTS = new ErrorCode(100_009_001, "菜单不存在!");
     ErrorCode MENU_HAS_CHILDREN = new ErrorCode(100_009_002, "菜单还有子菜单!");
-    ErrorCode FORBID_REMOVE = new ErrorCode(100_009_003, "系统菜单禁止删除!");
+    ErrorCode MENU_FORBID_OPERATE = new ErrorCode(100_009_003, "系统重要菜单禁止操作!");
     ErrorCode LEVEL_RELATION_ERROR = new ErrorCode(100_009_004, "错误的层次关系!");
+    ErrorCode MENU_OPERATE_FAILED = new ErrorCode(100_009_005, "菜单操作失败!");
 
     //role相关 100_010_001
     ErrorCode ROLE_NOT_EXISTS = new ErrorCode(100_010_001, "角色不存在!");
+    ErrorCode DONT_REMOVE_SUPER_ROLE = new ErrorCode(100_010_002, "不能删除超级管理员角色!");
+    ErrorCode ROLE_EXISTS = new ErrorCode(100_010_003, "角色已存在!");
 
     //codegen相关 100_011_001
     ErrorCode CODEGEN_NOT_EXISTS = new ErrorCode(100_011_001, "代码生成不存在!");
@@ -74,4 +76,10 @@ public interface ErrorCodeConstants {
     //demo相关 100_012_001
     ErrorCode DEMO_NOT_EXISTS = new ErrorCode(100_012_001, "测试不存在!");
 
+    //permission相关 100_013_001
+    ErrorCode ASSIGN_MENU_TO_ROLE_FAILED = new ErrorCode(100_013_001, "分配角色菜单失败!");
+    ErrorCode ASSIGN_ROLE_TO_USER_FAILED = new ErrorCode(100_013_002, "分配用户角色失败!");
+    ErrorCode ASSIGN_DEPT_TO_USER_FAILED = new ErrorCode(100_013_003, "分配用户(部门/职位)失败!");
+    ErrorCode ASSIGN_ROLE_TO_DEPT_FAILED = new ErrorCode(100_013_004, "分配(部门/职位)角色失败!");
+    ErrorCode ASSIGN_TARGET_IS_OWN = new ErrorCode(100_013_005, "分配的目标不能所属于自己!");
 }

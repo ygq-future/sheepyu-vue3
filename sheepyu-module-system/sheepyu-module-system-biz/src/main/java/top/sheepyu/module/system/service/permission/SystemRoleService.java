@@ -26,11 +26,13 @@ public interface SystemRoleService extends IServiceX<SystemRole> {
 
     List<SystemRole> listRole();
 
+    List<SystemRole> listRoleByCreator();
+
     SystemRole findById(Long id);
 
     boolean isSuperAdmin(Long roleId);
 
     boolean hasAnySuperAdmin(Set<Long> roleIds);
 
-    List<SystemRole> findRoleByIdsFromCache(Set<Long> roleIds);
+    List<SystemRole> findRoleByIds(Set<Long> roleIds);
 }

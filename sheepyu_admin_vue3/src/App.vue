@@ -1,14 +1,21 @@
 <template>
-  <el-config-provider :locale='zhCn'>
+  <el-config-provider :locale="zhCn">
     <router-view></router-view>
   </el-config-provider>
 </template>
 
-<script setup lang='ts'>
-import zhCn from 'element-plus/dist/locale/zh-cn.mjs'</script>
+<script setup lang="ts">
+import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
+import { useConfig } from '@/stores/config/config'
 
-<style lang='scss'>
-html, body, #app {
+//为了能在项目任何页面都有白天/暗夜适配
+useConfig()
+</script>
+
+<style lang="scss">
+html,
+body,
+#app {
   width: 100vw;
   height: 100vh;
   margin: 0;

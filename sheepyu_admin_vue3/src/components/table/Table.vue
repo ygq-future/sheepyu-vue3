@@ -103,7 +103,7 @@ const props = withDefaults(defineProps<{
   tableConfig: TableConfig
   //如果开启了selection, 也可以使用双向绑定, 更加方便
   selection?: any[]
-  pagination?: any & {current?: number, size?: number, total?: number}
+  pagination?: any & { current?: number, size?: number, total?: number }
   auth?: string
 }>(), {
   auth: 'none',
@@ -148,6 +148,8 @@ function onSelectionChange(selection: Array<any>) {
 function onRowDblClick(row: any) {
   if (row.children && row.children.length > 0) {
     tableRef.value?.toggleRowExpansion(row)
+  } else {
+    onEdit(row)
   }
 }
 

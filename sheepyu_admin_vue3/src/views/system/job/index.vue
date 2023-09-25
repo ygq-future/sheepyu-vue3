@@ -1,70 +1,67 @@
 <template>
-  <div class='default-main'>
+  <div class="default-main">
     <TableHeader
-      ref='tableHeaderRef'
-      v-model='state.query.keyword'
-      auth='system:job'
+      ref="tableHeaderRef"
+      v-model="state.query.keyword"
+      auth="system:job"
       :buttons="['add', 'delete', 'edit']"
-      :rows='state.selection'
-      @refresh='pageJob'
-      @add='onAdd'
-      @batch-delete='onBatchDelete'
-      @batch-edit='onBatchEdit'
-      @input-enter='pageJob'
-      @input-clear='$nextTick(() => pageJob())'
+      :rows="state.selection"
+      @refresh="pageJob"
+      @add="onAdd"
+      @batch-delete="onBatchDelete"
+      @batch-edit="onBatchEdit"
+      @input-enter="pageJob"
+      @input-clear="$nextTick(() => pageJob())"
     >
       <template #comSearch>
-        <ComSearch
-          :com-search-config='state.comSearchConfig'
-          :form='state.query'
-          @search='pageJob'
-          @reset='pageJob'
-        />
+        <ComSearch :com-search-config="state.comSearchConfig" :form="state.query" @search="pageJob" @reset="pageJob" />
       </template>
     </TableHeader>
 
     <Table
-      ref='tableRef'
-      v-model:selection='state.selection'
-      auth='system:job'
-      :data='state.tableData'
-      :table-config='state.tableConfig'
-      :pagination='state.query'
-      @edit='(row) => onBatchEdit([row.id])'
-      @delete='(row) => onBatchDelete([row.id])'
-      @current-change='pageJob'
-      @size-change='pageJob'
+      ref="tableRef"
+      v-model:selection="state.selection"
+      auth="system:job"
+      :data="state.tableData"
+      :table-config="state.tableConfig"
+      :pagination="state.query"
+      @edit="row => onBatchEdit([row.id])"
+      @delete="row => onBatchDelete([row.id])"
+      @current-change="pageJob"
+      @size-change="pageJob"
     >
-      <template #buttons='scope'>
-        <el-tooltip content='执行一次' placement='top' :show-after='500'>
-          <el-button v-auth="'system:job:update'" v-blur type='warning' @click='execute(scope.data.id)'>
+      <template #buttons="scope">
+        <el-tooltip content="执行一次" placement="top" :show-after="500">
+          <el-button v-auth="'system:job:update'" v-blur type="warning" @click="execute(scope.data.id)">
             <template #icon>
-              <MyIcon name='fa fa-flash' />
+              <MyIcon name="fa fa-flash" />
             </template>
           </el-button>
         </el-tooltip>
 
-        <el-tooltip content='暂停' placement='top' :show-after='500'>
+        <el-tooltip content="暂停" placement="top" :show-after="500">
           <el-button
-            v-show='scope.data.status === 1'
+            v-show="scope.data.status === 1"
             v-auth="'system:job:update'"
-            v-blur type='danger'
-            @click='updateStatus(scope.data.id)'
+            v-blur
+            type="danger"
+            @click="updateStatus(scope.data.id)"
           >
             <template #icon>
-              <MyIcon name='fa fa-stop-circle' />
+              <MyIcon name="fa fa-stop-circle" />
             </template>
           </el-button>
         </el-tooltip>
-        <el-tooltip content='开始' placement='top' :show-after='500'>
+        <el-tooltip content="开始" placement="top" :show-after="500">
           <el-button
-            v-show='scope.data.status === 2'
+            v-show="scope.data.status === 2"
             v-auth="'system:job:update'"
-            v-blur type='success'
-            @click='updateStatus(scope.data.id)'
+            v-blur
+            type="success"
+            @click="updateStatus(scope.data.id)"
           >
             <template #icon>
-              <MyIcon name='fa fa-play-circle' />
+              <MyIcon name="fa fa-play-circle" />
             </template>
           </el-button>
         </el-tooltip>
@@ -72,16 +69,16 @@
     </Table>
 
     <PopupForm
-      ref='popupFormRef'
-      :form='state.form'
-      :config='state.popupFormConfig'
-      @close='onClose'
-      @next='findJob'
-      @submit='onSubmit'
+      ref="popupFormRef"
+      :form="state.form"
+      :config="state.popupFormConfig"
+      @close="onClose"
+      @next="findJob"
+      @submit="onSubmit"
     />
   </div>
 </template>
-<script setup lang='ts'>
+<script setup lang="ts">
 import TableHeader from '@/components/table/header/TableHeader.vue'
 import Table from '@/components/table/Table.vue'
 import PopupForm from '@/components/form/PopupForm.vue'
@@ -90,10 +87,12 @@ import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemJobCreateVo, SystemJobQueryVo, SystemJobRespVo, SystemJobUpdateVo } from '@/api/system/job'
 import {
   createJobApi,
-  deleteJobApi, executeJobApi,
+  deleteJobApi,
+  executeJobApi,
   findJobApi,
   pageJobApi,
-  updateJobApi, updateJobStatusApi
+  updateJobApi,
+  updateJobStatusApi
 } from '@/api/system/job'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
@@ -171,7 +170,7 @@ const state = reactive<{
       { label: '参数', prop: 'handlerParam', required: false, placeholder: '参数', render: 'text' },
       { label: 'CRON 表达式', prop: 'cron', placeholder: 'CRON表达式', render: 'text' },
       { label: '重试次数', prop: 'retryCount', placeholder: '重试次数', render: 'number' },
-      { label: '重试间隔', prop: 'retryInterval', placeholder: '重试间隔', render: 'number' }
+      { label: '重试间隔(秒)', prop: 'retryInterval', placeholder: '重试间隔', render: 'number' }
     ]
   }
 })
@@ -242,7 +241,7 @@ onMounted(() => {
 })
 </script>
 
-<script lang='ts'>
+<script lang="ts">
 export default defineComponent({
   name: 'system-job'
 })

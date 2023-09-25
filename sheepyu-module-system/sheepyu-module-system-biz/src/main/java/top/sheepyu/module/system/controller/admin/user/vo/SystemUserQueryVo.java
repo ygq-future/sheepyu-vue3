@@ -31,7 +31,7 @@ public class SystemUserQueryVo extends PageParam {
     private Integer type;
 
     @ApiModelProperty("部门id")
-    private Integer deptId;
+    private Long deptId;
 
     @ApiModelProperty("最近登录时间")
     @DateTimeFormat(pattern = DATE_TIME_FORMAT)

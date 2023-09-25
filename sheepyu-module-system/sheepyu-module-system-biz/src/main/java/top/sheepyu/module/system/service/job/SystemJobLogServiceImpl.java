@@ -36,14 +36,14 @@ public class SystemJobLogServiceImpl extends ServiceImplX<SystemJobLogMapper, Sy
     @Async
     @Override
     public void updateJobLogResultAsync(Long logId, Date endTime, Integer duration, boolean success, String result) {
-        SystemJobLog jobLog = this.findByIdValidateExists(logId);
+        SystemJobLog jobLog = this.findByIdThrowIfNotExists(logId);
         jobLog.setEndTime(endTime).setDuration(duration).setResult(result);
         jobLog.setStatus(success ? SUCCESS.getCode() : FAILED.getCode());
         updateById(jobLog);
     }
 
-    private SystemJobLog findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, LOG_NOT_EXISTS);
+    private SystemJobLog findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, LOG_NOT_EXISTS);
     }
 
     @Override

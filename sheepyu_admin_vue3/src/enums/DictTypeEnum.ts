@@ -13,5 +13,6 @@ export enum DictTypeEnum {
   SYSTEM_JOB_STATUS = 'system_job_status',
   SYSTEM_JOG_LOG_STATUS = 'system_jog_log_status',
   SYSTEM_FILE_COMPLETE = 'system_file_complete',
-  FILE_TYPE = 'file_type'
+  FILE_TYPE = 'file_type',
+  SYSTEM_DEPT_TYPE = 'system_dept_type',
 }

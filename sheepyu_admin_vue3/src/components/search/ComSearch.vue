@@ -25,7 +25,7 @@
           <el-col class='p-15' :sm='6' :xs='24' v-if='item.render === "select"'>
             <el-form-item :label='item.label' :prop='item.prop'>
               <el-select v-model='form[item.prop]' :clearable='item.clearable === undefined || item.clearable'>
-                <el-option v-for='option in selectFormat(item)' :label='option.label' :value='option.id' />
+                <el-option v-for='option in selectFormat(item)' :label='option.label' :value='option.value' />
               </el-select>
             </el-form-item>
           </el-col>
@@ -36,10 +36,10 @@
                 v-model='form[item.prop]'
                 default-expand-all
                 check-strictly
-                :node-key='item.selectIdKey'
-                :data='item.selectOptions'
+                :node-key='item.props?.value ?? defaultProps.value'
+                :data='item.data || []'
                 :render-after-expand='false'
-                :props='{label: item.selectLabelKey, value: item.selectIdKey}'
+                :props='item.props ?? defaultProps'
               />
             </el-form-item>
           </el-col>
@@ -92,6 +92,10 @@ const emits = defineEmits<{
 }>()
 
 const formRef = ref<InstanceType<typeof ElForm>>()
+const defaultProps = {
+  label: 'name',
+  value: 'id'
+}
 
 function onReset() {
   formRef.value?.resetFields()
@@ -99,14 +103,14 @@ function onReset() {
 }
 
 function selectFormat(configItem: ComSearchConfigItem): SelectOptionItem[] {
-  const selectOptions = configItem.selectOptions
+  const selectOptions = configItem.data
   if (!selectOptions) {
     return []
   }
   return selectOptions.map(option => {
-    let id: string | number = configItem.selectIdKey ? option[configItem.selectIdKey] : option.id
-    let label: string | number = configItem.selectLabelKey ? option[configItem.selectLabelKey] : option.label
-    return { id, label } as SelectOptionItem
+    let value: string = option[configItem.props?.value ?? defaultProps.value]
+    let label: string = option[configItem.props?.label ?? defaultProps.label]
+    return { value, label } as SelectOptionItem
   })
 }
 </script>

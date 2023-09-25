@@ -1,6 +1,5 @@
 package top.sheepyu.module.system.service.user;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -8,33 +7,34 @@ import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.security.config.LoginUser;
 import top.sheepyu.framework.security.core.service.SecurityRedisService;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 import top.sheepyu.module.common.common.PageParam;
 import top.sheepyu.module.common.common.PageResult;
-import top.sheepyu.module.common.enums.CommonStatusEnum;
-import top.sheepyu.module.common.enums.UserTypeEnum;
 import top.sheepyu.module.system.controller.admin.user.vo.*;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserLoginVo;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserRegisterVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
 import top.sheepyu.module.system.convert.user.SystemUserConvert;
 import top.sheepyu.module.system.dao.user.SystemUser;
+import top.sheepyu.module.system.dao.user.SystemUserDeptMapper;
+import top.sheepyu.module.system.dao.user.SystemUserRoleMapper;
 import top.sheepyu.module.system.service.captcha.CaptchaService;
 import top.sheepyu.module.system.service.dept.SystemDeptService;
 import top.sheepyu.module.system.service.log.SystemAccessLogService;
-import top.sheepyu.module.system.service.post.SystemPostService;
+import top.sheepyu.module.system.service.permission.PermissionBiz;
 
 import javax.validation.Valid;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static top.sheepyu.framework.security.core.constants.SecurityRedisConstants.REFRESH_TOKEN_KEY;
 import static top.sheepyu.module.common.constants.ErrorCodeConstants.OPERATION_FAILED;
+import static top.sheepyu.module.common.enums.CommonStatusEnum.ENABLE;
 import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
+import static top.sheepyu.module.common.enums.UserTypeEnum.MEMBER;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.EMAIL_OR_MOBILE_NONNULL;
@@ -56,7 +56,9 @@ public class SystemUserBiz {
     private final CaptchaService captchaService;
     private final SystemAccessLogService systemAccessLogService;
     private final SystemDeptService systemDeptService;
-    private final SystemPostService systemPostService;
+    private final SystemUserRoleMapper systemUserRoleMapper;
+    private final SystemUserDeptMapper systemUserDeptMapper;
+    private final PermissionBiz permissionBiz;
 
     public LoginUser login(@Valid SystemUserLoginVo loginVo) {
         //校验验证码
@@ -114,9 +116,11 @@ public class SystemUserBiz {
         return page;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void createUser(SystemUserCreateVo createVo) {
         createVo.setType(ADMIN.getCode());
-        systemUserService.create(createVo);
+        Long userId = systemUserService.create(createVo);
+        permissionBiz.assignDeptToUser(userId, createVo.getDeptIds());
     }
 
     /**
@@ -129,32 +133,43 @@ public class SystemUserBiz {
         if (StrUtil.isAllBlank(registerVo.getEmail(), registerVo.getMobile())) {
             throw exception(EMAIL_OR_MOBILE_NONNULL);
         }
+
         SystemUserCreateVo createVo = new SystemUserCreateVo();
         createVo.setNickname(registerVo.getNickname());
         createVo.setPassword(registerVo.getPassword());
         createVo.setEmail(registerVo.getEmail());
         createVo.setMobile(registerVo.getMobile());
-        createVo.setType(UserTypeEnum.MEMBER.getCode());
-        createVo.setStatus(CommonStatusEnum.ENABLE.getCode());
-
+        createVo.setType(MEMBER.getCode());
+        createVo.setStatus(ENABLE.getCode());
         //设置用户名
         createVo.setUsername("sheepyu_user" + RandomUtil.randomNumbers(12));
         systemUserService.create(createVo);
     }
 
     public SystemUser infoById(Long id) {
-        return systemUserService.insensitiveInfo(id);
+        SystemUser userInfo = systemUserService.insensitiveInfo(id);
+        fillDeptInfo(userInfo);
+        return userInfo;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void updateUser(SystemUserUpdateVo updateVo) {
         systemUserService.updateUser(updateVo);
+        Long userId = updateVo.getId();
+        permissionBiz.assignDeptToUser(userId, updateVo.getDeptIds());
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void deleteUser(Long id) {
         systemUserService.deleteUser(id);
+        systemUserRoleMapper.deleteByUserId(id);
+        systemUserDeptMapper.deleteByUserId(id);
     }
 
     public List<SystemUser> listUser(@Valid SystemUserQueryVo queryVo) {
+        if (queryVo.getType() == null) {
+            queryVo.setType(2);
+        }
         List<SystemUser> list = systemUserService.list(buildQuery(queryVo));
         for (SystemUser user : list) {
             fillDeptInfo(user);
@@ -185,12 +200,26 @@ public class SystemUserBiz {
     private LambdaQueryWrapper<SystemUser> buildQuery(SystemUserQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
 
+        Set<Long> userIds = new HashSet<>();
+        //非超级管理员只能查询自己部门下的用户
+        if (!permissionBiz.isSuperAdminRole()) {
+            Long userId = SecurityFrameworkUtil.getLoginUserId();
+            userIds.addAll(systemDeptService.deepQueryUserIdByUserId(userId));
+            userIds.add(0L);
+        }
+        //添加指定部门下的所有用户id
+        if (queryVo.getDeptId() != null) {
+            Set<Long> singleDeptId = Collections.singleton(queryVo.getDeptId());
+            userIds.addAll(systemDeptService.deepQueryUserIdByDeptId(singleDeptId));
+            userIds.add(0L);
+        }
+
         return systemUserService.buildQuery()
                 .eqIfPresent(SystemUser::getStatus, queryVo.getStatus())
-                .eqIfPresent(SystemUser::getDeptId, queryVo.getDeptId())
                 .betweenIfPresent(SystemUser::getCreateTime, queryVo.getCreateTimes())
                 .betweenIfPresent(SystemUser::getLoginTime, queryVo.getLoginTimes())
                 .eqIfPresent(SystemUser::getType, queryVo.getType())
+                .inIfPresent(SystemUser::getId, userIds)
                 .and(StrUtil.isNotBlank(keyword), e -> e
                         .like(SystemUser::getUsername, keyword).or()
                         .like(SystemUser::getNickname, keyword).or()
@@ -228,15 +257,11 @@ public class SystemUserBiz {
     }
 
     private void fillDeptInfo(SystemUser user) {
-        if (user.getDeptId() != null) {
-            String deptName = systemDeptService.findNameById(user.getDeptId());
-            user.setDeptName(deptName);
-        }
-
-        if (CollUtil.isNotEmpty(user.getPostIds())) {
-            List<String> postNames = systemPostService.findNamesByIds(user.getPostIds());
-            user.setPostNames(String.join(",", postNames));
-        }
+        Long userId = user.getId();
+        Set<Long> deptIds = systemUserDeptMapper.findDeptIdByUserId(userId);
+        user.setDeptIds(deptIds);
+        List<String> deptNames = systemDeptService.findNamesByIds(userId, deptIds);
+        user.setDeptNames(String.join(",", deptNames));
     }
 
     public SystemUserStatisticsVo statistics() {

@@ -70,7 +70,7 @@ import PopupForm from '@/components/form/PopupForm.vue'
 import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemMenuCreateVo, SystemMenuQueryVo, SystemMenuRespVo, SystemMenuUpdateVo } from '@/api/system/menu'
-import { createMenu, deleteMenu, findMenu, menuList, updateMenu } from '@/api/system/menu'
+import { changeStatus, createMenu, deleteMenu, findMenu, menuList, updateMenu } from '@/api/system/menu'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { useTabs } from '@/stores/tabs/tabs'
@@ -107,7 +107,13 @@ const state = reactive<{
   },
   tableData: [],
   comSearchConfig: [
-    { label: '状态', prop: 'status', placeholder: '菜单状态', render: 'dict', dictType: DictTypeEnum.COMMON_STATUS }
+    {
+      label: '状态',
+      prop: 'status',
+      placeholder: '菜单状态',
+      render: 'dict',
+      dictType: DictTypeEnum.COMMON_STATUS
+    }
   ],
   tableConfig: {
     rowKey: 'id',
@@ -150,16 +156,21 @@ const state = reactive<{
   }
 })
 
+watch(() => state.query.status, val => {
+  console.log(val)
+})
+
 const forbidList: number[] = [1, 2, 12]
 
 async function onFieldChange(row: SystemMenuUpdateVo) {
   const data = toRaw(row)
   if (forbidList.includes(data.id)) {
-    await findMenuList()
-    return ElNotification.warning('不能操作重要数据')
+    ElNotification.warning('不能操作重要数据!')
+  } else {
+    await changeStatus(data.id)
   }
-  await updateMenu(data)
-  tabs.clearRoute()
+  await findMenuList()
+  tabs.notifyNeedUpdate()
 }
 
 function onUnfold(value: boolean) {

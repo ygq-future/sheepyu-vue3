@@ -22,7 +22,7 @@ public interface SystemRoleConvert {
 
     SystemRole convert(SystemRoleUpdateVo updateVo);
 
-    SystemRoleRespVo convert(SystemRole systemConfig);
+    SystemRoleRespVo convert(SystemRole systemRole);
 
     List<SystemRoleRespVo> convertList(List<SystemRole> list);
 

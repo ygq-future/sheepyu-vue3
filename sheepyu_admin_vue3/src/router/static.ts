@@ -16,7 +16,8 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           keepalive: true,
           fullpath: '/system/codegen/edit/:id'
         }
-      }, {
+      },
+      {
         name: 'system-dict-data',
         path: '/system/dict/:type',
         component: () => import('@/views/system/dict/data.vue'),
@@ -25,7 +26,8 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           keepalive: true,
           fullpath: '/system/dict/:type'
         }
-      }, {
+      },
+      {
         name: 'system-user-info',
         path: '/system/user/info',
         component: () => import('@/views/system/user/info.vue'),
@@ -34,7 +36,8 @@ export const staticRoutes: Array<RouteRecordRaw> = [
           keepalive: true,
           fullpath: '/system/user/info'
         }
-      }, {
+      },
+      {
         name: 'system-job-log',
         path: '/system/job/log/:jobId',
         component: () => import('@/views/system/job/log.vue'),
@@ -45,11 +48,13 @@ export const staticRoutes: Array<RouteRecordRaw> = [
         }
       }
     ]
-  }, {
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('@/views/login.vue')
-  }, {
+  },
+  {
     path: '/404',
     name: '404',
     component: () => import('@/views/common/404.vue')

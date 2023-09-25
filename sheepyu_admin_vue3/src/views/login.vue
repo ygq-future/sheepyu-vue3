@@ -1,62 +1,41 @@
 <template>
-  <div style='position: fixed;top: 0;left:0;bottom: 0;right: 0;'>
-    <canvas id='canvas' />
+  <div style="position: fixed; top: 0; left: 0; bottom: 0; right: 0">
+    <canvas id="canvas" />
   </div>
-  <div class='theme-select'>
-    <el-radio-group v-model='config.layout.colorModeIndex' @change='onColorModeChange' size='small'>
-      <el-radio-button v-for='(item, index) in config.layout.colorMode' :label='index'>
+  <div class="theme-select">
+    <el-radio-group v-model="config.layout.colorModeIndex" @change="onColorModeChange" size="small">
+      <el-radio-button v-for="(item, index) in config.layout.colorMode" :label="index">
         {{ item }}
       </el-radio-button>
     </el-radio-group>
   </div>
-  <div class='box full'>
-    <img class='img' src='@/assets/logo.png' alt=''>
-    <span class='title'>SY管理后台登录</span>
-    <el-form
-      ref='formRef'
-      :model='form'
-      :rules='rules'
-      label-width='0'
-      size='default'
-    >
-      <el-form-item prop='login'>
-        <el-input
-          autofocus
-          prefix-icon='el-icon-User'
-          v-model='form.login'
-          placeholder='用户名/邮箱/手机号'
-        />
+  <div class="box full">
+    <img class="img" src="@/assets/logo.png" alt="" />
+    <span class="title">SY管理后台登录</span>
+    <el-form ref="formRef" :model="form" :rules="rules" label-width="0" size="default">
+      <el-form-item prop="login">
+        <el-input autofocus prefix-icon="el-icon-User" v-model="form.login" placeholder="用户名/邮箱/手机号" />
       </el-form-item>
-      <el-form-item prop='password'>
-        <el-input
-          prefix-icon='el-icon-Lock'
-          type='password'
-          v-model='form.password'
-          placeholder='密码'
-        />
+      <el-form-item prop="password">
+        <el-input prefix-icon="el-icon-Lock" type="password" v-model="form.password" placeholder="密码" />
       </el-form-item>
-      <el-form-item class='code' prop='code'>
+      <el-form-item class="code" prop="code">
         <el-input
-          :disabled='!captchaEnable'
-          prefix-icon='el-icon-More'
-          v-model='form.code'
-          placeholder='验证码'
-          @keydown.enter='submit(formRef)'
+          :disabled="!captchaEnable"
+          prefix-icon="el-icon-More"
+          v-model="form.code"
+          placeholder="验证码"
+          @keydown.enter="submit(formRef)"
         />
-        <img v-if='captchaEnable'
-             :src='captchaInfo.base64'
-             alt='验证码'
-             @click='getCaptcha'
-             title='点击刷新'
-        >
-        <span v-else style='color: lightgray;user-select: none'>不用验证码</span>
+        <img v-if="captchaEnable" :src="captchaInfo.base64" alt="验证码" @click="getCaptcha" title="点击刷新" />
+        <span v-else style="color: lightgray; user-select: none">不用验证码</span>
       </el-form-item>
     </el-form>
-    <el-button type='primary' @click='submit(formRef)'>登录</el-button>
+    <el-button type="primary" @click="submit(formRef)">登录</el-button>
   </div>
 </template>
 
-<script setup lang='ts'>
+<script setup lang="ts">
 import { useConfig } from '@/stores/config/config'
 import { useUser } from '@/stores/user/user'
 import { useRouter } from 'vue-router'
@@ -100,16 +79,16 @@ function submit(formRef?: InstanceType<typeof ElForm>) {
     data.key = captchaInfo.key
     data.code = captchaInfo.arithmetic + data.code
     login(data).then(res => {
-      user.setAuthInfo(res.data)
-      info().then(res => {
-        user.setUserInfo(res.data)
-        loadDict()
-        const redirectUrl = route.query.redirectUrl as string
-        router.push(redirectUrl ? redirectUrl : '/')
+        user.setAuthInfo(res.data)
+        info().then(res => {
+          user.setUserInfo(res.data)
+          loadDict()
+          const redirectUrl = route.query.redirectUrl as string
+          router.replace(redirectUrl ? redirectUrl : '/')
+        })
+      }).catch(() => {
+        getCaptcha()
       })
-    }).catch(() => {
-      getCaptcha()
-    })
   })
 }
 
@@ -132,6 +111,15 @@ function onColorModeChange(colorModeIndex: number) {
   })
 }
 
+onBeforeMount(() => {
+  //如果在登录状态就直接跳转就行了
+  const refreshExpireTime = new Date(user.get().refreshExpireTime || 0)
+  if (refreshExpireTime.getTime() > Date.now()) {
+    const redirectUrl = route.query.redirectUrl as string
+    router.replace(redirectUrl ? redirectUrl : '/')
+  }
+})
+
 onMounted(async () => {
   particleLine = new ParticleLine(config.layout.isDark)
   particleLine.init()
@@ -141,7 +129,7 @@ onMounted(async () => {
 })
 </script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 .img {
   position: absolute;
   top: -40px;

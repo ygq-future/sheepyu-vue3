@@ -27,12 +27,8 @@
               <span>{{ state.user.email }}</span>
             </div>
             <div class='content-item'>
-              <span><MyIcon name='fa fa-sitemap' />部门:</span>
-              <span>{{ state.user.deptName }}</span>
-            </div>
-            <div class='content-item'>
-              <span><MyIcon name='fa fa-sitemap' />职位:</span>
-              <span>{{ state.user.postNames }}</span>
+              <span><MyIcon name='fa fa-sitemap' />部门/职位:</span>
+              <span>{{ state.user.deptNames }}</span>
             </div>
             <div class='content-item'>
               <span><MyIcon name='fa fa-calendar-plus-o' />注册日期:</span>
@@ -109,8 +105,16 @@ const user = useUser()
 
 const state = reactive<{
   user: SystemUserRespVo
-  userForm: { nickname: string, mobile: string, email: string }
-  passForm: { password: string, newPass: string, confirmPass: string }
+  userForm: {
+    nickname: string,
+    mobile: string,
+    email: string
+  }
+  passForm: {
+    password: string,
+    newPass: string,
+    confirmPass: string
+  }
 }>({
   user: {
     id: 0,
@@ -204,15 +208,13 @@ export default defineComponent({
     align-items: center;
     justify-content: space-between;
     padding: 10px 0;
+    gap: 15px;
     border-bottom: 1px solid lightgray;
-
-    .icon {
-      margin-right: 5px;
-    }
 
     span:nth-child(1) {
       display: flex;
       align-items: center;
+      gap: 5px;
     }
   }
 

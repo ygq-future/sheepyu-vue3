@@ -31,11 +31,10 @@
       :data='state.tableData'
       :table-config='state.tableConfig'
       @fieldChange='onFieldChange'
-      @edit='(row) => onBatchEdit([row.id])'
-      @delete='(row) => onDelete(row.id)'
+      @edit='row => onBatchEdit([row.id])'
+      @delete='row => onDelete(row.id)'
     >
-
-      <template #buttons='{data}'>
+      <template #buttons='{ data }'>
         <el-tooltip content='新增' placement='top' :show-after='500'>
           <el-button v-auth="'system:dept:create'" v-blur type='success' @click='onAdd(data?.id)'>
             <template #icon>
@@ -43,8 +42,14 @@
             </template>
           </el-button>
         </el-tooltip>
+        <el-tooltip v-if='data?.leaderUserId !== user.get().id' content='分配角色' placement='top' :show-after='500'>
+          <el-button v-auth="'system:role:assign'" v-blur type='warning' @click='onAssignRole(data)'>
+            <template #icon>
+              <MyIcon name='fa fa-odnoklassniki' />
+            </template>
+          </el-button>
+        </el-tooltip>
       </template>
-
     </Table>
 
     <PopupForm
@@ -54,6 +59,14 @@
       @close='onClose'
       @next='findDept'
       @submit='onSubmit'
+    />
+
+    <PopupForm
+      ref='roleAssignFormRef'
+      :form='state.roleAssignForm'
+      :config='state.roleAssignFormConfig'
+      @close='onRoleAssignClose'
+      @submit='onRoleAssignSubmit'
     />
   </div>
 </template>
@@ -65,34 +78,54 @@ import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemDeptCreateVo, SystemDeptQueryVo, SystemDeptRespVo, SystemDeptUpdateVo } from '@/api/system/dept'
 import {
+  assignRoleToDeptApi,
   createDeptApi,
   deleteDeptApi,
   findDeptApi,
-  listDeptApi,
+  listDeptApi, roleByDeptApi,
+  treeDeptApi,
   updateDeptApi
 } from '@/api/system/dept'
 import type { PopupFormConfig } from '@/components/form/interface'
 import ComSearch from '@/components/search/ComSearch.vue'
+import { DictTypeEnum } from '@/enums/DictTypeEnum'
+import { listUserApi } from '@/api/system/user'
+import { ElLoading } from 'element-plus'
+import { listRoleApi } from '@/api/system/role'
+import { useUser } from '@/stores/user/user'
 
+const user = useUser()
 const tableRef = ref()
 const tableHeaderRef = ref()
 const popupFormRef = ref()
+const roleAssignFormRef = ref()
 
 const state = reactive<{
   selection: any[]
   query: SystemDeptQueryVo
   form: SystemDeptCreateVo | SystemDeptUpdateVo
+  roleAssignForm: {
+    deptId: number,
+    roleIds: Array<number>,
+    name?: string,
+    leaderNickname?: string
+  }
   tableData: SystemDeptRespVo[]
   comSearchConfig: ComSearchConfig
   tableConfig: TableConfig
   popupFormConfig: PopupFormConfig
+  roleAssignFormConfig: PopupFormConfig
 }>({
   selection: [],
   query: {},
   form: {
     name: '',
-    parentId: 0,
-    sort: 0
+    sort: 0,
+    type: 0
+  },
+  roleAssignForm: {
+    deptId: 0,
+    roleIds: []
   },
   tableData: [],
   comSearchConfig: [],
@@ -102,14 +135,15 @@ const state = reactive<{
     columns: [
       { label: '部门编号', prop: 'id', render: 'text' },
       { label: '部门名称', prop: 'name', render: 'text' },
+      { label: '负责人', prop: 'leaderNickname', render: 'text' },
+      { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_DEPT_TYPE },
       { label: '显示顺序', prop: 'sort', render: 'text' },
-      { label: '负责人', prop: 'leaderUserId', render: 'text' },
       { label: '联系电话', prop: 'phone', render: 'text' },
       { label: '邮箱', prop: 'email', render: 'text' }
     ],
     operate: {
       buttons: ['edit', 'delete'],
-      width: 120
+      width: 160
     }
   },
   popupFormConfig: {
@@ -123,10 +157,36 @@ const state = reactive<{
         props: { label: 'name', value: 'id' }
       },
       { label: '部门名称', prop: 'name', placeholder: '部门名称', render: 'text' },
+      { label: '类型', prop: 'type', dictRender: 'radio', dictType: DictTypeEnum.SYSTEM_DEPT_TYPE },
+      {
+        label: '负责人',
+        prop: 'leaderUserId',
+        required: false,
+        placeholder: '负责人',
+        render: 'select',
+        props: { label: 'nickname', labelVModelKey: 'leaderNickname' }
+      },
       { label: '显示顺序', prop: 'sort', placeholder: '显示顺序', render: 'number' },
-      { label: '负责人', prop: 'leaderUserId', required: false, placeholder: '负责人', render: 'number' },
       { label: '联系电话', prop: 'phone', required: false, placeholder: '联系电话', render: 'text' },
       { label: '邮箱', prop: 'email', required: false, placeholder: '邮箱', render: 'text' }
+    ]
+  },
+  roleAssignFormConfig: {
+    title: '分配角色',
+    labelWidth: 120,
+    width: 500,
+    formItemConfigs: [
+      { label: '部门/职位名称', prop: 'name', disabled: true },
+      { label: '负责人', prop: 'leaderNickname', disabled: true, required: false },
+      {
+        label: '角色',
+        prop: 'roleIds',
+        placeholder: '请选择角色',
+        render: 'select',
+        multiple: true,
+        required: false,
+        props: { label: 'name', value: 'id' }
+      }
     ]
   }
 })
@@ -141,10 +201,22 @@ function onUnfold(value: boolean) {
 }
 
 function onAdd(id?: number) {
+  state.popupFormConfig.disabledProps = []
   if (id) state.form.parentId = id
   state.popupFormConfig.title = '新增部门'
   state.popupFormConfig.isEdit = false
   popupFormRef.value.show()
+}
+
+async function onAssignRole(row: any) {
+  const service = ElLoading.service({ fullscreen: true })
+  const { data } = await roleByDeptApi(row.id)
+  service.close()
+  state.roleAssignForm.roleIds = data
+  state.roleAssignForm.deptId = row.id
+  state.roleAssignForm.name = row.name
+  state.roleAssignForm.leaderNickname = row.leaderNickname
+  roleAssignFormRef.value.show()
 }
 
 async function onDelete(id: number) {
@@ -153,6 +225,7 @@ async function onDelete(id: number) {
 }
 
 function onBatchEdit(ids: number[]) {
+  state.popupFormConfig.disabledProps = ['parentId', 'type']
   state.popupFormConfig.title = '修改部门'
   state.popupFormConfig.isEdit = true
   state.popupFormConfig.ids = [...ids]
@@ -170,6 +243,12 @@ async function onSubmit(cb: Function) {
   await listDept()
 }
 
+async function onRoleAssignSubmit(cb: Function) {
+  const data = toRaw(state.roleAssignForm)
+  await assignRoleToDeptApi(data.deptId, data.roleIds)
+  cb && cb()
+}
+
 async function findDept(id: number) {
   const { data } = await findDeptApi(id)
   state.form = data
@@ -178,26 +257,38 @@ async function findDept(id: number) {
 async function listDept() {
   state.tableConfig.loading = true
   const { data } = await listDeptApi(toRaw(state.query))
+  const { data: treeDept } = await treeDeptApi()
+  const { data: userList } = await listUserApi({})
+  const { data: roleList } = await listRoleApi()
   state.tableConfig.loading = false
   state.tableData = data
-  state.popupFormConfig.formItemConfigs[0].data = [{
-    id: 0,
-    name: '顶级部门',
-    children: [...data]
-  }]
+  state.popupFormConfig.formItemConfigs[0].data = treeDept
+  state.popupFormConfig.formItemConfigs[3].data = userList
+  state.roleAssignFormConfig.formItemConfigs[2].data = roleList
   await nextTick(() => {
     tableRef.value.expandAll(!tableHeaderRef.value.getUnfold())
   })
 }
 
-
 function onClose() {
   state.form = {
     name: '',
-    parentId: 0,
-    sort: 0
+    sort: 0,
+    type: 0
   }
 }
+
+function onRoleAssignClose() {
+  state.roleAssignForm = { deptId: 0, roleIds: [] }
+}
+
+watch(
+  () => state.form.type,
+  value => {
+    state.popupFormConfig.hideProps = value === 0 ? [] : ['leaderUserId', 'email', 'phone']
+  },
+  { immediate: true }
+)
 
 onMounted(() => {
   listDept()

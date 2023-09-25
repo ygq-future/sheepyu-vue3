@@ -75,7 +75,7 @@ public class SystemConfigServiceImpl extends ServiceImplX<SystemConfigMapper, Sy
     @Override
     public void updateConfig(SystemConfigUpdateVo updateVo) {
         //先把数据库中查出来的key保存起来, 因为修改vo中是没有key的
-        String key = findByIdValidateExists(updateVo.getId()).getConfigKey();
+        String key = findByIdThrowIfNotExists(updateVo.getId()).getConfigKey();
         SystemConfig config = CONVERT.convert(updateVo);
         boolean result = updateById(config);
         if (result) {
@@ -85,7 +85,7 @@ public class SystemConfigServiceImpl extends ServiceImplX<SystemConfigMapper, Sy
 
     @Override
     public void deleteConfig(Long id) {
-        SystemConfig config = findByIdValidateExists(id);
+        SystemConfig config = findByIdThrowIfNotExists(id);
         boolean result = removeById(config);
         if (result) {
             redisUtil.hDel(SYSTEM_CONFIG_KEY, config.getConfigKey());
@@ -102,7 +102,7 @@ public class SystemConfigServiceImpl extends ServiceImplX<SystemConfigMapper, Sy
 
     @Override
     public SystemConfig findById(Long id) {
-        return findByIdValidateExists(id);
+        return findByIdThrowIfNotExists(id);
     }
 
     @Override
@@ -114,8 +114,8 @@ public class SystemConfigServiceImpl extends ServiceImplX<SystemConfigMapper, Sy
                 .orderByDesc(SystemConfig::getCreateTime));
     }
 
-    private SystemConfig findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, CONFIG_NOT_EXISTS);
+    private SystemConfig findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, CONFIG_NOT_EXISTS);
     }
 
     private Object strCastObject(String value, Class<?> clazz) {

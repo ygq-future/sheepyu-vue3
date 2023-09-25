@@ -30,17 +30,18 @@
       :data='state.tableData'
       :table-config='state.tableConfig'
       :pagination='state.query'
+      @edit='(row) => onBatchEdit([row.id])'
       @fieldChange='onFieldChange'
       @current-change='pageUser'
       @size-change='pageUser'
     >
-      <template #buttons='scope'>
-        <el-tooltip v-if='scope.data.type === 2' content='编辑' placement='top' :show-after='500'>
+      <template #buttons='{data}'>
+        <el-tooltip v-if='data!.type === 2' content='编辑' placement='top' :show-after='500'>
           <el-button
             v-auth='`system:user:update`'
             v-blur
             type='primary'
-            @click='onBatchEdit([scope.data.id])'
+            @click='onBatchEdit([data!.id])'
           >
             <template #icon>
               <MyIcon name='el-icon-Edit' />
@@ -49,10 +50,10 @@
         </el-tooltip>
 
         <el-popconfirm
-          v-if='scope.data.type === 2'
+          v-if='data!.type === 2'
           confirm-button-type='danger'
           title='确认删除这条记录吗?'
-          @confirm='onDelete(scope.data.id)'
+          @confirm='onDelete(data!.id)'
         >
           <template #reference>
             <div>
@@ -68,10 +69,10 @@
         </el-popconfirm>
 
         <el-popconfirm
-          v-if='scope.data.type === 2'
+          v-if='data!.type === 2'
           confirm-button-type='danger'
           title='确认重置此用户密码吗?'
-          @confirm='onResetPassword(scope.data)'
+          @confirm='onResetPassword(data)'
         >
           <template #reference>
             <div>
@@ -86,7 +87,12 @@
           </template>
         </el-popconfirm>
 
-        <el-tooltip v-if='scope.data.type === 2' content='分配角色' placement='top' :show-after='500'>
+        <el-tooltip
+          v-if='data!.type === 2 && data!.id !== user.get().id'
+          content='分配角色'
+          placement='top'
+          :show-after='500'
+        >
           <el-button v-auth="'system:role:assign'" v-blur type='success' @click='onAssignRole(scope.data)'>
             <template #icon>
               <MyIcon name='fa fa-odnoklassniki' />
@@ -129,17 +135,18 @@ import {
   updateUserApi,
   exportUserApi,
   resetPasswordApi,
-  assignRoleApi,
+  assignRoleToUserApi,
   roleByUserApi
 } from '@/api/system/user'
 import { listDeptApi } from '@/api/system/dept'
-import { listPostApi } from '@/api/system/post'
 import { listRoleApi } from '@/api/system/role'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
+import { useUser } from '@/stores/user/user'
 
+const user = useUser()
 const tableRef = ref()
 const tableHeaderRef = ref()
 const popupFormRef = ref()
@@ -149,7 +156,12 @@ const state = reactive<{
   selection: any[]
   query: SystemUserQueryVo
   form: SystemUserCreateVo | SystemUserUpdateVo
-  roleAssignForm: { userId: number, roleIds: Array<number>, username?: string, nickname?: string }
+  roleAssignForm: {
+    userId: number,
+    roleIds: Array<number>,
+    username?: string,
+    nickname?: string
+  }
   tableData: SystemUserRespVo[]
   comSearchConfig: ComSearchConfig
   tableConfig: TableConfig
@@ -179,9 +191,7 @@ const state = reactive<{
       label: '部门',
       prop: 'deptId',
       placeholder: '部门',
-      render: 'tree-select',
-      selectIdKey: 'id',
-      selectLabelKey: 'name'
+      render: 'tree-select'
     },
     {
       label: '状态',
@@ -206,19 +216,18 @@ const state = reactive<{
     pagination: true,
     columns: [
       { label: '编号', prop: 'id', render: 'text' },
-      { label: '用户名', prop: 'username', render: 'text' },
-      { label: '昵称', prop: 'nickname', render: 'text' },
-      { label: '邮箱', prop: 'email', render: 'text' },
+      { label: '用户名', prop: 'username', render: 'text', width: 100 },
+      { label: '昵称', prop: 'nickname', render: 'text', width: 100 },
+      { label: '邮箱', prop: 'email', render: 'text', width: 130 },
       { label: '手机号码', prop: 'mobile', render: 'text', width: 120 },
-      { label: '头像', prop: 'avatar', render: 'img', width: 130 },
-      { label: '部门', prop: 'deptName', render: 'text' },
-      { label: '职位', prop: 'postNames', render: 'text' },
-      { label: '状态', prop: 'status', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS },
+      { label: '头像', prop: 'avatar', render: 'img', width: 100 },
+      { label: '部门/职位', prop: 'deptNames', render: 'text', width: 150 },
+      { label: '状态', prop: 'status', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS, width: 90 },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_USER_TYPE, width: 90 },
-      { label: '备注', prop: 'remark', render: 'text' },
+      { label: '备注', prop: 'remark', render: 'text', width: 100 },
       { label: '登录IP', prop: 'loginIp', render: 'text', width: 100 },
-      { label: '登录时间', prop: 'loginTime', render: 'text', width: 100 },
-      { label: '创建时间', prop: 'createTime', render: 'text', width: 100 }
+      { label: '登录时间', prop: 'loginTime', render: 'text', width: 170 },
+      { label: '创建时间', prop: 'createTime', render: 'text', width: 170 }
     ],
     operate: {
       buttons: [],
@@ -227,6 +236,7 @@ const state = reactive<{
   },
   popupFormConfig: {
     title: '新增用户',
+    labelWidth: 100,
     formItemConfigs: [
       { label: '用户名', prop: 'username', placeholder: '用户账号', render: 'text' },
       { label: '密码', prop: 'password', placeholder: '密码', render: 'password' },
@@ -235,19 +245,10 @@ const state = reactive<{
       { label: '手机号码', prop: 'mobile', required: false, placeholder: '手机号码', render: 'text' },
       { label: '头像', prop: 'avatar', required: false, placeholder: '头像地址', render: 'image-upload' },
       {
-        label: '部门',
-        prop: 'deptId',
-        required: false,
-        placeholder: '部门',
+        label: '部门/职位',
+        prop: 'deptIds',
+        placeholder: '部门/职位',
         render: 'tree-select',
-        props: { label: 'name', value: 'id' }
-      },
-      {
-        label: '职位',
-        prop: 'postIds',
-        required: false,
-        placeholder: '职位',
-        render: 'select',
         multiple: true,
         props: { label: 'name', value: 'id' }
       },
@@ -265,13 +266,14 @@ const state = reactive<{
     title: '分配角色',
     formItemConfigs: [
       { label: '用户名', prop: 'username', disabled: true },
-      { label: '昵称', prop: 'nickname', disabled: true },
+      { label: '昵称', prop: 'nickname', disabled: true, required: false },
       {
         label: '角色',
         prop: 'roleIds',
         placeholder: '请选择角色',
         render: 'select',
         multiple: true,
+        required: false,
         props: { label: 'name', value: 'id' }
       }
     ]
@@ -280,7 +282,10 @@ const state = reactive<{
 
 async function onFieldChange(row: SystemUserUpdateVo) {
   const data = toRaw(row)
-  await updateUserApi(data)
+  try {
+    await updateUserApi(data)
+  } catch (e) {
+  }
   await pageUser()
 }
 
@@ -334,7 +339,7 @@ async function onSubmit(cb: Function) {
 
 async function onRoleAssignSubmit(cb: Function) {
   const data = toRaw(state.roleAssignForm)
-  await assignRoleApi(data.userId, data.roleIds)
+  await assignRoleToUserApi(data.userId, data.roleIds)
   cb && cb()
 }
 
@@ -346,25 +351,14 @@ async function findUser(id: number) {
 async function pageUser() {
   state.tableConfig.loading = true
   const { data } = await pageUserApi(toRaw(state.query))
+  const { data: roleList } = await listRoleApi()
+  const { data: deptList } = await listDeptApi({})
+  state.comSearchConfig[0].data = deptList
+  state.popupFormConfig.formItemConfigs[6].data = deptList
+  state.roleAssignFormConfig.formItemConfigs[2].data = roleList
   state.tableConfig.loading = false
   state.tableData = data.list
   state.query.total = data.total
-}
-
-async function listDept() {
-  const { data } = await listDeptApi({})
-  state.comSearchConfig[0].selectOptions = data
-  state.popupFormConfig.formItemConfigs[6].data = data
-}
-
-async function listPost() {
-  const { data } = await listPostApi()
-  state.popupFormConfig.formItemConfigs[7].data = data
-}
-
-async function listRole() {
-  const { data } = await listRoleApi()
-  state.roleAssignFormConfig.formItemConfigs[2].data = data
 }
 
 function exportUser() {
@@ -391,9 +385,6 @@ function onClose() {
 
 onMounted(() => {
   pageUser()
-  listDept()
-  listPost()
-  listRole()
 })
 </script>
 

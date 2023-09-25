@@ -24,6 +24,10 @@ export function updateMenu(data: SystemMenuUpdateVo) {
   return request.put<boolean>('/system/permission/menu', data)
 }
 
+export function changeStatus(id: number) {
+  return request.patch<boolean>('/system/permission/menu/change-status/' + id)
+}
+
 export function deleteMenu(ids: string) {
   return request.delete<boolean>(`/system/permission/menu/${ids}`)
 }

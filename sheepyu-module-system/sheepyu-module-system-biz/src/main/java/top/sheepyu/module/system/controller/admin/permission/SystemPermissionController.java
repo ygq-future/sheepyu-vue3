@@ -59,6 +59,14 @@ public class SystemPermissionController {
         return success(true);
     }
 
+    @PatchMapping("/menu/change-status/{id}")
+    @ApiOperation("修改系统菜单状态")
+    @PreAuthorize("@ss.hasPermission('system:menu:update')")
+    public Result<Boolean> changeStatus(@PathVariable Long id) {
+        systemMenuService.changeStatus(id);
+        return success(true);
+    }
+
     @DeleteMapping("/menu/{ids}")
     @ApiOperation("删除系统菜单")
     @PreAuthorize("@ss.hasPermission('system:menu:delete')")
@@ -119,7 +127,8 @@ public class SystemPermissionController {
     @ApiOperation("获取系统角色列表")
     @PreAuthorize("@ss.hasPermission('system:role:query')")
     public Result<List<SystemRoleRespVo>> list() {
-        return success(SystemRoleConvert.CONVERT.convertList(systemRoleService.listRole()));
+        List<SystemRole> list = permissionBiz.listRoleByPermission();
+        return success(SystemRoleConvert.CONVERT.convertList(list));
     }
 
     @GetMapping("/role/{id}")
@@ -130,26 +139,41 @@ public class SystemPermissionController {
         return success(SystemRoleConvert.CONVERT.convert(role));
     }
 
-    @PutMapping("/role/assign/{userId}")
-    @ApiOperation("修改用户的角色")
+    @PutMapping("/role/assign/dept/{deptId}")
+    @ApiOperation("修改部门的角色")
     @PreAuthorize("@ss.hasPermission('system:role:assign')")
-    public Result<Boolean> assignRole(@PathVariable Long userId, @RequestBody Set<Long> roleIds) {
-        permissionBiz.assignRole(userId, roleIds);
+    public Result<Boolean> assignRoleToDept(@PathVariable Long deptId, @RequestBody Set<Long> roleIds) {
+        permissionBiz.assignRoleToDept(deptId, roleIds);
         return success(true);
     }
 
-    @PutMapping("/menu/assign/{roleId}")
+    @PutMapping("/role/assign/user/{userId}")
+    @ApiOperation("修改用户的角色")
+    @PreAuthorize("@ss.hasPermission('system:role:assign')")
+    public Result<Boolean> assignRoleToUser(@PathVariable Long userId, @RequestBody Set<Long> roleIds) {
+        permissionBiz.assignRoleToUser(userId, roleIds);
+        return success(true);
+    }
+
+    @PutMapping("/menu/assign/role/{roleId}")
     @ApiOperation("修改角色的菜单")
     @PreAuthorize("@ss.hasPermission('system:menu:assign')")
-    public Result<Boolean> assignMenu(@PathVariable Long roleId, @RequestBody Set<Long> menuIds) {
-        permissionBiz.assignMenu(roleId, menuIds);
+    public Result<Boolean> assignMenuToRole(@PathVariable Long roleId, @RequestBody Set<Long> menuIds) {
+        permissionBiz.assignMenuToRole(roleId, menuIds);
         return success(true);
+    }
+
+    @GetMapping("/role-by-dept/{deptId}")
+    @ApiOperation("获取用户的角色id")
+    @PreAuthorize("@ss.hasPermission('system:role:query')")
+    public Result<Set<Long>> listRoleByDeptId(@PathVariable Long deptId) {
+        return success(permissionBiz.findRoleByDeptId(deptId));
     }
 
     @GetMapping("/role-by-user/{userId}")
     @ApiOperation("获取用户的角色id")
     @PreAuthorize("@ss.hasPermission('system:role:query')")
-    public Result<Set<Long>> listByUser(@PathVariable Long userId) {
+    public Result<Set<Long>> listRoleByUserId(@PathVariable Long userId) {
         return success(permissionBiz.findRoleByUserId(userId));
     }
 

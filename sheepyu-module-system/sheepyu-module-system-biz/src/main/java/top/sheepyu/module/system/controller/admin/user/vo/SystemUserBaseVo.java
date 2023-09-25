@@ -33,11 +33,8 @@ public class SystemUserBaseVo {
     @InEnum(CommonStatusEnum.class)
     private Integer status;
 
-    @ApiModelProperty("所属部门")
-    private Long deptId;
-
-    @ApiModelProperty("担任的岗位")
-    private Set<Long> postIds;
+    @ApiModelProperty("所属部门-职位")
+    private Set<Long> deptIds;
 
     @ApiModelProperty("备注")
     private String remark;

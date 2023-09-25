@@ -109,18 +109,15 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
     @Override
     public SystemUser insensitiveInfo(Long userId) {
-        SystemUser user = findByIdValidateExists(userId);
+        SystemUser user = findByIdThrowIfNotExists(userId);
         user.setPassword(null);
         return user;
     }
 
     @Override
-    public void create(SystemUserCreateVo createVo) {
+    public Long create(SystemUserCreateVo createVo) {
         SystemUser user = CONVERT.convert(createVo).setType(createVo.getType());
-        SystemUser byUsername = findByUsername(user.getUsername());
-        if (byUsername != null) {
-            throw exception(USER_EXISTS);
-        }
+        findByFieldThrowIfExists(SystemUser::getUsername, user.getUsername(), USER_EXISTS);
         //根据用户名删除deleted=1的用户
         baseMapper.removeByUsernameDeleted(user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -129,14 +126,15 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
             createVo.setNickname("sheepyu_用户" + RandomUtil.randomNumbers(8));
         }
         save(user);
+        return user.getId();
     }
 
     @Override
     public void updateUser(SystemUserUpdateVo updateVo) {
-        findByIdValidateExists(updateVo.getId());
+        findByIdThrowIfNotExists(updateVo.getId());
         SystemUser user = CONVERT.convert(updateVo);
         //安全考虑
-        if (isSuperAdmin(user.getId()) && DISABLE.getCode().equals(user.getStatus())) {
+        if (isSuperAdmin(user.getId()) && Objects.equals(DISABLE.getCode(), user.getStatus())) {
             throw exception(FORBID_OPERATE_ADMIN);
         }
         updateById(user);
@@ -194,7 +192,7 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
         if (isSuperAdmin(id)) {
             throw exception(FORBID_OPERATE_ADMIN);
         }
-        SystemUser user = findByIdValidateExists(id);
+        SystemUser user = findByIdThrowIfNotExists(id);
         String password;
         if (StrUtil.isNotBlank(newPass)) {
             password = passwordEncoder.encode(newPass);
@@ -208,35 +206,35 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
     @Override
     public void updateNickname(Long userId, String nickname) {
-        SystemUser user = findByIdValidateExists(userId);
+        SystemUser user = findByIdThrowIfNotExists(userId);
         user.setNickname(nickname);
         updateById(user);
     }
 
     @Override
     public void updateMobile(Long userId, String mobile) {
-        SystemUser user = findByIdValidateExists(userId);
+        SystemUser user = findByIdThrowIfNotExists(userId);
         user.setMobile(mobile);
         updateById(user);
     }
 
     @Override
     public void updateEmail(Long userId, String email) {
-        SystemUser user = findByIdValidateExists(userId);
+        SystemUser user = findByIdThrowIfNotExists(userId);
         user.setEmail(email);
         updateById(user);
     }
 
     @Override
     public void updateAvatar(Long userId, String avatar) {
-        SystemUser user = findByIdValidateExists(userId);
+        SystemUser user = findByIdThrowIfNotExists(userId);
         user.setAvatar(avatar);
         updateById(user);
     }
 
     @Override
     public void updatePassword(Long userId, String oldPass, String newPass) {
-        SystemUser user = findByIdValidateExists(userId);
+        SystemUser user = findByIdThrowIfNotExists(userId);
         if (!passwordEncoder.matches(oldPass, user.getPassword())) {
             throw exception(OLD_PASS_ERROR);
         }
@@ -257,8 +255,8 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
         }
     }
 
-    private SystemUser findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, USER_NOT_EXISTS);
+    private SystemUser findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, USER_NOT_EXISTS);
     }
 
 }

@@ -36,13 +36,9 @@ public class SystemUserExcelVo {
     @ExcelProperty("电话号码")
     private String mobile;
 
-    @ApiModelProperty("部门")
-    @ExcelProperty("部门")
-    private String deptName;
-
-    @ApiModelProperty("职位")
-    @ExcelProperty("职位")
-    private String postNames;
+    @ApiModelProperty("部门-职位")
+    @ExcelProperty("部门-职位")
+    private String deptNames;
 
     @ApiModelProperty("状态")
     @ExcelProperty("状态")

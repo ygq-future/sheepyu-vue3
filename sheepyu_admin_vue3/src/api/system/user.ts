@@ -1,7 +1,5 @@
 import { request } from '@/util/request'
 import type { PageResult } from '@/util/request'
-import type { SystemRoleRespVo } from '@/api/system/role'
-import type { SystemMenuRespVo } from '@/api/system/menu'
 
 export function login(data: SystemUserLoginVo) {
   return request.post<LoginUser>('/system/user/login', data)
@@ -47,12 +45,16 @@ export function pageUserApi(params: SystemUserQueryVo) {
   return request.get<PageResult<SystemUserRespVo>>('/system/user/page', { params })
 }
 
+export function listUserApi(params: SystemUserQueryVo) {
+  return request.get<Array<SystemUserRespVo>>('/system/user', { params })
+}
+
 export function exportUserApi(params: SystemUserQueryVo) {
   return request.download('/system/user/export', '用户导出数据.xlsx', { params })
 }
 
-export function assignRoleApi(userId: number, roleIds: Array<number>) {
-  return request.put<PageResult<SystemRoleRespVo>>('/system/permission/role/assign/' + userId, roleIds)
+export function assignRoleToUserApi(userId: number, roleIds: Array<number>) {
+  return request.put<boolean>('/system/permission/role/assign/user/' + userId, roleIds)
 }
 
 export function roleByUserApi(userId: number) {
@@ -86,11 +88,9 @@ export interface SystemUserBaseVo {
   mobile?: string
   //头像地址
   avatar?: string
-  //部门id
-  deptId?: number
-  //职位ids
-  postIds?: Array<number>
-  //帐号状态
+  //部门-职位ids
+  deptIds?: Array<number>
+  //账号状态
   status: number
   //备注
   remark?: string
@@ -117,10 +117,10 @@ export interface SystemUserRespVo extends SystemUserBaseVo {
   username: string
   //最后登录IP
   loginIp?: string
+  //部门-职位ids
+  deptIds?: Array<number>
   //部门
-  deptName?: string
-  //职位
-  postNames?: string
+  deptNames?: string
   //最后登录时间
   loginTime?: string
   //创建时间
@@ -138,9 +138,7 @@ export interface SystemUserQueryVo {
   keyword?: string
   //部门id
   deptId?: number
-  //职位ids
-  postIds?: string
-  //帐号状态
+  //账号状态
   status?: number
   //身份类型
   type?: number

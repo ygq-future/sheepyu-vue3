@@ -35,11 +35,11 @@ export interface FormItemConfig {
   dictType?: DictTypeEnum
   dictRender?: DictRender
   //如果render是switch, 或者select, 需要传递数据进行渲染
-  data?: any
+  data?: Array<any>
   //select这些组件, 有些树形渲染的数据需要用到, 配置可自定义
   //labelVModelKey就是指是否要把select组件(也有可能是其他组件)的label进行双向绑定, 这里就填需要绑定label的key
   //例如: 'categoryName'
-  props?: { label: string, value: string, labelVModelKey?: string }
+  props?: { label?: string, value?: string, labelVModelKey?: string }
   //switch或者select, dict=select时变化调用的函数, 可以解决select联动的问题
   change?: (val: any) => void
   //用于表单校验, 默认为true

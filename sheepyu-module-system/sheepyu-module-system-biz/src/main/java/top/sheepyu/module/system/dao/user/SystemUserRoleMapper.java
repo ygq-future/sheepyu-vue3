@@ -1,11 +1,13 @@
-package top.sheepyu.module.system.dao.permission.role;
+package top.sheepyu.module.system.dao.user;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
+
+import static top.sheepyu.module.common.util.CollectionUtil.convertSet;
 
 /**
  * @author ygq
@@ -17,22 +19,25 @@ public interface SystemUserRoleMapper extends BaseMapper<SystemUserRole> {
     }
 
     default Set<Long> findRoleIdByUserId(Long userId) {
-        return selectList(new LambdaQueryWrapper<SystemUserRole>()
+        List<SystemUserRole> userRoles = selectList(new LambdaQueryWrapper<SystemUserRole>()
                 .eq(SystemUserRole::getUserId, userId)
-                .select(SystemUserRole::getRoleId))
-                .stream().map(SystemUserRole::getRoleId)
-                .collect(Collectors.toSet());
+                .select(SystemUserRole::getRoleId));
+        return convertSet(userRoles, SystemUserRole::getRoleId);
     }
 
-    default void deleteRoleByUserId(Long userId, Collection<Long> remove) {
+    default void deleteRoleIdByUserId(Long userId, Collection<Long> roleIdList) {
         delete(new LambdaQueryWrapper<SystemUserRole>()
                 .eq(SystemUserRole::getUserId, userId)
-                .in(SystemUserRole::getRoleId, remove));
+                .in(SystemUserRole::getRoleId, roleIdList));
     }
 
-    default void insertRoleByUserId(Long userId, Collection<Long> add) {
-        for (Long roleId : add) {
+    default void insertRoleIdsByUserId(Long userId, Collection<Long> roleIdList) {
+        for (Long roleId : roleIdList) {
             insert(new SystemUserRole().setUserId(userId).setRoleId(roleId));
         }
+    }
+
+    default void deleteByUserId(Long userId) {
+        delete(new LambdaQueryWrapper<SystemUserRole>().eq(SystemUserRole::getUserId, userId));
     }
 }

@@ -120,7 +120,6 @@ function closeAll() {
   const homePath = '/dashboard'
   if (tabs.state.activeRoute!.path == homePath) {
     tabs.closeTabs(tabs.state.activeRoute!)
-    changeNavTab()
   } else {
     tabs.closeTabs()
     router.push(homePath)
@@ -132,8 +131,6 @@ function closeOther(menu: RouteLocationNormalized) {
 
   if (route.path !== menu.path) {
     router.push(menu)
-  } else {
-    changeNavTab()
   }
 }
 
@@ -155,23 +152,23 @@ function onClose(item: RouteLocationNormalized) {
     //如果不是激活的, 只需要更新当前记录的activeIndex即可
     //为什么: 因为如果当前关闭的tab再activeTab之前, 那么activeIndex就不对了
     tabs.updateActiveTabIndex()
-    changeNavTab()
   }
 }
 
 function updateTab(menu: RouteLocationNormalized) {
   if (!menu.meta.keepalive) return
-
   tabs.addTab(menu)
   tabs.setActiveTab(menu)
-
-  changeNavTab()
 }
 
 function closeCurrentToRoute(path: string) {
   tabs.closeTab(tabs.state.activeRoute!)
   router.push(path)
 }
+
+watch(() => tabs.state.activeIndex, () => {
+  changeNavTab()
+}, { immediate: true })
 
 onBeforeRouteUpdate((to) => {
   updateTab(to)

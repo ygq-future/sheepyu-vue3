@@ -30,23 +30,20 @@
       :data='state.tableData'
       :table-config='state.tableConfig'
       :pagination='state.query'
-      @fieldChange='onFieldChange'
       @edit='(row) => onBatchEdit([row.id])'
       @delete='(row) => onBatchDelete([row.id])'
       @current-change='pageRole'
       @size-change='pageRole'
     >
-
-      <template #buttons='scope'>
+      <template #buttons='{data}'>
         <el-tooltip content='分配菜单' placement='top' :show-after='500'>
-          <el-button v-auth="'system:menu:assign'" v-blur type='warning' @click='onAssignMenu(scope.data)'>
+          <el-button v-auth="'system:menu:assign'" v-blur type='warning' @click='onAssignMenu(data)'>
             <template #icon>
               <MyIcon name='fa fa-sitemap' />
             </template>
           </el-button>
         </el-tooltip>
       </template>
-
     </Table>
 
     <PopupForm
@@ -80,11 +77,10 @@ import {
   findRoleApi,
   pageRoleApi,
   updateRoleApi,
-  assignMenuApi,
+  assignMenuToRoleApi,
   menuByRoleApi
 } from '@/api/system/role'
-import { menuList } from '@/api/system/menu'
-import { DictTypeEnum } from '@/enums/DictTypeEnum'
+import { menuList, userMenu } from '@/api/system/menu'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
@@ -114,23 +110,14 @@ const state = reactive<{
   form: {
     name: '',
     code: '',
-    sort: 0,
-    status: 1
+    sort: 0
   },
   menuAssignForm: {
     roleId: 0,
     menuIds: []
   },
   tableData: [],
-  comSearchConfig: [
-    {
-      label: '状态',
-      prop: 'status',
-      placeholder: '角色状态',
-      render: 'dict',
-      dictType: DictTypeEnum.COMMON_STATUS
-    }
-  ],
+  comSearchConfig: [],
   tableConfig: {
     rowKey: 'id',
     selection: true,
@@ -139,8 +126,8 @@ const state = reactive<{
       { label: '角色编号', prop: 'id', render: 'text' },
       { label: '角色名称', prop: 'name', render: 'text' },
       { label: '角色编码', prop: 'code', render: 'text' },
+      { label: '创建者', prop: 'creator', render: 'text' },
       { label: '显示顺序', prop: 'sort', render: 'text' },
-      { label: '角色状态', prop: 'status', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS },
       { label: '备注', prop: 'remark', render: 'text' }
     ],
     operate: {
@@ -159,13 +146,6 @@ const state = reactive<{
         render: 'text'
       },
       { label: '显示顺序', prop: 'sort', placeholder: '显示顺序', render: 'number' },
-      {
-        label: '角色状态',
-        prop: 'status',
-        placeholder: '角色状态',
-        dictRender: 'radio',
-        dictType: DictTypeEnum.COMMON_STATUS
-      },
       { label: '备注', prop: 'remark', required: false, placeholder: '备注', render: 'textarea' }
     ]
   },
@@ -184,12 +164,6 @@ const state = reactive<{
     ]
   }
 })
-
-async function onFieldChange(row: SystemRoleUpdateVo) {
-  const data = toRaw(row)
-  await updateRoleApi(data)
-  await pageRole()
-}
 
 function onAdd() {
   state.popupFormConfig.title = '新增角色'
@@ -233,7 +207,7 @@ async function onSubmit(cb: Function) {
 
 async function onMenuAssignSubmit(cb: Function) {
   const data = toRaw(state.menuAssignForm)
-  await assignMenuApi(data.roleId, data.menuIds)
+  await assignMenuToRoleApi(data.roleId, data.menuIds)
   cb && cb()
 }
 
@@ -251,7 +225,12 @@ async function pageRole() {
 }
 
 async function findMenuList() {
-  const { data } = await menuList({ status: 1 })
+  const { data } = await userMenu()
+  state.menuAssignFormConfig.formItemConfigs[2].data = data
+}
+
+async function findUserMenuList() {
+  const { data } = await userMenu()
   state.menuAssignFormConfig.formItemConfigs[2].data = data
 }
 
@@ -263,14 +242,14 @@ function onClose() {
   state.form = {
     name: '',
     code: '',
-    sort: 0,
-    status: 1
+    sort: 0
   }
 }
 
 onMounted(() => {
   pageRole()
-  findMenuList()
+  // findMenuList()
+  findUserMenuList()
 })
 </script>
 

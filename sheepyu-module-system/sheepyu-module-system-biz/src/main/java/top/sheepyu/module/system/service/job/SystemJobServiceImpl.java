@@ -19,6 +19,7 @@ import top.sheepyu.module.system.enums.job.JobStatusEnum;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Objects;
 
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
@@ -43,7 +44,7 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
         validateCronExpression(createVo.getCron());
         SystemJob job = CONVERT.convert(createVo);
         //检查处理器名字是否重复
-        checkRepeatByFieldThrow(job, SystemJob::getHandlerParam, JOB_HANDLER_EXISTS);
+        checkRepeatByFieldThrow(job, SystemJob::getHandlerName, JOB_HANDLER_EXISTS);
 
         job.setStatus(INIT.getCode());
         save(job);
@@ -58,18 +59,18 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
     @Override
     public void updateJob(SystemJobUpdateVo updateVo) throws SchedulerException {
         validateCronExpression(updateVo.getCron());
-        SystemJob job = findByIdValidateExists(updateVo.getId());
+        SystemJob job = findByIdThrowIfNotExists(updateVo.getId());
         String handlerName = job.getHandlerName();
-
-        //只有开启状态下才能修改, 因为如果是暂停修改后又会开启
-        if (!job.getStatus().equals(NORMAL.getCode())) {
-            throw exception(JOB_UPDATE_ONLY_NORMAL_STATUS);
-        }
+        Integer status = job.getStatus();
 
         job = CONVERT.convert(updateVo);
         updateById(job);
 
         schedulerManager.update(handlerName, job.getHandlerParam(), job.getRetryCount(), job.getRetryInterval(), job.getCron());
+        //因为修改后会自动开启, 如果是停止的状态就在停止一次
+        if (Objects.equals(status, STOP.getCode())) {
+            schedulerManager.pause(handlerName);
+        }
     }
 
     @Transactional
@@ -77,14 +78,14 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
     public void deleteJobs(String ids) throws SchedulerException {
         List<Long> idList = MyStrUtil.splitToLong(ids, ',');
         for (Long id : idList) {
-            schedulerManager.delete(findByIdValidateExists(id).getHandlerName());
+            schedulerManager.delete(findByIdThrowIfNotExists(id).getHandlerName());
         }
         batchDelete(ids, SystemJob::getId);
     }
 
     @Override
     public void updateJobStatus(Long id) throws SchedulerException {
-        SystemJob job = findByIdValidateExists(id);
+        SystemJob job = findByIdThrowIfNotExists(id);
         JobStatusEnum currentStatus = JobStatusEnum.valueOf(job.getStatus());
 
         if (currentStatus.equals(NORMAL)) {
@@ -100,13 +101,13 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
 
     @Override
     public void execute(Long id) throws SchedulerException {
-        SystemJob job = findByIdValidateExists(id);
+        SystemJob job = findByIdThrowIfNotExists(id);
         schedulerManager.execute(job.getId(), job.getHandlerName(), job.getHandlerParam());
     }
 
     @Override
     public SystemJob findJobById(Long id) {
-        return findByIdValidateExists(id);
+        return findByIdThrowIfNotExists(id);
     }
 
     @Override
@@ -122,7 +123,7 @@ public class SystemJobServiceImpl extends ServiceImplX<SystemJobMapper, SystemJo
         }
     }
 
-    private SystemJob findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, JOB_HANDLER_NOT_EXISTS);
+    private SystemJob findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, JOB_HANDLER_NOT_EXISTS);
     }
 }

@@ -22,7 +22,7 @@ public class SystemCodegenTableServiceImpl extends ServiceImplX<SystemCodegenTab
 
     @Override
     public SystemCodegenTable findById(Long id) {
-        return findByIdValidateExists(id);
+        return findByIdThrowIfNotExists(id);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class SystemCodegenTableServiceImpl extends ServiceImplX<SystemCodegenTab
                 .orderByDesc(SystemCodegenTable::getCreateTime));
     }
 
-    private SystemCodegenTable findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, CODEGEN_NOT_EXISTS);
+    private SystemCodegenTable findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, CODEGEN_NOT_EXISTS);
     }
 }

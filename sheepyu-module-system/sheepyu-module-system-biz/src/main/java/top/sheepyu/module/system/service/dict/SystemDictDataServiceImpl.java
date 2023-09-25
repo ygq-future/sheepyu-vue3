@@ -48,7 +48,7 @@ public class SystemDictDataServiceImpl extends ServiceImplX<SystemDictDataMapper
     public SystemDictData updateDictData(SystemDictDataUpdateVo updateVo) {
         SystemDictData dictData = CONVERT.convert(updateVo);
         updateById(dictData);
-        return findByIdValidateExists(dictData.getId());
+        return findByIdThrowIfNotExists(dictData.getId());
     }
 
     @Override
@@ -79,11 +79,11 @@ public class SystemDictDataServiceImpl extends ServiceImplX<SystemDictDataMapper
 
     @Override
     public SystemDictData findDictData(Long id) {
-        return findByIdValidateExists(id);
+        return findByIdThrowIfNotExists(id);
     }
 
-    private SystemDictData findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, DICT_DATA_NOT_EXISTS);
+    private SystemDictData findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, DICT_DATA_NOT_EXISTS);
     }
 
 }

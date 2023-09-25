@@ -63,7 +63,7 @@ public interface IServiceX<T> extends IService<T> {
      * @param errorCode 报错的错误码
      * @return 返回单条数据
      */
-    T findByIdValidateExists(Object id, ErrorCode errorCode);
+    T findByIdThrowIfNotExists(Object id, ErrorCode errorCode);
 
     /**
      * 根据某个字段查找数据, 如果找不到就会报错
@@ -73,7 +73,7 @@ public interface IServiceX<T> extends IService<T> {
      * @param errorCode 报错的错误码
      * @return 返回单条数据
      */
-    T findByFieldValidateExists(SFunction<T, ?> field, Object fieldVal, ErrorCode errorCode);
+    T findByFieldThrowIfExists(SFunction<T, ?> field, Object fieldVal, ErrorCode errorCode);
 
     /**
      * 根据某个字段查找数据, 找不到不会报错

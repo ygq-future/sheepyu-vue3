@@ -91,4 +91,7 @@ public class SecurityFrameworkUtil {
         return authenticationToken;
     }
 
+    public static boolean isSuperAdmin() {
+        return getLoginUserId() == 1L;
+    }
 }

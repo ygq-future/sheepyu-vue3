@@ -125,6 +125,14 @@ public class SystemUserController {
         return success(SystemUserConvert.CONVERT.convertPage(result));
     }
 
+    @GetMapping
+    @ApiOperation("获取管理员用户列表")
+    @PreAuthorize("@ss.hasPermission('system:user:query')")
+    public Result<List<SystemUserRespVo>> list(SystemUserQueryVo queryVo) {
+        List<SystemUser> result = systemUserBiz.listUser(queryVo);
+        return success(SystemUserConvert.CONVERT.convertList(result));
+    }
+
     @PostMapping
     @ApiOperation("创建管理员")
     @PreAuthorize("@ss.hasPermission('system:user:create')")

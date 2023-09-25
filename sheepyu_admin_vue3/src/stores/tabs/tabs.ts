@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { IdEnum } from '@/stores/storeId'
 import { StorePersistKey } from '@/stores/storePersistKey'
-import type { RouteLocationNormalized, RouteRecordRaw } from 'vue-router'
+import type { RouteLocationNormalized, RouteRecordName, RouteRecordRaw } from 'vue-router'
+import { Mit } from '@/main'
 
 interface NavTabs {
   //当前激活路由下标
@@ -13,7 +14,7 @@ interface NavTabs {
   tabFullScreen: boolean
   //用于右侧菜单渲染
   tabsViewRoutes: RouteRecordRaw[]
-  //是否有路由更新, 关联菜单操作
+  //路由是否已经更新了, 关联菜单操作
   isRouteUpdated: boolean
 }
 
@@ -24,20 +25,65 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
     tabsView: [],
     tabFullScreen: false,
     tabsViewRoutes: [],
-    isRouteUpdated: true
+    isRouteUpdated: false
   })
+  const router = useRouter()
 
   function hasRoute() {
-    return !state.isRouteUpdated
+    return state.isRouteUpdated
   }
 
   function setRoutes(routes: RouteRecordRaw[]) {
-    state.isRouteUpdated = false
+    state.isRouteUpdated = true
     state.tabsViewRoutes = routes
+    return handleTabsView()
+  }
+
+  /**
+   * 关闭路由刷新后不存在的tab标签
+   */
+  function handleTabsView() {
+    const routeNames: RouteRecordName[] = []
+    const closeTabsView: RouteLocationNormalized[] = []
+    fillTreeRouteNames(routeNames, state.tabsViewRoutes)
+    for (let i = 0; i < state.tabsView.length; i++) {
+      const tab = state.tabsView[i]
+      const exists = routeNames.find(routeName => routeName === tab.name)
+      !exists && closeTabsView.push(tab)
+    }
+    let hasActive = false
+    //关闭菜单, 并记录是否有激活的菜单
+    closeTabsView.forEach(tab => {
+      hasActive = tab.name === state.activeRoute?.name
+      closeTab(tab)
+      Mit.emit('onTabClose', tab)
+    })
+    //更新激活的菜单
+    hasActive && updateActiveTabIndex()
+    return closeTabsView
+  }
+
+  function fillTreeRouteNames(routeNames: RouteRecordName[], routes: RouteRecordRaw[]) {
+    routes.forEach(route => {
+      route.name && routeNames.push(route.name)
+      const children = route.children
+      children && children.length > 0 && fillTreeRouteNames(routeNames, children)
+    })
   }
 
   function clearRoute() {
-    state.isRouteUpdated = true
+    notifyNeedUpdate()
+    state.tabsViewRoutes.forEach(route => {
+      const routeName = route.name || ''
+      if (['layout', 'dashboard'].includes(routeName.toString())) {
+        return
+      }
+      router.hasRoute(routeName) && router.removeRoute(routeName)
+    })
+  }
+
+  function notifyNeedUpdate() {
+    state.isRouteUpdated = false
   }
 
   function closeTab(route: RouteLocationNormalized): number {
@@ -113,7 +159,8 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
     clearRoute,
     getMenuTree,
     updateActiveTabIndex,
-    getTabsView
+    getTabsView,
+    notifyNeedUpdate
   }
 }, {
   persist: {

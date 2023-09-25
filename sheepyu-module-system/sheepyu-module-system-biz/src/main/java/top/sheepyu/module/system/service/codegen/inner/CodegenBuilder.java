@@ -117,6 +117,8 @@ public class CodegenBuilder {
         //判断是否需要继承BaseModel
         List<String> fields = columns.stream().map(SystemCodegenColumn::getJavaField).collect(Collectors.toList());
         boolean requireBaseModel = fields.stream().filter(BASE_MODEL_FIELD::contains).count() == BASE_MODEL_FIELD.size();
+        //如果有可以为空的字段, 排除BASE_MODEL_FIELD
+        boolean nullable = columns.stream().anyMatch(e -> !BASE_MODEL_FIELD.contains(e.getJavaField()) && e.getNullable());
         Map<Object, Object> params = MapUtil.builder()
                 .put("table", table)
                 .put("columns", columns)
@@ -129,6 +131,7 @@ public class CodegenBuilder {
                 .put("date", DateUtil.now())
                 .put("notExistsName", notExistsName)
                 .put("requireBaseModel", requireBaseModel)
+                .put("nullable", nullable)
                 .build();
 
         MapBuilder<String, String> builder = MapUtil.builder();

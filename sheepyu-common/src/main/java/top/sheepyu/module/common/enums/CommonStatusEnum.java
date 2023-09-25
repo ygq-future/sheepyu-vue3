@@ -21,7 +21,7 @@ public enum CommonStatusEnum implements IterableEnum {
     /**
      * 状态值
      */
-    private final Integer code;
+    private final int code;
     /**
      * 状态名
      */

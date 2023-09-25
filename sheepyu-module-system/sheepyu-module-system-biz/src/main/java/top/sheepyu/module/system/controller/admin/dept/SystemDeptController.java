@@ -58,8 +58,16 @@ public class SystemDeptController {
     @GetMapping
     @ApiOperation("获取系统部门列表")
     @PreAuthorize("@ss.hasPermission('system:dept:query')")
-    public Result<List<SystemDeptRespVo>> page(SystemDeptQueryVo queryVo) {
+    public Result<List<SystemDeptRespVo>> list(SystemDeptQueryVo queryVo) {
         List<SystemDept> result = systemDeptService.listDept(queryVo);
+        return success(CONVERT.convertList(result));
+    }
+
+    @GetMapping("/tree")
+    @ApiOperation("获取系统部门列表树,排除岗位")
+    @PreAuthorize("@ss.hasPermission('system:dept:query')")
+    public Result<List<SystemDeptRespVo>> tree() {
+        List<SystemDept> result = systemDeptService.tree();
         return success(CONVERT.convertList(result));
     }
 

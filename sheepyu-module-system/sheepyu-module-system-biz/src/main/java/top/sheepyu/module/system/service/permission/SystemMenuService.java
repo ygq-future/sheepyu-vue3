@@ -19,6 +19,8 @@ public interface SystemMenuService extends IServiceX<SystemMenu> {
 
     void updateMenu(@Valid SystemMenuUpdateVo updateVo);
 
+    void changeStatus(Long id);
+
     void deleteMenu(String ids);
 
     List<SystemMenu> listMenu(SystemMenuQueryVo queryVo);
@@ -29,7 +31,21 @@ public interface SystemMenuService extends IServiceX<SystemMenu> {
 
     Set<Long> listMenuIdFromCache();
 
+    /**
+     * 从缓存中根据 menuIds 获取对应的权限字符串
+     *
+     * @param menuIds menuIds
+     * @param enable  是否只查询状态为开启的菜单
+     * @return Set<String>
+     */
     Set<String> findPermissionByMenuIdsFromCache(Set<Long> menuIds, boolean enable);
 
+    /**
+     * 从缓存中根据 menuIds 获取对应的菜单对象
+     *
+     * @param menuIds menuIds
+     * @param enable  是否只查询状态为开启的菜单
+     * @return List<SystemMenu>
+     */
     List<SystemMenu> findMenuByIdsFromCache(Set<Long> menuIds, boolean enable);
 }

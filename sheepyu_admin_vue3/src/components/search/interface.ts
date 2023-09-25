@@ -18,15 +18,14 @@ export interface ComSearchConfigItem {
   render?: undefined | 'text' | 'number' | 'datetime' | 'select' | 'dict' | 'tree-select' | 'number-range'
   placeholder?: string
   //render为select或者tree-select时必传
-  selectOptions?: Array<any>
-  selectIdKey?: string
-  selectLabelKey?: string
+  data?: Array<any>
+  props?: { label?: string, value?: string }
   //如果render为dict, 那么字典类型必传
   dictType?: DictTypeEnum
   clearable?: boolean
 }
 
 export interface SelectOptionItem {
-  id: number | string
-  label: number | string
+  value: string
+  label:  string
 }

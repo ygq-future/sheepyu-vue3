@@ -28,10 +28,7 @@ public class SystemUserRespVo extends SystemUserBaseVo {
     private String loginIp;
 
     @ApiModelProperty("部门名称")
-    private String deptName;
-
-    @ApiModelProperty("岗位名称")
-    private String postNames;
+    private String deptNames;
 
     @ApiModelProperty("上一次登录时间")
     private Date loginTime;

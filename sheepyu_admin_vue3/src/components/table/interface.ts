@@ -31,6 +31,7 @@ export interface ColumnConfig {
   prop: string
   align?: string
   width?: number | string
+  radius?: number | string
   sortable?: boolean
   showTip?: boolean
   dictRender?: DictRender

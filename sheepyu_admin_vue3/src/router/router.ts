@@ -17,7 +17,7 @@ const router = createRouter({
 
 const whiteList: Array<string> = ['/login']
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, _, next) => {
   NProgress.configure({ showSpinner: false })
   NProgress.start()
   const user = useUser()
@@ -45,18 +45,23 @@ router.beforeEach(async (to, from, next) => {
 
   //添加动态路由
   const routes: RouteRecordRaw[] = []
-  generateRoutes(routes, data, null, null)
+  generateRoutes(routes, data, null)
   routes.forEach(route => router.addRoute('layout', route))
   router.addRoute({ path: '/:path(.*)*', redirect: '/404' })
-  tabs.setRoutes(routes)
+  const closeTabsView = tabs.setRoutes(routes)
+  //如果要去的是已经关闭的标签, 那么直接跳转至控制台
+  const exists = closeTabsView.find(tab => tab.name === to.name)
+  if (exists) {
+    return next('/')
+  }
   next({ ...to, replace: true })
 })
 
-router.afterEach((to, from, failure) => {
+router.afterEach(() => {
   NProgress.done()
 })
 
-function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], parentMenu: SystemMenuRespVo | null, parentRoute: RouteRecordRaw | null) {
+function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], parentRoute: RouteRecordRaw | null) {
   if (!menuTree || menuTree.length === 0) return
 
   for (let menu of menuTree) {
@@ -91,7 +96,7 @@ function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], 
 
     if (!parentRoute) {
       routes.push(route)
-      generateRoutes(routes, menu.children || [], menu, route)
+      generateRoutes(routes, menu.children || [], route)
       continue
     }
 
@@ -100,7 +105,7 @@ function generateRoutes(routes: RouteRecordRaw[], menuTree: SystemMenuRespVo[], 
     } else {
       parentRoute.children = [route]
     }
-    generateRoutes(routes, menu.children || [], menu, route)
+    generateRoutes(routes, menu.children || [], route)
   }
 }
 

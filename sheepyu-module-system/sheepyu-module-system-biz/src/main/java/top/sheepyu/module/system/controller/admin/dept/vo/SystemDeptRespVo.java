@@ -3,6 +3,7 @@ package top.sheepyu.module.system.controller.admin.dept.vo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -11,28 +12,17 @@ import java.util.List;
  * @date 2023-01-29 18:10
  **/
 @Data
+@EqualsAndHashCode(callSuper = true)
 @ApiModel("系统部门响应vo")
-public class SystemDeptRespVo {
+public class SystemDeptRespVo extends SystemDeptBaseVo {
     @ApiModelProperty("id")
     private Long id;
-
-    @ApiModelProperty("部门名称")
-    private String name;
 
     @ApiModelProperty("父部门id")
     private Long parentId;
 
-    @ApiModelProperty("排序")
-    private Integer sort;
-
-    @ApiModelProperty("部门负责人id")
-    private Long leaderUserId;
-
-    @ApiModelProperty("部门联系电话")
-    private String phone;
-
-    @ApiModelProperty("部门联系邮箱")
-    private String email;
+    @ApiModelProperty("部门类型")
+    private Integer type;
 
     @ApiModelProperty("子部门")
     private List<SystemDeptRespVo> children;

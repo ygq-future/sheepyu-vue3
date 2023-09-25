@@ -21,7 +21,6 @@ import top.sheepyu.framework.log.core.annotations.RecordLog;
 import top.sheepyu.framework.log.core.service.ApiLogFrameworkService;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 import top.sheepyu.module.common.common.Result;
-import top.sheepyu.module.common.exception.CommonException;
 import top.sheepyu.module.common.util.ExceptionUtil;
 import top.sheepyu.module.common.util.ServletUtil;
 import top.sheepyu.module.system.api.log.ApiLogDto;
@@ -110,19 +109,24 @@ public class RecordLogAspect {
         if (th == null) {
             return;
         }
-        //如果是自定义异常也不记录
+        /*//如果是自定义异常也不记录
         if (th.getClass().isAssignableFrom(CommonException.class)) {
             return;
         }
         //校验异常不记录
         if (th.toString().contains("validation")) {
             return;
-        }
+        }*/
 
         apiLog.setExceptionTime(new Date());
         apiLog.setExceptionName(th.getClass().getName());
         apiLog.setExceptionRootCauseMessage(ExceptionUtil.getRootCauseMessage(th));
         apiLog.setExceptionStackTraceFull(ExceptionUtil.getMessage(th));
+        List<String> crucialInfo = getCrucialInfo(th);
+        apiLog.setExceptionStackTraceCrucial(String.join("\n", crucialInfo));
+    }
+
+    private static List<String> getCrucialInfo(Throwable th) {
         List<String> crucialInfo = new ArrayList<>();
         for (StackTraceElement traceElement : th.getStackTrace()) {
             String className = traceElement.getClassName();
@@ -134,7 +138,7 @@ public class RecordLogAspect {
                 crucialInfo.add(info);
             }
         }
-        apiLog.setExceptionStackTraceCrucial(String.join("\n", crucialInfo));
+        return crucialInfo;
     }
 
     private void fillBaseFields(ProceedingJoinPoint pj, ApiLogDto apiLog, ApiOperation apiOperation, RecordLog recordLog) {

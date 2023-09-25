@@ -16,7 +16,7 @@ import 'element-plus/theme-chalk/display.css'
 import Icon from '@/components/icon/Icon.vue'
 
 //注册mit
-const Mit: Emitter<{
+export const Mit: Emitter<{
   [propName: string]: any
 }> = mitt()
 declare module 'vue' {
@@ -30,9 +30,6 @@ app.config.globalProperties.$bus = Mit
 //注册自定义组件Icon和ElementPlus的所有图标
 registerIcons(app)
 //注册内置指令
-//强迫症患者, 在这里加上webstorm就可以识别指令, 而后在registerDirectives方法内覆盖了这里这两个空指令
-app.directive('blur', {})
-app.directive('auth', {})
 registerDirectives(app)
 //初始化自定义图标
 iconFontInit()

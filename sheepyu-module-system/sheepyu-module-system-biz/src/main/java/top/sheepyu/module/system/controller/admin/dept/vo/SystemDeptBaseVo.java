@@ -18,16 +18,15 @@ public class SystemDeptBaseVo {
     @NotBlank(message = "部门名称不能为空")
     private String name;
 
-    @ApiModelProperty("父部门id")
-    @NotNull(message = "父部门id不能为空")
-    private Long parentId;
-
     @ApiModelProperty("排序")
     @NotNull(message = "排序不能为空")
     private Integer sort;
 
     @ApiModelProperty("部门负责人id")
     private Long leaderUserId;
+
+    @ApiModelProperty("部门负责人昵称")
+    private String leaderNickname;
 
     @ApiModelProperty("部门联系电话")
     private String phone;

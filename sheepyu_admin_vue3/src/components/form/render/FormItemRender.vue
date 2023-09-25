@@ -48,12 +48,14 @@
       v-model='form[config.prop]'
       check-strictly
       default-expand-all
+      check-on-click-node
+      :expand-on-click-node='false'
       clearable
       :collapse-tags='config.multiple'
       :multiple='config.multiple'
       :show-checkbox='config.multiple'
       :node-key="config.props?.value || 'id'"
-      :data='config.data'
+      :data='config.data || []'
       :render-after-expand='false'
       :props='config.props || defaultProps'
       :disabled='disabled'
@@ -67,11 +69,12 @@
       default-expand-all
       check-strictly
       check-on-click-node
+      :expand-on-click-node='false'
       :node-key="config.props?.value || 'id'"
       :props='config.props || defaultProps'
       :render-after-expand='false'
       :default-checked-keys='form[config.prop]'
-      :data='config.data'
+      :data='config.data || []'
       @check-change='onCheckChange'
     />
 
@@ -91,9 +94,11 @@
       v-if='config.render === "select"'
       v-model='form[config.prop]'
       clearable
+      filterable
       :multiple='config.multiple'
       :disabled='disabled'
       :placeholder='config.placeholder'
+      @clear='onSelectClear'
       @change='(value: any) => config.change ? config.change(findSelectItem(value)) : defaultSelectChange(value)'
     >
       <el-option
@@ -153,13 +158,19 @@ function onCheckChange() {
   }
 }
 
+function onSelectClear() {
+  if (props.config.props?.labelVModelKey) {
+    props.form[props.config.props?.labelVModelKey] = ''
+  }
+}
+
 /**
  * select组件默认的change事件
  * @param value
  */
 function defaultSelectChange(value: any) {
   let item = findSelectItem(value)
-  if (props.config.props?.labelVModelKey) {
+  if (item && props.config.props?.labelVModelKey) {
     props.form[props.config.props?.labelVModelKey] = item[props.config.props?.label || 'name']
   }
 }
@@ -169,7 +180,7 @@ function defaultSelectChange(value: any) {
  * @param value
  */
 function findSelectItem(value: any) {
-  return props.config.data.find((item: any) => item[props.config.props?.value || 'id'] === value)
+  return props.config.data?.find((item: any) => item[props.config.props?.value || 'id'] === value)
 }
 
 onUnmounted(() => {

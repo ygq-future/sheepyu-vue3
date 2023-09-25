@@ -5,7 +5,7 @@
     :width="column.width || ''"
     :align='column.align || "center"'
     :sortable='column.sortable === true'
-    :show-overflow-tooltip='column.showTip === undefined || column.showTip'
+    :show-overflow-tooltip='!!column.showTip'
   >
     <template #default='{row}'>
       <span v-if='(!column.render && !column.dictRender) || column.render === "text"'>
@@ -31,7 +31,7 @@
 
       <el-image
         v-if='column.render === "img"'
-        style='width: 100px; height: 100px'
+        :style='imgStyle'
         preview-teleported
         hide-on-click-modal
         fit='cover'
@@ -54,6 +54,10 @@ const props = defineProps<{
 const emits = defineEmits<{
   (e: 'field-change', row: any, val: any): void
 }>()
+
+const imgStyle = {
+  borderRadius: `${(props.column.radius ?? 8).toString().replace('px', '')}px`
+}
 
 function onFieldChange(row: any, val: any) {
   emits('field-change', row, val)

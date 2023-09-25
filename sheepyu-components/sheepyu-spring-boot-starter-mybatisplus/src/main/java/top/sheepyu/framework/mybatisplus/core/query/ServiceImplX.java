@@ -84,7 +84,7 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
     }
 
     @Override
-    public T findByIdValidateExists(Object id, ErrorCode errorCode) {
+    public T findByIdThrowIfNotExists(Object id, ErrorCode errorCode) {
         if (id == null) {
             throw exception(errorCode);
         }
@@ -97,8 +97,8 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
     }
 
     @Override
-    public T findByFieldValidateExists(SFunction<T, ?> field, Object fieldVal, ErrorCode errorCode) {
-        if (fieldVal == null) {
+    public T findByFieldThrowIfExists(SFunction<T, ?> field, Object fieldVal, ErrorCode errorCode) {
+        if (fieldVal != null) {
             throw exception(errorCode);
         }
 

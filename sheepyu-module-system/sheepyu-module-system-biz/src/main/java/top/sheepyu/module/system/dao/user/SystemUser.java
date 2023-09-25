@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import top.sheepyu.framework.mybatisplus.core.handler.JsonLongSetTypeHandler;
 import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 
 import java.util.Date;
@@ -27,13 +26,16 @@ public class SystemUser extends BaseModel {
     private String email;
     private String mobile;
     private String avatar;
-    private Long deptId;
+    /**
+     * 部门-职位id
+     */
     @TableField(exist = false)
-    private String deptName;
-    @TableField(typeHandler = JsonLongSetTypeHandler.class)
-    private Set<Long> postIds;
+    private Set<Long> deptIds;
+    /**
+     * 部门和职位名称
+     */
     @TableField(exist = false)
-    private String postNames;
+    private String deptNames;
     private Integer status;
     private Integer type;
     private String remark;

@@ -36,7 +36,7 @@ public class SystemDictTypeServiceImpl extends ServiceImplX<SystemDictTypeMapper
 
     @Override
     public String updateDictType(SystemDictTypeUpdateVo updateVo) {
-        SystemDictType dictType = findByIdValidateExists(updateVo.getId());
+        SystemDictType dictType = findByIdThrowIfNotExists(updateVo.getId());
         String type = dictType.getType();
         dictType = CONVERT.convert(updateVo);
         updateById(dictType);
@@ -57,7 +57,7 @@ public class SystemDictTypeServiceImpl extends ServiceImplX<SystemDictTypeMapper
 
     @Override
     public SystemDictType findDictType(Long id) {
-        return findByIdValidateExists(id);
+        return findByIdThrowIfNotExists(id);
     }
 
     @Override
@@ -84,7 +84,7 @@ public class SystemDictTypeServiceImpl extends ServiceImplX<SystemDictTypeMapper
         return baseMapper.deleteRealById(id);
     }
 
-    private SystemDictType findByIdValidateExists(Long id) {
-        return findByIdValidateExists(id, DICT_TYPE_NOT_EXISTS);
+    private SystemDictType findByIdThrowIfNotExists(Long id) {
+        return findByIdThrowIfNotExists(id, DICT_TYPE_NOT_EXISTS);
     }
 }
