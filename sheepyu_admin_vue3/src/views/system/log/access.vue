@@ -93,8 +93,8 @@ const state = reactive<{
       { label: '登录账号', prop: 'username', render: 'text' },
       { label: '昵称', prop: 'nickname', render: 'text' },
       { label: '登录IP', prop: 'userIp', render: 'text' },
-      { label: '浏览器 UA', prop: 'userAgent', render: 'text' },
-      { label: '登录时间', prop: 'createTime', render: 'text', width: 150 }
+      { label: '浏览器 UA', prop: 'userAgent', render: 'text', showTip: true },
+      { label: '登录时间', prop: 'createTime', render: 'text', width: 170 }
     ]
   }
 })

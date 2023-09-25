@@ -154,7 +154,7 @@ const state = reactive<{
       { label: 'CRON表达式', prop: 'cron', render: 'text', width: 120 },
       { label: '重试次数', prop: 'retryCount', render: 'text', width: 100 },
       { label: '重试间隔', prop: 'retryInterval', render: 'text', width: 100 },
-      { label: '创建时间', prop: 'createTime', render: 'text' }
+      { label: '创建时间', prop: 'createTime', render: 'text', width: 150 }
     ],
     operate: {
       buttons: ['edit', 'delete'],

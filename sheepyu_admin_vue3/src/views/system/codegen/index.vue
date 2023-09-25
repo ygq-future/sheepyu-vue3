@@ -177,12 +177,12 @@ const state = reactive<{
     columns: [
       { label: '场景', prop: 'scene', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_CODEGEN_SCENE, width: 90 },
       { label: '表名称', prop: 'tableName', render: 'text', width: 150 },
-      { label: '表描述', prop: 'tableComment', render: 'text' },
+      { label: '表描述', prop: 'tableComment', render: 'text', width: 170 },
       { label: '模块名', prop: 'moduleName', render: 'text' },
       { label: '业务名', prop: 'businessName', render: 'text' },
-      { label: '类名称', prop: 'className', render: 'text' },
-      { label: '类描述', prop: 'classComment', render: 'text' },
-      { label: '作者', prop: 'author', render: 'text' },
+      { label: '类名称', prop: 'className', render: 'text', width: 120 },
+      { label: '类描述', prop: 'classComment', render: 'text', width: 170 },
+      { label: '作者', prop: 'author', render: 'text', width: 100 },
       {
         label: '列表操作',
         prop: 'requireList',
@@ -211,8 +211,8 @@ const state = reactive<{
         dictType: DictTypeEnum.COMMON_BOOLEAN_STATUS,
         width: 100
       },
-      { label: '创建时间', prop: 'createTime', render: 'text', width: 100 },
-      { label: '备注', prop: 'remark', render: 'text' }
+      { label: '创建时间', prop: 'createTime', render: 'text', width: 180 },
+      { label: '备注', prop: 'remark', render: 'text', showTip: true }
     ],
     operate: {
       buttons: ['edit', 'delete'],

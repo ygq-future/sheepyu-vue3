@@ -95,7 +95,7 @@ const state = reactive<{
       { label: '配置名称', prop: 'name', render: 'text' },
       { label: '配置键名', prop: 'configKey', render: 'text' },
       { label: '配置键值', prop: 'configValue', render: 'text' },
-      { label: '备注', prop: 'remark', render: 'text' },
+      { label: '备注', prop: 'remark', render: 'text', showTip: true },
       { label: '创建人', prop: 'creator', render: 'text' },
       { label: '创建时间', prop: 'createTime', render: 'text' }
     ],
