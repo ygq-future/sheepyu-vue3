@@ -93,7 +93,7 @@
           placement='top'
           :show-after='500'
         >
-          <el-button v-auth="'system:role:assign'" v-blur type='success' @click='onAssignRole(scope.data)'>
+          <el-button v-auth="'system:role:assign'" v-blur type='success' @click='onAssignRole(data)'>
             <template #icon>
               <MyIcon name='fa fa-odnoklassniki' />
             </template>

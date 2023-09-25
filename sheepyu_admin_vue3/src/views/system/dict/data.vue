@@ -101,9 +101,7 @@ const state = reactive<{
       prop: 'dictType',
       placeholder: '字典类型',
       render: 'select',
-      selectOptions: [],
-      selectIdKey: 'type',
-      selectLabelKey: 'name',
+      props: { label: 'name', value: 'type' },
       clearable: false
     }
   ],
@@ -219,7 +217,7 @@ async function listDictData() {
 
 async function dictTypeList() {
   const { data } = await dictTypeListApi()
-  state.comSearchConfig[0].selectOptions = data
+  state.comSearchConfig[0].data = data
   state.popupFormConfig.formItemConfigs[0].data = data
 }
 
