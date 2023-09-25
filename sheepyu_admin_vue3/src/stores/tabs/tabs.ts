@@ -73,13 +73,6 @@ export const useTabs = defineStore(IdEnum.TABS, () => {
 
   function clearRoute() {
     notifyNeedUpdate()
-    state.tabsViewRoutes.forEach(route => {
-      const routeName = route.name || ''
-      if (['layout', 'dashboard'].includes(routeName.toString())) {
-        return
-      }
-      router.hasRoute(routeName) && router.removeRoute(routeName)
-    })
   }
 
   function notifyNeedUpdate() {

@@ -4,7 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
+<<<<<<< HEAD
     <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="" />
+=======
+    <list default="true" id="2b51546b-d0db-4e9e-9e7e-a965d3d8744d" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu-server/src/main/resources/application-dev.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/auto-import.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/auto-import.d.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" beforeDir="false" afterPath="$PROJECT_DIR$/sheepyu_admin_vue3/src/component.d.ts" afterDir="false" />
+    </list>
+>>>>>>> 94723bf630d5b64f2306f4b04d77cea1e1af577d
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -315,8 +323,13 @@
       <workItem from="1695439794713" duration="36000" />
       <workItem from="1695439837795" duration="15921000" />
       <workItem from="1695459575593" duration="1955000" />
+<<<<<<< HEAD
       <workItem from="1695516686328" duration="59642000" />
       <workItem from="1695649997669" duration="63000" />
+=======
+      <workItem from="1695516686328" duration="59330000" />
+      <workItem from="1695649779371" duration="455000" />
+>>>>>>> 94723bf630d5b64f2306f4b04d77cea1e1af577d
     </task>
     <servers />
   </component>

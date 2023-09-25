@@ -100,15 +100,15 @@ const state = reactive<{
     pagination: true,
     selection: true,
     columns: [
-      { label: '上传ID', prop: 'uploadId', render: 'text', width: 100 },
-      { label: '文件名', prop: 'filename', render: 'text', width: 200 },
-      { label: 'URL', prop: 'url', render: 'text', width: 150 },
-      { label: 'MD5', prop: 'md5', render: 'text' },
+      { label: '上传ID', prop: 'uploadId', render: 'text', width: 100, showTip: true },
+      { label: '文件名', prop: 'filename', render: 'text', width: 200, showTip: true },
+      { label: 'URL', prop: 'url', render: 'text', width: 150, showTip: true },
+      { label: 'MD5', prop: 'md5', render: 'text', showTip: true },
       { label: '文件类型', prop: 'mimeType', dictRender: 'tag', dictType: DictTypeEnum.FILE_TYPE, width: 100 },
       { label: '文件大小', prop: 'size', render: 'text', width: 100 },
       { label: '上传索引', prop: 'partIndex', render: 'text', width: 100 },
-      { label: '上传地域', prop: 'domain', render: 'text', width: 100 },
-      { label: '相对路径', prop: 'path', render: 'text', width: 100 },
+      { label: '上传地域', prop: 'domain', render: 'text', width: 100, showTip: true },
+      { label: '相对路径', prop: 'path', render: 'text', width: 100, showTip: true },
       {
         label: '是否完成',
         prop: 'complete',
@@ -118,7 +118,7 @@ const state = reactive<{
       },
       { label: '备注', prop: 'remark', render: 'text' },
       { label: '创建者', prop: 'creator', render: 'text' },
-      { label: '创建时间', prop: 'createTime', render: 'text', width: 100 }
+      { label: '创建时间', prop: 'createTime', render: 'text', width: 130 }
     ],
     operate: {
       buttons: ['delete'],

@@ -120,9 +120,9 @@ const state = reactive<{
     selection: true,
     columns: [
       { label: 'id', prop: 'id' },
-      { label: '名称', prop: 'name' },
+      { label: '名称', prop: 'name', width: 120 },
       { label: '图标', prop: 'icon', render: 'icon' },
-      { label: '权限标识', prop: 'permission' },
+      { label: '权限标识', prop: 'permission', width: 160 },
       { label: '排序', prop: 'sort', sortable: true },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_MENU_TYPE },
       { label: '缓存', prop: 'keepAlive', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS },
