@@ -177,7 +177,7 @@ public class SystemUserController {
 
     @GetMapping("/statistics")
     @ApiOperation("用户统计")
-    @PreAuthorize("@ss.hasPermission('dashboard')")
+//    @PreAuthorize("@ss.hasPermission('dashboard')")
     public Result<SystemUserStatisticsVo> statistics() {
         return success(systemUserBiz.statistics());
     }

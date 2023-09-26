@@ -61,6 +61,20 @@
             </div>
           </el-tooltip>
 
+          <el-tooltip
+            v-if="buttons.includes('unfold2')"
+            :content="state.unfold ? '展开第二层' : '折叠'"
+            :show-after='500'
+            placement='top'
+          >
+            <div class='button-item'>
+              <el-button v-blur :type="state.unfold ? 'warning' : 'danger'" @click='onUnfold(2)'>
+                <MyIcon :name='state.unfold ? "fa fa-folder-open" : "fa fa-folder"' />
+                <span class='button-text'>{{ state.unfold ? '展开第二层' : '折叠' }}</span>
+              </el-button>
+            </div>
+          </el-tooltip>
+
           <el-tooltip v-if="buttons.includes('import')" content='导入' placement='top'>
             <el-upload
               :http-request='onFileUpload'
@@ -173,7 +187,7 @@ const emits = defineEmits<{
   (e: 'add'): void
   (e: 'batch-edit', ids: any[]): void
   (e: 'batch-delete', ids: any[]): void
-  (e: 'unfold', unfold: boolean): void
+  (e: 'unfold', unfold: boolean, limit: number): void
   (e: 'input', searchValue: string): void
   (e: 'input-enter', searchValue: string): void
   (e: 'input-clear'): void
@@ -186,11 +200,12 @@ const emits = defineEmits<{
 const state = reactive({
   searchValue: '',
   unfold: true,
-  comSearch: false
+  comSearch: false,
+  limit: 999
 })
 
-function onUnfold() {
-  emits('unfold', state.unfold)
+function onUnfold(limit: number = 999) {
+  emits('unfold', state.unfold, state.limit = limit)
   state.unfold = !state.unfold
 }
 
@@ -220,12 +235,13 @@ function onFileUpload(options: UploadRequestOptions) {
 }
 
 defineExpose({
-  getUnfold: () => state.unfold
+  getUnfold: () => state.unfold,
+  getLimit: () => state.limit
 })
 
 onMounted(() => {
   shrink.value = shrink.value || props.enableShrink
-  if (props.buttons.length >= 5) {
+  if (props.buttons.length >= 6) {
     shrink.value = true
   }
 })

@@ -11,7 +11,7 @@ import top.sheepyu.module.system.controller.admin.dept.vo.SystemDeptQueryVo;
 import top.sheepyu.module.system.controller.admin.dept.vo.SystemDeptRespVo;
 import top.sheepyu.module.system.controller.admin.dept.vo.SystemDeptUpdateVo;
 import top.sheepyu.module.system.dao.dept.SystemDept;
-import top.sheepyu.module.system.service.dept.SystemDeptService;
+import top.sheepyu.module.system.service.dept.SystemDeptBiz;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -29,13 +29,13 @@ import static top.sheepyu.module.system.convert.dept.SystemDeptConvert.CONVERT;
 @Api(tags = "管理端 - 系统部门")
 public class SystemDeptController {
     @Resource
-    private SystemDeptService systemDeptService;
+    private SystemDeptBiz systemDeptBiz;
 
     @PostMapping
     @ApiOperation("添加系统部门")
     @PreAuthorize("@ss.hasPermission('system:dept:create')")
     public Result<Boolean> create(@RequestBody SystemDeptCreateVo createVo) {
-        systemDeptService.createDept(createVo);
+        systemDeptBiz.createDept(createVo);
         return success(true);
     }
 
@@ -43,7 +43,7 @@ public class SystemDeptController {
     @ApiOperation("修改系统部门")
     @PreAuthorize("@ss.hasPermission('system:dept:update')")
     public Result<Boolean> update(@RequestBody SystemDeptUpdateVo updateVo) {
-        systemDeptService.updateDept(updateVo);
+        systemDeptBiz.updateDept(updateVo);
         return success(true);
     }
 
@@ -51,7 +51,7 @@ public class SystemDeptController {
     @ApiOperation("删除系统部门")
     @PreAuthorize("@ss.hasPermission('system:dept:delete')")
     public Result<Boolean> delete(@PathVariable Long id) {
-        systemDeptService.deleteDept(id);
+        systemDeptBiz.deleteDept(id);
         return success(true);
     }
 
@@ -59,7 +59,7 @@ public class SystemDeptController {
     @ApiOperation("获取系统部门列表")
     @PreAuthorize("@ss.hasPermission('system:dept:query')")
     public Result<List<SystemDeptRespVo>> list(SystemDeptQueryVo queryVo) {
-        List<SystemDept> result = systemDeptService.listDept(queryVo);
+        List<SystemDept> result = systemDeptBiz.listDept(queryVo);
         return success(CONVERT.convertList(result));
     }
 
@@ -67,7 +67,7 @@ public class SystemDeptController {
     @ApiOperation("获取系统部门列表树,排除岗位")
     @PreAuthorize("@ss.hasPermission('system:dept:query')")
     public Result<List<SystemDeptRespVo>> tree() {
-        List<SystemDept> result = systemDeptService.tree();
+        List<SystemDept> result = systemDeptBiz.tree();
         return success(CONVERT.convertList(result));
     }
 
@@ -75,7 +75,7 @@ public class SystemDeptController {
     @ApiOperation("获取指定系统部门")
     @PreAuthorize("@ss.hasPermission('system:dept:query')")
     public Result<SystemDeptRespVo> findById(@PathVariable Long id) {
-        SystemDept dept = systemDeptService.findById(id);
+        SystemDept dept = systemDeptBiz.findById(id);
         return success(CONVERT.convert(dept));
     }
 }

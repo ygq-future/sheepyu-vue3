@@ -15,7 +15,7 @@ import java.util.Set;
  * @date 2023-01-29 17:55
  **/
 public interface SystemDeptService extends IServiceX<SystemDept> {
-    void createDept(@Valid SystemDeptCreateVo createVo);
+    Long createDept(@Valid SystemDeptCreateVo createVo);
 
     void updateDept(@Valid SystemDeptUpdateVo updateVo);
 
@@ -38,9 +38,9 @@ public interface SystemDeptService extends IServiceX<SystemDept> {
      */
     List<SystemDept> tree();
 
-    List<String> findNamesByIds(Long userId, Set<Long> postIds);
+    List<SystemDept> deptListToTree(List<SystemDept> list);
 
-    Set<Long> listDeptIdByUserId(Long userId);
+    List<String> findNamesByIds(Long userId, Set<Long> postIds);
 
     /**
      * 查询此用户部门及子部门的用户id
@@ -50,6 +50,12 @@ public interface SystemDeptService extends IServiceX<SystemDept> {
      */
     Set<Long> deepQueryUserIdByUserId(Long userId);
 
+    /**
+     * 查询此用户部门及子部门的部门id
+     *
+     * @param userId userId
+     * @return deptId Set
+     */
     Set<Long> deepQueryDeptIdByUserId(Long userId);
 
     /**
@@ -60,6 +66,12 @@ public interface SystemDeptService extends IServiceX<SystemDept> {
      */
     Set<Long> deepQueryUserIdByDeptId(Set<Long> deptIds);
 
+    /**
+     * 查询此部门及子部门的部门id
+     *
+     * @param deptIds deptIds
+     * @return deptId Set
+     */
     Set<Long> deepQueryDeptIdByDeptId(Set<Long> deptIds);
 
     boolean isOwn(Long loginUserId, Long deptId);

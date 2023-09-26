@@ -18,7 +18,7 @@ public interface ErrorCodeConstants {
     ErrorCode CRON_ERROR = new ErrorCode(100_001_001, "cron表达式错误");
     ErrorCode JOB_HANDLER_EXISTS = new ErrorCode(100_001_002, "任务处理器已存在");
     ErrorCode JOB_HANDLER_NOT_EXISTS = new ErrorCode(100_001_003, "任务处理器不存在");
-//    ErrorCode JOB_UPDATE_ONLY_NORMAL_STATUS = new ErrorCode(100_001_004, "只能在开启状态下修改任务");
+    //    ErrorCode JOB_UPDATE_ONLY_NORMAL_STATUS = new ErrorCode(100_001_004, "只能在开启状态下修改任务");
     ErrorCode STATUS_ERROR = new ErrorCode(100_001_005, "错误的状态!");
     ErrorCode LOG_NOT_EXISTS = new ErrorCode(100_001_006, "任务日志不存在!");
 
@@ -36,6 +36,7 @@ public interface ErrorCodeConstants {
     ErrorCode FORBID_OPERATE_ADMIN = new ErrorCode(100_003_005, "禁止操作超级管理员!");
     ErrorCode OLD_PASS_ERROR = new ErrorCode(100_003_006, "原密码错误!");
     ErrorCode EMAIL_OR_MOBILE_NONNULL = new ErrorCode(100_003_007, "邮箱或者手机号不能为空!");
+    ErrorCode DONT_DELETE_OWN = new ErrorCode(100_003_008, "你为什么要把自己删除!");
 
     //systemConfig相关 100_004_001
     ErrorCode CONFIG_NOT_EXISTS = new ErrorCode(100_004_001, "配置不存在!");
@@ -69,6 +70,7 @@ public interface ErrorCodeConstants {
     ErrorCode ROLE_NOT_EXISTS = new ErrorCode(100_010_001, "角色不存在!");
     ErrorCode DONT_REMOVE_SUPER_ROLE = new ErrorCode(100_010_002, "不能删除超级管理员角色!");
     ErrorCode ROLE_EXISTS = new ErrorCode(100_010_003, "角色已存在!");
+    ErrorCode ROLE_HAS_RELEVANCY = new ErrorCode(100_010_003, "角色已被关联, 无法删除!");
 
     //codegen相关 100_011_001
     ErrorCode CODEGEN_NOT_EXISTS = new ErrorCode(100_011_001, "代码生成不存在!");

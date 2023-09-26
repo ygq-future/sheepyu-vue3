@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ygq
@@ -21,10 +22,10 @@ public class SystemDept extends BaseModel {
     private String name;
     private Long parentId;
     private Integer sort;
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    private Long leaderUserId;
-    @TableField(updateStrategy = FieldStrategy.IGNORED)
-    private String leaderNickname;
+    @TableField(exist = false)
+    private Set<Long> leaderUserIds;
+    @TableField(exist = false)
+    private String leaderNicknames;
     private Integer type;
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String phone;

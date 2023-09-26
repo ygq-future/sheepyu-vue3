@@ -111,7 +111,7 @@ public class SystemPermissionController {
     @ApiOperation("删除系统角色")
     @PreAuthorize("@ss.hasPermission('system:role:delete')")
     public Result<Boolean> deleteRole(@PathVariable String ids) {
-        systemRoleService.deleteRole(ids);
+        permissionBiz.deleteRole(ids);
         return success(true);
     }
 
@@ -119,7 +119,7 @@ public class SystemPermissionController {
     @ApiOperation("获取系统角色分页")
     @PreAuthorize("@ss.hasPermission('system:role:query')")
     public Result<PageResult<SystemRoleRespVo>> pageRole(SystemRoleQueryVo queryVo) {
-        PageResult<SystemRole> result = systemRoleService.pageRole(queryVo);
+        PageResult<SystemRole> result = permissionBiz.pageRoleByPermission(queryVo);
         return success(SystemRoleConvert.CONVERT.convertPage(result));
     }
 

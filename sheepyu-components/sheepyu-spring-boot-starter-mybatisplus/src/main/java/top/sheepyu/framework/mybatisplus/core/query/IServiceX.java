@@ -66,7 +66,7 @@ public interface IServiceX<T> extends IService<T> {
     T findByIdThrowIfNotExists(Object id, ErrorCode errorCode);
 
     /**
-     * 根据某个字段查找数据, 如果找不到就会报错
+     * 根据某个字段查找数据, 如果存在就会报错
      *
      * @param field     字段
      * @param fieldVal  要查找的字段值
@@ -85,6 +85,18 @@ public interface IServiceX<T> extends IService<T> {
     T findByField(SFunction<T, ?> field, Object fieldVal);
 
     /**
+     * 根据指定字段集合查询指定字段值集合
+     *
+     * @param resField      需要查询的字段
+     * @param byField       根据哪个字段进行查询
+     * @param byFieldValues 根据字段的values
+     * @param <U1>          返回字段值类型
+     * @param <U2>          根据查询字段值类型
+     * @return 返回字段值集合
+     */
+    <U1, U2> List<U1> findFieldValueByField(SFunction<T, U1> resField, SFunction<T, U2> byField, Collection<U2> byFieldValues);
+
+    /**
      * @param ids         要删除的资源的唯一标识
      * @param fieldLambda 要根据哪个字段进行删除的表达式
      */
@@ -94,7 +106,7 @@ public interface IServiceX<T> extends IService<T> {
      * @param idList      要删除的资源的唯一标识列表
      * @param fieldLambda 要根据哪个字段进行删除的表达式
      */
-    void batchDelete(List<? extends Serializable> idList, SFunction<T, ?> fieldLambda);
+    void batchDelete(Collection<? extends Serializable> idList, SFunction<T, ?> fieldLambda);
 
     /**
      * @param ids         要删除的资源的唯一标识
@@ -108,7 +120,7 @@ public interface IServiceX<T> extends IService<T> {
      * @param fieldLambda 要根据哪个字段进行删除的表达式
      * @param wrapperX    删除需要什么条件, 注意这里就不要加需要删除的字段了
      */
-    void batchDelete(List<? extends Serializable> idList, SFunction<T, ?> fieldLambda, LambdaQueryWrapperX<T> wrapperX);
+    void batchDelete(Collection<? extends Serializable> idList, SFunction<T, ?> fieldLambda, LambdaQueryWrapperX<T> wrapperX);
 
     /**
      * 构建自定义增强条件

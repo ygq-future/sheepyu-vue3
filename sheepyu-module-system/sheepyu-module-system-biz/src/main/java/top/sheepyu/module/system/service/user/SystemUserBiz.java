@@ -1,11 +1,13 @@
 package top.sheepyu.module.system.service.user;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.date.DateTime;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.AllArgsConstructor;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -31,13 +33,14 @@ import javax.validation.Valid;
 import java.util.*;
 
 import static top.sheepyu.framework.security.core.constants.SecurityRedisConstants.REFRESH_TOKEN_KEY;
+import static top.sheepyu.module.common.common.PageResult.emptyPage;
+import static top.sheepyu.module.common.constants.ErrorCodeConstants.NOT_PERMISSION;
 import static top.sheepyu.module.common.constants.ErrorCodeConstants.OPERATION_FAILED;
 import static top.sheepyu.module.common.enums.CommonStatusEnum.ENABLE;
 import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.enums.UserTypeEnum.MEMBER;
 import static top.sheepyu.module.common.exception.CommonException.exception;
-import static top.sheepyu.module.system.constants.ErrorCodeConstants.CODE_ERROR;
-import static top.sheepyu.module.system.constants.ErrorCodeConstants.EMAIL_OR_MOBILE_NONNULL;
+import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.enums.log.LoginResultEnum.CAPTCHA_CODE_ERROR;
 import static top.sheepyu.module.system.enums.log.LoginResultEnum.SUCCESS;
 import static top.sheepyu.module.system.enums.log.LoginTypeEnum.LOGIN_TOKEN;
@@ -109,17 +112,30 @@ public class SystemUserBiz {
     }
 
     public PageResult<SystemUser> pageUser(@Valid SystemUserQueryVo queryVo) {
-        PageResult<SystemUser> page = systemUserService.page(queryVo, buildQuery(queryVo));
-        for (SystemUser user : page.getList()) {
-            fillDeptInfo(user);
+        LambdaQueryWrapper<SystemUser> queryWrapper = buildQuery(queryVo);
+        if (queryWrapper == null) {
+            return emptyPage();
         }
+        PageResult<SystemUser> page = systemUserService.page(queryVo, queryWrapper);
+        page.getList().forEach(this::fillDeptInfo);
         return page;
+    }
+
+    public List<SystemUser> listUser(@Valid SystemUserQueryVo queryVo) {
+        LambdaQueryWrapper<SystemUser> queryWrapper = buildQuery(queryVo);
+        if (queryWrapper == null) {
+            return Collections.emptyList();
+        }
+        List<SystemUser> list = systemUserService.list(queryWrapper);
+        list.forEach(this::fillDeptInfo);
+        return list;
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void createUser(SystemUserCreateVo createVo) {
         createVo.setType(ADMIN.getCode());
         Long userId = systemUserService.create(createVo);
+        permissionBiz.assignRoleToUser(userId, new HashSet<>());
         permissionBiz.assignDeptToUser(userId, createVo.getDeptIds());
     }
 
@@ -160,21 +176,35 @@ public class SystemUserBiz {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void deleteUser(Long id) {
-        systemUserService.deleteUser(id);
-        systemUserRoleMapper.deleteByUserId(id);
-        systemUserDeptMapper.deleteByUserId(id);
-    }
-
-    public List<SystemUser> listUser(@Valid SystemUserQueryVo queryVo) {
-        if (queryVo.getType() == null) {
-            queryVo.setType(2);
+    public void deleteUser(Long userId) {
+        Long loginUserId = SecurityFrameworkUtil.getLoginUserId();
+        if (Objects.equals(loginUserId, userId)) {
+            throw exception(DONT_DELETE_OWN);
         }
-        List<SystemUser> list = systemUserService.list(buildQuery(queryVo));
-        for (SystemUser user : list) {
-            fillDeptInfo(user);
+        Set<Long> deptIds = systemUserDeptMapper.findDeptIdByUserId(userId);
+        if (CollUtil.isNotEmpty(deptIds)) {
+            //被删除用户有所属部门, 检查所属部门中是否有部门在当前操作者管理下
+            //获取当前操作者所有的部门
+            Set<Long> userDeptIds = systemDeptService.deepQueryDeptIdByUserId(loginUserId);
+            Collection<Long> removeDeptIds = CollUtil.intersection(deptIds, userDeptIds);
+            if (CollUtil.isEmpty(removeDeptIds)) {
+                //说明被删除用户不在此用户部门下 (正常是不可能走到这里的, 除非是非法攻击)
+                throw exception(NOT_PERMISSION);
+            }
+            //removeDeptIds.size != deptIds.size
+            //被删除用户所属部门还有的不是此用户所管理的, 只取消部门关联即可
+            if (removeDeptIds.size() < deptIds.size()) {
+                systemUserDeptMapper.deleteByUserIdAndDeptIds(userId, removeDeptIds);
+                return;
+            }
+            //说明被删除用户所属的部门/职位都是隶属于此用户下, 直接删除所有部门
+            systemUserDeptMapper.deleteByUserId(userId);
         }
-        return list;
+        //用户删除前, 需要处理用户之前所创建的角色信息
+        permissionBiz.handleRoleInfo(userId);
+        //说明被删除用户没有部门或者所属的部门/职位都是隶属于此用户下, 这样可以直接删除
+        systemUserService.deleteUser(userId);
+        systemUserRoleMapper.deleteByUserId(userId);
     }
 
     public LoginUser loginByEmail(@Valid EmailLoginVo loginVo) {
@@ -197,21 +227,24 @@ public class SystemUserBiz {
         return loginUser;
     }
 
+    @Nullable
     private LambdaQueryWrapper<SystemUser> buildQuery(SystemUserQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
 
-        Set<Long> userIds = new HashSet<>();
-        //非超级管理员只能查询自己部门下的用户
-        if (!permissionBiz.isSuperAdminRole()) {
-            Long userId = SecurityFrameworkUtil.getLoginUserId();
-            userIds.addAll(systemDeptService.deepQueryUserIdByUserId(userId));
-            userIds.add(0L);
-        }
+        Set<Long> userIds = null;
         //添加指定部门下的所有用户id
         if (queryVo.getDeptId() != null) {
             Set<Long> singleDeptId = Collections.singleton(queryVo.getDeptId());
-            userIds.addAll(systemDeptService.deepQueryUserIdByDeptId(singleDeptId));
-            userIds.add(0L);
+            userIds = systemDeptService.deepQueryUserIdByDeptId(singleDeptId);
+        } else if (!permissionBiz.isSuperAdminRole()) {
+            //非超级管理员只能查询自己部门下的用户和自己
+            Long userId = SecurityFrameworkUtil.getLoginUserId();
+            userIds = systemDeptService.deepQueryUserIdByUserId(userId);
+        }
+
+        //说明不是管理员查询了自己部门或者有deptId查询条件, 但是查询出来的结果是空
+        if (userIds != null && userIds.isEmpty()) {
+            return null;
         }
 
         return systemUserService.buildQuery()

@@ -36,7 +36,12 @@
       @size-change='pageUser'
     >
       <template #buttons='{data}'>
-        <el-tooltip v-if='data!.type === 2' content='编辑' placement='top' :show-after='500'>
+        <el-tooltip
+          v-if='data!.type === 2'
+          content='编辑'
+          placement='top'
+          :show-after='500'
+        >
           <el-button
             v-auth='`system:user:update`'
             v-blur
@@ -57,8 +62,16 @@
         >
           <template #reference>
             <div>
-              <el-tooltip :show-after='500' content='删除' placement='top'>
-                <el-button v-auth='`system:user:delete`' v-blur type='danger'>
+              <el-tooltip
+                :show-after='500'
+                content='删除'
+                placement='top'
+              >
+                <el-button
+                  v-auth='`system:user:delete`'
+                  v-blur
+                  type='danger'
+                >
                   <template #icon>
                     <MyIcon name='el-icon-Delete' />
                   </template>
@@ -76,8 +89,16 @@
         >
           <template #reference>
             <div>
-              <el-tooltip content='重置密码' placement='top' :show-after='500'>
-                <el-button v-auth="'system:user:reset-password'" v-blur type='warning'>
+              <el-tooltip
+                content='重置密码'
+                placement='top'
+                :show-after='500'
+              >
+                <el-button
+                  v-auth="'system:user:reset-password'"
+                  v-blur
+                  type='warning'
+                >
                   <template #icon>
                     <MyIcon name='el-icon-RefreshRight' />
                   </template>
@@ -93,7 +114,12 @@
           placement='top'
           :show-after='500'
         >
-          <el-button v-auth="'system:role:assign'" v-blur type='success' @click='onAssignRole(data)'>
+          <el-button
+            v-auth="'system:role:assign'"
+            v-blur
+            type='success'
+            @click='onAssignRole(data)'
+          >
             <template #icon>
               <MyIcon name='fa fa-odnoklassniki' />
             </template>
@@ -120,7 +146,10 @@
     />
   </div>
 </template>
-<script setup lang='ts'>
+<script
+  setup
+  lang='ts'
+>
 import TableHeader from '@/components/table/header/TableHeader.vue'
 import Table from '@/components/table/Table.vue'
 import PopupForm from '@/components/form/PopupForm.vue'
@@ -139,12 +168,14 @@ import {
   roleByUserApi
 } from '@/api/system/user'
 import { listDeptApi } from '@/api/system/dept'
+import type { SystemDeptRespVo } from '@/api/system/dept'
 import { listRoleApi } from '@/api/system/role'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
 import { useUser } from '@/stores/user/user'
+import { DeptTypeEnum } from '@/enums/DeptTypeEnum'
 
 const user = useUser()
 const tableRef = ref()
@@ -249,6 +280,7 @@ const state = reactive<{
         prop: 'deptIds',
         placeholder: '部门/职位',
         render: 'tree-select',
+        required: false,
         multiple: true,
         props: { label: 'name', value: 'id' }
       },

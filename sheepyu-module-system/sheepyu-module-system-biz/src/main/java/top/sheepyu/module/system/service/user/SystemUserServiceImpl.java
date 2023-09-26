@@ -1,7 +1,9 @@
 package top.sheepyu.module.system.service.user;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,9 +25,7 @@ import top.sheepyu.module.system.service.config.SystemConfigService;
 import top.sheepyu.module.system.service.log.SystemAccessLogService;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static top.sheepyu.module.common.enums.CommonStatusEnum.DISABLE;
 import static top.sheepyu.module.common.exception.CommonException.exception;
@@ -116,14 +116,14 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
 
     @Override
     public Long create(SystemUserCreateVo createVo) {
-        SystemUser user = CONVERT.convert(createVo).setType(createVo.getType());
+        SystemUser user = CONVERT.convert(createVo);
         findByFieldThrowIfExists(SystemUser::getUsername, user.getUsername(), USER_EXISTS);
         //根据用户名删除deleted=1的用户
         baseMapper.removeByUsernameDeleted(user.getUsername());
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         //设置昵称
-        if (StrUtil.isBlank(createVo.getNickname())) {
-            createVo.setNickname("sheepyu_用户" + RandomUtil.randomNumbers(8));
+        if (StrUtil.isBlank(user.getNickname())) {
+            user.setNickname("user" + RandomUtil.randomNumbers(8));
         }
         save(user);
         return user.getId();
@@ -246,6 +246,14 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
     @Override
     public List<Long> countByWeek(Date beginWeek, Date endWeek) {
         return baseMapper.countByWeek(beginWeek, endWeek);
+    }
+
+    @Override
+    public <U> List<U> findFieldValueByIds(SFunction<SystemUser, U> field, Set<Long> userIds) {
+        if (CollUtil.isEmpty(userIds)) {
+            return Collections.emptyList();
+        }
+        return findFieldValueByField(field, SystemUser::getId, userIds);
     }
 
     private void checkStatus(SystemUser user, LoginTypeEnum loginType) {

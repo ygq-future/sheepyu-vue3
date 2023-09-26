@@ -6,6 +6,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Set;
 
 /**
  * @author ygq
@@ -22,11 +23,11 @@ public class SystemDeptBaseVo {
     @NotNull(message = "排序不能为空")
     private Integer sort;
 
-    @ApiModelProperty("部门负责人id")
-    private Long leaderUserId;
+    @ApiModelProperty("部门负责人ids")
+    private Set<Long> leaderUserIds;
 
     @ApiModelProperty("部门负责人昵称")
-    private String leaderNickname;
+    private String leaderNicknames;
 
     @ApiModelProperty("部门联系电话")
     private String phone;

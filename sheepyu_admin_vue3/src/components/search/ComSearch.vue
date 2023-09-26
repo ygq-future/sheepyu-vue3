@@ -35,6 +35,7 @@
               <el-tree-select
                 v-model='form[item.prop]'
                 default-expand-all
+                :clearable='item.clearable === undefined || item.clearable'
                 check-strictly
                 :node-key='item.props?.value ?? defaultProps.value'
                 :data='item.data || []'
@@ -50,13 +51,13 @@
             </el-form-item>
           </el-col>
 
-          <el-col class='p-15' :sm='12' :xs='24' v-if='item.render === "datetime"'>
+          <el-col class='p-15' :sm='8' :xs='24' v-if='item.render === "datetime"'>
             <el-form-item :label='item.label' :prop='item.prop'>
               <DateTime v-model='form[item.prop]' range />
             </el-form-item>
           </el-col>
 
-          <el-col class='p-15' :sm='12' :xs='24' v-if='item.render === "number-range"'>
+          <el-col class='p-15' :sm='8' :xs='24' v-if='item.render === "number-range"'>
             <el-form-item :label='item.label' :prop='item.prop'>
               <NumberRange v-model='form[item.prop]' :placeholder='item.placeholder' />
             </el-form-item>

@@ -99,7 +99,7 @@ import { useConfig } from '@/stores/config/config'
 const config = useConfig()
 
 const props = withDefaults(defineProps<{
-  data: any
+  data: any[]
   tableConfig: TableConfig
   //如果开启了selection, 也可以使用双向绑定, 更加方便
   selection?: any[]
@@ -170,15 +170,12 @@ function onCurrentChange(current: number) {
 }
 
 //递归展开
-function expandAllRecursive(data: any, value: boolean) {
-  if (!data) return
-
+function recursiveExpand(data: any[], value: boolean, limit: number = 999, cur: number = 1) {
+  if (!data || data.length === 0 || cur === limit) return
   data.forEach((item: any) => {
-    if (item) {
-      tableRef.value?.toggleRowExpansion(item, value)
-      if (item.children && item.children.length > 0) {
-        expandAllRecursive(item.children, value)
-      }
+    tableRef.value?.toggleRowExpansion(item, value)
+    if (item.children && item.children.length > 0) {
+      recursiveExpand(item.children, value, limit, cur + 1)
     }
   })
 }
@@ -196,8 +193,8 @@ defineExpose({
   toggleAllSelection: () => {
     props.tableConfig.selection && tableRef.value?.toggleAllSelection()
   },
-  expandAll: (value: boolean) => {
-    expandAllRecursive(props.data, value)
+  expandAll: (value: boolean, limit: number) => {
+    recursiveExpand(props.data, value, limit)
   }
 })
 </script>

@@ -27,7 +27,7 @@ public class SystemUser extends BaseModel {
     private String mobile;
     private String avatar;
     /**
-     * 部门-职位id
+     * 部门/职位id
      */
     @TableField(exist = false)
     private Set<Long> deptIds;

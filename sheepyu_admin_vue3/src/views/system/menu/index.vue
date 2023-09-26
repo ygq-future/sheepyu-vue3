@@ -4,7 +4,7 @@
       ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:menu'
-      :buttons="['add', 'delete', 'edit', 'unfold']"
+      :buttons="['add', 'delete', 'edit', 'unfold', 'unfold2']"
       :rows='state.selection'
       @unfold='onUnfold'
       @refresh='findMenuList'
@@ -173,8 +173,8 @@ async function onFieldChange(row: SystemMenuUpdateVo) {
   tabs.notifyNeedUpdate()
 }
 
-function onUnfold(value: boolean) {
-  tableRef.value.expandAll(value)
+function onUnfold(value: boolean, limit: number) {
+  tableRef.value.expandAll(value, limit)
 }
 
 function onAdd(data?: any) {
@@ -246,7 +246,7 @@ async function findMenuList() {
   state.tableData = data
   setFormItemData(data)
   await nextTick(() => {
-    tableRef.value.expandAll(!tableHeaderRef.value.getUnfold())
+    tableRef.value.expandAll(!tableHeaderRef.value.getUnfold(), tableHeaderRef.value.getLimit())
   })
 }
 

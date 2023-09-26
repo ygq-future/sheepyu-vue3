@@ -3,11 +3,12 @@ package top.sheepyu.module.system.service.permission;
 import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleCreateVo;
-import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleQueryVo;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleUpdateVo;
 import top.sheepyu.module.system.dao.permission.role.SystemRole;
+import top.sheepyu.module.system.service.permission.bo.SystemRoleQueryBo;
 
 import javax.validation.Valid;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -20,13 +21,15 @@ public interface SystemRoleService extends IServiceX<SystemRole> {
 
     void updateRole(@Valid SystemRoleUpdateVo updateVo);
 
-    void deleteRole(String ids);
+    void deleteRole(Collection<Long> idList);
 
-    PageResult<SystemRole> pageRole(@Valid SystemRoleQueryVo queryVo);
+    PageResult<SystemRole> pageAllRole(SystemRoleQueryBo queryBo);
 
-    List<SystemRole> listRole();
+    PageResult<SystemRole> pageRoleByPermission(@Valid SystemRoleQueryBo queryBo);
 
-    List<SystemRole> listRoleByCreator();
+    List<SystemRole> listAllRole();
+
+    List<SystemRole> listRoleByCreators(List<String> creatorList);
 
     SystemRole findById(Long id);
 

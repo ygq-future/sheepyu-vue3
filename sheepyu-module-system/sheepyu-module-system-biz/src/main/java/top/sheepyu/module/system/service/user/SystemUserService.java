@@ -1,5 +1,6 @@
 package top.sheepyu.module.system.service.user;
 
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
@@ -12,6 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author ygq
@@ -61,4 +63,6 @@ public interface SystemUserService extends IServiceX<SystemUser> {
     void updatePassword(Long userId, @NotBlank(message = "密码不能为空") String oldPass, @NotBlank(message = "密码不能为空") String newPass);
 
     List<Long> countByWeek(Date beginWeek, Date endWeek);
+
+    <U> List<U> findFieldValueByIds(SFunction<SystemUser, U> field, Set<Long> userIds);
 }

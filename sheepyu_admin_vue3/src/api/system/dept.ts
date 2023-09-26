@@ -42,7 +42,8 @@ export interface SystemDeptBaseVo {
   //显示顺序
   sort: number
   //负责人
-  leaderUserId?: number
+  leaderUserIds?: Array<number>
+  leaderNicknames?: string
   //联系电话
   phone?: string
   //邮箱
@@ -60,6 +61,7 @@ export interface SystemDeptUpdateVo extends SystemDeptBaseVo {
 export interface SystemDeptRespVo extends SystemDeptBaseVo {
   //部门id
   id: number
+  disabled?: boolean
   children?: Array<SystemDeptRespVo>
 }
 

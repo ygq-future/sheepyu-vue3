@@ -35,14 +35,14 @@
       @delete='row => onDelete(row.id)'
     >
       <template #buttons='{ data }'>
-        <el-tooltip content='新增' placement='top' :show-after='500'>
+        <el-tooltip v-if='data?.type === DeptTypeEnum.DEPT' content='新增' placement='top' :show-after='500'>
           <el-button v-auth="'system:dept:create'" v-blur type='success' @click='onAdd(data?.id)'>
             <template #icon>
               <MyIcon name='el-icon-Plus' />
             </template>
           </el-button>
         </el-tooltip>
-        <el-tooltip v-if='data?.leaderUserId !== user.get().id' content='分配角色' placement='top' :show-after='500'>
+        <el-tooltip content='分配角色' placement='top' :show-after='500'>
           <el-button v-auth="'system:role:assign'" v-blur type='warning' @click='onAssignRole(data)'>
             <template #icon>
               <MyIcon name='fa fa-odnoklassniki' />
@@ -92,9 +92,8 @@ import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import { listUserApi } from '@/api/system/user'
 import { ElLoading } from 'element-plus'
 import { listRoleApi } from '@/api/system/role'
-import { useUser } from '@/stores/user/user'
+import { DeptTypeEnum } from '@/enums/DeptTypeEnum'
 
-const user = useUser()
 const tableRef = ref()
 const tableHeaderRef = ref()
 const popupFormRef = ref()
@@ -135,7 +134,7 @@ const state = reactive<{
     columns: [
       { label: '部门编号', prop: 'id', render: 'text' },
       { label: '部门名称', prop: 'name', render: 'text' },
-      { label: '负责人', prop: 'leaderNickname', render: 'text' },
+      { label: '负责人', prop: 'leaderNicknames', render: 'text' },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_DEPT_TYPE },
       { label: '显示顺序', prop: 'sort', render: 'text' },
       { label: '联系电话', prop: 'phone', render: 'text' },
@@ -160,11 +159,12 @@ const state = reactive<{
       { label: '类型', prop: 'type', dictRender: 'radio', dictType: DictTypeEnum.SYSTEM_DEPT_TYPE },
       {
         label: '负责人',
-        prop: 'leaderUserId',
+        prop: 'leaderUserIds',
         required: false,
+        multiple: true,
         placeholder: '负责人',
         render: 'select',
-        props: { label: 'nickname', labelVModelKey: 'leaderNickname' }
+        props: { label: 'nickname' }
       },
       { label: '显示顺序', prop: 'sort', placeholder: '显示顺序', render: 'number' },
       { label: '联系电话', prop: 'phone', required: false, placeholder: '联系电话', render: 'text' },

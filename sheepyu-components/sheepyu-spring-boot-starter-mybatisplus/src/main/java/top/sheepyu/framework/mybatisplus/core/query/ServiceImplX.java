@@ -21,6 +21,7 @@ import java.util.List;
 import static top.sheepyu.module.common.constants.ErrorCodeConstants.CHECK_FIELD_NOT_NULL;
 import static top.sheepyu.module.common.constants.ErrorCodeConstants.OPERATION_FAILED;
 import static top.sheepyu.module.common.exception.CommonException.exception;
+import static top.sheepyu.module.common.util.CollectionUtil.convertList;
 
 /**
  * @author ygq
@@ -98,12 +99,8 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
 
     @Override
     public T findByFieldThrowIfExists(SFunction<T, ?> field, Object fieldVal, ErrorCode errorCode) {
-        if (fieldVal != null) {
-            throw exception(errorCode);
-        }
-
         T one = findByField(field, fieldVal);
-        if (one == null) {
+        if (one != null) {
             throw exception(errorCode);
         }
         return one;
@@ -115,12 +112,21 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
     }
 
     @Override
+    public <U1, U2> List<U1> findFieldValueByField(SFunction<T, U1> resField, SFunction<T, U2> byField, Collection<U2> byFieldValues) {
+        List<T> list = lambdaQuery()
+                .in(byField, byFieldValues)
+                .select(resField)
+                .list();
+        return convertList(list, resField);
+    }
+
+    @Override
     public void batchDelete(String ids, SFunction<T, ?> fieldLambda) {
         batchDelete(ids, fieldLambda, buildQuery());
     }
 
     @Override
-    public void batchDelete(List<? extends Serializable> idList, SFunction<T, ?> fieldLambda) {
+    public void batchDelete(Collection<? extends Serializable> idList, SFunction<T, ?> fieldLambda) {
         batchDelete(idList, fieldLambda, buildQuery());
     }
 
@@ -140,7 +146,7 @@ public class ServiceImplX<M extends BaseMapper<T>, T> extends ServiceImpl<M, T> 
     }
 
     @Override
-    public void batchDelete(List<? extends Serializable> idList, SFunction<T, ?> fieldLambda, LambdaQueryWrapperX<T> wrapperX) {
+    public void batchDelete(Collection<? extends Serializable> idList, SFunction<T, ?> fieldLambda, LambdaQueryWrapperX<T> wrapperX) {
         wrapperX.in(fieldLambda, idList);
         boolean result = remove(wrapperX);
 

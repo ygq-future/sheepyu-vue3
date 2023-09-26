@@ -49,11 +49,12 @@
       check-strictly
       default-expand-all
       check-on-click-node
-      :expand-on-click-node='false'
       clearable
+      filterable
+      :expand-on-click-node='false'
       :collapse-tags='config.multiple'
       :multiple='config.multiple'
-      :show-checkbox='config.multiple'
+      :show-checkbox="config.showCheckbox ?? true"
       :node-key="config.props?.value || 'id'"
       :data='config.data || []'
       :render-after-expand='false'
@@ -65,10 +66,10 @@
     <el-tree
       ref='treeRef'
       v-if='config.render === "tree-checkbox"'
-      show-checkbox
       default-expand-all
       check-strictly
       check-on-click-node
+      :show-checkbox="config.showCheckbox ?? true"
       :expand-on-click-node='false'
       :node-key="config.props?.value || 'id'"
       :props='config.props || defaultProps'

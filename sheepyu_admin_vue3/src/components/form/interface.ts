@@ -46,6 +46,8 @@ export interface FormItemConfig {
   required?: boolean
   //是否开启多选, 用于tree-select和select
   multiple?: boolean
+  //是否显示复选框, 用于tree-select和tree
+  showCheckbox?: boolean
   disabled?: boolean
   //render为文件上传时可以传递的自定义属性
   uploadProps?: { extendTypes?: Array<string>, size?: number, chunkNum?: number }

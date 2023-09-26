@@ -19,6 +19,7 @@ import top.sheepyu.module.system.dao.user.SystemUserDeptMapper;
 import javax.annotation.Resource;
 import java.util.*;
 
+import static top.sheepyu.framework.security.util.SecurityFrameworkUtil.getLoginUserId;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.common.util.CollectionUtil.convertList;
 import static top.sheepyu.module.common.util.CollectionUtil.convertSet;
@@ -40,9 +41,10 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
     private SystemUserDeptMapper systemUserDeptMapper;
 
     @Override
-    public void createDept(SystemDeptCreateVo createVo) {
+    public Long createDept(SystemDeptCreateVo createVo) {
         SystemDept dept = CONVERT.convert(createVo);
         save(dept);
+        return dept.getId();
     }
 
     @Override
@@ -53,25 +55,18 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
 
     @Transactional
     @Override
-    public void deleteDept(Long id) {
+    public void deleteDept(Long deptId) {
         //操作人不能删除自己所在部门
-        if (isLeaderUser(id, SecurityFrameworkUtil.getLoginUserId())) {
+        if (isOwn(getLoginUserId(), deptId)) {
             throw exception(DONT_REMOVE_OWN_DEPT);
         }
-        if (existsChildren(id)) {
+        if (existsChildren(deptId)) {
             throw exception(DEPT_HAS_CHILDREN);
         }
-        if (systemUserDeptMapper.existsUser(id)) {
+        if (systemUserDeptMapper.existsUser(deptId)) {
             throw exception(DEPT_HAS_USER);
         }
-        removeById(id);
-    }
-
-    private boolean isLeaderUser(Long id, Long loginUserId) {
-        return lambdaQuery()
-                .eq(SystemDept::getId, id)
-                .eq(SystemDept::getLeaderUserId, loginUserId)
-                .exists();
+        removeById(deptId);
     }
 
     @Override
@@ -83,11 +78,12 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
     public List<SystemDept> listDept(SystemDeptQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
         //没有超管就只能查询自己管理部门之下的
-        Set<Long> queryDeptIds = null;
+        Set<Long> queryDeptIds = new HashSet<>();
         if (!SecurityFrameworkUtil.isSuperAdmin()) {
-            queryDeptIds = deepQueryDeptIdByUserId(SecurityFrameworkUtil.getLoginUserId());
+            queryDeptIds.addAll(deepQueryDeptIdByUserId(getLoginUserId()));
+            queryDeptIds.add(0L);
         }
-        List<SystemDept> list = list(buildQuery()
+        return list(buildQuery()
                 .inIfPresent(SystemDept::getId, queryDeptIds)
                 .and(StrUtil.isNotBlank(keyword), e -> e
                         .like(SystemDept::getEmail, keyword).or()
@@ -95,12 +91,11 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
                         .like(SystemDept::getPhone, keyword)).or()
                 .eq(StrUtil.isNotBlank(keyword), SystemDept::getType, POST.getCode())
                 .orderByAsc(SystemDept::getSort));
-        return deptListToTree(list);
     }
 
     @Override
     public List<SystemDept> tree() {
-        Set<Long> queryDeptIds = deepQueryDeptIdByUserId(SecurityFrameworkUtil.getLoginUserId());
+        Set<Long> queryDeptIds = deepQueryDeptIdByUserId(getLoginUserId());
         List<SystemDept> list = list(buildQuery()
                 .inIfPresent(SystemDept::getId, queryDeptIds)
                 .eqIfPresent(SystemDept::getType, DEPT.getCode())
@@ -114,7 +109,8 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
         return treeData;
     }
 
-    private List<SystemDept> deptListToTree(List<SystemDept> list) {
+    @Override
+    public List<SystemDept> deptListToTree(List<SystemDept> list) {
         //返回结果
         List<SystemDept> result = new ArrayList<>();
         //把所以的id抽取出来
@@ -132,11 +128,12 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
     }
 
     @Override
-    public List<String> findNamesByIds(Long userId, Set<Long> postIds) {
+    public List<String> findNamesByIds(Long userId, Set<Long> deptIds) {
+        if (CollUtil.isEmpty(deptIds)) {
+            deptIds = Collections.singleton(0L);
+        }
         List<SystemDept> list = list(buildQuery()
-                .inIfPresent(SystemDept::getId, postIds)
-                .eq(SystemDept::getType, POST.getCode()).or()
-                .eq(SystemDept::getLeaderUserId, userId)
+                .inIfPresent(SystemDept::getId, deptIds)
                 .select(SystemDept::getName, SystemDept::getType, SystemDept::getParentId));
         return convertList(list, e -> {
             if (Objects.equals(e.getType(), DEPT.getCode())) return e.getName() + "管理员";
@@ -145,17 +142,9 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
     }
 
     @Override
-    public Set<Long> listDeptIdByUserId(Long userId) {
-        List<SystemDept> list = list(buildQuery()
-                .eq(SystemDept::getType, DEPT.getCode())
-                .eq(SystemDept::getLeaderUserId, userId)
-                .select(SystemDept::getId));
-        return convertSet(list, SystemDept::getId);
-    }
-
-    @Override
     public Set<Long> deepQueryUserIdByUserId(Long userId) {
-        Set<Long> userDeptIds = listDeptIdByUserId(userId);
+        Set<Long> userDeptIds = systemUserDeptMapper.findDeptIdByUserId(userId);
+        if (CollUtil.isEmpty(userDeptIds)) return Collections.singleton(userId);
         Set<Long> userIds = deepQueryUserIdByDeptId(userDeptIds);
         userIds.add(userId);
         return userIds;
@@ -163,18 +152,21 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
 
     @Override
     public Set<Long> deepQueryDeptIdByUserId(Long userId) {
-        Set<Long> userDeptIds = listDeptIdByUserId(userId);
+        Set<Long> userDeptIds = systemUserDeptMapper.findDeptIdByUserId(userId);
+        if (CollUtil.isEmpty(userDeptIds)) return Collections.emptySet();
         return deepQueryDeptIdByDeptId(userDeptIds);
     }
 
     @Override
     public Set<Long> deepQueryUserIdByDeptId(Set<Long> deptIds) {
+        if (CollUtil.isEmpty(deptIds)) return Collections.emptySet();
         Set<Long> deptIdList = deepQueryDeptIdByDeptId(deptIds);
         return systemUserDeptMapper.findUserIdByDeptIds(deptIdList);
     }
 
     @Override
     public Set<Long> deepQueryDeptIdByDeptId(Set<Long> deptIds) {
+        if (CollUtil.isEmpty(deptIds)) return Collections.emptySet();
         Set<Long> res = new HashSet<>(deptIds);
         List<SystemDept> deptList = list();
         recursiveFlatDeptId(res, deptIds, deptList);
@@ -183,10 +175,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
 
     @Override
     public boolean isOwn(Long loginUserId, Long deptId) {
-        return lambdaQuery()
-                .eq(SystemDept::getLeaderUserId, loginUserId)
-                .eq(SystemDept::getId, deptId)
-                .exists();
+        return systemUserDeptMapper.existsUserAndDept(loginUserId, deptId);
     }
 
     private void recursiveFlatDeptId(Set<Long> res, Set<Long> deptIds, List<SystemDept> deptList) {

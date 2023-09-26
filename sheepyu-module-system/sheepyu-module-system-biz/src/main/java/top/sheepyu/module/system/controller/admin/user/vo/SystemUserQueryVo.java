@@ -8,11 +8,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import top.sheepyu.module.common.annotations.InEnum;
 import top.sheepyu.module.common.common.PageParam;
 import top.sheepyu.module.common.enums.CommonStatusEnum;
-import top.sheepyu.module.common.enums.UserTypeEnum;
 
 import java.util.Date;
 
 import static top.sheepyu.module.common.constants.CommonConstants.DATE_TIME_FORMAT;
+import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 
 /**
  * @author ygq
@@ -27,8 +27,7 @@ public class SystemUserQueryVo extends PageParam {
     private Integer status;
 
     @ApiModelProperty("用户类型")
-    @InEnum(UserTypeEnum.class)
-    private Integer type;
+    private Integer type = ADMIN.getCode();
 
     @ApiModelProperty("部门id")
     private Long deptId;

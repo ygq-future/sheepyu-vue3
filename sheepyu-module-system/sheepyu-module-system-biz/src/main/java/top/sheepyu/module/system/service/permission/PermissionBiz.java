@@ -1,5 +1,6 @@
 package top.sheepyu.module.system.service.permission;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ArrayUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +8,9 @@ import org.ehcache.impl.internal.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
+import top.sheepyu.module.common.common.PageResult;
+import top.sheepyu.module.common.util.MyStrUtil;
+import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleQueryVo;
 import top.sheepyu.module.system.dao.dept.SystemDept;
 import top.sheepyu.module.system.dao.dept.SystemDeptRole;
 import top.sheepyu.module.system.dao.dept.SystemDeptRoleMapper;
@@ -17,13 +20,17 @@ import top.sheepyu.module.system.dao.permission.role.SystemRoleMenu;
 import top.sheepyu.module.system.dao.permission.role.SystemRoleMenuMapper;
 import top.sheepyu.module.system.dao.user.*;
 import top.sheepyu.module.system.service.dept.SystemDeptService;
+import top.sheepyu.module.system.service.permission.bo.SystemRoleQueryBo;
 import top.sheepyu.module.system.service.user.SystemUserService;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.stream.Collectors;
 
+import static top.sheepyu.framework.security.util.SecurityFrameworkUtil.getLoginUserId;
+import static top.sheepyu.module.common.common.PageResult.emptyPage;
 import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.common.util.CollectionUtil.convertSet;
@@ -69,7 +76,7 @@ public class PermissionBiz {
      * @return boolean
      */
     public boolean isSuperAdminRole() {
-        return isSuperAdminRole(SecurityFrameworkUtil.getLoginUserId());
+        return isSuperAdminRole(getLoginUserId());
     }
 
     /**
@@ -82,27 +89,146 @@ public class PermissionBiz {
         return systemRoleService.hasAnySuperAdmin(roleIds);
     }
 
+    @Transactional
+    public void handleRoleInfo(Long userId) {
+        Set<Long> singleUserId = Collections.singleton(userId);
+        List<String> usernames = systemUserService.findFieldValueByIds(SystemUser::getUsername, singleUserId);
+        //拿到这个用户所有创建的角色信息
+        List<SystemRole> roleList = systemRoleService.listRoleByCreators(usernames);
+        if (CollUtil.isEmpty(roleList)) return;
+        Set<Long> roleIds = convertSet(roleList, SystemRole::getId);
+        //获取部门/用户关联的角色id
+        Set<Long> relevancyRoleIds = getRelevancyRoleIds();
+        //排除掉关联的角色id, 把不关联的删除
+        Collection<Long> removeRoleIds = CollUtil.subtract(roleIds, relevancyRoleIds);
+        if (CollUtil.isNotEmpty(removeRoleIds)) {
+            systemRoleService.deleteRole(removeRoleIds);
+        }
+        //其他的直接转移的超管
+        Collection<Long> transferRoleIds = CollUtil.subtract(roleIds, removeRoleIds);
+        if (CollUtil.isNotEmpty(transferRoleIds)) {
+            systemRoleService.lambdaUpdate()
+                    .set(SystemRole::getCreator, "admin")
+                    .in(SystemRole::getId, transferRoleIds)
+                    .update();
+        }
+    }
+
+    @Transactional
+    public void deleteRole(String ids) {
+        List<Long> roleIds = MyStrUtil.splitToLong(ids, ',');
+        if (CollUtil.isEmpty(roleIds)) {
+            return;
+        }
+        Set<Long> relevancyRoleIds = getRelevancyRoleIds();
+        Collection<Long> intersection = CollUtil.intersection(roleIds, relevancyRoleIds);
+        if (CollUtil.isNotEmpty(intersection)) {
+            throw exception(ROLE_HAS_RELEVANCY);
+        }
+        systemRoleService.deleteRole(roleIds);
+    }
+
+    /**
+     * 获取所有被关联的角色的id
+     *
+     * @return Set<Long>
+     */
+    private Set<Long> getRelevancyRoleIds() {
+        Set<Long> userRoleIds = userRolesCache.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
+        Set<Long> deptRoleIds = deptRolesCache.values().stream()
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
+        return CollUtil.unionDistinct(userRoleIds, deptRoleIds);
+    }
+
+    /**
+     * 角色分页
+     * 根据用户的权限查询角色, 如果是管理员角色, 返回所有
+     * 否则只返回自己部门下用户创建的和自己拥有的
+     *
+     * @return PageResult<SystemRole>
+     */
+    public PageResult<SystemRole> pageRoleByPermission(SystemRoleQueryVo queryVo) {
+        SystemRoleQueryBo queryBo = BeanUtil.copyProperties(queryVo, SystemRoleQueryBo.class);
+        Long userId = getLoginUserId();
+        //获取用户对应的所有角色
+        Set<Long> roleIds = findRoleIdsByUserId(userId);
+        if (CollUtil.isEmpty(roleIds)) {
+            return emptyPage();
+        }
+
+        Set<Long> userIds;
+        if (queryBo.getDeptId() != null) {
+            userIds = systemDeptService.deepQueryUserIdByDeptId(Collections.singleton(queryVo.getDeptId()));
+            List<String> usernameList = systemUserService.findFieldValueByIds(SystemUser::getUsername, userIds);
+            queryBo.setCreators(usernameList);
+        }
+
+        //如果有超级管理员角色
+        if (systemRoleService.hasAnySuperAdmin(roleIds)) {
+            return systemRoleService.pageAllRole(queryBo);
+        }
+
+        //获取此用户部门下所有的用户, 然后查询此部门下所有用户创建的角色 + 此用户及其子部门拥有的角色
+        queryBo.setRoleIds(roleIds);
+        userIds = systemDeptService.deepQueryUserIdByUserId(userId);
+        queryBo.getRoleIds().addAll(findRoleIdsByUserIds(userIds));
+        if (queryBo.getDeptId() == null) {
+            List<String> usernameList = systemUserService.findFieldValueByIds(SystemUser::getUsername, userIds);
+            queryBo.setCreators(usernameList);
+        }
+        return systemRoleService.pageRoleByPermission(queryBo);
+    }
+
+    private static Set<Long> findRoleIdsByUserIds(Set<Long> userIds) {
+        Set<Long> roleIds = new HashSet<>();
+        userIds.forEach(userId -> {
+            roleIds.addAll(userRolesCache.get(userId));
+            Set<Long> deptIds = userDeptsCache.get(userId);
+            deptIds.forEach(deptId -> roleIds.addAll(deptRolesCache.get(deptId)));
+        });
+        return roleIds;
+    }
+
+    private Set<Long> findRoleIdsByUserId(Long userId) {
+        return findRoleIdsByUserIds(Collections.singleton(userId));
+    }
+
     /**
      * 根据用户的权限查询角色, 如果是管理员角色, 返回所有
-     * 否则只返回自己创建的和自己拥有的
+     * 否则只返回自己部门下用户创建的和自己拥有的
      *
      * @return List<SystemRole>
      */
     public List<SystemRole> listRoleByPermission() {
-        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        Long userId = getLoginUserId();
         //获取用户对应的所有角色
-        Set<Long> roleIds = getUserAllRoleId(userId);
+        Set<Long> roleIds = findRoleIdsByUserId(userId);
         if (CollUtil.isEmpty(roleIds)) {
             return Collections.emptyList();
         }
-
+        //如果有超级管理员角色
         if (systemRoleService.hasAnySuperAdmin(roleIds)) {
-            return systemRoleService.listRole();
+            return systemRoleService.listAllRole();
         }
-        //获取用户所创建的角色
-        List<SystemRole> roleList = systemRoleService.listRoleByCreator();
+
+        //获取此用户部门下所有的用户, 然后查询此部门下所有用户创建的角色 + 此用户拥有的角色
+        Set<Long> userIds = systemDeptService.deepQueryUserIdByUserId(userId);
+        //如果为空就只返回用户自己所拥有的
+        if (CollUtil.isEmpty(userIds)) {
+            return systemRoleService.listByIds(roleIds);
+        }
+        //不要干扰之前的roleIds, 所以新创建一个对象
+        HashSet<Long> newRoleIds = CollUtil.newHashSet(roleIds);
+        newRoleIds.addAll(findRoleIdsByUserIds(userIds));
+        List<String> usernameList = systemUserService.findFieldValueByIds(SystemUser::getUsername, userIds);
+        List<SystemRole> roleList = systemRoleService.listRoleByCreators(usernameList);
+        //取出roleId
         Set<Long> creatorRoleIdList = convertSet(roleList, SystemRole::getId);
-        Collection<Long> userRoleIds = CollUtil.subtract(roleIds, creatorRoleIdList);
+        //排除重复
+        Collection<Long> userRoleIds = CollUtil.subtract(newRoleIds, creatorRoleIdList);
         if (CollUtil.isNotEmpty(userRoleIds)) {
             roleList.addAll(systemRoleService.listByIds(userRoleIds));
         }
@@ -123,9 +249,9 @@ public class PermissionBiz {
      * @return 菜单列表
      */
     public List<SystemMenu> listMenuByUser() {
-        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        Long userId = getLoginUserId();
         //获取用户对应的所有角色
-        Set<Long> roleIds = getUserAllRoleId(userId);
+        Set<Long> roleIds = findRoleIdsByUserId(userId);
         if (CollUtil.isEmpty(roleIds)) {
             return Collections.emptyList();
         }
@@ -142,23 +268,14 @@ public class PermissionBiz {
         return systemMenuService.convertToTree(list);
     }
 
-    private Set<Long> getUserAllRoleId(Long userId) {
-        Set<Long> roleIds = userRolesCache.get(userId);
-        Set<Long> deptIds = userDeptsCache.get(userId);
-        for (Long deptId : deptIds) {
-            roleIds.addAll(deptRolesCache.get(deptId));
-        }
-        return roleIds;
-    }
-
     /**
      * 获取用户拥有的权限
      *
      * @return 权限列表
      */
     public Set<String> listPermissionByUser() {
-        Long userId = SecurityFrameworkUtil.getLoginUserId();
-        Set<Long> roleIds = getUserAllRoleId(userId);
+        Long userId = getLoginUserId();
+        Set<Long> roleIds = findRoleIdsByUserId(userId);
         if (CollUtil.isEmpty(roleIds)) {
             return Collections.emptySet();
         }
@@ -210,6 +327,36 @@ public class PermissionBiz {
         }
     }
 
+    public void assignUserToDept(Long deptId, Set<Long> userIds) {
+        userDeptsCacheLock.lock();
+        try {
+            Set<Long> oldUserIds = systemUserDeptMapper.findUserIdByDeptId(deptId);
+
+            //过滤出需要添加的用户
+            Collection<Long> add = CollUtil.subtract(userIds, oldUserIds);
+            //过滤出需要删除的用户
+            Collection<Long> remove = CollUtil.subtract(oldUserIds, userIds);
+
+            if (CollUtil.isNotEmpty(remove)) {
+                systemUserDeptMapper.deleteByDeptIdAndUserIds(deptId, remove);
+            }
+
+            if (CollUtil.isNotEmpty(add)) {
+                systemUserDeptMapper.insertUserIdsByDeptsId(deptId, add);
+            }
+
+            log.info("assignUserToDept: 分配部门负责人, 更新用户(部门/职位)缓存");
+            userIds.forEach(userId -> {
+                Set<Long> deptIds = userDeptsCache.get(userId);
+                deptIds.add(deptId);
+            });
+        } catch (Exception e) {
+            throw exception(ASSIGN_DEPT_TO_USER_FAILED);
+        } finally {
+            userDeptsCacheLock.unlock();
+        }
+    }
+
     /**
      * 修改用户的(部门/职位), 即可以添加用户的(部门/职位), 也可以删除用户的(部门/职位)
      *
@@ -255,7 +402,7 @@ public class PermissionBiz {
     public void assignRoleToUser(Long userId, Set<Long> roleIds) {
         userRolesCacheLock.lock();
         try {
-            if (userId.equals(SecurityFrameworkUtil.getLoginUserId())) {
+            if (userId.equals(getLoginUserId())) {
                 throw exception(ASSIGN_TARGET_IS_OWN);
             }
             Set<Long> oldRoleIds = systemUserRoleMapper.findRoleIdByUserId(userId);
@@ -293,7 +440,7 @@ public class PermissionBiz {
     public void assignRoleToDept(Long deptId, Set<Long> roleIds) {
         deptRolesCacheLock.lock();
         try {
-            if (systemDeptService.isOwn(SecurityFrameworkUtil.getLoginUserId(), deptId)) {
+            if (systemDeptService.isOwn(getLoginUserId(), deptId)) {
                 throw exception(ASSIGN_TARGET_IS_OWN);
             }
             Set<Long> oldRoleIds = systemDeptRoleMapper.findRoleIdByDeptId(deptId);
@@ -325,7 +472,7 @@ public class PermissionBiz {
     }
 
     public boolean hasPermission(Long userId, String permission) {
-        Set<Long> roleIds = getUserAllRoleId(userId);
+        Set<Long> roleIds = findRoleIdsByUserId(userId);
         if (systemRoleService.hasAnySuperAdmin(roleIds)) {
             return true;
         }
@@ -348,17 +495,6 @@ public class PermissionBiz {
         return convertSet(roles, SystemRole::getCode)
                 .stream()
                 .anyMatch(e -> ArrayUtil.contains(roleCodes, e));
-    }
-
-    @PostConstruct
-    public void initCache() {
-        log.info("加载权限缓存...");
-
-        loadDeptRole();
-        loadUserRole();
-        loadRoleMenuRole();
-
-        log.info("加载权限缓存完成");
     }
 
     private void loadDeptRole() {
@@ -412,5 +548,16 @@ public class PermissionBiz {
             roleMenusCache.put(roleId, roleMenuIds);
         }
         log.info("加载角色菜单缓存完成");
+    }
+
+    @PostConstruct
+    public void initCache() {
+        log.info("加载权限缓存...");
+
+        loadDeptRole();
+        loadUserRole();
+        loadRoleMenuRole();
+
+        log.info("加载权限缓存完成");
     }
 }

@@ -2,11 +2,22 @@ import type { RouteRecordRaw } from 'vue-router'
 
 export const staticRoutes: Array<RouteRecordRaw> = [
   {
-    path: '/',
     name: 'layout',
+    path: '/',
     redirect: '/dashboard',
     component: () => import('@/layouts/layout.vue'),
     children: [
+      {
+        name: 'dashboard',
+        path: '/dashboard',
+        component: () => import('@/views/dashboard.vue'),
+        meta: {
+          title: '控制台',
+          icon: 'fa fa-dashboard',
+          keepalive: true,
+          fullpath: '/dashboard'
+        }
+      },
       {
         name: 'system-codegen-edit',
         path: '/system/codegen/edit/:id',

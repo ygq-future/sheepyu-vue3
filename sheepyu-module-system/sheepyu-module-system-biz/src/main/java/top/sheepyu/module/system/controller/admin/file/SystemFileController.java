@@ -93,7 +93,7 @@ public class SystemFileController {
 
     @GetMapping("/statistics")
     @ApiOperation("文件统计")
-    @PreAuthorize("@ss.hasPermission('dashboard')")
+//    @PreAuthorize("@ss.hasPermission('dashboard')")
     public Result<SystemFileStatisticsVo> statistics() {
         return success(systemFileService.statistics());
     }

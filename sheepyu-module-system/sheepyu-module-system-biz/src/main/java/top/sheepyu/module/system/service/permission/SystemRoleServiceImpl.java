@@ -7,25 +7,20 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
-import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 import top.sheepyu.module.common.common.PageResult;
-import top.sheepyu.module.common.util.MyStrUtil;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleCreateVo;
-import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleQueryVo;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleUpdateVo;
 import top.sheepyu.module.system.dao.dept.SystemDeptRoleMapper;
 import top.sheepyu.module.system.dao.permission.role.SystemRole;
 import top.sheepyu.module.system.dao.permission.role.SystemRoleMapper;
 import top.sheepyu.module.system.dao.permission.role.SystemRoleMenuMapper;
 import top.sheepyu.module.system.dao.user.SystemUserRoleMapper;
+import top.sheepyu.module.system.service.permission.bo.SystemRoleQueryBo;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
-import static top.sheepyu.framework.security.util.SecurityFrameworkUtil.getLoginUserUsername;
+import static top.sheepyu.module.common.common.PageResult.emptyPage;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.permission.SystemRoleConvert.CONVERT;
@@ -60,12 +55,11 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
 
     @Transactional
     @Override
-    public void deleteRole(String ids) {
-        List<Long> idList = MyStrUtil.splitToLong(ids, ',');
+    public void deleteRole(Collection<Long> idList) {
         if (hasAnySuperAdmin(new HashSet<>(idList))) {
             throw exception(DONT_REMOVE_SUPER_ROLE);
         }
-        batchDelete(ids, SystemRole::getId);
+        batchDelete(idList, SystemRole::getId);
 
         //同步删除用户角色数据和角色菜单数据
         systemUserRoleMapper.deleteByRoleIds(idList);
@@ -74,28 +68,44 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
     }
 
     @Override
-    public PageResult<SystemRole> pageRole(SystemRoleQueryVo queryVo) {
-        String keyword = queryVo.getKeyword();
-        //只有超级管理员才能查看所有角色, 其他的人只能查看自己创建的角色
-        boolean superAdmin = SecurityFrameworkUtil.isSuperAdmin();
-        return page(queryVo, buildQuery()
+    public PageResult<SystemRole> pageAllRole(SystemRoleQueryBo queryBo) {
+        List<String> creators = queryBo.getCreators();
+        if (queryBo.getDeptId() != null && CollUtil.isEmpty(creators)) {
+            return emptyPage();
+        }
+        String keyword = queryBo.getKeyword();
+        //只有超级管理员才能查看所有角色, 其他的人只能查看自己部门下人员创建的角色
+        return page(queryBo, buildQuery()
                 .and(StrUtil.isNotBlank(keyword), e -> e
                         .like(SystemRole::getName, keyword).or()
-                        .like(SystemRole::getCode, keyword).or()
-                        .eq(SystemRole::getId, keyword))
-                .eq(!superAdmin, SystemRole::getCreator, getLoginUserUsername())
+                        .like(SystemRole::getCode, keyword))
+                .in(queryBo.getDeptId() != null, SystemRole::getCreator, creators)
                 .orderByAsc(SystemRole::getSort));
     }
 
     @Override
-    public List<SystemRole> listRole() {
+    public PageResult<SystemRole> pageRoleByPermission(SystemRoleQueryBo queryBo) {
+        List<String> creators = queryBo.getCreators();
+        String keyword = queryBo.getKeyword();
+        //只有超级管理员才能查看所有角色, 其他的人只能查看自己部门下人员创建的角色
+        return page(queryBo, buildQuery()
+                .inIfPresent(SystemRole::getCreator, creators).or()
+                .in(SystemRole::getId, queryBo.getRoleIds())
+                .and(StrUtil.isNotBlank(keyword), e -> e
+                        .like(SystemRole::getName, keyword).or()
+                        .like(SystemRole::getCode, keyword))
+                .orderByAsc(SystemRole::getSort));
+    }
+
+    @Override
+    public List<SystemRole> listAllRole() {
         return list(buildQuery().orderByAsc(SystemRole::getSort));
     }
 
     @Override
-    public List<SystemRole> listRoleByCreator() {
+    public List<SystemRole> listRoleByCreators(List<String> creatorList) {
         return lambdaQuery()
-                .eq(SystemRole::getCreator, getLoginUserUsername())
+                .in(SystemRole::getCreator, creatorList)
                 .orderByAsc(SystemRole::getSort)
                 .list();
     }
