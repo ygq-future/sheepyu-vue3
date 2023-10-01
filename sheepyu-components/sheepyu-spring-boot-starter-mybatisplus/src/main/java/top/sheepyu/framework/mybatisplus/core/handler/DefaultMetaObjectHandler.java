@@ -3,10 +3,11 @@ package top.sheepyu.framework.mybatisplus.core.handler;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
-import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
-import top.sheepyu.framework.web.util.WebFrameworkUtil;
 
 import java.util.Date;
+
+import static top.sheepyu.framework.mybatisplus.core.constants.BaseModelFillField.*;
+import static top.sheepyu.framework.web.util.WebFrameworkUtil.getLoginUserUsername;
 
 /**
  * @author ygq
@@ -15,30 +16,26 @@ import java.util.Date;
 public class DefaultMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        BaseModel baseModel = (BaseModel) metaObject.getOriginalObject();
+        Object createTime = metaObject.getValue(CREATE_TIME);
+        Object updateTime = metaObject.getValue(UPDATE_TIME);
+        Object creator = metaObject.getValue(CREATOR);
+        String username = getLoginUserUsername();
+        Date now = new Date();
 
-        String username = WebFrameworkUtil.getLoginUserUsername();
-        if (baseModel.getCreator() == null && StrUtil.isNotBlank(username)) {
-            baseModel.setCreator(username);
+        if (creator == null && StrUtil.isNotBlank(username)) {
+            metaObject.setValue(CREATOR, username);
         }
-
-        if (baseModel.getCreateTime() == null) {
-            baseModel.setCreateTime(new Date());
+        if (createTime == null) {
+            metaObject.setValue(CREATE_TIME, now);
         }
-
-        if (baseModel.getUpdateTime() == null) {
-            baseModel.setUpdateTime(new Date());
+        if (updateTime == null) {
+            metaObject.setValue(UPDATE_TIME, now);
         }
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        BaseModel baseModel = (BaseModel) metaObject.getOriginalObject();
-
-        String username = WebFrameworkUtil.getLoginUserUsername();
-        if (StrUtil.isNotBlank(username)) {
-            baseModel.setUpdater(username);
-        }
-        baseModel.setUpdateTime(new Date());
+        metaObject.setValue(UPDATER, getLoginUserUsername());
+        metaObject.setValue(UPDATE_TIME, new Date());
     }
 }
