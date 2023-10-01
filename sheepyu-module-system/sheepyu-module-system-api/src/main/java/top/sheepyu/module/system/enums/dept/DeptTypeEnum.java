@@ -20,8 +20,9 @@ import static top.sheepyu.module.system.constants.ErrorCodeConstants.DEPT_TYPE_N
 @AllArgsConstructor
 @Getter
 public enum DeptTypeEnum implements IterableEnum {
-    DEPT(0),    //部门
-    POST(1),    //职位
+    GROUP(0),    //权限组
+    ITEM(1),    //权限项
+    USER(2),    //用户
     ;
     private final int code;
 

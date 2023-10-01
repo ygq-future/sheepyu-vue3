@@ -29,6 +29,9 @@ public class SystemDeptBaseVo {
     @ApiModelProperty("部门负责人昵称")
     private String leaderNicknames;
 
+    @ApiModelProperty("可查询此部门的目标部门ids")
+    private Set<Long> targetDeptIds;
+
     @ApiModelProperty("部门联系电话")
     private String phone;
 

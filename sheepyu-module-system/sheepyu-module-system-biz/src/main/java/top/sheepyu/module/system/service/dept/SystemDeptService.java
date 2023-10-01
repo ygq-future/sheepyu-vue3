@@ -29,14 +29,14 @@ public interface SystemDeptService extends IServiceX<SystemDept> {
      * @param queryVo queryVo
      * @return List<SystemDept>
      */
-    List<SystemDept> listDept(@Valid SystemDeptQueryVo queryVo);
+    List<SystemDept> listDeptByPermission(@Valid SystemDeptQueryVo queryVo);
 
     /**
      * 查询部门表中类型为部门的数据, 用于下拉框树形选择
      *
      * @return List<SystemDept>
      */
-    List<SystemDept> tree();
+    List<SystemDept> treeByPermission();
 
     List<SystemDept> deptListToTree(List<SystemDept> list);
 

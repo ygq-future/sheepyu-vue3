@@ -24,6 +24,9 @@ public class SystemDeptRespVo extends SystemDeptBaseVo {
     @ApiModelProperty("部门类型")
     private Integer type;
 
+    @ApiModelProperty("是否禁用")
+    private Boolean disabled;
+
     @ApiModelProperty("子部门")
     private List<SystemDeptRespVo> children;
 }

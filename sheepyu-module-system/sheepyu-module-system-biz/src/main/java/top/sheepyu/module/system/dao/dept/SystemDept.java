@@ -26,6 +26,10 @@ public class SystemDept extends BaseModel {
     private Set<Long> leaderUserIds;
     @TableField(exist = false)
     private String leaderNicknames;
+    @TableField(exist = false)
+    private Set<Long> targetDeptIds;
+    @TableField(exist = false)
+    private Boolean disabled;
     private Integer type;
     @TableField(updateStrategy = FieldStrategy.IGNORED)
     private String phone;

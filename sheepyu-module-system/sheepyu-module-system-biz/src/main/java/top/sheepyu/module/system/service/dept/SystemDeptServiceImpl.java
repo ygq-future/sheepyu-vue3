@@ -14,6 +14,7 @@ import top.sheepyu.module.system.controller.admin.dept.vo.SystemDeptQueryVo;
 import top.sheepyu.module.system.controller.admin.dept.vo.SystemDeptUpdateVo;
 import top.sheepyu.module.system.dao.dept.SystemDept;
 import top.sheepyu.module.system.dao.dept.SystemDeptMapper;
+import top.sheepyu.module.system.dao.dept.SystemDeptQueryDeptMapper;
 import top.sheepyu.module.system.dao.user.SystemUserDeptMapper;
 
 import javax.annotation.Resource;
@@ -25,8 +26,8 @@ import static top.sheepyu.module.common.util.CollectionUtil.convertList;
 import static top.sheepyu.module.common.util.CollectionUtil.convertSet;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.dept.SystemDeptConvert.CONVERT;
-import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.DEPT;
-import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.POST;
+import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.GROUP;
+import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.ITEM;
 
 /**
  * @author ygq
@@ -39,6 +40,8 @@ import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.POST;
 public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, SystemDept> implements SystemDeptService {
     @Resource
     private SystemUserDeptMapper systemUserDeptMapper;
+    @Resource
+    private SystemDeptQueryDeptMapper systemDeptQueryDeptMapper;
 
     @Override
     public Long createDept(SystemDeptCreateVo createVo) {
@@ -75,7 +78,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
     }
 
     @Override
-    public List<SystemDept> listDept(SystemDeptQueryVo queryVo) {
+    public List<SystemDept> listDeptByPermission(SystemDeptQueryVo queryVo) {
         String keyword = queryVo.getKeyword();
         //没有超管就只能查询自己管理部门之下的
         Set<Long> queryDeptIds = new HashSet<>();
@@ -89,16 +92,16 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
                         .like(SystemDept::getEmail, keyword).or()
                         .like(SystemDept::getName, keyword).or()
                         .like(SystemDept::getPhone, keyword)).or()
-                .eq(StrUtil.isNotBlank(keyword), SystemDept::getType, POST.getCode())
+                .eq(StrUtil.isNotBlank(keyword), SystemDept::getType, ITEM.getCode())
                 .orderByAsc(SystemDept::getSort));
     }
 
     @Override
-    public List<SystemDept> tree() {
+    public List<SystemDept> treeByPermission() {
         Set<Long> queryDeptIds = deepQueryDeptIdByUserId(getLoginUserId());
         List<SystemDept> list = list(buildQuery()
                 .inIfPresent(SystemDept::getId, queryDeptIds)
-                .eqIfPresent(SystemDept::getType, DEPT.getCode())
+                .eqIfPresent(SystemDept::getType, GROUP.getCode())
                 .orderByAsc(SystemDept::getSort));
         List<SystemDept> treeData = deptListToTree(list);
         if (SecurityFrameworkUtil.isSuperAdmin()) {
@@ -118,7 +121,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
         //循环递归封装数据
         for (SystemDept dept : list) {
             //筛选类型为部门且在当前返回数据中没有上级的部门, 以此为顶级来封装树形数据
-            if (Objects.equals(dept.getType(), DEPT.getCode()) && !deptIds.contains(dept.getParentId())) {
+            if (Objects.equals(dept.getType(), GROUP.getCode()) && !deptIds.contains(dept.getParentId())) {
                 //递归封装数据
                 dept.setChildren(fillTreeData(list, dept.getId()));
                 result.add(dept);
@@ -136,7 +139,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
                 .inIfPresent(SystemDept::getId, deptIds)
                 .select(SystemDept::getName, SystemDept::getType, SystemDept::getParentId));
         return convertList(list, e -> {
-            if (Objects.equals(e.getType(), DEPT.getCode())) return e.getName() + "管理员";
+            if (Objects.equals(e.getType(), GROUP.getCode())) return e.getName() + "管理员";
             return getById(e.getParentId()).getName() + "-" + e.getName();
         });
     }
@@ -167,6 +170,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
     @Override
     public Set<Long> deepQueryDeptIdByDeptId(Set<Long> deptIds) {
         if (CollUtil.isEmpty(deptIds)) return Collections.emptySet();
+        deptIds.addAll(systemDeptQueryDeptMapper.findByTargetIds(deptIds));
         Set<Long> res = new HashSet<>(deptIds);
         List<SystemDept> deptList = list();
         recursiveFlatDeptId(res, deptIds, deptList);
@@ -201,7 +205,8 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
 
         for (SystemDept dept : list) {
             if (Objects.equals(dept.getParentId(), id)) {
-                dept.setChildren(fillTreeData(list, dept.getId()));
+                List<SystemDept> children = fillTreeData(list, dept.getId());
+                if (CollUtil.isNotEmpty(children)) dept.setChildren(children);
                 result.add(dept);
             }
         }
