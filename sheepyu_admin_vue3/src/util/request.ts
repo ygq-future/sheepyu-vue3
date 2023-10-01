@@ -51,14 +51,14 @@ export class Request {
     this.service.interceptors.request.use((config): any => {
       const user = useUser()
       const token = user.get().accessToken
-      let contentType = config.headers['Content-Type']
+      /*let contentType = config.headers['Content-Type']
       if (!contentType) {
         contentType = 'application/json;charset=UTF-8'
-      }
+      }*/
       return {
         ...config,
         headers: {
-          'Content-Type': contentType,
+          // 'Content-Type': contentType,
           'Authorization': token
         }
       }

@@ -2,6 +2,7 @@ import type { App } from 'vue'
 import * as elIcons from '@element-plus/icons-vue'
 import { useDict } from '@/stores/dict/dict'
 import { dictTypeListApi } from '@/api/system/dict'
+import { ElLoading } from 'element-plus'
 
 export function registerIcons(app: App) {
   /*
@@ -56,6 +57,31 @@ export function download(fileName: string, data?: Blob) {
   window.URL.revokeObjectURL(href)
 }
 
+/**
+ * 接受一个回调函数, 兼容同步和异步, 函数调用期间一直全屏加载loading
+ * @param cb 回调函数
+ */
+export async function fullscreenLoading(cb: Function) {
+  const service = ElLoading.service({ fullscreen: true })
+  if (cb.constructor.name === 'AsyncFunction') {
+    try {
+      console.log('async')
+      cb && await cb()
+    } catch (err) {
+      console.log(err)
+    } finally {
+      service.close()
+    }
+    return
+  }
+  console.log('sync')
+  cb && cb().then(() => {
+    service.close()
+  }).catch((err: any) => {
+    console.log(err)
+    service.close()
+  })
+}
 
 const contentTypeMap: Map<string, string> = new Map([
   ['xls', 'application/vnd.ms-excel'],
