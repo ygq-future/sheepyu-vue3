@@ -15,7 +15,10 @@
     <el-table-column v-if='tableConfig.selection' type='selection' align='center' fixed='left' />
 
     <template v-for='item in tableConfig.columns'>
-      <ColumnRender :column='item' @field-change='onFieldChange' />
+      <ColumnRender
+        :column='item'
+        @field-change='(row: any, val: any) => item.change ? item.change(row, val) : onFieldChange(row, val)'
+      />
     </template>
 
     <el-table-column
@@ -148,8 +151,6 @@ function onSelectionChange(selection: Array<any>) {
 function onRowDblClick(row: any) {
   if (row.children && row.children.length > 0) {
     tableRef.value?.toggleRowExpansion(row)
-  } else {
-    onEdit(row)
   }
 }
 

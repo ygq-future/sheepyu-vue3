@@ -157,25 +157,23 @@ import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemUserCreateVo, SystemUserQueryVo, SystemUserRespVo, SystemUserUpdateVo } from '@/api/system/user'
 import {
+  assignRoleToUserApi,
   createUserApi,
   deleteUserApi,
+  exportUserApi,
   findUserApi,
   pageUserApi,
-  updateUserApi,
-  exportUserApi,
   resetPasswordApi,
-  assignRoleToUserApi,
-  roleByUserApi
+  roleByUserApi,
+  updateUserApi
 } from '@/api/system/user'
 import { listDeptApi } from '@/api/system/dept'
-import type { SystemDeptRespVo } from '@/api/system/dept'
 import { listRoleApi } from '@/api/system/role'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
 import { useUser } from '@/stores/user/user'
-import { DeptTypeEnum } from '@/enums/DeptTypeEnum'
 
 const user = useUser()
 const tableRef = ref()
@@ -252,7 +250,7 @@ const state = reactive<{
       { label: '邮箱', prop: 'email', render: 'text', width: 130 },
       { label: '手机号码', prop: 'mobile', render: 'text', width: 120 },
       { label: '头像', prop: 'avatar', render: 'img', width: 100 },
-      { label: '部门/职位', prop: 'deptNames', render: 'text', width: 150 },
+      { label: '权限组/项', prop: 'deptNames', render: 'text', width: 150 },
       { label: '状态', prop: 'status', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS, width: 90 },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_USER_TYPE, width: 90 },
       { label: '备注', prop: 'remark', render: 'text', width: 100 },
@@ -276,9 +274,9 @@ const state = reactive<{
       { label: '手机号码', prop: 'mobile', required: false, placeholder: '手机号码', render: 'text' },
       { label: '头像', prop: 'avatar', required: false, placeholder: '头像地址', render: 'image-upload' },
       {
-        label: '部门/职位',
+        label: '权限组/项',
         prop: 'deptIds',
-        placeholder: '部门/职位',
+        placeholder: '权限组/项',
         render: 'tree-select',
         required: false,
         multiple: true,

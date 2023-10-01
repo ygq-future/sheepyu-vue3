@@ -26,7 +26,7 @@ export interface TableConfig {
 }
 
 export interface ColumnConfig {
-  render?: 'text' | 'icon' | 'img' | 'link'
+  render?: 'text' | 'icon' | 'img' | 'link' | 'rich'
   label: string
   prop: string
   align?: string
@@ -36,6 +36,7 @@ export interface ColumnConfig {
   showTip?: boolean
   dictRender?: DictRender
   dictType?: DictTypeEnum
+  change?: (row: any, val: any) => any
   /**
    * render为link时跳转的路由, 只能带路径参数, 参数只能是row数据中的一个属性
    * 例如我要跳转到 /system/dict/data/:type

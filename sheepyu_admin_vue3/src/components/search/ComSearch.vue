@@ -16,6 +16,7 @@
           <el-col class='p-15' :sm='6' :xs='24' v-if='item.render === "number"'>
             <el-form-item :label='item.label' :prop='item.prop'>
               <el-input-number
+                style='width: 100%;'
                 v-model='form[item.prop]'
                 :placeholder='item.placeholder ? item.placeholder : "精准搜索"'
               />

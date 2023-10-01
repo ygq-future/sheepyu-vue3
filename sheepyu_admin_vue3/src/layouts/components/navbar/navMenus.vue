@@ -11,12 +11,17 @@
     </div>
 
     <div class='menu-item'>
-      <MyIcon v-if='config.layout.colorModeIndex === 0'
-              name='fa fa-moon-o'
-              title='暗黑模式'
-              @click='changeColorMode(1)'
+      <MyIcon
+        v-if='config.layout.colorModeIndex === 0'
+        name='fa fa-moon-o'
+        title='暗黑模式'
+        @click='changeColorMode(1)'
       />
       <MyIcon v-else name='fa fa-sun-o' title='明亮模式' @click='changeColorMode(0)' />
+    </div>
+
+    <div class='menu-item' @click='onRefreshDict' title='刷新全局字典'>
+      <MyIcon :size='20' name='el-icon-Cpu' :color='topTextColor' />
     </div>
 
     <div class='menu-item'>
@@ -63,6 +68,7 @@ import Config from '@/layouts/components/navbar/config.vue'
 import { useRouter } from 'vue-router'
 import { useUser } from '@/stores/user/user'
 import { useTabs } from '@/stores/tabs/tabs'
+import { loadDict } from '@/util/common'
 
 const router = useRouter()
 const config = useConfig()
@@ -75,6 +81,10 @@ const state = reactive<{
 })
 
 const topTextColor = computed(() => config.getColor('topTextColor'))
+
+function onRefreshDict() {
+  loadDict()
+}
 
 function logout() {
   user.clear()

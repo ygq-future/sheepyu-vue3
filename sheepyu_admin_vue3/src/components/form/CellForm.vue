@@ -9,6 +9,7 @@
         v-if='render === "select"'
         v-model='value'
         clearable
+        filterable
         @visible-change='visibleChange'
       >
         <el-option

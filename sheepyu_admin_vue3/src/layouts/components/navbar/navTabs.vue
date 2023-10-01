@@ -166,9 +166,9 @@ function closeCurrentToRoute(path: string) {
   router.push(path)
 }
 
-watch(() => tabs.state.activeIndex, () => {
+watch(() => [tabs.state.activeRoute, tabs.state.activeIndex], () => {
   changeNavTab()
-}, { immediate: true })
+}, { immediate: true, deep: true })
 
 onBeforeRouteUpdate((to) => {
   updateTab(to)

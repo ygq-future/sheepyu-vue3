@@ -21,8 +21,10 @@
           </el-tooltip>
 
           <el-tooltip :show-after='500' v-if="buttons.includes('edit')" content='编辑' placement='top'>
-            <el-button v-auth='`${auth}:update`' v-blur type='primary' :disabled='!rows || rows.length === 0'
-                       @click='onBatchEdit'>
+            <el-button
+              v-auth='`${auth}:update`' v-blur type='primary' :disabled='!rows || rows.length === 0'
+              @click='onBatchEdit'
+            >
               <MyIcon name='fa fa-pencil' />
               <span class='button-text'>批量编辑</span>
             </el-button>
@@ -89,10 +91,7 @@
             </el-upload>
 
             <template #content>
-              <div style='display: flex;align-items: center'>
-                <span>导入: </span>
-                <el-link type='danger' @click="emits('download')">下载模板</el-link>
-              </div>
+              <el-link type='danger' @click="emits('download')">下载导入模板</el-link>
             </template>
           </el-tooltip>
 
@@ -155,8 +154,6 @@ import { ElNotification } from 'element-plus'
 
 const config = useConfig()
 
-//是否开启紧凑模式, 开启之后不会显示按钮的文字, 只会显示icon并带有title提示
-const shrink = ref<boolean>(config.layout.shrink)
 const props = withDefaults(defineProps<{
   //是否开启通用搜索
   comSearch?: boolean
@@ -181,6 +178,8 @@ const props = withDefaults(defineProps<{
   rowKey: 'id',
   auth: 'none'
 })
+//是否开启紧凑模式, 开启之后不会显示按钮的文字, 只会显示icon并带有title提示
+const shrink = computed(() => props.enableShrink || config.layout.shrink)
 
 const emits = defineEmits<{
   (e: 'refresh'): void
@@ -237,13 +236,6 @@ function onFileUpload(options: UploadRequestOptions) {
 defineExpose({
   getUnfold: () => state.unfold,
   getLimit: () => state.limit
-})
-
-onMounted(() => {
-  shrink.value = shrink.value || props.enableShrink
-  if (props.buttons.length >= 6) {
-    shrink.value = true
-  }
 })
 </script>
 

@@ -6,6 +6,7 @@ export interface PopupFormConfig {
   title: string
   width?: number | string
   maxWidth?: number
+  maxHeight?: number
   labelWidth?: number | string
   formItemConfigs: FormItemConfig[]
   rules?: FormRules
@@ -48,24 +49,16 @@ export interface FormItemConfig {
   multiple?: boolean
   //是否显示复选框, 用于tree-select和tree
   showCheckbox?: boolean
+  checkStrictly?: boolean
+  leftOnly?: boolean
   disabled?: boolean
   //render为文件上传时可以传递的自定义属性
   uploadProps?: { extendTypes?: Array<string>, size?: number, chunkNum?: number }
 }
 
-/**
- * 1. 推荐switch, radio, select, checkbox能用字典就用字典
- * 2. tree-select-checkbox无法选中父节点的值
- * 3. tree-checkbox可以选中父节点的值, 但是取消了关联选择
- *
- * remark:  其实这些都可以又开发者根据需求去扩展,
- *          不能修改, 不然会影响现有的功能, 比如你需要关联选择
- *          你可以自己扩展一个类型tree-checkbox-strictly
- */
 export type FormRender =
   'number' | 'text' | 'switch' | 'password' |
   'radio' | 'select' | 'icon' |
   'slider' | 'upload' | 'tree-select' |
   'checkbox' | 'datetime' | 'part-upload' |
-  'textarea' | 'tree-select-checkbox' | 'tree-checkbox' |
-  'image-upload' | 'editor'
+  'textarea' | 'tree' | 'image-upload' | 'editor'

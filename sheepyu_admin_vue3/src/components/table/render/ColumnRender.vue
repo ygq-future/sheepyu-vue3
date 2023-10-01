@@ -12,25 +12,27 @@
         {{ row[column.prop] }}
       </span>
 
-      <Dict v-if='column.dictRender === "tag"  && column.dictType'
-            :value='row[column.prop]'
-            :render='column.dictRender'
-            :type='column.dictType'
+      <Dict
+        v-else-if='column.dictRender === "tag"  && column.dictType'
+        :value='row[column.prop]'
+        :render='column.dictRender'
+        :type='column.dictType'
       />
 
-      <Dict v-if='column.dictRender === "switch" && column.dictType'
-            v-model='row[column.prop]'
-            :render='column.dictRender'
-            :type='column.dictType'
-            @change='(val: any) => onFieldChange(row, val)'
+      <Dict
+        v-else-if='column.dictRender === "switch" && column.dictType'
+        v-model='row[column.prop]'
+        :render='column.dictRender'
+        :type='column.dictType'
+        @change='(val: any) => onFieldChange(row, val)'
       />
 
-      <MyIcon v-if='column.render === "icon"' :name='row[column.prop]' />
+      <MyIcon v-else-if='column.render === "icon"' :name='row[column.prop]' />
 
-      <el-link v-if='column.render === "link"' @click='linkTo(row)'>{{ row[column.prop] }}</el-link>
+      <el-link v-else-if='column.render === "link"' @click='linkTo(row)'>{{ row[column.prop] }}</el-link>
 
       <el-image
-        v-if='column.render === "img"'
+        v-else-if='column.render === "img"'
         :style='imgStyle'
         preview-teleported
         hide-on-click-modal
@@ -38,6 +40,8 @@
         :src='row[column.prop]'
         :preview-src-list='[row[column.prop]]'
       />
+
+      <div v-else-if='column.render === "rich"' v-html='row[column.prop]'></div>
     </template>
   </el-table-column>
 </template>
@@ -91,4 +95,3 @@ function linkTo(row: any) {
 }
 
 </script>
-

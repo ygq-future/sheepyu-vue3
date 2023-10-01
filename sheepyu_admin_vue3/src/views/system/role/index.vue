@@ -72,15 +72,15 @@ import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemRoleCreateVo, SystemRoleQueryVo, SystemRoleRespVo, SystemRoleUpdateVo } from '@/api/system/role'
 import {
+  assignMenuToRoleApi,
   createRoleApi,
   deleteRoleApi,
   findRoleApi,
+  menuByRoleApi,
   pageRoleApi,
-  updateRoleApi,
-  assignMenuToRoleApi,
-  menuByRoleApi
+  updateRoleApi
 } from '@/api/system/role'
-import { menuList, userMenu } from '@/api/system/menu'
+import { userMenu } from '@/api/system/menu'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
@@ -158,7 +158,7 @@ const state = reactive<{
         label: '菜单',
         prop: 'menuIds',
         placeholder: '请选择菜单',
-        render: 'tree-checkbox',
+        render: 'tree',
         props: { label: 'name', value: 'id' }
       }
     ]

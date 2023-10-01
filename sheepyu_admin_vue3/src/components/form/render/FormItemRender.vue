@@ -10,7 +10,7 @@
     />
 
     <el-input
-      v-if='config.render === "password"'
+      v-else-if='config.render === "password"'
       v-model='form[config.prop]'
       type='password'
       show-password
@@ -19,14 +19,14 @@
     />
 
     <el-input-number
-      v-if='config.render === "number"'
+      v-else-if='config.render === "number"'
       v-model='form[config.prop]'
       :disabled='disabled'
       :placeholder='config.placeholder'
     />
 
     <Dict
-      v-if='config.dictType && config.dictRender'
+      v-else-if='config.dictType && config.dictRender'
       v-model='form[config.prop]'
       :render='config.dictRender'
       :value='form[config.prop]'
@@ -36,7 +36,7 @@
     />
 
     <IconSelector
-      v-if='config.render === "icon"'
+      v-else-if='config.render === "icon"'
       v-model='form[config.prop]'
       width='100%'
       :disabled='disabled'
@@ -44,17 +44,17 @@
 
     <!--  多选情况下默认无法选中父节点  -->
     <el-tree-select
-      v-if='config.render === "tree-select"'
+      v-else-if='config.render === "tree-select"'
       v-model='form[config.prop]'
-      check-strictly
       default-expand-all
       check-on-click-node
       clearable
       filterable
+      :check-strictly='config.checkStrictly ?? true'
       :expand-on-click-node='false'
       :collapse-tags='config.multiple'
       :multiple='config.multiple'
-      :show-checkbox="config.showCheckbox ?? true"
+      :show-checkbox='config.showCheckbox ?? true'
       :node-key="config.props?.value || 'id'"
       :data='config.data || []'
       :render-after-expand='false'
@@ -65,11 +65,11 @@
     <!--  可以选中父节点, 但是取消了关联选择  -->
     <el-tree
       ref='treeRef'
-      v-if='config.render === "tree-checkbox"'
+      v-else-if='config.render === "tree"'
       default-expand-all
-      check-strictly
       check-on-click-node
-      :show-checkbox="config.showCheckbox ?? true"
+      :check-strictly='config.checkStrictly ?? true'
+      :show-checkbox='config.showCheckbox ?? true'
       :expand-on-click-node='false'
       :node-key="config.props?.value || 'id'"
       :props='config.props || defaultProps'
@@ -79,10 +79,10 @@
       @check-change='onCheckChange'
     />
 
-    <DateTime v-if='config.render === "datetime"' v-model='form[config.prop]' />
+    <DateTime v-else-if='config.render === "datetime"' v-model='form[config.prop]' />
 
     <el-input
-      v-if='config.render === "textarea"'
+      v-else-if='config.render === "textarea"'
       v-model='form[config.prop]'
       type='textarea'
       clearable
@@ -92,7 +92,7 @@
     />
 
     <el-select
-      v-if='config.render === "select"'
+      v-else-if='config.render === "select"'
       v-model='form[config.prop]'
       clearable
       filterable
@@ -109,24 +109,24 @@
       />
     </el-select>
 
-    <ImageUpload v-if='config.render === "image-upload"' width='100px' v-model='form[config.prop]' />
+    <ImageUpload v-else-if='config.render === "image-upload"' width='100px' v-model='form[config.prop]' />
 
     <Upload
-      v-if='config.render === "upload"'
+      v-else-if='config.render === "upload"'
       v-model='form[config.prop]'
       :extend-types='config.uploadProps?.extendTypes'
       :size='config.uploadProps?.size'
     />
 
     <PartUpload
-      v-if='config.render === "part-upload"'
+      v-else-if='config.render === "part-upload"'
       v-model='form[config.prop]'
       :extend-types='config.uploadProps?.extendTypes'
       :size='config.uploadProps?.size'
       :chunk-num='config.uploadProps?.chunkNum'
     />
 
-    <Editor v-if='config.render === "editor"' v-model='form[config.prop]' />
+    <Editor v-else-if='config.render === "editor"' v-model='form[config.prop]' />
 
     <span class='tip' v-if='config.tip'>{{ config.tip }}</span>
   </el-form-item>
@@ -155,7 +155,7 @@ const defaultProps = {
 
 function onCheckChange() {
   if (treeRef.value) {
-    props.form[props.config.prop] = treeRef.value.getCheckedKeys()
+    props.form[props.config.prop] = treeRef.value.getCheckedKeys(props.config.leftOnly)
   }
 }
 

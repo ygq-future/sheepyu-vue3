@@ -107,7 +107,7 @@ const state = reactive<{
     deptId: number,
     roleIds: Array<number>,
     name?: string,
-    leaderNickname?: string
+    leaderNicknames?: string
   }
   tableData: SystemDeptRespVo[]
   comSearchConfig: ComSearchConfig
@@ -132,8 +132,8 @@ const state = reactive<{
     rowKey: 'id',
     selection: true,
     columns: [
-      { label: '部门编号', prop: 'id', render: 'text' },
-      { label: '部门名称', prop: 'name', render: 'text' },
+      { label: '编号', prop: 'id', render: 'text' },
+      { label: '组名称', prop: 'name', render: 'text' },
       { label: '负责人', prop: 'leaderNicknames', render: 'text' },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_DEPT_TYPE },
       { label: '显示顺序', prop: 'sort', render: 'text' },
@@ -146,16 +146,17 @@ const state = reactive<{
     }
   },
   popupFormConfig: {
-    title: '新增部门',
+    title: '新增组',
+    labelWidth: 120,
     formItemConfigs: [
       {
-        label: '父部门',
+        label: '上级',
         prop: 'parentId',
-        placeholder: '父部门',
+        placeholder: '上级',
         render: 'tree-select',
         props: { label: 'name', value: 'id' }
       },
-      { label: '部门名称', prop: 'name', placeholder: '部门名称', render: 'text' },
+      { label: '组名称', prop: 'name', placeholder: '组名称', render: 'text' },
       { label: '类型', prop: 'type', dictRender: 'radio', dictType: DictTypeEnum.SYSTEM_DEPT_TYPE },
       {
         label: '负责人',
@@ -165,6 +166,16 @@ const state = reactive<{
         placeholder: '负责人',
         render: 'select',
         props: { label: 'nickname' }
+      },
+      {
+        label: '可查询组',
+        prop: 'targetDeptIds',
+        required: false,
+        multiple: true,
+        placeholder: '可查询组',
+        render: 'tree-select',
+        tip: '这里表示哪些组可以查询此组及组下的所有用户(只能管理员分配)',
+        props: { label: 'name' }
       },
       { label: '显示顺序', prop: 'sort', placeholder: '显示顺序', render: 'number' },
       { label: '联系电话', prop: 'phone', required: false, placeholder: '联系电话', render: 'text' },
@@ -176,8 +187,8 @@ const state = reactive<{
     labelWidth: 120,
     width: 500,
     formItemConfigs: [
-      { label: '部门/职位名称', prop: 'name', disabled: true },
-      { label: '负责人', prop: 'leaderNickname', disabled: true, required: false },
+      { label: '组名称', prop: 'name', disabled: true },
+      { label: '负责人', prop: 'leaderNicknames', disabled: true, required: false },
       {
         label: '角色',
         prop: 'roleIds',
@@ -203,19 +214,19 @@ function onUnfold(value: boolean) {
 function onAdd(id?: number) {
   state.popupFormConfig.disabledProps = []
   if (id) state.form.parentId = id
-  state.popupFormConfig.title = '新增部门'
+  state.popupFormConfig.title = '新增组'
   state.popupFormConfig.isEdit = false
   popupFormRef.value.show()
 }
 
-async function onAssignRole(row: any) {
+async function onAssignRole(row: SystemDeptRespVo) {
   const service = ElLoading.service({ fullscreen: true })
   const { data } = await roleByDeptApi(row.id)
   service.close()
   state.roleAssignForm.roleIds = data
   state.roleAssignForm.deptId = row.id
   state.roleAssignForm.name = row.name
-  state.roleAssignForm.leaderNickname = row.leaderNickname
+  state.roleAssignForm.leaderNicknames = row.leaderNicknames
   roleAssignFormRef.value.show()
 }
 
@@ -226,7 +237,7 @@ async function onDelete(id: number) {
 
 function onBatchEdit(ids: number[]) {
   state.popupFormConfig.disabledProps = ['parentId', 'type']
-  state.popupFormConfig.title = '修改部门'
+  state.popupFormConfig.title = '修改组'
   state.popupFormConfig.isEdit = true
   state.popupFormConfig.ids = [...ids]
   popupFormRef.value.show()
@@ -264,6 +275,7 @@ async function listDept() {
   state.tableData = data
   state.popupFormConfig.formItemConfigs[0].data = treeDept
   state.popupFormConfig.formItemConfigs[3].data = userList
+  state.popupFormConfig.formItemConfigs[4].data = data
   state.roleAssignFormConfig.formItemConfigs[2].data = roleList
   await nextTick(() => {
     tableRef.value.expandAll(!tableHeaderRef.value.getUnfold())
@@ -285,7 +297,7 @@ function onRoleAssignClose() {
 watch(
   () => state.form.type,
   value => {
-    state.popupFormConfig.hideProps = value === 0 ? [] : ['leaderUserId', 'email', 'phone']
+    state.popupFormConfig.hideProps = value === 0 ? [] : ['leaderUserIds', 'email', 'phone']
   },
   { immediate: true }
 )

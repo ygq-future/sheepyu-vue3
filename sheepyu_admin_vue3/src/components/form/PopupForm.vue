@@ -9,7 +9,7 @@
     @close='hide'
   >
 
-    <el-scrollbar max-height='400px' style='padding: 0 15px'>
+    <el-scrollbar :max-height='config.maxHeight ?? 400' style='padding: 0 15px'>
       <el-form
         v-if='state.dialogVisible'
         v-loading='state.formLoading'
@@ -26,6 +26,7 @@
             :disabled='(config.disabledProps && config.disabledProps.includes(itemConfig.prop)) || itemConfig.disabled || config.looked'
           />
         </template>
+        <slot name='form-items'></slot>
       </el-form>
     </el-scrollbar>
 
@@ -81,7 +82,7 @@ async function onSubmitAndNext() {
   //回调超时处理
   const timer = setTimeout(() => {
     state.formLoading = false
-  }, props.config.timeout ?? 5000)
+  }, props.config.timeout ?? 3000)
 
   emits('submit', () => {
     clearTimeout(timer)
@@ -135,4 +136,3 @@ onBeforeMount(() => {
   })
 })
 </script>
-

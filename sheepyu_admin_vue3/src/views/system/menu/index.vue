@@ -125,8 +125,19 @@ const state = reactive<{
       { label: '权限标识', prop: 'permission', width: 160 },
       { label: '排序', prop: 'sort', sortable: true },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_MENU_TYPE },
-      { label: '缓存', prop: 'keepAlive', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS },
-      { label: '状态', prop: 'status', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS }
+      {
+        label: '缓存',
+        prop: 'keepAlive',
+        dictRender: 'switch',
+        dictType: DictTypeEnum.COMMON_STATUS
+      },
+      {
+        label: '状态',
+        prop: 'status',
+        dictRender: 'switch',
+        dictType: DictTypeEnum.COMMON_STATUS,
+        change: onStatusChange
+      }
     ],
     operate: {
       buttons: ['edit', 'delete'],
@@ -141,6 +152,7 @@ const state = reactive<{
         prop: 'parentId',
         placeholder: '请选择父级菜单',
         render: 'tree-select',
+        showCheckbox: false,
         props: { label: 'name', value: 'id' }
       },
       { label: '名称', prop: 'name', placeholder: '请输入名称' },
@@ -155,11 +167,6 @@ const state = reactive<{
     ]
   }
 })
-
-watch(() => state.query.status, val => {
-  console.log(val)
-})
-
 const forbidList: number[] = [1, 2, 12]
 
 async function onFieldChange(row: SystemMenuUpdateVo) {
@@ -167,7 +174,18 @@ async function onFieldChange(row: SystemMenuUpdateVo) {
   if (forbidList.includes(data.id)) {
     ElNotification.warning('不能操作重要数据!')
   } else {
-    await changeStatus(data.id)
+    await updateMenu(row)
+  }
+  await findMenuList()
+  tabs.notifyNeedUpdate()
+}
+
+async function onStatusChange(row: SystemMenuUpdateVo) {
+  const data = toRaw(row)
+  if (forbidList.includes(data.id)) {
+    ElNotification.warning('不能操作重要数据!')
+  } else {
+    await changeStatus(row.id)
   }
   await findMenuList()
   tabs.notifyNeedUpdate()
@@ -242,17 +260,17 @@ async function findMenuById(id: number) {
 async function findMenuList() {
   state.tableConfig.loading = true
   const { data } = await menuList(toRaw(state.query))
+  await setFormItemData()
   state.tableConfig.loading = false
   state.tableData = data
-  setFormItemData(data)
   await nextTick(() => {
     tableRef.value.expandAll(!tableHeaderRef.value.getUnfold(), tableHeaderRef.value.getLimit())
   })
 }
 
-function setFormItemData(data: SystemMenuRespVo[]) {
-  const temp: SystemMenuRespVo[] = JSON.parse(JSON.stringify(data))
-  removeLastChildren(temp)
+async function setFormItemData() {
+  const { data } = await menuList({})
+  removeLastChildren(data)
   state.popupFormConfig.formItemConfigs[0].data = [{
     id: 0,
     name: '顶级目录',
@@ -261,7 +279,7 @@ function setFormItemData(data: SystemMenuRespVo[]) {
     parentId: 0,
     status: 1,
     keepAlive: 1,
-    children: temp
+    children: data
   }]
 }
 
