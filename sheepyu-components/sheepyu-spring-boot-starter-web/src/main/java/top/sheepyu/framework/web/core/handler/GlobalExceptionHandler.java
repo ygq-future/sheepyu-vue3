@@ -17,11 +17,10 @@ import top.sheepyu.module.common.util.ExceptionUtil;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-
+import javax.validation.ValidationException;
 import java.sql.SQLException;
 
 import static top.sheepyu.module.common.constants.ErrorCodeConstants.*;
-import static top.sheepyu.module.common.constants.ErrorCodeConstants.SQL_ERROR;
 
 @RestControllerAdvice
 @Slf4j
@@ -71,6 +70,14 @@ public class GlobalExceptionHandler {
     public Result<Object> constraintViolationExceptionHandler(ConstraintViolationException ex) {
         ConstraintViolation<?> constraintViolation = ex.getConstraintViolations().iterator().next();
         return Result.fail(INVALID_PARAMS.getCode(), String.format("请求参数不正确:%s", constraintViolation.getMessage()));
+    }
+
+    /**
+     * 处理自定义校验异常
+     */
+    @ExceptionHandler(value = ValidationException.class)
+    public Result<Object> validationExceptionHandler(ValidationException ex) {
+        return Result.fail(INVALID_PARAMS.getCode(), String.format("请求参数不正确:%s", ex.getMessage()));
     }
 
     /**
