@@ -48,4 +48,6 @@ public interface SystemMenuService extends IServiceX<SystemMenu> {
      * @return List<SystemMenu>
      */
     List<SystemMenu> findMenuByIdsFromCache(Set<Long> menuIds, boolean enable);
+
+    void initMenus();
 }

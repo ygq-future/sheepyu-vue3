@@ -17,7 +17,6 @@ import top.sheepyu.module.system.dao.permission.menu.SystemMenuMapper;
 import top.sheepyu.module.system.dao.permission.role.SystemRoleMenuMapper;
 import top.sheepyu.module.system.enums.menu.MenuTypeEnum;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -279,9 +278,10 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
         return findByIdThrowIfNotExists(id, MENU_NOT_EXISTS);
     }
 
-    @PostConstruct
+    @Override
     public void initMenus() {
         log.info("初始化加载菜单缓存");
+        MENUS.clear();
         List<SystemMenu> list = list();
         for (SystemMenu menu : list) {
             MENUS.put(menu.getId(), menu);

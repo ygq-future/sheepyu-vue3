@@ -301,6 +301,9 @@ public class PermissionBiz {
 
     @Transactional
     public void assignMenuToRole(Long roleId, Set<Long> menuIds) {
+        if (menuIds == null) {
+            menuIds = Collections.emptySet();
+        }
         roleMenusCacheLock.lock();
         try {
             Set<Long> oldMenuIds = systemRoleMenuMapper.findMenuIdByRoleId(roleId);
@@ -328,6 +331,9 @@ public class PermissionBiz {
     }
 
     public void assignUserToDept(Long deptId, Set<Long> userIds) {
+        if (userIds == null) {
+            userIds = Collections.emptySet();
+        }
         userDeptsCacheLock.lock();
         try {
             Set<Long> oldUserIds = systemUserDeptMapper.findUserIdByDeptId(deptId);
@@ -365,6 +371,9 @@ public class PermissionBiz {
      */
     @Transactional
     public void assignDeptToUser(Long userId, Set<Long> deptIds) {
+        if (deptIds == null) {
+            deptIds = Collections.emptySet();
+        }
         userDeptsCacheLock.lock();
         try {
             Set<Long> oldDeptIds = systemUserDeptMapper.findDeptIdByUserId(userId);
@@ -400,6 +409,9 @@ public class PermissionBiz {
      */
     @Transactional
     public void assignRoleToUser(Long userId, Set<Long> roleIds) {
+        if (roleIds == null) {
+            roleIds = Collections.emptySet();
+        }
         userRolesCacheLock.lock();
         try {
             if (userId.equals(getLoginUserId())) {
@@ -557,6 +569,7 @@ public class PermissionBiz {
         loadDeptRole();
         loadUserRole();
         loadRoleMenuRole();
+        systemMenuService.initMenus();
 
         log.info("加载权限缓存完成");
     }
