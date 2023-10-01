@@ -14,7 +14,8 @@ import java.util.*;
 **/
 @TableName("${table.tableName}")
 @Data
-#if(${requireBaseModel})@EqualsAndHashCode(callSuper = true)#end
+#if(${requireBaseModel})@EqualsAndHashCode(callSuper = true)
+#end
 @Accessors(chain = true)
 public class ${fullClassName}#if(${requireBaseModel}) extends BaseModel#end {
     #foreach($column in $columns)

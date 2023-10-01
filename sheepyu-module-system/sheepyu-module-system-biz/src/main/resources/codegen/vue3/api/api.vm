@@ -38,6 +38,10 @@ export function export${table.className}Api(params: ${fullClassName}QueryVo) {
 #end
 #if($table.requireImport)
 
+export function download${table.className}TemplateApi() {
+  return request.download('/${table.moduleName}/${table.businessName}/download-template', '${table.classComment}导入模板.xlsx')
+}
+
 export function import${table.className}Api(file: File) {
   const formData = new FormData()
   formData.append("file", file)

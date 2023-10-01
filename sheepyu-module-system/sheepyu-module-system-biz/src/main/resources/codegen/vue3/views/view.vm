@@ -95,6 +95,7 @@
 import TableHeader from '@/components/table/header/TableHeader.vue'
 import Table from '@/components/table/Table.vue'
 import PopupForm from '@/components/form/PopupForm.vue'
+import ComSearch from '@/components/search/ComSearch.vue'
 import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { ${fullClassName}CreateVo, ${fullClassName}QueryVo, ${fullClassName}RespVo, ${fullClassName}UpdateVo } from '@/api/${table.moduleName}/${table.businessName}'
@@ -119,7 +120,7 @@ import {
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 #if($table.requireImport || $table.requireExport)
-import { ElLoading } from 'element-plus'
+import { fullscreenLoading } from '@/util/common'
 #end
 
 const tableRef = ref()
@@ -241,31 +242,20 @@ async function ${methodName}() {
 
 #if($table.requireExport)
 function export${table.className}() {
-  const service = ElLoading.service({ fullscreen: true })
-  export${table.className}Api(toRaw(state.query)).then(() => {
-    service.close()
-  }).catch(() => {
-    service.close()
-  })
+  fullscreenLoading(() => export${table.className}Api(toRaw(state.query)))
 }
 #end
 
 #if($table.requireImport)
 function batchImport(file: File) {
-  const service = ElLoading.service({ fullscreen: true })
-  import${table.className}Api(file).then(() => {
-    ${methodName}()
-    service.close()
-  }).catch(() => {
-    service.close()
+  fullscreenLoading(async () => {
+    await import${table.className}Api(file)
+    await ${methodName}()
   })
 }
 
 function downloadTemplate() {
-  //很多方式, 可以先上传文件到后端, 然后直接填一个文件链接(这种不是很安全, 没有权限校验)
-  //或者调用axios的download方法从后端拿文件流(比较安全, 但是后端文件流从哪里来?写死也不太好)
-  //目前没有做到这个业务先放一边
-  console.log('download')
+  fullscreenLoading(() => download${table.className}TemplateApi())
 }
 #end
 

@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import top.sheepyu.module.common.common.Result;
 #if($table.requireImport || $table.requireExport)
 import java.io.IOException;
+import java.util.Collections;
 import top.sheepyu.framework.log.core.annotations.RecordLog;
 import top.sheepyu.module.common.util.ExcelUtil;
 import top.sheepyu.module.${table.moduleName}.controller.${sceneName}.${table.businessName}.vo.${fullClassName}ExcelVo;
@@ -30,9 +31,7 @@ import java.util.List;
 
 import static top.sheepyu.module.common.common.Result.success;
 import static top.sheepyu.module.${table.moduleName}.convert.${table.businessName}.${fullClassName}Convert.CONVERT;
-#if($table.requireExport)import static top.sheepyu.framework.log.core.enums.OperateTypeEnum.EXPORT;
-#end
-#if($table.requireImport)import static top.sheepyu.framework.log.core.enums.OperateTypeEnum.IMPORT;
+#if($table.requireImport || $table.requireExport)import static top.sheepyu.framework.log.core.enums.OperateTypeEnum.*;
 #end
 
 /**
@@ -115,6 +114,15 @@ public class ${fullClassName}Controller {
 #end
 
 #if ($table.requireImport)
+    @GetMapping("/download-template")
+    @ApiOperation("下载${table.classComment}导入文件模板")
+    #if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:import')")
+    #end
+    @RecordLog(DOWNLOAD)
+    public void downloadTemplate(HttpServletResponse response) throws IOException {
+        ExcelUtil.write(response, "${table.classComment}导入模板", ${fullClassName}ExcelVo.class, Collections.emptyList());
+    }
+
     @PostMapping("/batchImport")
     @ApiOperation("批量导入${table.classComment}")
 #if ($table.scene == 1)    @PreAuthorize("@ss.hasPermission('${table.moduleName}:${table.businessName}:import')")

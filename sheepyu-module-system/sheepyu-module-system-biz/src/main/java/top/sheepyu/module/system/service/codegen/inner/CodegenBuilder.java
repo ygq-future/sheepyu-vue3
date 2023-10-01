@@ -46,7 +46,10 @@ public class CodegenBuilder {
             "system_file_part",
             "system_menu",
             "system_role_menu",
-            "system_user_role"
+            "system_user_role",
+            "system_dept_role",
+            "system_user_dept",
+            "system_dept_query_dept"
     );
     //不需要代码生成的表的代表前缀: 通常用来排除一些框架的表, 例如qrtz
     private static final List<String> EXCLUDE_TABLES_PREFIX = Lists.newArrayList("QRTZ");
