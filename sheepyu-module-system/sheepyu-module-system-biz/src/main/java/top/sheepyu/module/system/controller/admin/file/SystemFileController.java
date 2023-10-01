@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import top.sheepyu.framework.web.core.annotations.FlowLimit;
 import top.sheepyu.module.common.common.PageResult;
 import top.sheepyu.module.common.common.Result;
 import top.sheepyu.module.system.controller.admin.file.vo.SystemFileQueryVo;
@@ -32,7 +33,7 @@ public class SystemFileController {
 
     @GetMapping("/checkMd5/{md5}")
     @ApiOperation("检查是否已经有这个md5的文件")
-    @PreAuthorize("@ss.hasPermission('system:file:create')")
+    @FlowLimit
     public Result<SystemFileRespVo> checkMd5(@PathVariable String md5) {
         SystemFile file = systemFileService.findFileByMd5(md5);
         return success(CONVERT.convert(file));
@@ -48,7 +49,7 @@ public class SystemFileController {
 
     @PostMapping("/upload")
     @ApiOperation("文件上传")
-    @PreAuthorize("@ss.hasPermission('system:file:create')")
+    @FlowLimit
     public Result<String> upload(@RequestParam MultipartFile file,
                                  @RequestParam String md5,
                                  @RequestParam(required = false) String remark) throws IOException {
@@ -58,7 +59,7 @@ public class SystemFileController {
 
     @PostMapping("/preparePart")
     @ApiOperation("准备分片上传")
-    @PreAuthorize("@ss.hasPermission('system:file:create')")
+    @FlowLimit
     public Result<String> preparePart(@RequestParam String md5,
                                       @RequestParam String filename,
                                       @RequestParam(required = false) String remark) {
@@ -68,7 +69,7 @@ public class SystemFileController {
 
     @PostMapping("/uploadPart/{uploadId}")
     @ApiOperation("分片上传")
-    @PreAuthorize("@ss.hasPermission('system:file:create')")
+    @FlowLimit(60)
     public Result<String> uploadPart(@PathVariable String uploadId,
                                      @RequestParam MultipartFile part,
                                      @RequestParam Integer index) throws IOException {
@@ -78,7 +79,7 @@ public class SystemFileController {
 
     @PostMapping("/completePart/{uploadId}")
     @ApiOperation("完成分片上传")
-    @PreAuthorize("@ss.hasPermission('system:file:create')")
+    @FlowLimit
     public Result<String> completePart(@PathVariable String uploadId) {
         String url = systemFileService.completePart(uploadId);
         return success(url);
@@ -93,7 +94,7 @@ public class SystemFileController {
 
     @GetMapping("/statistics")
     @ApiOperation("文件统计")
-//    @PreAuthorize("@ss.hasPermission('dashboard')")
+    @FlowLimit(20)
     public Result<SystemFileStatisticsVo> statistics() {
         return success(systemFileService.statistics());
     }
