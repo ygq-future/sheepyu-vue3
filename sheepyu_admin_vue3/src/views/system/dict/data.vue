@@ -58,10 +58,10 @@ import type {
 import {
   createDictDataApi,
   deleteDictDataApi,
+  dictTypeListApi,
   findDictDataApi,
   listDictDataApi,
-  updateDictDataApi,
-  dictTypeListApi
+  updateDictDataApi
 } from '@/api/system/dict'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'

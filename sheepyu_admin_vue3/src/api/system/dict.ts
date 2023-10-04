@@ -1,5 +1,5 @@
-import { request } from '@/util/request'
 import type { PageResult } from '@/util/request'
+import { request } from '@/util/request'
 
 export function createDictTypeApi(data: SystemDictTypeCreateVo) {
   return request.post<boolean>('/system/dict/type', data)

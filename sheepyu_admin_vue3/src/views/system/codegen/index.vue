@@ -107,20 +107,18 @@ import TableHeader from '@/components/table/header/TableHeader.vue'
 import Table from '@/components/table/Table.vue'
 import PopupSearch from '@/components/search/PopupSearch.vue'
 import type { TableConfig } from '@/components/table/interface'
-import type { ComSearchConfig } from '@/components/search/interface'
-import type {
-  SystemCodegenQueryVo,
-  SystemCodegenRespVo
-} from '@/api/system/codegen'
+import type { ComSearchConfig, PopupSearchConfig } from '@/components/search/interface'
+import type { SystemCodegenQueryVo, SystemCodegenRespVo } from '@/api/system/codegen'
 import {
+  codegenGenerateApi,
   createCodegenApi,
   deleteCodegenApi,
   pageCodegenApi,
-  tableListApi,
-  codegenGenerateApi, syncCodegenApi, previewCodegenApi
+  previewCodegenApi,
+  syncCodegenApi,
+  tableListApi
 } from '@/api/system/codegen'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
-import type { PopupSearchConfig } from '@/components/search/interface'
 import { useTabs } from '@/stores/tabs/tabs'
 import { ElLoading, ElNotification } from 'element-plus'
 import 'highlight.js/styles/atom-one-dark.css'

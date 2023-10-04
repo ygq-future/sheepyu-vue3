@@ -36,9 +36,7 @@ import Table from '@/components/table/Table.vue'
 import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemAccessLogQueryVo, SystemAccessLogRespVo } from '@/api/system/log'
-import {
-  pageAccessLogApi
-} from '@/api/system/log'
+import { pageAccessLogApi } from '@/api/system/log'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import ComSearch from '@/components/search/ComSearch.vue'
 

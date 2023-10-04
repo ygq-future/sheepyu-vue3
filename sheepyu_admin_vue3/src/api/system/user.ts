@@ -1,5 +1,5 @@
-import { request } from '@/util/request'
 import type { PageResult } from '@/util/request'
+import { request } from '@/util/request'
 
 export function loginApi(data: SystemUserLoginVo) {
   return request.post<LoginUser>('/system/user/login', data)

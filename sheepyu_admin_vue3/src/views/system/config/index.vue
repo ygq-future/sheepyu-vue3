@@ -51,13 +51,7 @@ import type {
   SystemConfigRespVo,
   SystemConfigUpdateVo
 } from '@/api/system/config'
-import {
-  createConfigApi,
-  deleteConfigApi,
-  findConfigApi,
-  pageConfigApi,
-  updateConfigApi
-} from '@/api/system/config'
+import { createConfigApi, deleteConfigApi, findConfigApi, pageConfigApi, updateConfigApi } from '@/api/system/config'
 import type { PopupFormConfig } from '@/components/form/interface'
 
 const tableRef = ref()

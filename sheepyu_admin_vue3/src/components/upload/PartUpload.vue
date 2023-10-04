@@ -29,15 +29,9 @@
 import type { UploadProps } from 'element-plus'
 import { ElNotification } from 'element-plus'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
-import {
-  abortPart,
-  checkMd5Api,
-  completePartApi,
-  preparePartApi,
-  uploadPartApi
-} from '@/api/system/file'
+import type { PreparePartData, UploadPartData } from '@/api/system/file'
+import { abortPart, checkMd5Api, completePartApi, preparePartApi, uploadPartApi } from '@/api/system/file'
 import type { WritableComputedRef } from '@vue/reactivity'
-import type { UploadPartData, PreparePartData } from '@/api/system/file'
 
 const md5Store = useMd5Worker()
 

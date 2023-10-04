@@ -1,5 +1,5 @@
-import { request } from '@/util/request'
 import type { PageResult } from '@/util/request'
+import { request } from '@/util/request'
 
 export function pageAccessLogApi(params: SystemAccessLogQueryVo) {
   return request.get<PageResult<SystemAccessLogRespVo>>('/system/log/access/page', { params })

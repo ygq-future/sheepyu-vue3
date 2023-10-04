@@ -191,10 +191,10 @@
 </template>
 
 <script setup lang='ts'>
-import { findCodegenApi, updateCodegenApi } from '@/api/system/codegen'
-import { dictTypeListApi } from '@/api/system/dict'
 import type { SystemCodegenColumn, SystemCodegenRespVo, SystemCodegenUpdateVo } from '@/api/system/codegen'
+import { findCodegenApi, updateCodegenApi } from '@/api/system/codegen'
 import type { SystemDictTypeRespVo } from '@/api/system/dict'
+import { dictTypeListApi } from '@/api/system/dict'
 import type { FormRender } from '@/components/form/interface'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { FormRules } from 'element-plus'

@@ -34,9 +34,7 @@ import Table from '@/components/table/Table.vue'
 import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemJobLogQueryVo, SystemJobLogRespVo } from '@/api/system/job'
-import {
-  pageJobLogApi
-} from '@/api/system/job'
+import { pageJobLogApi } from '@/api/system/job'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import ComSearch from '@/components/search/ComSearch.vue'
 

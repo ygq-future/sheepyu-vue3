@@ -52,10 +52,7 @@ import Table from '@/components/table/Table.vue'
 import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemApiLogQueryVo, SystemApiLogRespVo } from '@/api/system/log'
-import {
-  pageApiLogApi,
-  processApiLogApi
-} from '@/api/system/log'
+import { pageApiLogApi, processApiLogApi } from '@/api/system/log'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import ComSearch from '@/components/search/ComSearch.vue'

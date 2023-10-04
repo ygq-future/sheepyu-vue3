@@ -1,6 +1,6 @@
+import type { PageResult } from '@/util/request'
 import { request } from '@/util/request'
 import type { CancelTokenSource } from 'axios'
-import type { PageResult } from '@/util/request'
 
 let source: CancelTokenSource = request.getSource()
 let isCancel: boolean = false

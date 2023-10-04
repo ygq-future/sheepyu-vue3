@@ -82,7 +82,8 @@ import {
   createDeptApi,
   deleteDeptApi,
   findDeptApi,
-  listDeptApi, roleByDeptApi,
+  listDeptApi,
+  roleByDeptApi,
   treeDeptApi,
   updateDeptApi
 } from '@/api/system/dept'

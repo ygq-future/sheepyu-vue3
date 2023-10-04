@@ -11,8 +11,8 @@
 </template>
 
 <script lang='ts' setup>
-import { ElLoading, ElNotification } from 'element-plus'
 import type { UploadProps } from 'element-plus'
+import { ElLoading, ElNotification } from 'element-plus'
 import { checkMd5Api, uploadApi } from '@/api/system/file'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
 

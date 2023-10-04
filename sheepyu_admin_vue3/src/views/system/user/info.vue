@@ -92,8 +92,8 @@
 </template>
 
 <script setup lang='ts'>
-import { userInfoApi, updateUserApi, updatePassApi } from '@/api/system/user'
 import type { SystemUserRespVo } from '@/api/system/user'
+import { updatePassApi, updateUserApi, userInfoApi } from '@/api/system/user'
 import type { FormRules } from 'element-plus'
 import { ElForm, ElNotification } from 'element-plus'
 import { useUser } from '@/stores/user/user'

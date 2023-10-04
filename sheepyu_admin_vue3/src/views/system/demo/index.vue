@@ -55,17 +55,17 @@
 import TableHeader from '@/components/table/header/TableHeader.vue'
 import Table from '@/components/table/Table.vue'
 import PopupForm from '@/components/form/PopupForm.vue'
-import type {  TableConfig } from '@/components/table/interface'
+import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemDemoCreateVo, SystemDemoQueryVo, SystemDemoRespVo, SystemDemoUpdateVo } from '@/api/system/demo'
 import {
   createDemoApi,
   deleteDemoApi,
-  findDemoApi,
-  pageDemoApi,
-  updateDemoApi,
   exportDemoApi,
-  importDemoApi
+  findDemoApi,
+  importDemoApi,
+  pageDemoApi,
+  updateDemoApi
 } from '@/api/system/demo'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
