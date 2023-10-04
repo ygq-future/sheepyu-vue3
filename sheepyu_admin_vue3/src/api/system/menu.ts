@@ -8,7 +8,7 @@ export function userMenu() {
   return request.get<SystemMenuRespVo[]>('/system/permission/user-menu')
 }
 
-export function menuList(params: SystemMenuQueryVo) {
+export function listMenuApi(params: SystemMenuQueryVo) {
   return request.get<SystemMenuRespVo[]>('/system/permission/menu', { params })
 }
 
@@ -35,6 +35,7 @@ export function deleteMenu(ids: string) {
 export interface SystemMenuQueryVo {
   keyword?: string
   status?: number
+  parentId?: number
 }
 
 export interface SystemMenuRespVo {
@@ -50,6 +51,7 @@ export interface SystemMenuRespVo {
   status: number
   keepAlive: number
   children?: SystemMenuRespVo[]
+  hasChildren?: boolean
 }
 
 export interface SystemMenuCreateVo extends SystemMenuBaseVo {

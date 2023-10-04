@@ -30,4 +30,6 @@ public class SystemMenu extends BaseModel {
 
     @TableField(exist = false)
     private List<SystemMenu> children;
+    @TableField(exist = false)
+    private Boolean hasChildren;
 }

@@ -48,4 +48,7 @@ public class SystemMenuRespVo {
 
     @ApiModelProperty("子菜单")
     private List<SystemMenuRespVo> children;
+
+    @ApiModelProperty("是否还有子菜单")
+    private Boolean hasChildren;
 }

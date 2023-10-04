@@ -4,12 +4,11 @@
       ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:menu'
-      :buttons="['add', 'delete', 'edit', 'unfold', 'unfold2']"
+      :buttons="['add', 'delete', 'edit']"
       :rows='state.selection'
-      @unfold='onUnfold'
       @refresh='findMenuList'
       @add='onAdd'
-      @batch-delete='onBatchDelete'
+      @batch-delete='ids => onBatchDelete(ids, state.selection)'
       @batch-edit='onBatchEdit'
       @input-enter='findMenuList'
       @input-clear='$nextTick(() => findMenuList())'
@@ -30,9 +29,10 @@
       auth='system:menu'
       :data='state.tableData'
       :table-config='state.tableConfig'
+      @load='onLoad'
       @fieldChange='onFieldChange'
       @edit='(row) => onBatchEdit([row.id])'
-      @delete='(row) => onBatchDelete([row.id])'
+      @delete='(row) => onBatchDelete([row.id], [row])'
     >
 
       <template #buttons='{data}'>
@@ -70,7 +70,7 @@ import PopupForm from '@/components/form/PopupForm.vue'
 import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemMenuCreateVo, SystemMenuQueryVo, SystemMenuRespVo, SystemMenuUpdateVo } from '@/api/system/menu'
-import { changeStatus, createMenu, deleteMenu, findMenu, menuList, updateMenu } from '@/api/system/menu'
+import { changeStatus, createMenu, deleteMenu, findMenu, listMenuApi, updateMenu } from '@/api/system/menu'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { useTabs } from '@/stores/tabs/tabs'
@@ -79,9 +79,8 @@ import { ElNotification } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
 
 const tabs = useTabs()
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const tableRef = shallowRef()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]
@@ -118,8 +117,9 @@ const state = reactive<{
   tableConfig: {
     rowKey: 'id',
     selection: true,
+    lazy: true,
     columns: [
-      { label: 'id', prop: 'id' },
+      { label: 'id', prop: 'id', width: 150 },
       { label: '名称', prop: 'name', width: 120 },
       { label: '图标', prop: 'icon', render: 'icon' },
       { label: '权限标识', prop: 'permission', width: 160 },
@@ -191,10 +191,6 @@ async function onStatusChange(row: SystemMenuUpdateVo) {
   tabs.notifyNeedUpdate()
 }
 
-function onUnfold(value: boolean, limit: number) {
-  tableRef.value.expandAll(value, limit)
-}
-
 function onAdd(data?: any) {
   state.popupFormConfig.disabledProps = []
   if (data && data.id) {
@@ -210,8 +206,12 @@ function onAdd(data?: any) {
   popupFormRef.value.show()
 }
 
-async function onBatchDelete(ids: number[]) {
+async function onBatchDelete(ids: number[], rows: SystemMenuRespVo[]) {
   await deleteMenu(ids.join(','))
+  for (const row of rows) {
+    const { data } = await listMenuApi({ parentId: row.parentId })
+    tableRef.value.lazyUpdate(row.parentId, data)
+  }
   await findMenuList()
   tabs.clearRoute()
 }
@@ -225,14 +225,20 @@ function onBatchEdit(ids: number[]) {
 }
 
 async function onSubmit(cb: Function) {
+  const form = toRaw(state.form)
   if (state.popupFormConfig.isEdit) {
-    await updateMenu(state.form as SystemMenuUpdateVo)
+    await updateMenu(form as SystemMenuUpdateVo)
   } else {
-    await createMenu(state.form)
+    await createMenu(form)
+  }
+  if (form.parentId === 0) {
+    await findMenuList()
+  } else {
+    const { data } = await listMenuApi({ parentId: form.parentId })
+    tableRef.value.lazyUpdate(form.parentId, data)
   }
   cb && cb()
   tabs.clearRoute()
-  await findMenuList()
 }
 
 function onClose() {
@@ -257,19 +263,27 @@ async function findMenuById(id: number) {
   state.form = data
 }
 
+async function onLoad(row: any, treeNode: unknown, resolve: (data: any[]) => void) {
+  const { data } = await listMenuApi({ parentId: row.id })
+  resolve(data)
+}
+
 async function findMenuList() {
   state.tableConfig.loading = true
-  const { data } = await menuList(toRaw(state.query))
+  const query = { ...toRaw(state.query) }
+  if (query.keyword) {
+    query.parentId = undefined
+  } else {
+    query.parentId = 0
+  }
+  const { data } = await listMenuApi(query)
   await setFormItemData()
   state.tableConfig.loading = false
   state.tableData = data
-  await nextTick(() => {
-    tableRef.value.expandAll(!tableHeaderRef.value.getUnfold(), tableHeaderRef.value.getLimit())
-  })
 }
 
 async function setFormItemData() {
-  const { data } = await menuList({})
+  const { data } = await listMenuApi({})
   removeLastChildren(data)
   state.popupFormConfig.formItemConfigs[0].data = [{
     id: 0,

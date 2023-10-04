@@ -197,10 +197,13 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
 
     @Override
     public List<SystemMenu> listMenu(SystemMenuQueryVo queryVo) {
+        String keyword = queryVo.getKeyword();
         List<SystemMenu> list = list(buildQuery()
-                .likeIfPresent(SystemMenu::getName, queryVo.getKeyword())
+                .likeIfPresent(SystemMenu::getName, keyword)
                 .eqIfPresent(SystemMenu::getStatus, queryVo.getStatus())
+                .eqIfPresent(SystemMenu::getParentId, queryVo.getParentId())
                 .orderByAsc(SystemMenu::getSort));
+        list.forEach(e -> e.setHasChildren(!Objects.equals(e.getType(), BUTTON.getCode())));
         return convertToTree(list);
     }
 

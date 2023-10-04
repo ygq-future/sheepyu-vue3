@@ -19,4 +19,7 @@ public class SystemMenuQueryVo {
     @ApiModelProperty("菜单状态")
     @InEnum(CommonStatusEnum.class)
     private Integer status;
+
+    @ApiModelProperty("父级菜单id")
+    private Long parentId;
 }

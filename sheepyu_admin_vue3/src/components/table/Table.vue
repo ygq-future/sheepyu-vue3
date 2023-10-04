@@ -2,10 +2,12 @@
   <el-table
     ref='tableRef'
     border
+    :lazy='tableConfig.lazy ?? false'
     :data='data'
     :row-key='tableConfig.rowKey'
     :stripe='tableConfig.stripe === undefined || tableConfig.stripe'
     :tree-props='tableConfig.treeProps'
+    :load='onLoad'
     v-loading='tableConfig.loading'
     @select='onSelect'
     @select-all='onSelectAll'
@@ -127,9 +129,21 @@ const emits = defineEmits<{
   (e: 'delete', row: any): void
   (e: 'size-change', size: number): void
   (e: 'current-change', current: number): void
+  (e: 'load', row: any, treeNode: unknown, resolve: (data: any[]) => void): void
 }>()
 
-const tableRef = ref<InstanceType<typeof ElTable>>()
+const tableRef = shallowRef<InstanceType<typeof ElTable>>()
+const tableStore = computed<any>(() => tableRef.value?.store)
+const lazyTreeNodeMap = computed(() => tableStore.value.states.lazyTreeNodeMap.value)
+
+const lazyUpdate = (pid: number, data: any[]) => {
+  const node = lazyTreeNodeMap.value
+  node[pid] = data
+}
+
+function onLoad(row: any, treeNode: unknown, resolve: (data: any[]) => void) {
+  emits('load', row, treeNode, resolve)
+}
 
 function onFieldChange(row: any, val: any) {
   emits('field-change', row, val)
@@ -196,7 +210,8 @@ defineExpose({
   },
   expandAll: (value: boolean, limit: number) => {
     recursiveExpand(props.data, value, limit)
-  }
+  },
+  lazyUpdate
 })
 </script>
 

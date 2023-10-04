@@ -4,6 +4,8 @@ import type { DictRender } from '@/components/dict/interface'
 export interface TableConfig {
   //是否斑马风格
   stripe?: boolean
+  //是否需要懒加载
+  lazy?: boolean
   //是否需要多选功能
   selection?: boolean
   //是否需要分页
