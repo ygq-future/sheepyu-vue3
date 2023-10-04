@@ -1,6 +1,5 @@
-import { request } from '@/util/request'
 import type { PageResult } from '@/util/request'
-import type { SystemMenuRespVo } from '@/api/system/menu'
+import { request } from '@/util/request'
 
 export function createRoleApi(data: SystemRoleCreateVo) {
   return request.post<boolean>('/system/permission/role', data)

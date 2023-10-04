@@ -4,7 +4,7 @@ import { staticRoutes } from '@/router/static'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 import type { SystemMenuRespVo } from '@/api/system/menu'
-import { userMenu } from '@/api/system/menu'
+import { userMenuApi } from '@/api/system/menu'
 import { useUser } from '@/stores/user/user'
 import { useTabs } from '@/stores/tabs/tabs'
 import { MenuTypeEnum } from '@/enums/MenuTypeEnum'
@@ -37,7 +37,7 @@ router.beforeEach(async (to, _, next) => {
     return next()
   }
 
-  const { data } = await userMenu()
+  const { data } = await userMenuApi()
   //从菜单中抽取permissions并保存
   const permission: string[] = []
   getPermissionFromMenuTree(data, permission)

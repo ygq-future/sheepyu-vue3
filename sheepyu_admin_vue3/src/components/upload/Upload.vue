@@ -26,7 +26,7 @@
 import type { UploadProps } from 'element-plus'
 import { ElLoading, ElNotification } from 'element-plus'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
-import { checkMd5, upload } from '@/api/system/file'
+import { checkMd5Api, uploadApi } from '@/api/system/file'
 import type { UploadData } from '@/api/system/file'
 import type { WritableComputedRef } from '@vue/reactivity'
 
@@ -79,7 +79,7 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     //计算md5
     const md5 = await md5Store.computeMd5(file)
     //查看是否有这个文件
-    const res = await checkMd5(md5)
+    const res = await checkMd5Api(md5)
     if (res.data && res.data.complete) {
       //如果文件存在会返回url, 直接回调更新值
       emits('update:modelValue', res.data.url)
@@ -89,7 +89,7 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     const instance = ElLoading.service({ text: '正在上传文件...', fullscreen: true })
     try {
       const data: UploadData = { file, md5, remark: remark.value }
-      emits('update:modelValue', (await upload(data)).data)
+      emits('update:modelValue', (await uploadApi(data)).data)
     } finally {
       instance.close()
     }

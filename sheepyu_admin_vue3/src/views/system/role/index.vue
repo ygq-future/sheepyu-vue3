@@ -80,7 +80,7 @@ import {
   pageRoleApi,
   updateRoleApi
 } from '@/api/system/role'
-import { userMenu } from '@/api/system/menu'
+import { userMenuApi } from '@/api/system/menu'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
@@ -225,12 +225,12 @@ async function pageRole() {
 }
 
 async function findMenuList() {
-  const { data } = await userMenu()
+  const { data } = await userMenuApi()
   state.menuAssignFormConfig.formItemConfigs[2].data = data
 }
 
 async function findUserMenuList() {
-  const { data } = await userMenu()
+  const { data } = await userMenuApi()
   state.menuAssignFormConfig.formItemConfigs[2].data = data
 }
 

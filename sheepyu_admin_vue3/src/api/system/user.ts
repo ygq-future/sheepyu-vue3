@@ -1,19 +1,19 @@
 import { request } from '@/util/request'
 import type { PageResult } from '@/util/request'
 
-export function login(data: SystemUserLoginVo) {
+export function loginApi(data: SystemUserLoginVo) {
   return request.post<LoginUser>('/system/user/login', data)
 }
 
-export function refreshToken(refreshToken: string) {
+export function refreshTokenApi(refreshToken: string) {
   return request.post<LoginUser>(`/system/user/refreshToken/${refreshToken}`)
 }
 
-export function info() {
+export function userInfoApi() {
   return request.get<SystemUserRespVo>('/system/user/info')
 }
 
-export function captcha() {
+export function getCaptchaApi() {
   return request.get<CaptchaRespVo>('/captcha')
 }
 

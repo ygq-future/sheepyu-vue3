@@ -17,7 +17,7 @@
 <script setup lang='ts'>
 import '@wangeditor/editor/dist/css/style.css' // 引入 css
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import { checkMd5, upload } from '@/api/system/file'
+import { checkMd5Api, uploadApi } from '@/api/system/file'
 import type { IDomEditor, IEditorConfig, IToolbarConfig } from '@wangeditor/editor'
 import { ElLoading } from 'element-plus'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
@@ -66,7 +66,7 @@ async function customUpload(file: File, insertFn: Function) {
   //计算md5
   const md5 = await md5Store.computeMd5(file)
   //查看是否有这个文件
-  const res = await checkMd5(md5)
+  const res = await checkMd5Api(md5)
   if (res.data && res.data.complete) {
     //如果文件存在会返回url, 直接回调更新值
     return insertFn(res.data.url)
@@ -74,7 +74,7 @@ async function customUpload(file: File, insertFn: Function) {
 
   const instance = ElLoading.service({ text: '正在上传文件...', fullscreen: true })
   try {
-    const { data } = await upload({ file, md5, remark: '图片上传' })
+    const { data } = await uploadApi({ file, md5, remark: '图片上传' })
     // 自己实现上传，并得到图片 url alt href
     insertFn(data)
   } finally {

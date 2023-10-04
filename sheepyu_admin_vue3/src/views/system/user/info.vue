@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang='ts'>
-import { info, updateUserApi, updatePassApi } from '@/api/system/user'
+import { userInfoApi, updateUserApi, updatePassApi } from '@/api/system/user'
 import type { SystemUserRespVo } from '@/api/system/user'
 import type { FormRules } from 'element-plus'
 import { ElForm, ElNotification } from 'element-plus'
@@ -171,7 +171,7 @@ async function updateUser() {
 }
 
 async function userInfo() {
-  const { data } = await info()
+  const { data } = await userInfoApi()
   state.user = data
   state.userForm.nickname = data.nickname
   state.userForm.mobile = data.mobile || ''

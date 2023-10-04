@@ -1,10 +1,10 @@
 import { request } from '@/util/request'
 
-export function userPermission() {
+export function userPermissionApi() {
   return request.get<string[]>('/system/permission/user-permission')
 }
 
-export function userMenu() {
+export function userMenuApi() {
   return request.get<SystemMenuRespVo[]>('/system/permission/user-menu')
 }
 
@@ -12,23 +12,23 @@ export function listMenuApi(params: SystemMenuQueryVo) {
   return request.get<SystemMenuRespVo[]>('/system/permission/menu', { params })
 }
 
-export function findMenu(id: number) {
+export function findMenuApi(id: number) {
   return request.get<SystemMenuRespVo>(`/system/permission/menu/${id}`)
 }
 
-export function createMenu(data: SystemMenuCreateVo) {
+export function createMenuApi(data: SystemMenuCreateVo) {
   return request.post<boolean>('/system/permission/menu', data)
 }
 
-export function updateMenu(data: SystemMenuUpdateVo) {
+export function updateMenuApi(data: SystemMenuUpdateVo) {
   return request.put<boolean>('/system/permission/menu', data)
 }
 
-export function changeStatus(id: number) {
+export function changeStatusApi(id: number) {
   return request.patch<boolean>('/system/permission/menu/change-status/' + id)
 }
 
-export function deleteMenu(ids: string) {
+export function deleteMenuApi(ids: string) {
   return request.delete<boolean>(`/system/permission/menu/${ids}`)
 }
 

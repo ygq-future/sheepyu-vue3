@@ -40,11 +40,11 @@ import { useConfig } from '@/stores/config/config'
 import { useUser } from '@/stores/user/user'
 import { useRouter } from 'vue-router'
 import type { CaptchaRespVo, SystemUserLoginVo } from '@/api/system/user'
-import { captcha, info, login } from '@/api/system/user'
+import { getCaptchaApi, userInfoApi, loginApi } from '@/api/system/user'
 import { ParticleLine } from '@/util/particleLine'
 import type { ElForm, FormRules } from 'element-plus'
 import { loadDict } from '@/util/common'
-import { getConfig } from '@/api/system/config'
+import { getConfigApi } from '@/api/system/config'
 import { ConfigKeyEnum } from '@/enums/ConfigKeyEnum'
 
 let particleLine: ParticleLine
@@ -78,9 +78,9 @@ function submit(formRef?: InstanceType<typeof ElForm>) {
     form.code = ''
     data.key = captchaInfo.key
     data.code = captchaInfo.arithmetic + data.code
-    login(data).then(res => {
+    loginApi(data).then(res => {
         user.setAuthInfo(res.data)
-        info().then(res => {
+        userInfoApi().then(res => {
           user.setUserInfo(res.data)
           loadDict()
           const redirectUrl = route.query.redirectUrl as string
@@ -97,7 +97,7 @@ async function getCaptcha() {
     return
   }
 
-  const { data } = await captcha()
+  const { data } = await getCaptchaApi()
   if (!data) return
   captchaInfo.base64 = data.base64
   captchaInfo.arithmetic = data.arithmetic
@@ -123,7 +123,7 @@ onBeforeMount(() => {
 onMounted(async () => {
   particleLine = new ParticleLine(config.layout.isDark)
   particleLine.init()
-  const { data } = await getConfig(ConfigKeyEnum.CAPTCHA_ENABLE)
+  const { data } = await getConfigApi(ConfigKeyEnum.CAPTCHA_ENABLE)
   captchaEnable.value = data
   await getCaptcha()
 })

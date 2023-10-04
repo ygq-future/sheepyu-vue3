@@ -14,11 +14,11 @@ function checkCancel() {
   }
 }
 
-export function checkMd5(md5: string) {
+export function checkMd5Api(md5: string) {
   return request.get<SystemFileRespVo>(`/system/file/checkMd5/${md5}`)
 }
 
-export function upload(data: UploadData) {
+export function uploadApi(data: UploadData) {
   const formData = new FormData()
   formData.append('file', data.file)
   formData.append('md5', data.md5)
@@ -26,7 +26,7 @@ export function upload(data: UploadData) {
   return request.post<string>('/system/file/upload', formData)
 }
 
-export function preparePart(data: PreparePartData) {
+export function preparePartApi(data: PreparePartData) {
   checkCancel()
   const formData = new FormData()
   formData.append('md5', data.md5)
@@ -35,7 +35,7 @@ export function preparePart(data: PreparePartData) {
   return request.post<string>('/system/file/preparePart', formData, { cancelToken: source.token })
 }
 
-export function uploadPart(uploadId: string, data: UploadPartData) {
+export function uploadPartApi(uploadId: string, data: UploadPartData) {
   checkCancel()
   const formData = new FormData()
   formData.append('part', data.part)
@@ -51,7 +51,7 @@ export function abortPart() {
   isCancel = true
 }
 
-export function completePart(uploadId: string) {
+export function completePartApi(uploadId: string) {
   checkCancel()
   return request.post<string>(`/system/file/completePart/${uploadId}`, { cancelToken: source.token })
 }

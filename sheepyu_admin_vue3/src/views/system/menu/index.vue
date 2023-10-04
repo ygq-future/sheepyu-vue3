@@ -70,7 +70,14 @@ import PopupForm from '@/components/form/PopupForm.vue'
 import type { TableConfig } from '@/components/table/interface'
 import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemMenuCreateVo, SystemMenuQueryVo, SystemMenuRespVo, SystemMenuUpdateVo } from '@/api/system/menu'
-import { changeStatus, createMenu, deleteMenu, findMenu, listMenuApi, updateMenu } from '@/api/system/menu'
+import {
+  changeStatusApi,
+  createMenuApi,
+  deleteMenuApi,
+  findMenuApi,
+  listMenuApi,
+  updateMenuApi
+} from '@/api/system/menu'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { useTabs } from '@/stores/tabs/tabs'
@@ -174,7 +181,7 @@ async function onFieldChange(row: SystemMenuUpdateVo) {
   if (forbidList.includes(data.id)) {
     ElNotification.warning('不能操作重要数据!')
   } else {
-    await updateMenu(row)
+    await updateMenuApi(row)
   }
   await findMenuList()
   tabs.notifyNeedUpdate()
@@ -185,7 +192,7 @@ async function onStatusChange(row: SystemMenuUpdateVo) {
   if (forbidList.includes(data.id)) {
     ElNotification.warning('不能操作重要数据!')
   } else {
-    await changeStatus(row.id)
+    await changeStatusApi(row.id)
   }
   await findMenuList()
   tabs.notifyNeedUpdate()
@@ -207,7 +214,7 @@ function onAdd(data?: any) {
 }
 
 async function onBatchDelete(ids: number[], rows: SystemMenuRespVo[]) {
-  await deleteMenu(ids.join(','))
+  await deleteMenuApi(ids.join(','))
   for (const row of rows) {
     const { data } = await listMenuApi({ parentId: row.parentId })
     tableRef.value.lazyUpdate(row.parentId, data)
@@ -227,9 +234,9 @@ function onBatchEdit(ids: number[]) {
 async function onSubmit(cb: Function) {
   const form = toRaw(state.form)
   if (state.popupFormConfig.isEdit) {
-    await updateMenu(form as SystemMenuUpdateVo)
+    await updateMenuApi(form as SystemMenuUpdateVo)
   } else {
-    await createMenu(form)
+    await createMenuApi(form)
   }
   if (form.parentId === 0) {
     await findMenuList()
@@ -256,7 +263,7 @@ function onClose() {
 }
 
 async function findMenuById(id: number) {
-  const { data } = await findMenu(id)
+  const { data } = await findMenuApi(id)
   if (forbidList.includes(data.id)) {
     state.popupFormConfig.disabledProps = ['keepAlive', 'status', 'type']
   }

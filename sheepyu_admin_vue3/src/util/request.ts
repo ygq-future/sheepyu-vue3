@@ -2,7 +2,7 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, CancelTokenSourc
 import axios, { AxiosError } from 'axios'
 import { ElNotification } from 'element-plus'
 import { useUser } from '@/stores/user/user'
-import { refreshToken } from '@/api/system/user'
+import { refreshTokenApi } from '@/api/system/user'
 import router from '@/router/router'
 import { download } from '@/util/common'
 import qs from 'qs'
@@ -77,7 +77,7 @@ export class Request {
             this.isRefreshing = true
 
             try {
-              const result = await refreshToken(user.get().refreshToken as string)
+              const result = await refreshTokenApi(user.get().refreshToken as string)
               user.setAuthInfo(result.data)
               this.requestList.forEach(cb => cb())
               return this.service(res.config)

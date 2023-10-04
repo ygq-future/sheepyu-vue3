@@ -2,7 +2,7 @@ import { request } from '@/util/request'
 import type { ConfigKeyEnum } from '@/enums/ConfigKeyEnum'
 import type { PageResult } from '@/util/request'
 
-export function getConfig(key: ConfigKeyEnum) {
+export function getConfigApi(key: ConfigKeyEnum) {
   return request.get<any>(`/system/config/by-key/${key}`)
 }
 

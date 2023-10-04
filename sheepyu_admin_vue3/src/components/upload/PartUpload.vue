@@ -31,10 +31,10 @@ import { ElNotification } from 'element-plus'
 import { useMd5Worker } from '@/stores/worker/md5Worker'
 import {
   abortPart,
-  checkMd5,
-  completePart,
-  preparePart,
-  uploadPart
+  checkMd5Api,
+  completePartApi,
+  preparePartApi,
+  uploadPartApi
 } from '@/api/system/file'
 import type { WritableComputedRef } from '@vue/reactivity'
 import type { UploadPartData, PreparePartData } from '@/api/system/file'
@@ -123,12 +123,12 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     //计算md5
     const md5 = await md5Store.computeMd5(file)
     //查看是否有这个文件
-    const { data } = await checkMd5(md5)
+    const { data } = await checkMd5Api(md5)
     //如果没有这个文件
     if (!data) {
       //调用分片准备接口, 创建全局唯一id
       const prepareData: PreparePartData = { md5, filename: file.name, remark: state.remark }
-      state.uploadId = <string>(await preparePart(prepareData)).data
+      state.uploadId = <string>(await preparePartApi(prepareData)).data
     } else {
       //如果已经有此md5的文件, 直接取uploadId
       state.uploadId = data.uploadId!
@@ -148,11 +148,11 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     const total = i + partList.length
     for (const part of partList) {
       state.percentage = Math.ceil((++i / total) * 100) - 1
-      await uploadPart(state.uploadId, part)
+      await uploadPartApi(state.uploadId, part)
     }
 
     //合并分片
-    emits('update:modelValue', (await completePart(state.uploadId)).data)
+    emits('update:modelValue', (await completePartApi(state.uploadId)).data)
     state.percentage = 100
     state.uploadId = ''
     ElNotification.success('上传成功')
