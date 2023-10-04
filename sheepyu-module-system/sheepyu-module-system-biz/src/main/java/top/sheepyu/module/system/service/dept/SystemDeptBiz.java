@@ -16,12 +16,10 @@ import top.sheepyu.module.system.dao.user.SystemUserDeptMapper;
 import top.sheepyu.module.system.service.permission.PermissionBiz;
 import top.sheepyu.module.system.service.user.SystemUserService;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
+import static top.sheepyu.module.common.enums.CommonStatusEnum.DISABLE;
+import static top.sheepyu.module.common.util.CollectionUtil.convertList;
 import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.*;
 
 /**
@@ -81,22 +79,25 @@ public class SystemDeptBiz {
                 continue;
             }
             Set<Long> userIds = systemUserDeptMapper.findUserIdByDeptIds(Collections.singleton(dept.getId()));
-            if (CollUtil.isNotEmpty(userIds)) {
-                List<SystemUser> userList = systemUserService.lambdaQuery()
-                        .in(SystemUser::getId, userIds)
-                        .select(SystemUser::getId, SystemUser::getUsername)
-                        .list();
-                //把User和Dept同化放在一颗树上
-                List<SystemDept> userChildren = userList.stream().map(e -> {
-                    SystemDept userDept = new SystemDept();
-                    userDept.setId(e.getId())
-                            .setParentId(dept.getId())
-                            .setName(e.getUsername())
-                            .setType(USER.getCode());
-                    return userDept;
-                }).collect(Collectors.toList());
-                dept.setChildren(userChildren);
+            if (CollUtil.isEmpty(userIds)) {
+                dept.setDisabled(true);
+                continue;
             }
+            List<SystemUser> userList = systemUserService.lambdaQuery()
+                    .in(SystemUser::getId, userIds)
+                    .select(SystemUser::getId, SystemUser::getUsername, SystemUser::getStatus)
+                    .list();
+            //把User和Dept同化放在一颗树上
+            List<SystemDept> userChildren = convertList(userList, e -> {
+                SystemDept userDept = new SystemDept();
+                userDept.setId(e.getId())
+                        .setParentId(dept.getId())
+                        .setName(e.getUsername())
+                        .setType(USER.getCode())
+                        .setDisabled(Objects.equals(DISABLE.getCode(), e.getStatus()));
+                return userDept;
+            });
+            dept.setChildren(userChildren);
         }
         return systemDeptService.deptListToTree(deptList);
     }
