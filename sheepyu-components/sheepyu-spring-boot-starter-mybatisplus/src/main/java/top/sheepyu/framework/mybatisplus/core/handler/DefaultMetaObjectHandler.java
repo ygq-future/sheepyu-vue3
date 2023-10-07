@@ -16,26 +16,42 @@ import static top.sheepyu.framework.web.util.WebFrameworkUtil.getLoginUserUserna
 public class DefaultMetaObjectHandler implements MetaObjectHandler {
     @Override
     public void insertFill(MetaObject metaObject) {
-        Object createTime = metaObject.getValue(CREATE_TIME);
-        Object updateTime = metaObject.getValue(UPDATE_TIME);
-        Object creator = metaObject.getValue(CREATOR);
         String username = getLoginUserUsername();
         Date now = new Date();
 
-        if (creator == null && StrUtil.isNotBlank(username)) {
-            metaObject.setValue(CREATOR, username);
+        if (hasProperty(metaObject, CREATOR)) {
+            Object creator = metaObject.getValue(CREATOR);
+            if (creator == null && StrUtil.isNotBlank(username)) {
+                metaObject.setValue(CREATOR, username);
+            }
         }
-        if (createTime == null) {
-            metaObject.setValue(CREATE_TIME, now);
+
+        if (hasProperty(metaObject, CREATE_TIME)) {
+            Object createTime = metaObject.getValue(CREATE_TIME);
+            if (createTime == null) {
+                metaObject.setValue(CREATE_TIME, now);
+            }
         }
-        if (updateTime == null) {
-            metaObject.setValue(UPDATE_TIME, now);
+
+        if (hasProperty(metaObject, UPDATE_TIME)) {
+            Object updateTime = metaObject.getValue(UPDATE_TIME);
+            if (updateTime == null) {
+                metaObject.setValue(UPDATE_TIME, now);
+            }
         }
     }
 
     @Override
     public void updateFill(MetaObject metaObject) {
-        metaObject.setValue(UPDATER, getLoginUserUsername());
-        metaObject.setValue(UPDATE_TIME, new Date());
+        if (hasProperty(metaObject, UPDATER)) {
+            metaObject.setValue(UPDATER, getLoginUserUsername());
+        }
+        if (hasProperty(metaObject, UPDATE_TIME)) {
+            metaObject.setValue(UPDATE_TIME, new Date());
+        }
+    }
+
+    private boolean hasProperty(MetaObject metaObject, String propertyName) {
+        return metaObject.hasGetter(propertyName) && metaObject.hasSetter(propertyName);
     }
 }

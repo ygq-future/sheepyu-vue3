@@ -49,7 +49,7 @@ public class WebFrameworkUtil {
         }
         //使用String.valueOf防止NPE
         Object username = request.getAttribute(REQUEST_ATTRIBUTE_LOGIN_USERNAME);
-        return username == null ? null : username.toString();
+        return String.valueOf(username);
     }
 
     public static Integer getLoginUserType(HttpServletRequest request) {

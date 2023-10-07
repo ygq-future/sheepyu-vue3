@@ -64,7 +64,7 @@ public class SecurityFrameworkUtil {
     @Nullable
     public static String getLoginUserUsername() {
         LoginUser loginUser = getLoginUser();
-        return loginUser != null ? loginUser.getUsername() : null;
+        return String.valueOf(loginUser);
     }
 
     /**
