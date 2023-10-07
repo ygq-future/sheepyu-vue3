@@ -14,6 +14,7 @@ import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 @Accessors(chain = true)
 public class SystemRole extends BaseModel {
     private Long id;
+    private Long deptId;
     private String name;
     private String code;
     private Integer sort;

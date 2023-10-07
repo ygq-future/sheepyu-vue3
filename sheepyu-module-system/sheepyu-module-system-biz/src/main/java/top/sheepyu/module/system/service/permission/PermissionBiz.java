@@ -146,7 +146,7 @@ public class PermissionBiz {
     /**
      * 角色分页
      * 根据用户的权限查询角色, 如果是管理员角色, 返回所有
-     * 否则只返回自己部门下用户创建的和自己拥有的
+     * 否则只返回自己部门下及其子部门下的角色
      *
      * @return PageResult<SystemRole>
      */
@@ -159,11 +159,11 @@ public class PermissionBiz {
             return emptyPage();
         }
 
-        Set<Long> userIds;
+        //如果带了部门查询条件, 就查询此部门及其子部门下的所有部门id
+        Set<Long> deptIds;
         if (queryBo.getDeptId() != null) {
-            userIds = systemDeptService.deepQueryUserIdByDeptId(Collections.singleton(queryVo.getDeptId()));
-            List<String> usernameList = systemUserService.findFieldValueByIds(SystemUser::getUsername, userIds);
-            queryBo.setCreators(usernameList);
+            deptIds = systemDeptService.deepQueryDeptIdByDeptId(Collections.singleton(queryBo.getDeptId()));
+            queryBo.setDeptIds(deptIds);
         }
 
         //如果有超级管理员角色
@@ -171,34 +171,19 @@ public class PermissionBiz {
             return systemRoleService.pageAllRole(queryBo);
         }
 
-        //获取此用户部门下所有的用户, 然后查询此部门下所有用户创建的角色 + 此用户及其子部门拥有的角色
+        //将用户拥有的角色加入条件
         queryBo.setRoleIds(roleIds);
-        userIds = systemDeptService.deepQueryUserIdByUserId(userId);
-        queryBo.getRoleIds().addAll(findRoleIdsByUserIds(userIds));
+        //如果没有带查询条件, 就查询此用户所在的部门及其所在部门的子部门id
         if (queryBo.getDeptId() == null) {
-            List<String> usernameList = systemUserService.findFieldValueByIds(SystemUser::getUsername, userIds);
-            queryBo.setCreators(usernameList);
+            deptIds = systemDeptService.deepQueryDeptIdByDeptId(userDeptsCache.get(userId));
+            queryBo.setDeptIds(deptIds);
         }
         return systemRoleService.pageRoleByPermission(queryBo);
     }
 
-    private static Set<Long> findRoleIdsByUserIds(Set<Long> userIds) {
-        Set<Long> roleIds = new HashSet<>();
-        userIds.forEach(userId -> {
-            roleIds.addAll(userRolesCache.get(userId));
-            Set<Long> deptIds = userDeptsCache.get(userId);
-            deptIds.forEach(deptId -> roleIds.addAll(deptRolesCache.get(deptId)));
-        });
-        return roleIds;
-    }
-
-    private Set<Long> findRoleIdsByUserId(Long userId) {
-        return findRoleIdsByUserIds(Collections.singleton(userId));
-    }
-
     /**
      * 根据用户的权限查询角色, 如果是管理员角色, 返回所有
-     * 否则只返回自己部门下用户创建的和自己拥有的
+     * 否则只返回自己部门及其子部门下的角色
      *
      * @return List<SystemRole>
      */
@@ -214,25 +199,36 @@ public class PermissionBiz {
             return systemRoleService.listAllRole();
         }
 
-        //获取此用户部门下所有的用户, 然后查询此部门下所有用户创建的角色 + 此用户拥有的角色
-        Set<Long> userIds = systemDeptService.deepQueryUserIdByUserId(userId);
+        //获取用户所属部门及其子部门id
+        Set<Long> deptIds = systemDeptService.deepQueryDeptIdByDeptId(userDeptsCache.get(userId));
         //如果为空就只返回用户自己所拥有的
-        if (CollUtil.isEmpty(userIds)) {
+        if (CollUtil.isEmpty(deptIds)) {
             return systemRoleService.listByIds(roleIds);
         }
-        //不要干扰之前的roleIds, 所以新创建一个对象
-        HashSet<Long> newRoleIds = CollUtil.newHashSet(roleIds);
-        newRoleIds.addAll(findRoleIdsByUserIds(userIds));
-        List<String> usernameList = systemUserService.findFieldValueByIds(SystemUser::getUsername, userIds);
-        List<SystemRole> roleList = systemRoleService.listRoleByCreators(usernameList);
+        //根据部门ids查询角色
+        List<SystemRole> roleList = systemRoleService.listRoleByDeptIds(deptIds);
         //取出roleId
         Set<Long> creatorRoleIdList = convertSet(roleList, SystemRole::getId);
         //排除重复
-        Collection<Long> userRoleIds = CollUtil.subtract(newRoleIds, creatorRoleIdList);
+        Collection<Long> userRoleIds = CollUtil.subtract(roleIds, creatorRoleIdList);
         if (CollUtil.isNotEmpty(userRoleIds)) {
             roleList.addAll(systemRoleService.listByIds(userRoleIds));
         }
         return roleList;
+    }
+
+    private static Set<Long> findRoleIdsByUserIds(Set<Long> userIds) {
+        Set<Long> roleIds = new HashSet<>();
+        userIds.forEach(userId -> {
+            roleIds.addAll(userRolesCache.get(userId));
+            Set<Long> deptIds = userDeptsCache.get(userId);
+            deptIds.forEach(deptId -> roleIds.addAll(deptRolesCache.get(deptId)));
+        });
+        return roleIds;
+    }
+
+    private Set<Long> findRoleIdsByUserId(Long userId) {
+        return findRoleIdsByUserIds(Collections.singleton(userId));
     }
 
     public Set<Long> findRoleByUserId(Long userId) {
@@ -352,9 +348,19 @@ public class PermissionBiz {
             }
 
             log.info("assignUserToDept: 分配部门负责人, 更新用户(部门/职位)缓存");
-            userIds.forEach(userId -> {
-                Set<Long> deptIds = userDeptsCache.get(userId);
-                deptIds.add(deptId);
+            add.forEach(userId -> {
+                if (userDeptsCache.containsKey(userId)) {
+                    userDeptsCache.get(userId).add(deptId);
+                } else {
+                    HashSet<Long> deptIds = new HashSet<>();
+                    deptIds.add(deptId);
+                    userDeptsCache.put(userId, deptIds);
+                }
+            });
+            remove.forEach(userId -> {
+                if (userDeptsCache.containsKey(userId)) {
+                    userDeptsCache.get(userId).remove(deptId);
+                }
             });
         } catch (Exception e) {
             throw exception(ASSIGN_DEPT_TO_USER_FAILED);

@@ -15,9 +15,9 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SystemRoleQueryBo extends SystemRoleQueryVo {
-    @ApiModelProperty("创建者")
-    private List<String> creators;
-
     @ApiModelProperty("角色id")
     private Set<Long> roleIds;
+
+    @ApiModelProperty("部门ids")
+    private Set<Long> deptIds;
 }

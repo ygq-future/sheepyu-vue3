@@ -71,6 +71,14 @@ public class SystemDeptController {
         return success(CONVERT.convertList(result));
     }
 
+    @GetMapping("/dept-role")
+    @ApiOperation("获取系统部门职位下的角色树")
+    @PreAuthorize("@ss.hasPermission('system:dept:query')")
+    public Result<List<SystemDeptRespVo>> listDeptRole() {
+        List<SystemDept> result = systemDeptBiz.listDeptRole();
+        return success(CONVERT.convertList(result));
+    }
+
     @GetMapping("/tree")
     @ApiOperation("获取系统部门列表树,排除岗位(权限)")
     @PreAuthorize("@ss.hasPermission('system:dept:query')")

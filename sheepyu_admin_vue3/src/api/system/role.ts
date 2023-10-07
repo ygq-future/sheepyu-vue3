@@ -34,6 +34,8 @@ export function menuByRoleApi(roleId: number) {
 }
 
 export interface SystemRoleBaseVo {
+  //所属部门
+  deptId?: number
   //角色名称
   name: string
   //角色权限字符串
@@ -67,4 +69,6 @@ export interface SystemRoleQueryVo {
   total?: number
   //快速搜索关键字
   keyword?: string
+  //部门
+  deptId?: number
 }

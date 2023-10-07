@@ -84,6 +84,7 @@ import { userMenuApi } from '@/api/system/menu'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
+import { listDeptApi } from '@/api/system/dept'
 
 const tableRef = ref()
 const tableHeaderRef = ref()
@@ -117,7 +118,14 @@ const state = reactive<{
     menuIds: []
   },
   tableData: [],
-  comSearchConfig: [],
+  comSearchConfig: [
+    {
+      label: '部门',
+      prop: 'deptId',
+      placeholder: '部门',
+      render: 'tree-select'
+    }
+  ],
   tableConfig: {
     rowKey: 'id',
     selection: true,
@@ -138,13 +146,9 @@ const state = reactive<{
   popupFormConfig: {
     title: '新增角色',
     formItemConfigs: [
-      { label: '角色名称', prop: 'name', placeholder: '角色名称', render: 'text' },
-      {
-        label: '角色编码',
-        prop: 'code',
-        placeholder: '角色权限字符串',
-        render: 'text'
-      },
+      { label: '所属部门', prop: 'deptId', placeholder: '所属部门', render: 'tree-select', showCheckbox: false },
+      { label: '角色名称', prop: 'name', placeholder: '角色名称' },
+      { label: '角色编码', prop: 'code', placeholder: '角色权限字符串' },
       { label: '显示顺序', prop: 'sort', placeholder: '显示顺序', render: 'number' },
       { label: '备注', prop: 'remark', required: false, placeholder: '备注', render: 'textarea' }
     ]
@@ -188,6 +192,7 @@ async function onBatchDelete(ids: number[]) {
 }
 
 function onBatchEdit(ids: number[]) {
+  state.popupFormConfig.hideProps = ['deptId']
   state.popupFormConfig.title = '修改角色'
   state.popupFormConfig.isEdit = true
   state.popupFormConfig.ids = [...ids]
@@ -220,6 +225,9 @@ async function pageRole() {
   state.tableConfig.loading = true
   const { data } = await pageRoleApi(toRaw(state.query))
   await findUserMenuList()
+  const { data: deptList } = await listDeptApi({})
+  state.comSearchConfig[0].data = deptList
+  state.popupFormConfig.formItemConfigs[0].data = deptList
   state.tableConfig.loading = false
   state.tableData = data.list
   state.query.total = data.total

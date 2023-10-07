@@ -68,9 +68,17 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
     }
 
     @Override
+    public void transfer(Long sourceDeptId, Long targetDeptId) {
+        lambdaUpdate()
+                .set(SystemRole::getDeptId, targetDeptId)
+                .eq(SystemRole::getDeptId, sourceDeptId)
+                .update();
+    }
+
+    @Override
     public PageResult<SystemRole> pageAllRole(SystemRoleQueryBo queryBo) {
-        List<String> creators = queryBo.getCreators();
-        if (queryBo.getDeptId() != null && CollUtil.isEmpty(creators)) {
+        Set<Long> deptIds = queryBo.getDeptIds();
+        if (queryBo.getDeptId() != null && CollUtil.isEmpty(deptIds)) {
             return emptyPage();
         }
         String keyword = queryBo.getKeyword();
@@ -79,17 +87,16 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
                 .and(StrUtil.isNotBlank(keyword), e -> e
                         .like(SystemRole::getName, keyword).or()
                         .like(SystemRole::getCode, keyword))
-                .in(queryBo.getDeptId() != null, SystemRole::getCreator, creators)
+                .in(queryBo.getDeptId() != null, SystemRole::getDeptId, deptIds)
                 .orderByAsc(SystemRole::getSort));
     }
 
     @Override
     public PageResult<SystemRole> pageRoleByPermission(SystemRoleQueryBo queryBo) {
-        List<String> creators = queryBo.getCreators();
         String keyword = queryBo.getKeyword();
         //只有超级管理员才能查看所有角色, 其他的人只能查看自己部门下人员创建的角色
         return page(queryBo, buildQuery()
-                .inIfPresent(SystemRole::getCreator, creators).or()
+                .inIfPresent(SystemRole::getDeptId, queryBo.getDeptIds()).or()
                 .in(SystemRole::getId, queryBo.getRoleIds())
                 .and(StrUtil.isNotBlank(keyword), e -> e
                         .like(SystemRole::getName, keyword).or()
@@ -106,6 +113,14 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
     public List<SystemRole> listRoleByCreators(List<String> creatorList) {
         return lambdaQuery()
                 .in(SystemRole::getCreator, creatorList)
+                .orderByAsc(SystemRole::getSort)
+                .list();
+    }
+
+    @Override
+    public List<SystemRole> listRoleByDeptIds(Set<Long> deptIds) {
+        return lambdaQuery()
+                .in(SystemRole::getDeptId, deptIds)
                 .orderByAsc(SystemRole::getSort)
                 .list();
     }

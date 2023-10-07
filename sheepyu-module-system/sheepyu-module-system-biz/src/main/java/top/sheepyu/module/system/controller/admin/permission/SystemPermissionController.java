@@ -118,7 +118,7 @@ public class SystemPermissionController {
     @GetMapping("/role/page")
     @ApiOperation("获取系统角色分页")
     @PreAuthorize("@ss.hasPermission('system:role:query')")
-    public Result<PageResult<SystemRoleRespVo>> pageRole(SystemRoleQueryVo queryVo) {
+    public Result<PageResult<SystemRoleRespVo>> pageRoleByPermission(SystemRoleQueryVo queryVo) {
         PageResult<SystemRole> result = permissionBiz.pageRoleByPermission(queryVo);
         return success(SystemRoleConvert.CONVERT.convertPage(result));
     }
@@ -126,7 +126,7 @@ public class SystemPermissionController {
     @GetMapping("/role")
     @ApiOperation("获取系统角色列表")
     @PreAuthorize("@ss.hasPermission('system:role:query')")
-    public Result<List<SystemRoleRespVo>> list() {
+    public Result<List<SystemRoleRespVo>> listRoleByPermission() {
         List<SystemRole> list = permissionBiz.listRoleByPermission();
         return success(SystemRoleConvert.CONVERT.convertList(list));
     }

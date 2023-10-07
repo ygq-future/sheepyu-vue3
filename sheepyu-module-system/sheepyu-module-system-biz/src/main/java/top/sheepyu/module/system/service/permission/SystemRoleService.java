@@ -23,6 +23,8 @@ public interface SystemRoleService extends IServiceX<SystemRole> {
 
     void deleteRole(Collection<Long> idList);
 
+    void transfer(Long sourceDeptId, Long targetDeptId);
+
     PageResult<SystemRole> pageAllRole(SystemRoleQueryBo queryBo);
 
     PageResult<SystemRole> pageRoleByPermission(@Valid SystemRoleQueryBo queryBo);
@@ -30,6 +32,8 @@ public interface SystemRoleService extends IServiceX<SystemRole> {
     List<SystemRole> listAllRole();
 
     List<SystemRole> listRoleByCreators(List<String> creatorList);
+
+    List<SystemRole> listRoleByDeptIds(Set<Long> deptIds);
 
     SystemRole findById(Long id);
 

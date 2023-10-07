@@ -81,6 +81,7 @@ import {
   assignRoleToDeptApi,
   createDeptApi,
   deleteDeptApi,
+  deptRoleApi,
   findDeptApi,
   listDeptApi,
   roleByDeptApi,
@@ -92,7 +93,6 @@ import ComSearch from '@/components/search/ComSearch.vue'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import { listUserApi } from '@/api/system/user'
 import { ElLoading } from 'element-plus'
-import { listRoleApi } from '@/api/system/role'
 import { DeptTypeEnum } from '@/enums/DeptTypeEnum'
 
 const tableRef = ref()
@@ -195,10 +195,11 @@ const state = reactive<{
         label: '角色',
         prop: 'roleIds',
         placeholder: '请选择角色',
-        render: 'select',
+        render: 'tree-select',
         multiple: true,
         required: false,
-        props: { label: 'name', value: 'id' }
+        leftOnly: true,
+        checkStrictly: false
       }
     ]
   }
@@ -239,6 +240,7 @@ async function onDelete(id: number) {
 
 function onBatchEdit(ids: number[]) {
   state.popupFormConfig.disabledProps = ['parentId', 'type']
+  state.popupFormConfig.hideProps = ['parentId']
   state.popupFormConfig.title = '修改部门/职位'
   state.popupFormConfig.isEdit = true
   state.popupFormConfig.ids = [...ids]
@@ -272,13 +274,13 @@ async function listDept() {
   const { data } = await listDeptApi(toRaw(state.query))
   const { data: treeDept } = await treeDeptApi()
   const { data: userList } = await listUserApi({})
-  const { data: roleList } = await listRoleApi()
+  const { data: deptRoleTree } = await deptRoleApi()
   state.tableConfig.loading = false
   state.tableData = data
   state.popupFormConfig.formItemConfigs[0].data = treeDept
   state.popupFormConfig.formItemConfigs[3].data = userList
   state.popupFormConfig.formItemConfigs[4].data = data
-  state.roleAssignFormConfig.formItemConfigs[2].data = roleList
+  state.roleAssignFormConfig.formItemConfigs[2].data = deptRoleTree
   await nextTick(() => {
     tableRef.value.expandAll(!tableHeaderRef.value.getUnfold())
   })

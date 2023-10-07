@@ -20,6 +20,14 @@ export function listDeptApi(params: SystemDeptQueryVo) {
   return request.get<Array<SystemDeptRespVo>>('/system/dept', { params })
 }
 
+export function deptUserApi() {
+  return request.get<Array<SystemDeptRespVo>>('/system/dept/dept-user')
+}
+
+export function deptRoleApi() {
+  return request.get<Array<SystemDeptRespVo>>('/system/dept/dept-role')
+}
+
 export function treeDeptApi() {
   return request.get<Array<SystemDeptRespVo>>('/system/dept/tree')
 }

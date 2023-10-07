@@ -123,9 +123,12 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
             //筛选类型为部门且在当前返回数据中没有上级的部门, 以此为顶级来封装树形数据
             if (Objects.equals(dept.getType(), DEPT.getCode()) && !deptIds.contains(dept.getParentId())) {
                 //递归封装数据
-                dept.setChildren(fillTreeData(list, dept.getId()));
+                List<SystemDept> children = fillTreeData(list, dept.getId());
+                //合并数据, 考虑到可能原来的dept对象中就已经带了children过来, 这里如果直接setChildren, 就会把原本的覆盖了
+                dept.setChildren(CollUtil.unionAll(children, dept.getChildren()));
                 result.add(dept);
             }
+
         }
         return result;
     }
@@ -206,7 +209,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
         for (SystemDept dept : list) {
             if (Objects.equals(dept.getParentId(), id)) {
                 List<SystemDept> children = fillTreeData(list, dept.getId());
-                if (CollUtil.isNotEmpty(children)) dept.setChildren(children);
+                dept.setChildren(CollUtil.unionAll(children, dept.getChildren()));
                 result.add(dept);
             }
         }

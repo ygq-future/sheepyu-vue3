@@ -23,6 +23,7 @@ public enum DeptTypeEnum implements IterableEnum {
     DEPT(0),    //部门
     POST(1),    //职位
     USER(2),    //用户
+    ROLE(3),    //角色
     ;
     private final int code;
 

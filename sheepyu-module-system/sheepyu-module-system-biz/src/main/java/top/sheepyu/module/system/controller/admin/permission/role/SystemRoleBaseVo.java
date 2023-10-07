@@ -18,6 +18,10 @@ public class SystemRoleBaseVo {
     @NotBlank(message = "角色名称不能为空")
     private String name;
 
+    @ApiModelProperty("所属部门")
+    @NotNull(message = "所属部门不能为空")
+    private Long deptId;
+
     @ApiModelProperty("角色code")
     @NotBlank(message = "角色code不能为空")
     private String code;

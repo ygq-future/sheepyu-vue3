@@ -167,8 +167,7 @@ import {
   roleByUserApi,
   updateUserApi
 } from '@/api/system/user'
-import { listDeptApi } from '@/api/system/dept'
-import { listRoleApi } from '@/api/system/role'
+import { deptRoleApi, listDeptApi } from '@/api/system/dept'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
@@ -250,7 +249,7 @@ const state = reactive<{
       { label: '邮箱', prop: 'email', render: 'text', width: 130 },
       { label: '手机号码', prop: 'mobile', render: 'text', width: 120 },
       { label: '头像', prop: 'avatar', render: 'img', width: 100 },
-      { label: '权限组/项', prop: 'deptNames', render: 'text', width: 150 },
+      { label: '部门/职位', prop: 'deptNames', render: 'text', width: 150 },
       { label: '状态', prop: 'status', dictRender: 'switch', dictType: DictTypeEnum.COMMON_STATUS, width: 90 },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_USER_TYPE, width: 90 },
       { label: '备注', prop: 'remark', render: 'text', width: 100 },
@@ -274,9 +273,9 @@ const state = reactive<{
       { label: '手机号码', prop: 'mobile', required: false, placeholder: '手机号码', render: 'text' },
       { label: '头像', prop: 'avatar', required: false, placeholder: '头像地址', render: 'image-upload' },
       {
-        label: '权限组/项',
+        label: '部门/职位',
         prop: 'deptIds',
-        placeholder: '权限组/项',
+        placeholder: '部门/职位',
         render: 'tree-select',
         required: false,
         multiple: true,
@@ -301,10 +300,11 @@ const state = reactive<{
         label: '角色',
         prop: 'roleIds',
         placeholder: '请选择角色',
-        render: 'select',
+        render: 'tree-select',
         multiple: true,
         required: false,
-        props: { label: 'name', value: 'id' }
+        leftOnly: true,
+        checkStrictly: false
       }
     ]
   }
@@ -381,11 +381,11 @@ async function findUser(id: number) {
 async function pageUser() {
   state.tableConfig.loading = true
   const { data } = await pageUserApi(toRaw(state.query))
-  const { data: roleList } = await listRoleApi()
+  const { data: deptRoleTree } = await deptRoleApi()
   const { data: deptList } = await listDeptApi({})
   state.comSearchConfig[0].data = deptList
   state.popupFormConfig.formItemConfigs[6].data = deptList
-  state.roleAssignFormConfig.formItemConfigs[2].data = roleList
+  state.roleAssignFormConfig.formItemConfigs[2].data = deptRoleTree
   state.tableConfig.loading = false
   state.tableData = data.list
   state.query.total = data.total

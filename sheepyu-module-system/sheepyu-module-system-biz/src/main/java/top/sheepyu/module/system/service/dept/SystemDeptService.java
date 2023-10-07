@@ -68,6 +68,8 @@ public interface SystemDeptService extends IServiceX<SystemDept> {
 
     /**
      * 查询此部门及子部门的部门id
+     * 此查询的结果一般不会为空, 因为会把参数的的deptIds也加入结果集
+     * 除非参数集合也是空
      *
      * @param deptIds deptIds
      * @return deptId Set
