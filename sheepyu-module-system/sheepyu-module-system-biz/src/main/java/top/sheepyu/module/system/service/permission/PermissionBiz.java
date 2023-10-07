@@ -566,6 +566,10 @@ public class PermissionBiz {
     public void initCache() {
         log.info("加载权限缓存...");
 
+        userDeptsCache.clear();
+        userRolesCache.clear();
+        deptRolesCache.clear();
+        roleMenusCache.clear();
         loadDeptRole();
         loadUserRole();
         loadRoleMenuRole();
