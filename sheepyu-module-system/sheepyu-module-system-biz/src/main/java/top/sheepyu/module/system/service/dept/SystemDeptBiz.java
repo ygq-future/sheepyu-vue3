@@ -59,7 +59,7 @@ public class SystemDeptBiz {
     public List<SystemDept> listDeptByPermission(SystemDeptQueryVo queryVo) {
         List<SystemDept> deptList = systemDeptService.listDeptByPermission(queryVo);
         deptList.forEach(dept -> {
-            if (dept.getType().equals(GROUP.getCode())) {
+            if (dept.getType().equals(DEPT.getCode())) {
                 this.fillLeaderUserInfo(dept);
             }
         });
@@ -67,14 +67,14 @@ public class SystemDeptBiz {
     }
 
     /**
-     * 查询用户所能够查询的权限项下的用户, 非用户都是禁用
+     * 查询用户所能够查询的职位下的用户, 非用户都是禁用
      *
      * @return List<SystemDept>
      */
     public List<SystemDept> listDeptUser() {
         List<SystemDept> deptList = systemDeptService.listDeptByPermission(new SystemDeptQueryVo());
         for (SystemDept dept : deptList) {
-            if (!dept.getType().equals(ITEM.getCode())) {
+            if (!dept.getType().equals(POST.getCode())) {
                 dept.setDisabled(true);
                 continue;
             }
@@ -104,7 +104,7 @@ public class SystemDeptBiz {
 
     public SystemDept findById(Long id) {
         SystemDept dept = systemDeptService.findById(id);
-        if (dept.getType().equals(GROUP.getCode())) {
+        if (dept.getType().equals(DEPT.getCode())) {
             this.fillLeaderUserInfo(dept);
         }
         this.fillQueryDeptInfo(dept);

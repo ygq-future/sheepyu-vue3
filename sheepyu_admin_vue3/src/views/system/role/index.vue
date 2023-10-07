@@ -219,14 +219,10 @@ async function findRole(id: number) {
 async function pageRole() {
   state.tableConfig.loading = true
   const { data } = await pageRoleApi(toRaw(state.query))
+  await findUserMenuList()
   state.tableConfig.loading = false
   state.tableData = data.list
   state.query.total = data.total
-}
-
-async function findMenuList() {
-  const { data } = await userMenuApi()
-  state.menuAssignFormConfig.formItemConfigs[2].data = data
 }
 
 async function findUserMenuList() {
@@ -248,8 +244,6 @@ function onClose() {
 
 onMounted(() => {
   pageRole()
-  // findMenuList()
-  findUserMenuList()
 })
 </script>
 

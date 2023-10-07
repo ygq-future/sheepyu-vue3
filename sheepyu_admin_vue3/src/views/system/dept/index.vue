@@ -134,7 +134,7 @@ const state = reactive<{
     selection: true,
     columns: [
       { label: '编号', prop: 'id', render: 'text' },
-      { label: '组名称', prop: 'name', render: 'text' },
+      { label: '名称', prop: 'name', render: 'text' },
       { label: '负责人', prop: 'leaderNicknames', render: 'text' },
       { label: '类型', prop: 'type', dictRender: 'tag', dictType: DictTypeEnum.SYSTEM_DEPT_TYPE },
       { label: '显示顺序', prop: 'sort', render: 'text' },
@@ -147,7 +147,7 @@ const state = reactive<{
     }
   },
   popupFormConfig: {
-    title: '新增组',
+    title: '新增部门/职位',
     labelWidth: 120,
     formItemConfigs: [
       {
@@ -155,9 +155,10 @@ const state = reactive<{
         prop: 'parentId',
         placeholder: '上级',
         render: 'tree-select',
+        showCheckbox: false,
         props: { label: 'name', value: 'id' }
       },
-      { label: '组名称', prop: 'name', placeholder: '组名称', render: 'text' },
+      { label: '名称', prop: 'name', placeholder: '名称', render: 'text' },
       { label: '类型', prop: 'type', dictRender: 'radio', dictType: DictTypeEnum.SYSTEM_DEPT_TYPE },
       {
         label: '负责人',
@@ -169,13 +170,13 @@ const state = reactive<{
         props: { label: 'nickname' }
       },
       {
-        label: '可查询组',
+        label: '可查询部门/职位',
         prop: 'targetDeptIds',
         required: false,
         multiple: true,
-        placeholder: '可查询组',
+        placeholder: '可查询部门/职位',
         render: 'tree-select',
-        tip: '这里表示哪些组可以查询此组及组下的所有用户(只能管理员分配)',
+        tip: '这里表示哪些部门/职位可以查询此部门/职位及其下的所有用户(只能管理员分配)',
         props: { label: 'name' }
       },
       { label: '显示顺序', prop: 'sort', placeholder: '显示顺序', render: 'number' },
@@ -188,7 +189,7 @@ const state = reactive<{
     labelWidth: 120,
     width: 500,
     formItemConfigs: [
-      { label: '组名称', prop: 'name', disabled: true },
+      { label: '名称', prop: 'name', disabled: true },
       { label: '负责人', prop: 'leaderNicknames', disabled: true, required: false },
       {
         label: '角色',
@@ -215,7 +216,7 @@ function onUnfold(value: boolean) {
 function onAdd(id?: number) {
   state.popupFormConfig.disabledProps = []
   if (id) state.form.parentId = id
-  state.popupFormConfig.title = '新增组'
+  state.popupFormConfig.title = '新增部门/职位'
   state.popupFormConfig.isEdit = false
   popupFormRef.value.show()
 }
@@ -238,7 +239,7 @@ async function onDelete(id: number) {
 
 function onBatchEdit(ids: number[]) {
   state.popupFormConfig.disabledProps = ['parentId', 'type']
-  state.popupFormConfig.title = '修改组'
+  state.popupFormConfig.title = '修改部门/职位'
   state.popupFormConfig.isEdit = true
   state.popupFormConfig.ids = [...ids]
   popupFormRef.value.show()

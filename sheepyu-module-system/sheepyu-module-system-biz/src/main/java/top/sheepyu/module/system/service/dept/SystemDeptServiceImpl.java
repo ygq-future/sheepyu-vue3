@@ -26,8 +26,8 @@ import static top.sheepyu.module.common.util.CollectionUtil.convertList;
 import static top.sheepyu.module.common.util.CollectionUtil.convertSet;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
 import static top.sheepyu.module.system.convert.dept.SystemDeptConvert.CONVERT;
-import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.GROUP;
-import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.ITEM;
+import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.DEPT;
+import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.POST;
 
 /**
  * @author ygq
@@ -92,7 +92,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
                         .like(SystemDept::getEmail, keyword).or()
                         .like(SystemDept::getName, keyword).or()
                         .like(SystemDept::getPhone, keyword)).or()
-                .eq(StrUtil.isNotBlank(keyword), SystemDept::getType, ITEM.getCode())
+                .eq(StrUtil.isNotBlank(keyword), SystemDept::getType, POST.getCode())
                 .orderByAsc(SystemDept::getSort));
     }
 
@@ -101,7 +101,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
         Set<Long> queryDeptIds = deepQueryDeptIdByUserId(getLoginUserId());
         List<SystemDept> list = list(buildQuery()
                 .inIfPresent(SystemDept::getId, queryDeptIds)
-                .eqIfPresent(SystemDept::getType, GROUP.getCode())
+                .eqIfPresent(SystemDept::getType, DEPT.getCode())
                 .orderByAsc(SystemDept::getSort));
         List<SystemDept> treeData = deptListToTree(list);
         if (SecurityFrameworkUtil.isSuperAdmin()) {
@@ -121,7 +121,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
         //循环递归封装数据
         for (SystemDept dept : list) {
             //筛选类型为部门且在当前返回数据中没有上级的部门, 以此为顶级来封装树形数据
-            if (Objects.equals(dept.getType(), GROUP.getCode()) && !deptIds.contains(dept.getParentId())) {
+            if (Objects.equals(dept.getType(), DEPT.getCode()) && !deptIds.contains(dept.getParentId())) {
                 //递归封装数据
                 dept.setChildren(fillTreeData(list, dept.getId()));
                 result.add(dept);
@@ -139,7 +139,7 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
                 .inIfPresent(SystemDept::getId, deptIds)
                 .select(SystemDept::getName, SystemDept::getType, SystemDept::getParentId));
         return convertList(list, e -> {
-            if (Objects.equals(e.getType(), GROUP.getCode())) return e.getName() + "管理员";
+            if (Objects.equals(e.getType(), DEPT.getCode())) return e.getName() + "管理员";
             return getById(e.getParentId()).getName() + "-" + e.getName();
         });
     }
