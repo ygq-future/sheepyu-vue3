@@ -40,4 +40,8 @@ public interface SystemUserRoleMapper extends BaseMapper<SystemUserRole> {
     default void deleteByUserId(Long userId) {
         delete(new LambdaQueryWrapper<SystemUserRole>().eq(SystemUserRole::getUserId, userId));
     }
+
+    default Set<Long> selectRoleIds() {
+        return convertSet(selectList(null), SystemUserRole::getRoleId);
+    }
 }

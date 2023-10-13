@@ -27,7 +27,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
 
 import static top.sheepyu.framework.security.util.SecurityFrameworkUtil.getLoginUserId;
 import static top.sheepyu.module.common.common.PageResult.emptyPage;
@@ -134,12 +133,8 @@ public class PermissionBiz {
      * @return Set<Long>
      */
     private Set<Long> getRelevancyRoleIds() {
-        Set<Long> userRoleIds = userRolesCache.values().stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
-        Set<Long> deptRoleIds = deptRolesCache.values().stream()
-                .flatMap(Collection::stream)
-                .collect(Collectors.toSet());
+        Set<Long> userRoleIds = systemUserRoleMapper.selectRoleIds();
+        Set<Long> deptRoleIds = systemDeptRoleMapper.selectRoleIds();
         return CollUtil.unionDistinct(userRoleIds, deptRoleIds);
     }
 

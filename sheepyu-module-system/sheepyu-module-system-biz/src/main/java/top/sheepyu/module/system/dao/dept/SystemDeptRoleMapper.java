@@ -40,4 +40,8 @@ public interface SystemDeptRoleMapper extends BaseMapper<SystemDeptRole> {
     default void deleteByDeptId(Long deptId) {
         delete(new LambdaQueryWrapper<SystemDeptRole>().eq(SystemDeptRole::getDeptId, deptId));
     }
+
+    default Set<Long> selectRoleIds() {
+        return convertSet(selectList(null), SystemDeptRole::getRoleId);
+    }
 }
