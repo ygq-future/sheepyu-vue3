@@ -293,7 +293,7 @@ public class PermissionBiz {
     @Transactional
     public void assignMenuToRole(Long roleId, Set<Long> menuIds) {
         if (menuIds == null) {
-            menuIds = Collections.emptySet();
+            menuIds = new HashSet<>();
         }
         roleMenusCacheLock.lock();
         try {
@@ -323,7 +323,7 @@ public class PermissionBiz {
 
     public void assignUserToDept(Long deptId, Set<Long> userIds) {
         if (userIds == null) {
-            userIds = Collections.emptySet();
+            userIds = new HashSet<>();
         }
         userDeptsCacheLock.lock();
         try {
@@ -373,7 +373,7 @@ public class PermissionBiz {
     @Transactional
     public void assignDeptToUser(Long userId, Set<Long> deptIds) {
         if (deptIds == null) {
-            deptIds = Collections.emptySet();
+            deptIds = new HashSet<>();
         }
         userDeptsCacheLock.lock();
         try {
@@ -411,7 +411,7 @@ public class PermissionBiz {
     @Transactional
     public void assignRoleToUser(Long userId, Set<Long> roleIds) {
         if (roleIds == null) {
-            roleIds = Collections.emptySet();
+            roleIds = new HashSet<>();
         }
         userRolesCacheLock.lock();
         try {
@@ -451,6 +451,9 @@ public class PermissionBiz {
      */
     @Transactional
     public void assignRoleToDept(Long deptId, Set<Long> roleIds) {
+        if (roleIds == null) {
+            roleIds = new HashSet<>();
+        }
         deptRolesCacheLock.lock();
         try {
             if (systemDeptService.isOwn(getLoginUserId(), deptId)) {

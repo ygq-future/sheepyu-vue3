@@ -48,6 +48,7 @@ public class SystemDeptBiz {
             systemDeptQueryDeptMapper.insertSourceIdAndTargetIds(deptId, targetDeptIds);
         }
         permissionBiz.assignUserToDept(deptId, createVo.getLeaderUserIds());
+        permissionBiz.assignRoleToDept(deptId, new HashSet<>());
     }
 
     @Transactional(rollbackFor = Exception.class)
