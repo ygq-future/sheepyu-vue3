@@ -5,6 +5,7 @@
       auth='system:dict'
       :buttons="['add', 'delete', 'edit']"
       :search='false'
+      :rows='state.selection'
       @refresh='listDictData'
       @add='onAdd'
       @batch-delete='onBatchDelete'
@@ -25,6 +26,7 @@
     <Table
       ref='tableRef'
       auth='system:dict'
+      v-model:selection='state.selection'
       :data='state.tableData'
       :table-config='state.tableConfig'
       @fieldChange='onFieldChange'
