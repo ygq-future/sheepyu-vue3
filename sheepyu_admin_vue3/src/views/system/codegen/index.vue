@@ -329,6 +329,10 @@ async function tableList(keyword: string) {
 onMounted(() => {
   pageCodegen()
 })
+
+onActivated(() => {
+  pageCodegen()
+})
 </script>
 
 <script lang='ts'>

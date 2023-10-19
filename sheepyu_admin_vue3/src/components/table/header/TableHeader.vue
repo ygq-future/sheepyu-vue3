@@ -51,28 +51,28 @@
 
           <el-tooltip
             v-if="buttons.includes('unfold')"
-            :content="state.unfold ? '全部展开' : '全部折叠'"
+            :content="state.unfold ? '全部折叠' : '全部展开'"
             :show-after='500'
             placement='top'
           >
             <div class='button-item'>
-              <el-button v-blur :type="state.unfold ? 'warning' : 'danger'" @click='onUnfold'>
-                <MyIcon :name='state.unfold ? "fa fa-folder-open" : "fa fa-folder"' />
-                <span class='button-text'>{{ state.unfold ? '全部展开' : '全部折叠' }}</span>
+              <el-button v-blur :type="state.unfold ? 'danger' : 'warning'" @click='onUnfold'>
+                <MyIcon :name='state.unfold ? "fa fa-folder" : "fa fa-folder-open"' />
+                <span class='button-text'>{{ state.unfold ? '全部折叠' : '全部展开' }}</span>
               </el-button>
             </div>
           </el-tooltip>
 
           <el-tooltip
             v-if="buttons.includes('unfold2')"
-            :content="state.unfold ? '展开第二层' : '折叠'"
+            :content="state.unfold ? '折叠' : '展开第二层'"
             :show-after='500'
             placement='top'
           >
             <div class='button-item'>
-              <el-button v-blur :type="state.unfold ? 'warning' : 'danger'" @click='onUnfold(2)'>
-                <MyIcon :name='state.unfold ? "fa fa-folder-open" : "fa fa-folder"' />
-                <span class='button-text'>{{ state.unfold ? '展开第二层' : '折叠' }}</span>
+              <el-button v-blur :type="state.unfold ? 'danger' : 'warning'" @click='onUnfold(2)'>
+                <MyIcon :name='state.unfold ? "fa fa-folder" : "fa fa-folder-open"' />
+                <span class='button-text'>{{ state.unfold ? '折叠' : '展开第二层' }}</span>
               </el-button>
             </div>
           </el-tooltip>
@@ -170,13 +170,16 @@ const props = withDefaults(defineProps<{
   enableShrink?: boolean
   //权限前缀
   auth?: string
+  //是否默认展开
+  unfold?: boolean
 }>(), {
   comSearch: true,
   search: true,
   buttons: () => [],
   rows: () => [],
   rowKey: 'id',
-  auth: 'none'
+  auth: 'none',
+  unfold: false
 })
 //是否开启紧凑模式, 开启之后不会显示按钮的文字, 只会显示icon并带有title提示
 const shrink = computed(() => props.enableShrink || config.layout.shrink)
@@ -198,11 +201,15 @@ const emits = defineEmits<{
 
 const state = reactive({
   searchValue: '',
-  unfold: true,
+  unfold: props.unfold,
   comSearch: false,
   limit: 999
 })
 
+/**
+ * 点击展开方法
+ * @param limit 指定展开多少级,默认展开全部
+ */
 function onUnfold(limit: number = 999) {
   emits('unfold', state.unfold, state.limit = limit)
   state.unfold = !state.unfold

@@ -221,6 +221,10 @@ function onClose() {
 onMounted(() => {
   pageDictType()
 })
+
+onActivated(() => {
+  pageDictType()
+})
 </script>
 
 <script lang='ts'>

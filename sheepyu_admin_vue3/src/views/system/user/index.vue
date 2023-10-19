@@ -416,6 +416,10 @@ function onClose() {
 onMounted(() => {
   pageUser()
 })
+
+onActivated(() => {
+  pageUser()
+})
 </script>
 
 <script lang='ts'>

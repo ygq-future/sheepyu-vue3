@@ -330,6 +330,10 @@ watch(() => state.form.type, value => {
 onMounted(() => {
   findMenuList()
 })
+
+onActivated(() => {
+  findMenuList()
+})
 </script>
 
 <script lang='ts'>

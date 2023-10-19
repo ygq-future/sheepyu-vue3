@@ -168,6 +168,10 @@ async function pageFile() {
 onMounted(() => {
   pageFile()
 })
+
+onActivated(() => {
+  pageFile()
+})
 </script>
 
 <script lang='ts'>

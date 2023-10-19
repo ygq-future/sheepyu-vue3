@@ -253,6 +253,10 @@ function onClose() {
 onMounted(() => {
   pageRole()
 })
+
+onActivated(() => {
+  pageRole()
+})
 </script>
 
 <script lang='ts'>

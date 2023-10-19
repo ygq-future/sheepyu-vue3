@@ -7,6 +7,7 @@
       :buttons="['add', 'edit', 'unfold']"
       :rows='state.selection'
       :com-search='false'
+      unfold
       @refresh='listDept'
       @add='onAdd'
       @unfold='onUnfold'
@@ -282,7 +283,7 @@ async function listDept() {
   state.popupFormConfig.formItemConfigs[4].data = data
   state.roleAssignFormConfig.formItemConfigs[2].data = deptRoleTree
   await nextTick(() => {
-    tableRef.value.expandAll(!tableHeaderRef.value.getUnfold())
+    tableRef.value.expandAll(tableHeaderRef.value.getUnfold())
   })
 }
 
@@ -307,6 +308,10 @@ watch(
 )
 
 onMounted(() => {
+  listDept()
+})
+
+onActivated(() => {
   listDept()
 })
 </script>
