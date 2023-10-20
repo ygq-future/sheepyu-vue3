@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import top.sheepyu.module.system.controller.admin.permission.role.SystemRoleQueryVo;
 
-import java.util.List;
+import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
 /**
@@ -15,9 +15,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class SystemRoleQueryBo extends SystemRoleQueryVo {
-    @ApiModelProperty("角色id")
-    private Set<Long> roleIds;
-
     @ApiModelProperty("部门ids")
+    @NotEmpty(message = "查询的部门id不能为空")
     private Set<Long> deptIds;
 }

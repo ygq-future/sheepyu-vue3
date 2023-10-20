@@ -96,8 +96,7 @@ public class SystemRoleServiceImpl extends ServiceImplX<SystemRoleMapper, System
         String keyword = queryBo.getKeyword();
         //只有超级管理员才能查看所有角色, 其他的人只能查看自己部门下人员创建的角色
         return page(queryBo, buildQuery()
-                .inIfPresent(SystemRole::getDeptId, queryBo.getDeptIds()).or()
-                .in(SystemRole::getId, queryBo.getRoleIds())
+                .inIfPresent(SystemRole::getDeptId, queryBo.getDeptIds())
                 .and(StrUtil.isNotBlank(keyword), e -> e
                         .like(SystemRole::getName, keyword).or()
                         .like(SystemRole::getCode, keyword))

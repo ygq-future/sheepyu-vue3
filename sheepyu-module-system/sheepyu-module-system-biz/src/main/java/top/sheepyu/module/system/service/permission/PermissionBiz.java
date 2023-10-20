@@ -113,7 +113,6 @@ public class PermissionBiz {
         }
     }
 
-    @Transactional
     public void deleteRole(String ids) {
         List<Long> roleIds = MyStrUtil.splitToLong(ids, ',');
         if (CollUtil.isEmpty(roleIds)) {
@@ -157,23 +156,26 @@ public class PermissionBiz {
     /**
      * 角色分页
      * 根据用户的权限查询角色, 如果是管理员角色, 返回所有
-     * 否则只返回自己部门下及其子部门下的角色
+     * 否则只返回自己子部门下的角色
      *
      * @return PageResult<SystemRole>
      */
     public PageResult<SystemRole> pageRoleByPermission(SystemRoleQueryVo queryVo) {
         SystemRoleQueryBo queryBo = BeanUtil.copyProperties(queryVo, SystemRoleQueryBo.class);
         Long userId = getLoginUserId();
-        //获取用户对应的所有角色
-        Set<Long> roleIds = findRoleIdsByUserId(userId);
-        if (CollUtil.isEmpty(roleIds)) {
+        //如果用户没有部门, 直接返回空
+        Set<Long> userDeptIds = userDeptsCache.get(userId);
+        if (CollUtil.isEmpty(userDeptIds)) {
             return emptyPage();
         }
 
+        //获取用户对应的所有角色
+        Set<Long> roleIds = findRoleIdsByUserId(userId);
         //如果带了部门查询条件, 就查询此部门及其子部门下的所有部门id
-        Set<Long> deptIds;
-        if (queryBo.getDeptId() != null) {
-            deptIds = systemDeptService.deepQueryDeptIdByDeptId(Collections.singleton(queryBo.getDeptId()));
+        Set<Long> deptIds = null;
+        Long deptId = queryBo.getDeptId();
+        if (deptId != null) {
+            deptIds = systemDeptService.deepQueryDeptIdByDeptId(Collections.singleton(deptId));
             queryBo.setDeptIds(deptIds);
         }
 
@@ -182,11 +184,9 @@ public class PermissionBiz {
             return systemRoleService.pageAllRole(queryBo);
         }
 
-        //将用户拥有的角色加入条件
-        queryBo.setRoleIds(roleIds);
         //如果没有带查询条件, 就查询此用户所在的部门及其所在部门的子部门id
-        if (queryBo.getDeptId() == null) {
-            deptIds = systemDeptService.deepQueryDeptIdByDeptId(userDeptsCache.get(userId));
+        if (deptIds == null) {
+            deptIds = systemDeptService.deepQueryDeptIdByDeptId(userDeptIds);
             queryBo.setDeptIds(deptIds);
         }
         return systemRoleService.pageRoleByPermission(queryBo);
@@ -194,38 +194,30 @@ public class PermissionBiz {
 
     /**
      * 根据用户的权限查询角色, 如果是管理员角色, 返回所有
-     * 否则只返回自己部门及其子部门下的角色
+     * 否则只返回自己子部门下的角色
      *
      * @return List<SystemRole>
      */
     public List<SystemRole> listRoleByPermission() {
         Long userId = getLoginUserId();
-        //获取用户对应的所有角色
-        Set<Long> roleIds = findRoleIdsByUserId(userId);
-        if (CollUtil.isEmpty(roleIds)) {
+        //获取用户部门
+        Set<Long> userDeptIds = userDeptsCache.get(userId);
+        //如果用户没有部门就直接返回空
+        if (CollUtil.isEmpty(userDeptIds)) {
             return Collections.emptyList();
         }
+
+        //获取用户对应的所有角色
+        Set<Long> roleIds = findRoleIdsByUserId(userId);
         //如果有超级管理员角色
         if (systemRoleService.hasAnySuperAdmin(roleIds)) {
             return systemRoleService.listAllRole();
         }
 
         //获取用户所属部门及其子部门id
-        Set<Long> deptIds = systemDeptService.deepQueryDeptIdByDeptId(userDeptsCache.get(userId));
-        //如果为空就只返回用户自己所拥有的
-        if (CollUtil.isEmpty(deptIds)) {
-            return systemRoleService.listByIds(roleIds);
-        }
+        Set<Long> deptIds = systemDeptService.deepQueryDeptIdByDeptId(userDeptIds);
         //根据部门ids查询角色
-        List<SystemRole> roleList = systemRoleService.listRoleByDeptIds(deptIds);
-        //取出roleId
-        Set<Long> creatorRoleIdList = convertSet(roleList, SystemRole::getId);
-        //排除重复
-        Collection<Long> userRoleIds = CollUtil.subtract(roleIds, creatorRoleIdList);
-        if (CollUtil.isNotEmpty(userRoleIds)) {
-            roleList.addAll(systemRoleService.listByIds(userRoleIds));
-        }
-        return roleList;
+        return systemRoleService.listRoleByDeptIds(deptIds);
     }
 
     private static Set<Long> findRoleIdsByUserIds(Set<Long> userIds) {
