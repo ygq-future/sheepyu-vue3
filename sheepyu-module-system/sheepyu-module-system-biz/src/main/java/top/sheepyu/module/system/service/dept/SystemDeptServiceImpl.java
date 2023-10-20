@@ -120,8 +120,8 @@ public class SystemDeptServiceImpl extends ServiceImplX<SystemDeptMapper, System
         Set<Long> deptIds = convertSet(list, SystemDept::getId);
         //循环递归封装数据
         for (SystemDept dept : list) {
-            //筛选类型为部门且在当前返回数据中没有上级的部门, 以此为顶级来封装树形数据
-            if (Objects.equals(dept.getType(), DEPT.getCode()) && !deptIds.contains(dept.getParentId())) {
+            //当部门为顶级部门或者部门已经没有上级就封装子数据
+            if (Objects.equals(dept.getParentId(), 0L) || !deptIds.contains(dept.getParentId())) {
                 //递归封装数据
                 List<SystemDept> children = fillTreeData(list, dept.getId());
                 //合并数据, 考虑到可能原来的dept对象中就已经带了children过来, 这里如果直接setChildren, 就会把原本的覆盖了

@@ -20,8 +20,9 @@ import top.sheepyu.module.system.service.user.SystemUserService;
 
 import java.util.*;
 
+import static top.sheepyu.framework.security.util.SecurityFrameworkUtil.getLoginUserId;
 import static top.sheepyu.module.common.enums.CommonStatusEnum.DISABLE;
-import static top.sheepyu.module.common.util.CollectionUtil.convertList;
+import static top.sheepyu.module.common.util.CollectionUtil.*;
 import static top.sheepyu.module.system.enums.dept.DeptTypeEnum.*;
 
 /**
@@ -111,12 +112,21 @@ public class SystemDeptBiz {
      */
     public List<SystemDept> listDeptRole() {
         List<SystemDept> deptList = systemDeptService.listDeptByPermission(new SystemDeptQueryVo());
+        //查询用户所拥有的角色
+        Set<Long> hasRoleIds = permissionBiz.findRoleIdsByUserId(getLoginUserId());
+        List<SystemRole> hasRoles = new ArrayList<>();
+        if (CollUtil.isNotEmpty(hasRoleIds)) {
+            hasRoles = systemRoleService.listByIds(hasRoleIds);
+        }
         for (SystemDept dept : deptList) {
             List<SystemRole> roleList = systemRoleService.listRoleByDeptIds(Collections.singleton(dept.getId()));
             if (CollUtil.isEmpty(roleList)) {
                 dept.setDisabled(true);
                 continue;
             }
+            //判断所拥有的角色是否已经在自己部门的管理下了,如果不在就要添加到根节点数据
+            List<Long> containRoleIds = convertListFilter(roleList, SystemRole::getId, e -> hasRoleIds.contains(e.getId()));
+            hasRoles = filterList(hasRoles, e -> !containRoleIds.contains(e.getId()));
             //把Role和Dept同化放在一颗树上
             List<SystemDept> roleDeptChildren = convertList(roleList, e -> {
                 SystemDept roleDept = new SystemDept();
@@ -127,6 +137,18 @@ public class SystemDeptBiz {
                 return roleDept;
             });
             dept.setChildren(roleDeptChildren);
+        }
+        //说明这些角色是自己已经拥有的,但是没有在自己部门的管理下面
+        if (CollUtil.isNotEmpty(hasRoles)) {
+            List<SystemDept> hasRoleDepts = convertList(hasRoles, e -> {
+                SystemDept roleDept = new SystemDept();
+                roleDept.setId(e.getId())
+                        .setParentId(0L)
+                        .setName(e.getName().concat("(role)"))
+                        .setType(ROLE.getCode());
+                return roleDept;
+            });
+            deptList.addAll(hasRoleDepts);
         }
         return systemDeptService.deptListToTree(deptList);
     }

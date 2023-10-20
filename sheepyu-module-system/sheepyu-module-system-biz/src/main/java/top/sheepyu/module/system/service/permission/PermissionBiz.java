@@ -34,7 +34,8 @@ import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.exception.CommonException.exception;
 import static top.sheepyu.module.common.util.CollectionUtil.convertSet;
 import static top.sheepyu.module.common.util.CollectionUtil.convertSetFilter;
-import static top.sheepyu.module.system.constants.ErrorCodeConstants.*;
+import static top.sheepyu.module.system.constants.ErrorCodeConstants.ASSIGN_TARGET_IS_OWN;
+import static top.sheepyu.module.system.constants.ErrorCodeConstants.ROLE_HAS_RELEVANCY;
 
 /**
  * @author ygq
@@ -222,11 +223,23 @@ public class PermissionBiz {
         return roleIds;
     }
 
-    private Set<Long> findRoleIdsByUserId(Long userId) {
+    /**
+     * 查询用户所拥有的角色
+     *
+     * @param userId 用户id
+     * @return 返回用户所有拥有的角色
+     */
+    public Set<Long> findRoleIdsByUserId(Long userId) {
         return findRoleIdsByUserIds(Collections.singleton(userId));
     }
 
-    public Set<Long> findRoleByUserId(Long userId) {
+    /**
+     * 只获取与用户直接关联的角色
+     *
+     * @param userId 用户id
+     * @return 返回用户直接关联的角色
+     */
+    public Set<Long> findDirectRoleIdByUserId(Long userId) {
         return userRolesCache.get(userId);
     }
 

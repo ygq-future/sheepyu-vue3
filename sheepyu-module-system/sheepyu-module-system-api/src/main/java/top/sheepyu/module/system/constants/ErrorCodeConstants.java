@@ -79,5 +79,5 @@ public interface ErrorCodeConstants {
     ErrorCode DEMO_NOT_EXISTS = new ErrorCode(100_012_001, "测试不存在!");
 
     //permission相关 100_013_001
-    ErrorCode ASSIGN_TARGET_IS_OWN = new ErrorCode(100_013_001, "分配的目标不能所属于自己!");
+    ErrorCode ASSIGN_TARGET_IS_OWN = new ErrorCode(100_013_001, "不能给自己所在部门/职位分配角色!");
 }

@@ -174,7 +174,7 @@ public class SystemPermissionController {
     @ApiOperation("获取用户的角色id")
     @PreAuthorize("@ss.hasPermission('system:role:query')")
     public Result<Set<Long>> listRoleByUserId(@PathVariable Long userId) {
-        return success(permissionBiz.findRoleByUserId(userId));
+        return success(permissionBiz.findDirectRoleIdByUserId(userId));
     }
 
     @GetMapping("/menu-by-role/{roleId}")
