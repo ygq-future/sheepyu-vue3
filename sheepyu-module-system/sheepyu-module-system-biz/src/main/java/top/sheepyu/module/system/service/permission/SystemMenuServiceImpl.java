@@ -101,13 +101,12 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
             //不能操作系统重要的菜单
             checkForbidList(Collections.singletonList(id));
             SystemMenu menu = findByIdThrowIfNotExists(id);
-            Set<Long> childrenIds = null;
+            Set<Long> childrenIds = CollUtil.newHashSet(id);
             //如果不是按钮,说明可能有下级数据,将同步更新状态
             if (!Objects.equals(menu.getType(), BUTTON.getCode())) {
                 //深度查询指定菜单的所有子集id
                 List<SystemMenu> list = lambdaQuery().select(SystemMenu::getId, SystemMenu::getParentId).list();
-                childrenIds = findTreeIds(id, list);
-                childrenIds.add(id);
+                childrenIds.addAll(findTreeIds(id, list));
             }
             int status = Objects.equals(menu.getStatus(), ENABLE.getCode()) ? DISABLE.getCode() : ENABLE.getCode();
             boolean result = lambdaUpdate()
