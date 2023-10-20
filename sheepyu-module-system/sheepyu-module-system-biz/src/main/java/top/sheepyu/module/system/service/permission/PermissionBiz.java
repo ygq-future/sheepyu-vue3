@@ -32,8 +32,7 @@ import static top.sheepyu.framework.security.util.SecurityFrameworkUtil.getLogin
 import static top.sheepyu.module.common.common.PageResult.emptyPage;
 import static top.sheepyu.module.common.enums.UserTypeEnum.ADMIN;
 import static top.sheepyu.module.common.exception.CommonException.exception;
-import static top.sheepyu.module.common.util.CollectionUtil.convertSet;
-import static top.sheepyu.module.common.util.CollectionUtil.convertSetFilter;
+import static top.sheepyu.module.common.util.CollectionUtil.*;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.ASSIGN_TARGET_IS_OWN;
 import static top.sheepyu.module.system.constants.ErrorCodeConstants.ROLE_HAS_RELEVANCY;
 
@@ -137,6 +136,22 @@ public class PermissionBiz {
         Set<Long> userRoleIds = systemUserRoleMapper.selectRoleIds();
         Set<Long> deptRoleIds = systemDeptRoleMapper.selectRoleIds();
         return CollUtil.unionDistinct(userRoleIds, deptRoleIds);
+    }
+
+    /**
+     * 填充角色的部门信息
+     *
+     * @param roles 角色
+     */
+    public void fillRoleDeptName(Collection<SystemRole> roles) {
+        if (CollUtil.isEmpty(roles)) return;
+        Set<Long> deptIds = convertSet(roles, SystemRole::getDeptId);
+        List<SystemDept> deptList = systemDeptService.lambdaQuery()
+                .in(SystemDept::getId, deptIds)
+                .select(SystemDept::getId, SystemDept::getName)
+                .list();
+        Map<Long, String> deptMap = convertMap(deptList, SystemDept::getId, SystemDept::getName);
+        roles.forEach(r -> r.setDeptName(deptMap.get(r.getDeptId())));
     }
 
     /**

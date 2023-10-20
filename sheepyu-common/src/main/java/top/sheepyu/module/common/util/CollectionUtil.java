@@ -1,8 +1,6 @@
 package top.sheepyu.module.common.util;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -30,5 +28,13 @@ public class CollectionUtil {
 
     public static <T, U> List<U> convertListFilter(Collection<T> collection, Function<T, U> fun, Predicate<T> predicate) {
         return collection.stream().filter(predicate).map(fun).collect(Collectors.toList());
+    }
+
+    public static <T, K, V> Map<K, V> convertMap(Collection<T> collection, Function<T, K> key, Function<T, V> value) {
+        Map<K, V> res = new HashMap<>();
+        for (T t : collection) {
+            res.put(key.apply(t), value.apply(t));
+        }
+        return res;
     }
 }

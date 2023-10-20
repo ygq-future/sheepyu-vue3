@@ -132,6 +132,7 @@ const state = reactive<{
     pagination: true,
     columns: [
       { label: '角色编号', prop: 'id', render: 'text' },
+      { label: '所属部门', prop: 'deptName', render: 'text' },
       { label: '角色名称', prop: 'name', render: 'text' },
       { label: '角色编码', prop: 'code', render: 'text' },
       { label: '创建者', prop: 'creator', render: 'text' },
@@ -170,6 +171,7 @@ const state = reactive<{
 })
 
 function onAdd() {
+  state.popupFormConfig.hideProps = []
   state.popupFormConfig.title = '新增角色'
   state.popupFormConfig.isEdit = false
   popupFormRef.value.show()

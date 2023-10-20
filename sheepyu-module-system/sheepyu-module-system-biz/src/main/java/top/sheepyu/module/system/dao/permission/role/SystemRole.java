@@ -1,5 +1,6 @@
 package top.sheepyu.module.system.dao.permission.role;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -15,6 +16,8 @@ import top.sheepyu.framework.mybatisplus.core.model.BaseModel;
 public class SystemRole extends BaseModel {
     private Long id;
     private Long deptId;
+    @TableField(exist = false)
+    private String deptName;
     private String name;
     private String code;
     private Integer sort;

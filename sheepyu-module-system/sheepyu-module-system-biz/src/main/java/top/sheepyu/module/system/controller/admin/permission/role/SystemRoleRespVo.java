@@ -17,5 +17,8 @@ public class SystemRoleRespVo extends SystemRoleBaseVo {
     private Long id;
 
     @ApiModelProperty("创建者")
+    private String deptName;
+
+    @ApiModelProperty("创建者")
     private String creator;
 }

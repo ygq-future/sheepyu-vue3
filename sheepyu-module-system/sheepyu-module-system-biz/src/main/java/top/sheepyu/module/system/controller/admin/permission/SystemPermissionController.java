@@ -120,6 +120,7 @@ public class SystemPermissionController {
     @PreAuthorize("@ss.hasPermission('system:role:query')")
     public Result<PageResult<SystemRoleRespVo>> pageRoleByPermission(SystemRoleQueryVo queryVo) {
         PageResult<SystemRole> result = permissionBiz.pageRoleByPermission(queryVo);
+        permissionBiz.fillRoleDeptName(result.getList());
         return success(SystemRoleConvert.CONVERT.convertPage(result));
     }
 
@@ -128,6 +129,7 @@ public class SystemPermissionController {
     @PreAuthorize("@ss.hasPermission('system:role:query')")
     public Result<List<SystemRoleRespVo>> listRoleByPermission() {
         List<SystemRole> list = permissionBiz.listRoleByPermission();
+        permissionBiz.fillRoleDeptName(list);
         return success(SystemRoleConvert.CONVERT.convertList(list));
     }
 
