@@ -6,9 +6,10 @@ import cn.hutool.json.JSONUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static top.sheepyu.module.common.util.CollectionUtil.convertList;
 
 /**
  * @author ygq
@@ -75,6 +76,23 @@ public class RedisUtil {
         return value.toString();
     }
 
+    public Set<String> getKeysByPrefix(String prefix) {
+        Set<String> keys = redisTemplate.keys(prefix.concat("*"));
+        return keys == null ? Collections.emptySet() : keys;
+    }
+
+    public List<Object> getByKeys(Collection<String> keys) {
+        return redisTemplate.opsForValue().multiGet(keys);
+    }
+
+    public <T> List<T> getByKeys(Collection<String> keys, Class<T> clazz) {
+        List<Object> objects = getByKeys(keys);
+        for (Object object : objects) {
+            clazz.cast(object);
+        }
+        return convertList(objects, obj -> obj.getClass().isAssignableFrom(clazz) ? clazz.cast(obj) : null);
+    }
+
     public void sadd(String key, String value) {
         redisTemplate.opsForSet().add(key, value);
     }
@@ -102,6 +120,10 @@ public class RedisUtil {
 
     public void del(String key) {
         redisTemplate.delete(key);
+    }
+
+    public void del(Collection<String> keys) {
+        redisTemplate.delete(keys);
     }
 
     public void inr(String key) {

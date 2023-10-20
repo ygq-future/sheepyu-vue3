@@ -16,6 +16,7 @@ import top.sheepyu.framework.security.core.service.SecurityRedisService;
 import top.sheepyu.framework.security.util.SecurityFrameworkUtil;
 import top.sheepyu.module.common.common.PageParam;
 import top.sheepyu.module.common.common.PageResult;
+import top.sheepyu.module.common.enums.CommonStatusEnum;
 import top.sheepyu.module.system.controller.admin.user.vo.*;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserLoginVo;
 import top.sheepyu.module.system.controller.app.user.vo.AppUserRegisterVo;
@@ -170,6 +171,11 @@ public class SystemUserBiz {
 
     @Transactional(rollbackFor = Exception.class)
     public void updateUser(SystemUserUpdateVo updateVo) {
+        Integer status = updateVo.getStatus();
+        //如果修改为禁用用户, 就下线
+        if (Objects.equals(CommonStatusEnum.DISABLE.getCode(), status)) {
+            securityRedisService.offlineUser(updateVo.getId());
+        }
         systemUserService.updateUser(updateVo);
         Long userId = updateVo.getId();
         permissionBiz.assignDeptToUser(userId, updateVo.getDeptIds());
@@ -205,6 +211,8 @@ public class SystemUserBiz {
         //说明被删除用户没有部门或者所属的部门/职位都是隶属于此用户下, 这样可以直接删除
         systemUserService.deleteUser(userId);
         systemUserRoleMapper.deleteByUserId(userId);
+        //下线user
+        securityRedisService.offlineUser(userId);
     }
 
     public LoginUser loginByEmail(@Valid EmailLoginVo loginVo) {
