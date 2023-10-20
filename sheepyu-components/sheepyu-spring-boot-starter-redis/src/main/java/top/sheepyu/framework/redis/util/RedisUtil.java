@@ -61,7 +61,7 @@ public class RedisUtil {
 
     public <T> T getObj(String key, Class<T> clazz) {
         Object value = redisTemplate.opsForValue().get(key);
-        if (value == null) {
+        if (value == null || !value.getClass().isAssignableFrom(clazz)) {
             return null;
         }
         return clazz.cast(value);

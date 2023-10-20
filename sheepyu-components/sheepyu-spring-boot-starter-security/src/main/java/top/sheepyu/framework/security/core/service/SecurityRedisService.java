@@ -62,5 +62,6 @@ public class SecurityRedisService {
         }
     }
 
-
+    public void offlineUser(Long userId) {
+    }
 }
