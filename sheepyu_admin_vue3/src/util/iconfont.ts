@@ -2,8 +2,8 @@ import { loadCss } from '@/util/common'
 import * as elIcons from '@element-plus/icons-vue'
 
 const cssUrls = [
-  '//at.alicdn.com/t/c/font_3876395_n8wkznhweqo.css',
-  '//cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
+  'https://at.alicdn.com/t/c/font_3876395_n8wkznhweqo.css',
+  'https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
 ]
 
 export default function init() {
