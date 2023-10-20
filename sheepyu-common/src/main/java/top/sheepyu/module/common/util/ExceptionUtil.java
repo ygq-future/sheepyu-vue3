@@ -1,9 +1,12 @@
 package top.sheepyu.module.common.util;
 
-import java.io.IOException;
+import cn.hutool.core.io.IoUtil;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+@Slf4j
 public class ExceptionUtil {
     public static String getMessage(Throwable e) {
         StringWriter sw = null;
@@ -16,16 +19,8 @@ public class ExceptionUtil {
             pw.flush();
             sw.flush();
         } finally {
-            if (sw != null) {
-                try {
-                    sw.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-            if (pw != null) {
-                pw.close();
-            }
+            IoUtil.close(sw);
+            IoUtil.close(pw);
         }
         return sw.toString();
     }

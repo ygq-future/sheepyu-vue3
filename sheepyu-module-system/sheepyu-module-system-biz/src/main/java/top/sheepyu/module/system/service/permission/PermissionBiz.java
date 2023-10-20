@@ -314,8 +314,6 @@ public class PermissionBiz {
 
             log.info("assignMenuToRole: 分配角色菜单, 更新角色菜单缓存");
             roleMenusCache.put(roleId, menuIds);
-        } catch (Exception e) {
-            throw exception(ASSIGN_MENU_TO_ROLE_FAILED);
         } finally {
             roleMenusCacheLock.unlock();
         }
@@ -357,8 +355,6 @@ public class PermissionBiz {
                     userDeptsCache.get(userId).remove(deptId);
                 }
             });
-        } catch (Exception e) {
-            throw exception(ASSIGN_DEPT_TO_USER_FAILED);
         } finally {
             userDeptsCacheLock.unlock();
         }
@@ -394,8 +390,6 @@ public class PermissionBiz {
 
             log.info("assignDeptToUser: 分配用户的(部门/职位), 更新用户(部门/职位)缓存");
             userDeptsCache.put(userId, deptIds);
-        } catch (Exception e) {
-            throw exception(ASSIGN_DEPT_TO_USER_FAILED);
         } finally {
             userDeptsCacheLock.unlock();
         }
@@ -435,8 +429,6 @@ public class PermissionBiz {
 
             log.info("assignRoleToUser: 分配用户角色, 更新用户角色缓存");
             userRolesCache.put(userId, roleIds);
-        } catch (Exception e) {
-            throw exception(ASSIGN_ROLE_TO_USER_FAILED);
         } finally {
             userRolesCacheLock.unlock();
         }
@@ -476,8 +468,6 @@ public class PermissionBiz {
 
             log.info("assignRoleToDept: 分配(部门/职位)角色, 更新(部门/职位)角色缓存");
             deptRolesCache.put(deptId, roleIds);
-        } catch (Exception e) {
-            throw exception(ASSIGN_ROLE_TO_DEPT_FAILED);
         } finally {
             deptRolesCacheLock.unlock();
         }

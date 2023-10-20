@@ -79,9 +79,5 @@ public interface ErrorCodeConstants {
     ErrorCode DEMO_NOT_EXISTS = new ErrorCode(100_012_001, "测试不存在!");
 
     //permission相关 100_013_001
-    ErrorCode ASSIGN_MENU_TO_ROLE_FAILED = new ErrorCode(100_013_001, "分配角色菜单失败!");
-    ErrorCode ASSIGN_ROLE_TO_USER_FAILED = new ErrorCode(100_013_002, "分配用户角色失败!");
-    ErrorCode ASSIGN_DEPT_TO_USER_FAILED = new ErrorCode(100_013_003, "分配用户(部门/职位)失败!");
-    ErrorCode ASSIGN_ROLE_TO_DEPT_FAILED = new ErrorCode(100_013_004, "分配(部门/职位)角色失败!");
-    ErrorCode ASSIGN_TARGET_IS_OWN = new ErrorCode(100_013_005, "分配的目标不能所属于自己!");
+    ErrorCode ASSIGN_TARGET_IS_OWN = new ErrorCode(100_013_001, "分配的目标不能所属于自己!");
 }
