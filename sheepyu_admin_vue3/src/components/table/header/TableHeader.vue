@@ -211,8 +211,8 @@ const state = reactive({
  * @param limit 指定展开多少级,默认展开全部
  */
 function onUnfold(limit: number = 999) {
-  emits('unfold', state.unfold, state.limit = limit)
   state.unfold = !state.unfold
+  emits('unfold', state.unfold, state.limit = limit)
 }
 
 function onInput(value: string) {
