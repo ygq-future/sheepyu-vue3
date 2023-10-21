@@ -283,7 +283,7 @@ async function listDept() {
   state.popupFormConfig.formItemConfigs[4].data = data
   state.roleAssignFormConfig.formItemConfigs[2].data = deptRoleTree
   await nextTick(() => {
-    tableRef.value.expandAll(tableHeaderRef.value.getUnfold())
+    tableRef.value && tableRef.value.expandAll(tableHeaderRef.value.getUnfold())
   })
 }
 
