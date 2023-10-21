@@ -1,7 +1,6 @@
 <template>
   <div class="default-main">
     <TableHeader
-      ref="tableHeaderRef"
       v-model="state.query.keyword"
       auth="system:job"
       :buttons="['add', 'delete', 'edit']"
@@ -19,7 +18,6 @@
     </TableHeader>
 
     <Table
-      ref="tableRef"
       v-model:selection="state.selection"
       auth="system:job"
       :data="state.tableData"
@@ -98,9 +96,7 @@ import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import type { PopupFormConfig } from '@/components/form/interface'
 import ComSearch from '@/components/search/ComSearch.vue'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]

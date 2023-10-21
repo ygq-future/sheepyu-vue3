@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       auth='system:dict'
       :buttons="['add', 'delete', 'edit']"
       :search='false'
@@ -24,7 +23,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       auth='system:dict'
       v-model:selection='state.selection'
       :data='state.tableData'
@@ -72,9 +70,7 @@ import ComSearch from '@/components/search/ComSearch.vue'
 
 const route = useRoute()
 const router = useRouter()
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]

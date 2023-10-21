@@ -100,7 +100,7 @@ import { useUser } from '@/stores/user/user'
 import ImageUpload from '@/components/upload/ImageUpload.vue'
 
 const instance = getCurrentInstance()
-const passFormRef = ref<InstanceType<typeof ElForm>>()
+const passFormRef = shallowRef<InstanceType<typeof ElForm>>()
 const user = useUser()
 
 const state = reactive<{

@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:log-access'
       @refresh='pageAccessLog'
@@ -19,7 +18,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       auth='system:log-access'
       :data='state.tableData'
       :table-config='state.tableConfig'
@@ -40,9 +38,7 @@ import { pageAccessLogApi } from '@/api/system/log'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
 import ComSearch from '@/components/search/ComSearch.vue'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   query: SystemAccessLogQueryVo

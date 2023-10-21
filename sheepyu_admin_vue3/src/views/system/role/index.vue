@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:role'
       :buttons="['add', 'delete', 'edit']"
@@ -24,7 +23,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       v-model:selection='state.selection'
       auth='system:role'
       :data='state.tableData'
@@ -86,10 +84,8 @@ import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
 import { listDeptApi } from '@/api/system/dept'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
-const menuAssignFormRef = ref()
+const popupFormRef = shallowRef()
+const menuAssignFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]

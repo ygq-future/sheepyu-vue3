@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:dict'
       :buttons="['add', 'edit']"
@@ -32,7 +31,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       v-model:selection='state.selection'
       auth='system:dict'
       :data='state.tableData'
@@ -80,9 +78,7 @@ import type { PopupFormConfig } from '@/components/form/interface'
 import { loadDict } from '@/util/common'
 import ComSearch from '@/components/search/ComSearch.vue'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   buttonLoading?: boolean

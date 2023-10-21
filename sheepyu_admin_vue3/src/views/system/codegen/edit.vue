@@ -204,7 +204,7 @@ import CellForm from '@/components/form/CellForm.vue'
 const instance = getCurrentInstance()
 const route = useRoute()
 
-const formRef = ref<InstanceType<typeof ElForm>>()
+const formRef = shallowRef<InstanceType<typeof ElForm>>()
 
 const state = reactive<{
   codegenTable?: SystemCodegenRespVo

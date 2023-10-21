@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:file'
       :buttons='["delete"]'
@@ -30,7 +29,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       auth='system:file'
       v-model:selection='state.selection'
       :data='state.tableData'
@@ -58,14 +56,12 @@ import type { ComSearchConfig } from '@/components/search/interface'
 import type { SystemFileQueryVo, SystemFileRespVo } from '@/api/system/file'
 import { deleteFileApi, pageFileApi } from '@/api/system/file'
 import { DictTypeEnum } from '@/enums/DictTypeEnum'
-import { onMounted, reactive, ref, toRaw } from 'vue'
+import { onMounted, reactive, toRaw } from 'vue'
 import type { PopupFormConfig } from '@/components/form/interface'
 import ComSearch from '@/components/search/ComSearch.vue'
 import PopupForm from '@/components/form/PopupForm.vue'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]

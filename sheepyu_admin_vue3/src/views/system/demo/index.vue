@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:demo'
       :buttons="['add', 'delete', 'edit', 'import', 'export']"
@@ -27,7 +26,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       v-model:selection='state.selection'
       auth='system:demo'
       :data='state.tableData'
@@ -72,9 +70,7 @@ import type { PopupFormConfig } from '@/components/form/interface'
 import { ElLoading } from 'element-plus'
 import ComSearch from '@/components/search/ComSearch.vue'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]

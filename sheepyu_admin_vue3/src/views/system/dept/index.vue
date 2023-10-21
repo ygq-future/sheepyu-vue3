@@ -96,10 +96,10 @@ import { listUserApi } from '@/api/system/user'
 import { ElLoading } from 'element-plus'
 import { DeptTypeEnum } from '@/enums/DeptTypeEnum'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
-const roleAssignFormRef = ref()
+const tableRef = shallowRef()
+const tableHeaderRef = shallowRef()
+const popupFormRef = shallowRef()
+const roleAssignFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]

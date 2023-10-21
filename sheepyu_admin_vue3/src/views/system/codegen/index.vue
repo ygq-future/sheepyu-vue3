@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:codegen'
       :buttons="['delete']"
@@ -33,7 +32,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       v-model:selection='state.selection'
       auth='system:codegen'
       :data='state.tableData'
@@ -136,9 +134,7 @@ highlight.registerLanguage('ts', ts)
 
 const tabs = useTabs()
 const router = useRouter()
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupSearchRef = ref()
+const popupSearchRef = shallowRef()
 
 const state = reactive<{
   previewShow: boolean

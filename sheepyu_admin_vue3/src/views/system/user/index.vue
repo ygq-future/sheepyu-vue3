@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:user'
       :buttons="['add', 'edit', 'export']"
@@ -24,7 +23,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       v-model:selection='state.selection'
       auth='system:user'
       :data='state.tableData'
@@ -175,10 +173,8 @@ import ComSearch from '@/components/search/ComSearch.vue'
 import { useUser } from '@/stores/user/user'
 
 const user = useUser()
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
-const roleAssignFormRef = ref()
+const popupFormRef = shallowRef()
+const roleAssignFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]

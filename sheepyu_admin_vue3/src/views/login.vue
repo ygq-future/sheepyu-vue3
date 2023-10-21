@@ -64,7 +64,7 @@ const config = useConfig()
 const user = useUser()
 const router = useRouter()
 const route = useRoute()
-const formRef = ref<InstanceType<typeof ElForm>>()
+const formRef = shallowRef<InstanceType<typeof ElForm>>()
 const captchaEnable = ref<boolean>(true)
 const form = reactive<SystemUserLoginVo>({
   login: '',

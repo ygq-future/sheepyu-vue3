@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:config'
       :buttons="['add', 'edit']"
@@ -16,7 +15,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       v-model:selection='state.selection'
       auth='system:config'
       :data='state.tableData'
@@ -54,9 +52,7 @@ import type {
 import { createConfigApi, deleteConfigApi, findConfigApi, pageConfigApi, updateConfigApi } from '@/api/system/config'
 import type { PopupFormConfig } from '@/components/form/interface'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   selection: any[]

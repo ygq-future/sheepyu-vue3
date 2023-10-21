@@ -1,7 +1,6 @@
 <template>
   <div class='default-main'>
     <TableHeader
-      ref='tableHeaderRef'
       v-model='state.query.keyword'
       auth='system:log-api'
       @refresh='pageApiLog'
@@ -19,7 +18,6 @@
     </TableHeader>
 
     <Table
-      ref='tableRef'
       auth='system:log-api'
       :data='state.tableData'
       :table-config='state.tableConfig'
@@ -58,9 +56,7 @@ import type { PopupFormConfig } from '@/components/form/interface'
 import ComSearch from '@/components/search/ComSearch.vue'
 import PopupForm from '@/components/form/PopupForm.vue'
 
-const tableRef = ref()
-const tableHeaderRef = ref()
-const popupFormRef = ref()
+const popupFormRef = shallowRef()
 
 const state = reactive<{
   query: SystemApiLogQueryVo
