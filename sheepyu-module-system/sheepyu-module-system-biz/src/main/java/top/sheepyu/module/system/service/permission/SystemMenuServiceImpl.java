@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import top.sheepyu.framework.mybatisplus.core.query.ServiceImplX;
-import top.sheepyu.module.common.exception.CommonException;
 import top.sheepyu.module.common.util.MyStrUtil;
 import top.sheepyu.module.system.controller.admin.permission.menu.SystemMenuCreateVo;
 import top.sheepyu.module.system.controller.admin.permission.menu.SystemMenuQueryVo;
@@ -67,8 +66,6 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
             }
             save(menu);
             MENUS.put(menu.getId(), menu);
-        } catch (CommonException e) {
-            throw exception(MENU_OPERATE_FAILED);
         } finally {
             menuLock.unlock();
         }
@@ -86,8 +83,6 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
                 menu = findByIdThrowIfNotExists(menu.getId());
                 MENUS.put(menu.getId(), menu);
             }
-        } catch (CommonException e) {
-            throw exception(MENU_OPERATE_FAILED);
         } finally {
             menuLock.unlock();
         }
@@ -119,8 +114,6 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
                     value.setStatus(status);
                 }
             }
-        } catch (CommonException e) {
-            throw exception(MENU_OPERATE_FAILED);
         } finally {
             menuLock.unlock();
         }
@@ -181,8 +174,6 @@ public class SystemMenuServiceImpl extends ServiceImplX<SystemMenuMapper, System
             removeIds.forEach(MENUS::remove);
             //同时删除关联数据
             systemRoleMenuMapper.deleteByMenuIds(removeIds);
-        } catch (CommonException e) {
-            throw exception(MENU_OPERATE_FAILED);
         } finally {
             menuLock.unlock();
         }
