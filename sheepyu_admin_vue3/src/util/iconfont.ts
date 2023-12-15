@@ -3,7 +3,7 @@ import * as elIcons from '@element-plus/icons-vue'
 
 const cssUrls = [
   'https://at.alicdn.com/t/c/font_3876395_n8wkznhweqo.css',
-  'https://cdn.bootcdn.net/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css'
+  'https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css'
 ]
 
 export default function init() {
@@ -28,7 +28,7 @@ function getStylesFromDomain(domain: string) {
 export function getAwesomeIconfontNames() {
   return new Promise<string[]>((resolve, reject) => {
     const iconNames = []
-    const sheets = getStylesFromDomain('cdn.bootcdn.net/ajax/libs/font-awesome/')
+    const sheets = getStylesFromDomain('font-awesome.min.css')
     for (const sheet of sheets) {
       for (const rule of sheet.cssRules) {
         if (rule instanceof CSSStyleRule && /^\.fa-(.*)::before$/.test(rule.selectorText)) {
