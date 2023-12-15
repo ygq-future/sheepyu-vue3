@@ -44,6 +44,7 @@ const props = withDefaults(defineProps<{
 
 const emits = defineEmits<{
   (e: 'update:modelValue', value: string): void
+  (e: 'complete', url: string): void
 }>()
 
 const url: WritableComputedRef<string> = computed({
@@ -83,13 +84,16 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     if (res.data && res.data.complete) {
       //如果文件存在会返回url, 直接回调更新值
       emits('update:modelValue', res.data.url)
+      emits('complete', res.data.url)
       return resolve(true)
     }
 
     const instance = ElLoading.service({ text: '正在上传文件...', fullscreen: true })
     try {
       const data: UploadData = { file, md5, remark: remark.value }
-      emits('update:modelValue', (await uploadApi(data)).data)
+      const url = (await uploadApi(data)).data
+      emits('update:modelValue', url)
+      emits('complete', url)
     } finally {
       instance.close()
     }

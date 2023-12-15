@@ -8,7 +8,7 @@
           </template>
           <div class='content-list'>
             <div class='content-item flex-center'>
-              <ImageUpload v-model='state.user.avatar' width='150px' />
+              <ImageUpload v-model='state.userForm.avatar' width='150px' @complete='onAvatarComplete' />
             </div>
             <div class='content-item'>
               <span><MyIcon name='fa fa-user' />用户名:</span>
@@ -92,7 +92,7 @@
 </template>
 
 <script setup lang='ts'>
-import type { SystemUserRespVo } from '@/api/system/user'
+import type { SystemUserRespVo, SystemUserBaseInfoVo } from '@/api/system/user'
 import { updatePassApi, updateUserBaseApi, userInfoApi } from '@/api/system/user'
 import type { FormRules } from 'element-plus'
 import { ElForm, ElNotification } from 'element-plus'
@@ -105,11 +105,7 @@ const user = useUser()
 
 const state = reactive<{
   user: SystemUserRespVo
-  userForm: {
-    nickname: string,
-    mobile: string,
-    email: string
-  }
+  userForm: SystemUserBaseInfoVo
   passForm: {
     password: string,
     newPass: string,
@@ -125,9 +121,7 @@ const state = reactive<{
     createTime: ''
   },
   userForm: {
-    nickname: '',
-    mobile: '',
-    email: ''
+    nickname: ''
   },
   passForm: {
     password: '',
@@ -165,12 +159,13 @@ async function updatePass() {
   ElNotification.success('下次登录生效')
 }
 
+function onAvatarComplete(url: string) {
+  state.userForm.avatar = url
+  updateUser()
+}
+
 async function updateUser() {
-  const data = toRaw(state.user)
-  data.nickname = state.userForm.nickname
-  data.mobile = state.userForm.mobile
-  data.email = state.userForm.email
-  await updateUserBaseApi(data)
+  await updateUserBaseApi(toRaw(state.userForm))
   await userInfo()
 }
 
@@ -180,6 +175,7 @@ async function userInfo() {
   state.userForm.nickname = data.nickname
   state.userForm.mobile = data.mobile || ''
   state.userForm.email = data.email || ''
+  state.userForm.avatar = data.avatar || ''
   user.setUserInfo(data)
 }
 

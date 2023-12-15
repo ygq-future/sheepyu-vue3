@@ -49,6 +49,7 @@ const props = withDefaults(defineProps<{
 
 const emits = defineEmits<{
   (e: 'update:modelValue', url: string): void
+  (e: 'complete', url: string): void
 }>()
 
 const url: WritableComputedRef<string> = computed({
@@ -130,6 +131,7 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
       if (data.complete) {
         //如果文件存在会返回url, 直接回调更新值
         emits('update:modelValue', data.url)
+        emits('complete', data.url)
         state.percentage = 100
         return resolve(true)
       }
@@ -146,7 +148,9 @@ const httpRequest: UploadProps['httpRequest'] = (options) => {
     }
 
     //合并分片
-    emits('update:modelValue', (await completePartApi(state.uploadId)).data)
+    const url = (await completePartApi(state.uploadId)).data
+    emits('update:modelValue', url)
+    emits('complete', url)
     state.percentage = 100
     state.uploadId = ''
     ElNotification.success('上传成功')
