@@ -2,6 +2,7 @@ package top.sheepyu.module.system.service.user;
 
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import top.sheepyu.framework.mybatisplus.core.query.IServiceX;
+import top.sheepyu.module.system.controller.admin.user.vo.SystemUserBaseInfoVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
@@ -51,6 +52,8 @@ public interface SystemUserService extends IServiceX<SystemUser> {
     void sendCode(@Email String email);
 
     void resetPassword(Long id, String newPass);
+
+    void updateBaseInfo(Long userId, @Valid SystemUserBaseInfoVo baseInfoVo);
 
     void updateNickname(Long userId, @NotBlank(message = "用户名不能为空") String nickname);
 

@@ -272,6 +272,11 @@ public class SystemUserBiz {
         systemUserService.resetPassword(id, newPass);
     }
 
+    public void updateBaseInfo(SystemUserBaseInfoVo baseInfoVo) {
+        Long userId = SecurityFrameworkUtil.getLoginUserId();
+        systemUserService.updateBaseInfo(userId, baseInfoVo);
+    }
+
     public void updateNickname(String nickname) {
         Long userId = SecurityFrameworkUtil.getLoginUserId();
         systemUserService.updateNickname(userId, nickname);

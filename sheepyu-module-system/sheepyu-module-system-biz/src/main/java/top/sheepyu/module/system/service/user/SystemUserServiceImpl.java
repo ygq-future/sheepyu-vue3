@@ -15,6 +15,7 @@ import top.sheepyu.framework.sms.core.sender.email.EmailParams;
 import top.sheepyu.framework.web.util.WebFrameworkUtil;
 import top.sheepyu.module.common.constants.ErrorCodeConstants;
 import top.sheepyu.module.common.util.ServletUtil;
+import top.sheepyu.module.system.controller.admin.user.vo.SystemUserBaseInfoVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserCreateVo;
 import top.sheepyu.module.system.controller.admin.user.vo.SystemUserUpdateVo;
 import top.sheepyu.module.system.controller.app.user.vo.EmailLoginVo;
@@ -201,6 +202,16 @@ public class SystemUserServiceImpl extends ServiceImplX<SystemUserMapper, System
             password = passwordEncoder.encode(defaultPassword);
         }
         user.setPassword(password);
+        updateById(user);
+    }
+
+    @Override
+    public void updateBaseInfo(Long userId, SystemUserBaseInfoVo baseInfoVo) {
+        SystemUser user = findByIdThrowIfNotExists(userId);
+        user.setNickname(baseInfoVo.getNickname())
+                .setMobile(baseInfoVo.getMobile())
+                .setEmail(baseInfoVo.getEmail())
+                .setAvatar(baseInfoVo.getAvatar());
         updateById(user);
     }
 

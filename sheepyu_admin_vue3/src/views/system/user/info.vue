@@ -44,8 +44,8 @@
           </template>
           <el-tabs>
             <el-tab-pane label='基本资料'>
-              <el-form :model='state.userForm' label-width='80px'>
-                <el-form-item label='用户昵称'>
+              <el-form :rules='rules' :model='state.userForm' label-width='80px'>
+                <el-form-item label='用户昵称' prop='nickname'>
                   <el-input v-model='state.userForm.nickname' />
                 </el-form-item>
 
@@ -93,7 +93,7 @@
 
 <script setup lang='ts'>
 import type { SystemUserRespVo } from '@/api/system/user'
-import { updatePassApi, updateUserApi, userInfoApi } from '@/api/system/user'
+import { updatePassApi, updateUserBaseApi, userInfoApi } from '@/api/system/user'
 import type { FormRules } from 'element-plus'
 import { ElForm, ElNotification } from 'element-plus'
 import { useUser } from '@/stores/user/user'
@@ -136,6 +136,10 @@ const state = reactive<{
   }
 })
 
+const rules: FormRules = {
+  nickname: [{ required: true, message: '昵称不能为空', trigger: 'blur' }]
+}
+
 const passRule: FormRules = {
   password: [{ required: true, message: '原密码不能为空', trigger: 'blur' }],
   newPass: [{ required: true, message: '新密码不能为空', trigger: 'blur' }],
@@ -166,7 +170,7 @@ async function updateUser() {
   data.nickname = state.userForm.nickname
   data.mobile = state.userForm.mobile
   data.email = state.userForm.email
-  await updateUserApi(data)
+  await updateUserBaseApi(data)
   await userInfo()
 }
 

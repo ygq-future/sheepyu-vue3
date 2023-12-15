@@ -13,6 +13,10 @@ export function userInfoApi() {
   return request.get<SystemUserRespVo>('/system/user/info')
 }
 
+export function updateUserBaseApi(data: SystemUserBaseInfoVo) {
+  return request.patch<boolean>('/system/user/info', data)
+}
+
 export function getCaptchaApi() {
   return request.get<CaptchaRespVo>('/captcha')
 }
@@ -77,6 +81,17 @@ export interface SystemUserStatisticsVo {
 export interface SystemUpdatePassVo {
   oldPass: string
   newPass: string
+}
+
+export interface SystemUserBaseInfoVo {
+  //用户昵称
+  nickname: string
+  //用户邮箱
+  email?: string
+  //手机号码
+  mobile?: string
+  //头像地址
+  avatar?: string
 }
 
 export interface SystemUserBaseVo {

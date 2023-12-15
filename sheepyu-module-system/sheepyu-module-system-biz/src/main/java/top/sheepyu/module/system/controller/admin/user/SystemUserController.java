@@ -74,31 +74,10 @@ public class SystemUserController {
         return success(SystemUserConvert.CONVERT.convert(user));
     }
 
-    @PatchMapping("/nickname")
-    @ApiOperation("修改用户昵称")
-    public Result<Boolean> updateNickname(@RequestParam String nickname) {
-        systemUserBiz.updateNickname(nickname);
-        return success(true);
-    }
-
-    @PatchMapping("/mobile")
-    @ApiOperation("修改用户手机号")
-    public Result<Boolean> updateMobile(@RequestParam String mobile) {
-        systemUserBiz.updateMobile(mobile);
-        return success(true);
-    }
-
-    @PatchMapping("/email")
-    @ApiOperation("修改用户邮箱")
-    public Result<Boolean> updateEmail(@RequestParam String email) {
-        systemUserBiz.updateEmail(email);
-        return success(true);
-    }
-
-    @PatchMapping("/avatar")
-    @ApiOperation("修改用户头像")
-    public Result<Boolean> updateAvatar(@RequestParam String avatar) {
-        systemUserBiz.updateAvatar(avatar);
+    @PatchMapping("/info")
+    @ApiOperation("修改用户个人信息")
+    public Result<Boolean> updateBaseInfo(@RequestBody SystemUserBaseInfoVo baseInfoVo) {
+        systemUserBiz.updateBaseInfo(baseInfoVo);
         return success(true);
     }
 
