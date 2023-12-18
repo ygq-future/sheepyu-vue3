@@ -8,7 +8,7 @@
       :rows='state.selection'
       @refresh='findMenuList'
       @add='onAdd'
-      @batch-delete='ids => onBatchDelete(ids, state.selection)'
+      @batch-delete='(ids: any[]) => onBatchDelete(ids, state.selection)'
       @batch-edit='onBatchEdit'
       @input-enter='findMenuList'
       @input-clear='$nextTick(() => findMenuList())'
