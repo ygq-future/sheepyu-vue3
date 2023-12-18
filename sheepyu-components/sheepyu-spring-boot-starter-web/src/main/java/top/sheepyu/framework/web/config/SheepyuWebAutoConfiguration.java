@@ -3,6 +3,7 @@ package top.sheepyu.framework.web.config;
 import cn.hutool.core.text.AntPathMatcher;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -30,6 +31,7 @@ import java.time.format.DateTimeFormatter;
  **/
 @Configuration
 @EnableConfigurationProperties({WebProperties.class})
+@Slf4j
 public class SheepyuWebAutoConfiguration implements WebMvcConfigurer {
     @Resource
     private WebProperties webProperties;
@@ -60,6 +62,7 @@ public class SheepyuWebAutoConfiguration implements WebMvcConfigurer {
     @Bean
     @ConditionalOnProperty(prefix = "sheepyu.web", value = "demo")
     public FilterRegistrationBean<DemoFilter> demoFilter() {
+        log.info("Demo演示模式已开启！");
         return createFilterBean(new DemoFilter(webProperties), Integer.MAX_VALUE);
     }
 
