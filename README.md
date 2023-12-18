@@ -8,8 +8,9 @@
 - 权限认证使用Spring Security, 实现接口细粒度权限控制
 - 代码生成器可一键生成 前端+后端+knife4j文档+validator参数校验
 - 文件上传服务集成腾讯云, 阿里云, 本地上传. 支持大文件分片上传, 支持后台动态切换上传方式
-- 短信服务目前只集成了Java Mail邮箱服务, 后面会集成腾讯云短信服务
+- 短信服务目前只集成了Java Mail邮箱服务
 - 适配移动端
+- 权限控制是基于Level RBAC的权限控制
 
 # 项目运行
 
@@ -23,5 +24,22 @@
 
 
 # 运行截图
-![](https://s3.bmp.ovh/imgs/2023/02/23/8ec772dc333ee187.png)
-![](https://s3.bmp.ovh/imgs/2023/02/23/304ea8512c2e53ca.png)
+![](https://s3.bmp.ovh/imgs/2023/12/18/1ec5170ad89c18a4.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/136d367438279a77.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/63c802ccb305b23e.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/1f3e50be0b4f0381.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/3c111821f770ba59.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/7a0a16f0de55cd96.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/cf32a95b346f9115.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/85c79b5d3b11d9ce.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/ff9ba8603f660ff6.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/0d15cede2129044f.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/978da92519c3bde6.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/3161e037e1b066c2.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/0a92da942b2e76b4.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/61815da6e9600a86.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/294a9f164425438e.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/5218627778d397de.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/e98124cefd4ef44d.jpeg)
+![](https://s3.bmp.ovh/imgs/2023/12/18/24c8d22ab7645168.jpeg)
+![](https://3o.hk/images/2023/12/17/Screenshot_18-12-2023_112512_demo.sheepyu.top.jpg)
