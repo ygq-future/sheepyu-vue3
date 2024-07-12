@@ -1,11 +1,15 @@
 # 详情请参照SwaggerProperties
 sheepyu:
   swagger:
-    enable: true
-    version: 1.0.0
-    base-package: top.sheepyu
-    host: https://sheepyu.top
-    contact:
-      name: sheepyu
-      url: https://sheepyu.top
-      email: 3029944576@qq.com
+    base-info:
+      title: Sheepyu Api
+      version: 1.0.0
+      host: http://localhost:18080
+      contact:
+        name: sheepyu
+        url: https://sheepyu.top
+        email: 3029944576@qq.com
+    api-groups:
+      system:
+        description: 基础的系统功能api
+        base-package: top.sheepyu.module.system

@@ -1,28 +1,19 @@
 package top.sheepyu.framework.swagger.config;
 
-import com.github.xiaoymin.knife4j.core.extend.OpenApiExtendSetting;
-import com.github.xiaoymin.knife4j.core.model.MarkdownProperty;
-import com.github.xiaoymin.knife4j.spring.configuration.Knife4jHttpBasic;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Data
 @ConfigurationProperties(prefix = "sheepyu.swagger")
 public class SwaggerProperties {
-    private boolean enable;
-    private boolean product;
-    private String title;
-    private String description;
-    private String version;
-    private Contact contact;
-    private String basePackage;
-    private String host;
-    private Knife4jHttpBasic basic;
-    private OpenApiExtendSetting setting;
-    private List<MarkdownProperty> documents;
-    private List<GlobalOperationParameter> globalParameters;
+    private ApiGroup baseInfo = new ApiGroup();
+    private Map<String, ApiGroup> apiGroups = new HashMap<>();
+    private List<GlobalOperationParameter> globalParameters = new ArrayList<>();
 
     @Data
     public static class Contact {
@@ -34,9 +25,20 @@ public class SwaggerProperties {
     @Data
     public static class GlobalOperationParameter {
         private String name;
-        private String description = "全局参数";
+        private String description = "";
         private Boolean required = false;
         private String defaultValue = "";
         private Boolean allowEmptyValue = true;
+    }
+
+    @Data
+    public static class ApiGroup {
+        private String version;
+        private String basePackage;
+        private String host;
+        private String title;
+        private String serviceUrl;
+        private String description;
+        private Contact contact = new Contact();
     }
 }

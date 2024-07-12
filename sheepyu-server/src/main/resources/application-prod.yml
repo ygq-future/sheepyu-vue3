@@ -29,8 +29,6 @@ sheepyu:
     demo-exclude-url:
       - /admin-api/system/user/login
       - /admin-api/system/user/refreshToken/*
-  swagger:
-    product: true
   file:
     config:
       LOCAL:
@@ -39,3 +37,5 @@ sheepyu:
 logging:
   level:
     top.sheepyu: debug
+knife4j:
+  enable: false
