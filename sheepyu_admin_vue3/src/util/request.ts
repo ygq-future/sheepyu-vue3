@@ -83,7 +83,7 @@ export class Request {
               return this.service(res.config)
             } catch (e) {
               user.clear()
-              const route = useRoute()
+              const route = router.currentRoute.value
               const path = route.fullPath || '/'
               router.push('/login?redirectUrl=' + path).then(() => {
                 ElNotification.error('登录已过期')
