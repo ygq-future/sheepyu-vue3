@@ -15,10 +15,9 @@
 # 项目运行
 
 1. 使用git克隆之后, 新建数据库sheepyu, 导入项目根目录下的sheepyu.sql
-2. 修改sheepyu-server下的application-dev.yml配置文件中的MySQL和redis配置
-3. 运行项目访问localhost:18080/doc.html, 找到 测试 随意访问一个接口, 返回ok即后端项目没有问题
-4. 前端项目进入sheepyu_admin_vue3, npm i安装依赖, 安装完成之后npm start运行项目即可
-5. 登录用户名: admin, 密码: 2003
+2. 修改sheepyu-server下的application-dev.yml配置文件中的MySQL和redis配置后运行即可
+3. 前端项目进入sheepyu_admin_vue3, `pnpm install` 安装依赖, 安装完成之后 `pnpm dev` 或者使用 `npm install` 然后 `npm run start` 运行项目即可
+4. 登录用户名: admin, 密码: 2003
 
 > 注意: jdk使用1.8, node使用18
 
