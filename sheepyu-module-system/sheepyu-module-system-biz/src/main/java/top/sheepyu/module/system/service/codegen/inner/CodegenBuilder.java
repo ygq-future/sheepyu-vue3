@@ -41,15 +41,26 @@ public class CodegenBuilder {
     private DataSource dataSource;
     //不需要代码生成的表
     private static final List<String> EXCLUDE_TABLES = Lists.newArrayList(
+            "system_access_log",
+            "system_api_log",
             "system_codegen_column",
             "system_codegen_table",
-            "system_file_part",
-            "system_menu",
-            "system_role_menu",
-            "system_user_role",
+            "system_config",
+            "system_dept",
+            "system_dept_query_dept",
             "system_dept_role",
+            "system_dict_data",
+            "system_dict_type",
+            "system_file",
+            "system_file_part",
+            "system_job",
+            "system_job_log",
+            "system_menu",
+            "system_role",
+            "system_role_menu",
+            "system_user",
             "system_user_dept",
-            "system_dept_query_dept"
+            "system_user_role"
     );
     //不需要代码生成的表的代表前缀: 通常用来排除一些框架的表, 例如qrtz
     private static final List<String> EXCLUDE_TABLES_PREFIX = Lists.newArrayList("QRTZ");
