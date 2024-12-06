@@ -6,3 +6,9 @@ interface ImportMetaEnv {
   readonly VITE_APP_BASE_ROUTER: string
   readonly VITE_APP_ENABLE_CAPTCHA: boolean
 }
+
+declare module '*.vue' {
+  import { DefineComponent } from "vue"
+  const component: DefineComponent<{}, {}, any>
+  export default component
+}
